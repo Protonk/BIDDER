@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+*.pyo
+
+*.o
+*.a
+*.so
+*.dylib
+
+# Test binaries
+test_hch_c
+hch_stream
+speck_stream
+
+# macOS
+.DS_Store
+
+# PractRand build (external, lives in /tmp)
+build/

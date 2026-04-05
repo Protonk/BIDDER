@@ -255,20 +255,47 @@ which is itself uniform.
 Experiment: `experiments/others/other_digits.py`.
 
 
+### Reseeding
+
+Rekeying at each period boundary via `SHA-256(old_key || period_counter)`
+works without issue. Tested over 100 consecutive rekeyed periods
+(90,000 total outputs, base 10 d=3):
+
+- **Per-period uniformity preserved.** Every rekeyed period has
+  exactly uniform digit counts. The algebraic guarantee is
+  independent of the key and survives rekeying.
+
+- **No detectable seam.** Chi-squared test on boundary bigrams
+  (last output of period N, first output of period N+1) vs
+  interior bigrams: 107.45 with 81 df, below the 3-sigma
+  threshold. The transition is statistically invisible.
+
+- **Cross-period distribution exact.** 90,000 outputs across
+  100 periods: each digit appears exactly 10,000 times. The
+  per-period exactness compounds — 100 periods × 100 per digit
+  = 10,000 per digit, no rounding, no drift.
+
+- **Each period produces a different sequence.** The rekeyed
+  permutation is distinct. No two periods share output order.
+
+The running deviation drops to near zero within the first period
+and stays there indefinitely. Rekey events are invisible in the
+deviation curve.
+
+Experiment: `experiments/reseed/reseed_test.py`.
+
+
 ## Open questions
 
 1. **Structure-aware permutation.** Can a permutation exploit
    the digit-block structure to reduce cost without sacrificing
    PRP quality?
 
-2. **Reseeding.** The simplest approach: rekey at each period
-   boundary, where the distribution is exactly uniform regardless
-   of the previous key.
+2. **Composition.** Can HCH blocks at different bases or digit
+   classes be composed (e.g., via Chinese Remainder Theorem) to
+   cover arbitrary domain sizes without cycle-walking?
 
-3. **Composition.** Can HCH blocks at different bases or digit
-   classes be composed for larger output domains?
-
-4. **Spatial structure.** Can the generator be extended to produce
+3. **Spatial structure.** Can the generator be extended to produce
    spatially uniform (blue noise) output, or is a post-processing
    step needed?
 

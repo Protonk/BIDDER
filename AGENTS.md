@@ -1,0 +1,53 @@
+# AGENTS.md
+
+## Build and test
+
+Python tests (no dependencies beyond stdlib):
+
+    python3 tests/test_hch.py
+    python3 tests/test_speck.py
+
+C tests:
+
+    gcc -O2 -o test_hch_c tests/test_hch_c.c generator/hch.c -lm
+    ./test_hch_c
+
+Plots and experiments require `sage -python`, not `python3`.
+sage carries numpy and matplotlib internally.
+
+## Repo structure
+
+- `acm_core.py`, `acm_sawtooth.py`, `acm_benford.py` — original
+  ACM-Champernowne exploration scripts. These are the project's
+  origin. Don't modify without reason.
+- `generator/` — the HCH block generator (Python + C). Has its
+  own `AGENTS.md` with implementation-specific rules.
+- `tests/` — all test suites. Keep green.
+- `experiments/` — exploration scripts and visualizations.
+- `sources/` — reference papers. Read-only.
+
+## Experiment conventions
+
+Experiments live in `experiments/<topic>/`, each with its own
+script and output PNGs. Follow these patterns:
+
+- Dark background: `#0a0a0a`
+- Text color: white
+- Color palette: `#ffcc5c` (yellow), `#6ec6ff` (blue),
+  `#ff6f61` (red), `#88d8b0` (green)
+- Scripts use `sage -python` and insert the generator path:
+  `sys.path.insert(0, '../../generator')`
+- Each experiment directory may have a doc named for its folder
+  (e.g., `SIEVES.md` in `experiments/sieves/`)
+
+## Design doc
+
+`generator/HCH-BLOCK-GEN.md` is the source of truth for the
+generator's design, findings, and open questions. Update it
+when a question is answered or a finding is confirmed.
+
+## Documentation
+
+Don't create documentation files unless asked. Don't add
+docstrings, comments, or type annotations to code you didn't
+change.
