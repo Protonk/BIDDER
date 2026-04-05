@@ -48,12 +48,14 @@ typedef struct {
 /*
  * Initialize the generator.
  *
- * base:        output symbols are in {1, ..., base-1}
- * digit_class: operating block is [base^(d-1), base^d - 1]
- * key:         raw key material
- * key_len:     length of key in bytes
+ * base:        in [2, 2^32]. Output symbols are in {1, ..., base-1}.
+ * digit_class: >= 1. Operating block is [base^(d-1), base^d - 1].
+ * key:         raw key material (any length).
+ * key_len:     length of key in bytes.
  *
- * Returns 0 on success, -1 if block_size exceeds 2^32 (use Python for larger).
+ * Returns 0 on success, -1 on invalid parameters (base out of range,
+ * digit_class < 1, block_size overflow, or block_size > 2^32).
+ * On failure, ctx is zeroed.
  */
 int bidder_init(bidder_ctx *ctx, uint64_t base, uint32_t digit_class,
              const uint8_t *key, uint32_t key_len);

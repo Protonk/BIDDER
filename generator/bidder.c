@@ -169,10 +169,10 @@ static uint32_t leading_digit(uint64_t n, uint64_t base)
 int bidder_init(bidder_ctx *ctx, uint64_t base, uint32_t digit_class,
              const uint8_t *key, uint32_t key_len)
 {
-    if (base < 2 || digit_class < 1)
-        return -1;
-
     memset(ctx, 0, sizeof(*ctx));
+
+    if (base < 2 || base > (uint64_t)UINT32_MAX + 1 || digit_class < 1)
+        return -1;  /* base must be in [2, 2^32] so output fits uint32_t */
     ctx->base = base;
     ctx->digit_class = digit_class;
 

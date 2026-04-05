@@ -26,6 +26,8 @@ depends on the other.
 
 ### The monoid
 
+>Hilbert (c. 1900): introduced the arithmetic congruence monoid M_{1,4} = {1, 5, 9, 13, ...} to demonstrate non-unique factorization.
+
 For a positive integer n >= 2, the set nZ+ = {n, 2n, 3n, ...} is
 a multiplicative monoid. The element n*k is irreducible in nZ+ if
 and only if n does not divide k. These irreducibles are the
@@ -33,12 +35,16 @@ and only if n does not divide k. These irreducibles are the
 
 ### The encoding
 
+>Champernowne (1933): constructed a normal number by concatenating consecutive integers. 
+
 Fix a base b >= 2 and a depth K >= 1. For each n, list its first
 K n-primes and concatenate their base-b representations after a
 radix point to form a real number C_b(n). The leading base-b digit
 of C_b(n) is the leading base-b digit of n.
 
 ### The uniformity guarantee
+
+>Hyland (2026): identified the exact uniformity of leading digits in the ACM-Champernowne construction
 
 In base b, the integers in a complete digit block
 [b^(d-1), b^d - 1] have their leading base-b digits exactly
@@ -324,21 +330,18 @@ are not independently tunable. A large alphabet (large b) with
 a long period requires large d, and the block size grows as
 b^d. The 2^32 ceiling means:
 
-| base | max d | max period     |
-|------|-------|----------------|
-| 10   | 9     | ~900M          |
-| 256  | 2     | 65,280         |
-| 65536| 2     | ~4.3G          |
+| base  | max d | max period      |
+|-------|-------|-----------------|
+| 10    | 9     | 900,000,000     |
+| 256   | 4     | 4,278,190,080   |
+| 65536 | 2     | 4,294,901,760   |
 
-For base 256, the period is only 65,280 — short for many
-applications. Rekeying extends the stream indefinitely, but
-the per-period uniformity guarantee only holds within each
-period of 65,280 outputs.
+Base must be <= 2^32 (output symbols must fit uint32_t).
 
-Multi-digit extraction partially addresses this: with d=2 and
-base 256, each Speck evaluation yields 2 digits (positions 0
-and 1), and position 1 includes 0 — giving a full {0, ..., 255}
-byte. But the period constraint remains.
+Multi-digit extraction increases effective throughput: with
+d=4 and base 256, each Speck evaluation yields 4 digits, and
+positions 1-3 include 0 — giving a full {0, ..., 255} byte.
+Rekeying extends the stream past a single period.
 
 The composition question (CRT-based combination of generators
 at different bases) is the most promising path to decoupling
@@ -392,17 +395,3 @@ faster. BIDDER's value is in the provability, not the performance.
 3. **Spatial structure.** Can the generator be extended to produce
    spatially uniform (blue noise) output, or is a post-processing
    step needed?
-
-
-## Lineage
-
-- **Hilbert** (c. 1900): introduced the arithmetic congruence
-  monoid M_{1,4} = {1, 5, 9, 13, ...} to demonstrate non-unique
-  factorization.
-- **Champernowne** (1933): constructed a normal number by
-  concatenating consecutive integers. The encoding here adapts
-  this idea to irreducible elements of ACMs.
-- **Hyland** (2026): identified the exact uniformity of leading
-  digits in the ACM-Champernowne construction and proposed its
-  application to pseudorandom generation. The original name
-  "HCH" (Hilbert-Champernowne-Hyland) was later renamed to BIDDER.

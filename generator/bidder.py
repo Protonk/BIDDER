@@ -86,6 +86,8 @@ class Bidder:
     def __init__(self, base, digit_class, key):
         if base < 2:
             raise ValueError("base must be >= 2")
+        if base > 2**32:
+            raise ValueError("base must be <= 2^32 (output is uint32)")
         if digit_class < 1:
             raise ValueError("digit_class must be >= 1")
 

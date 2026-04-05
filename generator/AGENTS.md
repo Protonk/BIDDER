@@ -13,10 +13,16 @@ other.
 Both implementations support exactly:
 - Speck32/64 permutation for tight-fit blocks (cycle-walk ratio <= 64)
 - Balanced Feistel with SHA-256-derived round keys for small blocks
-- Blocks up to 2^32
+- Base in [2, 2^32], block size up to 2^32
 - Three operations: init, next, reset
 
-Do not add features to one language without the other.
+Python also exposes `period` (property), `__iter__`, `__next__`,
+and `__repr__` as language-required conventions. These are not
+feature additions — they make the generator usable in `for` loops
+and `repr()`. C does not need equivalents.
+
+Do not add features to one language without the other. The
+Python-specific conveniences above are the only exceptions.
 
 ## Speck variants
 
