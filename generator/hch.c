@@ -8,7 +8,6 @@
 
 #include "hch.h"
 #include <string.h>
-#include <math.h>
 
 /* ================================================================
  * Minimal SHA-256 (for key derivation only — not performance critical)
@@ -103,7 +102,7 @@ static void sha256(const uint8_t *data, uint32_t len, uint8_t out[32])
 void speck32_expand_key(const uint8_t key[8], uint16_t rk[22])
 {
     uint16_t k = (uint16_t)(key[0] | (key[1] << 8));
-    uint16_t l[25];
+    uint16_t l[24]; /* max index: i+3 for i=0..20 = 23 */
     l[0] = (uint16_t)(key[2] | (key[3] << 8));
     l[1] = (uint16_t)(key[4] | (key[5] << 8));
     l[2] = (uint16_t)(key[6] | (key[7] << 8));
@@ -133,19 +132,31 @@ uint32_t speck32_encrypt(uint32_t pt, const uint16_t rk[22])
  * HCH generator
  * ================================================================ */
 
-static uint64_t ipow(uint64_t base, uint32_t exp)
+static uint64_t ipow(uint64_t base, uint32_t exp, int *overflow)
 {
     uint64_t result = 1;
-    for (uint32_t i = 0; i < exp; i++)
+    for (uint32_t i = 0; i < exp; i++) {
+        if (base != 0 && result > UINT64_MAX / base) {
+            *overflow = 1;
+            return 0;
+        }
         result *= base;
+    }
+    *overflow = 0;
     return result;
 }
 
 static uint32_t isqrt_ceil(uint64_t n)
 {
-    uint32_t s = (uint32_t)ceil(sqrt((double)n));
-    while ((uint64_t)s * s < n) s++;
-    return s;
+    if (n == 0) return 0;
+    /* Integer Newton's method — no floating point */
+    uint64_t s = 1;
+    while (s * s < n)
+        s = (s + n / s) / 2 + 1; /* +1 ensures ceiling and convergence */
+    /* Back off if we overshot */
+    while (s > 0 && (s - 1) * (s - 1) >= n)
+        s--;
+    return (uint32_t)s;
 }
 
 static uint32_t leading_digit(uint64_t n, uint64_t base)
@@ -164,13 +175,18 @@ int hch_init(hch_ctx *ctx, uint64_t base, uint32_t digit_class,
     memset(ctx, 0, sizeof(*ctx));
     ctx->base = base;
     ctx->digit_class = digit_class;
-    ctx->block_start = ipow(base, digit_class - 1);
-    uint64_t block_end = ipow(base, digit_class) - 1;
+
+    int ov1, ov2;
+    ctx->block_start = ipow(base, digit_class - 1, &ov1);
+    uint64_t block_end = ipow(base, digit_class, &ov2);
+    if (ov1 || ov2)
+        return -1;  /* overflow — base^digit_class exceeds uint64 */
+    block_end -= 1;
     ctx->block_size = block_end - ctx->block_start + 1;
     ctx->counter = 0;
 
     if (ctx->block_size > (uint64_t)UINT32_MAX + 1)
-        return -1;  /* too large for Speck32 — use Python */
+        return -1;  /* too large for Speck32 */
 
     uint64_t speck_block = (uint64_t)1 << 32;
 
