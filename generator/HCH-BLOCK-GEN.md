@@ -64,32 +64,31 @@ generator's period before repetition.
 
 ### Keyed permutation
 
-The implementation uses the Speck family of lightweight block
-ciphers (Beaulieu et al., 2013) as the keyed bijection pi_K.
-The generator auto-selects the smallest Speck variant whose block
-covers the operating range:
+The implementation uses Speck32/64 (Beaulieu et al., 2013) as
+the keyed bijection pi_K: 22 rounds, 64-bit key, 32-bit block.
+Block sizes up to 2^32 are supported. When the operating block
+is much smaller than 2^32 (cycle-walk ratio > 64), a balanced
+Feistel network with 8 rounds of SHA-256-derived round keys is
+used instead. The mode is selected automatically at init time.
 
-| Block range | Speck variant | Rounds |
-|-------------|---------------|--------|
-| up to 2^32  | Speck32/64    | 22     |
-| up to 2^48  | Speck48/96    | 23     |
-| up to 2^64  | Speck64/128   | 27     |
-| up to 2^96  | Speck96/144   | 29     |
-| up to 2^128 | Speck128/256  | 34     |
+Key derivation: SHA-256(raw_key) truncated to 8 bytes for
+Speck32/64, or SHA-256(raw_key || round_index) for each of the
+8 Feistel round keys.
 
-When the operating block is much smaller than the Speck block
-(cycle-walk ratio > 64), a balanced Feistel with SHA-256-derived
-round keys is used instead. All 9 Speck test vectors from the
-paper's Appendix C have been verified.
+A reference implementation of the full Speck family (all 10
+variants from Table 4.1) is available in `speck.py` with all 9
+Appendix C test vectors verified. The generator uses only
+Speck32/64.
 
 ### Output
 
-The generator produces a sequence by iterating over B_d in
-permuted order:
+The generator maintains a counter from 0 to block_size - 1.
+Each call to `next()`:
 
-    for i in B_d:
-        n = pi_K(i)
-        output the leading base-b digit of n
+    1. Permutes the counter through pi_K (with cycle-walking)
+    2. Adds block_start to get an integer n in B_d
+    3. Extracts the leading base-b digit of n
+    4. Increments the counter (wraps at block_size)
 
 Since pi_K is a bijection on B_d, and B_d has exactly b^(d-1)
 elements with each leading digit, the output stream visits each
@@ -97,28 +96,49 @@ symbol in {1, ..., b-1} exactly b^(d-1) times over a full
 period. The marginal distribution is exactly uniform at the end
 of each period.
 
+Within a period, the distribution follows the same deterministic
+sawtooth as the raw ACM source, but the permutation scrambles
+the phase — the sawtooth's position is unpredictable without
+knowledge of the key.
+
 ### Parameters
 
 | Parameter | Controls                    | Example          |
 |-----------|-----------------------------|------------------|
 | b         | alphabet size (b-1 symbols) | 256 -> 255 syms  |
 | d         | period = (b-1) * b^(d-1)   | d=2 -> 65280     |
-| K         | which permutation           | 128-bit key      |
+| key       | which permutation           | arbitrary bytes  |
+
+Block size (b-1) * b^(d-1) must not exceed 2^32.
+
+### Constants
+
+    SPECK32_ROUNDS = 22
+    FEISTEL_ROUNDS = 8
+    MAX_CYCLE_WALK_RATIO = 64
 
 
 ## Implementations
 
-**Python.** `generator/hch_speck.py` + `generator/speck.py`. Full
-Speck family, auto-selection, Feistel fallback for small blocks.
+Both implementations have identical feature sets and produce
+identical output for identical inputs.
 
-**C.** `generator/hch.h` + `generator/hch.c`. Speck32/64 and Feistel.
-Bundled SHA-256 for key derivation. No external dependencies.
-Cross-checked against Python: same key + same params = identical
-output, byte for byte.
+**Python.** `generator/hch.py`. Speck32/64 and Feistel fallback.
+SHA-256 via hashlib. Class `HCH` with `next()`, `reset()`, and
+Python iterator protocol.
 
-**Tests.** `tests/test_speck.py` (13 tests, 9 Appendix C vectors),
-`tests/test_hch.py` (18 tests), `tests/test_hch_c.c` (10 tests
-including cross-language verification).
+**C.** `generator/hch.h` + `generator/hch.c`. Speck32/64 and
+Feistel. Bundled SHA-256. No external dependencies. Functions
+`hch_init()`, `hch_next()`, `hch_reset()`.
+
+**Reference.** `generator/speck.py`. Full Speck family (all 10
+variants, all 9 Appendix C test vectors). Used for cipher
+verification, not by the generator.
+
+**Tests.** `tests/test_hch.py` (18 tests including cross-language
+check against hardcoded C output), `tests/test_speck.py` (13
+tests), `tests/test_hch_c.c` (10 tests including cross-language
+print for manual comparison).
 
 
 ## Observed properties
