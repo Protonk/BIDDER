@@ -34,7 +34,7 @@ Decomposition (in log space):
       - ln(n-digitfrac) = ln(digits/K)  [typographic cost, staircase]
       - ln(n-Champernowne)              [full encoding, bounded sawtooth]
 
-    The running mean of the Champernowne reals converges toward ~1.55 = (10+1)/(2*10)
+    The running mean of the Champernowne reals moves toward ~1.55 = (10+1)/(2*10)
     but we conjecture it approaches from below and never arrives.
 
 CONNECTION TO ARITHMETIC CONGRUENCE MONOIDS (ACMs)
