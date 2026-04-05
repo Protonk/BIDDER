@@ -158,6 +158,9 @@ static uint32_t leading_digit(uint64_t n, uint64_t base)
 int hch_init(hch_ctx *ctx, uint64_t base, uint32_t digit_class,
              const uint8_t *key, uint32_t key_len)
 {
+    if (base < 2 || digit_class < 1)
+        return -1;
+
     memset(ctx, 0, sizeof(*ctx));
     ctx->base = base;
     ctx->digit_class = digit_class;
@@ -170,9 +173,8 @@ int hch_init(hch_ctx *ctx, uint64_t base, uint32_t digit_class,
         return -1;  /* too large for Speck32 — use Python */
 
     uint64_t speck_block = (uint64_t)1 << 32;
-    uint64_t ratio = speck_block / ctx->block_size;
 
-    if (ratio <= HCH_MAX_CYCLE_WALK_RATIO) {
+    if (speck_block <= (uint64_t)HCH_MAX_CYCLE_WALK_RATIO * ctx->block_size) {
         /* Speck32/64 mode */
         ctx->mode = 0;
         uint8_t hash[32];
@@ -185,22 +187,22 @@ int hch_init(hch_ctx *ctx, uint64_t base, uint32_t digit_class,
         ctx->L_size = s;
         ctx->R_size = s;
 
-        /* Derive 8 round keys: SHA-256(key || i) for i=0..7 */
+        /* Hash the full key once, then derive round keys from the hash */
+        uint8_t key_hash[32];
+        sha256(key, key_len, key_hash);
         for (int i = 0; i < HCH_FEISTEL_ROUNDS; i++) {
-            uint8_t buf[256 + 4];
-            uint32_t blen = key_len < 252 ? key_len : 252;
-            memcpy(buf, key, blen);
-            buf[blen]   = (uint8_t)(i);
-            buf[blen+1] = (uint8_t)(i >> 8);
-            buf[blen+2] = (uint8_t)(i >> 16);
-            buf[blen+3] = (uint8_t)(i >> 24);
+            uint8_t buf[36]; /* 32-byte hash + 4-byte index */
+            memcpy(buf, key_hash, 32);
+            buf[32] = (uint8_t)(i);
+            buf[33] = (uint8_t)(i >> 8);
+            buf[34] = (uint8_t)(i >> 16);
+            buf[35] = (uint8_t)(i >> 24);
 
-            uint8_t hash[32];
-            sha256(buf, blen + 4, hash);
-            /* Little-endian 8-byte read */
+            uint8_t round_hash[32];
+            sha256(buf, 36, round_hash);
             ctx->feistel_keys[i] = 0;
             for (int j = 0; j < 8; j++)
-                ctx->feistel_keys[i] |= (uint64_t)hash[j] << (j * 8);
+                ctx->feistel_keys[i] |= (uint64_t)round_hash[j] << (j * 8);
         }
     }
     return 0;

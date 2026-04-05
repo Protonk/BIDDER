@@ -24,7 +24,7 @@ sys.path.insert(0, '../..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from hch_speck import HCHSpeck
+from hch import HCH
 
 
 def make_gradient(width, height):
@@ -37,8 +37,8 @@ def dither_with_hch(image, base, digit_class, key):
     h, w = image.shape
     n_pixels = h * w
 
-    gen = HCHSpeck(base=base, digit_class=digit_class, key=key)
-    raw = gen.generate(n_pixels)
+    gen = HCH(base=base, digit_class=digit_class, key=key)
+    raw = [gen.next() for _ in range(n_pixels)]
 
     # Map digits {1, ..., base-1} to [0, 1)
     noise = np.array(raw, dtype=np.float64) / base

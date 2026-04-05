@@ -24,13 +24,13 @@ sys.path.insert(0, '../../..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from hch_speck import HCHSpeck
+from hch import HCH
 
 # --- Generate uniform source ---
 print("Generating uniform source...")
-gen = HCHSpeck(base=10, digit_class=4, key=b'contamination')
+gen = HCH(base=10, digit_class=4, key=b'contamination')
 N = gen.period  # 9000 outputs, exactly uniform
-raw = np.array(gen.generate(N), dtype=np.float64)
+raw = np.array([gen.next() for _ in range(N)], dtype=np.float64)
 
 # Map digits {1..9} to reals in [1.1, 2.0) for arithmetic
 reals = 1.0 + raw / 10.0

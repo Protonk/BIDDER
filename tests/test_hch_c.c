@@ -214,10 +214,9 @@ int main(void)
     test_crosscheck();
 
     if (failures == 0)
-        printf("=== All %d tests passed ===\n", 0);
+        printf("\nAll C tests passed.\n");
     else
-        printf("=== %d FAILURES ===\n", failures);
+        printf("\n%d test(s) FAILED.\n", failures);
 
-    printf("\nAll C tests passed.\n");
     return failures;
 }

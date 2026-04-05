@@ -17,8 +17,9 @@ No finite prefix of the output is exactly uniform — it converges.
 
 HCH factors the problem in two. An algebraic substrate provides
 exact uniformity. A keyed permutation provides disorder. The
-substrate guarantees the distribution; the permutation guarantees
-unpredictability. Neither depends on the other.
+substrate guarantees the distribution; the permutation provides
+unpredictability proportional to its PRP quality. Neither
+depends on the other.
 
 
 ## Background
@@ -72,8 +73,10 @@ Feistel network with 8 rounds of SHA-256-derived round keys is
 used instead. The mode is selected automatically at init time.
 
 Key derivation: SHA-256(raw_key) truncated to 8 bytes for
-Speck32/64, or SHA-256(raw_key || round_index) for each of the
-8 Feistel round keys.
+Speck32/64. For Feistel mode: key_hash = SHA-256(raw_key),
+then each round key is SHA-256(key_hash || round_index)
+truncated to 8 bytes. This two-stage derivation ensures
+keys of any length are handled uniformly.
 
 A reference implementation of the full Speck family (all 10
 variants from Table 4.1) is available in `speck.py` with all 9
@@ -359,10 +362,16 @@ For uses requiring strong PRP properties, the Speck32/64 mode
 The exact-uniformity guarantee is most valuable where uniformity
 must be **auditable** — verifiable by inspecting the construction,
 not by running statistical tests on the output. Candidate
-applications: clinical trial randomization, lottery draws,
-regulatory allocation, reproducible quadrature. The guarantee is
-structural ("inspect the algebra") rather than empirical ("test
-the samples").
+applications: reproducible quadrature, deterministic allocation
+schemes, simulation calibration. The guarantee is structural
+("inspect the algebra") rather than empirical ("test the samples").
+
+For high-stakes adversarial settings (lotteries, clinical trials),
+the Feistel fallback's limited diffusion is not a defensible
+basis for unpredictability. Use only the Speck32/64 mode
+(tight-fit blocks) in such contexts, and evaluate whether 22
+rounds of Speck32 meets the application's security requirements
+independently of HCH's uniformity claims.
 
 For applications that only need statistical uniformity (Monte
 Carlo simulation, game randomness, general-purpose PRNG), a

@@ -172,12 +172,12 @@ def test_cross_check():
     """Output must match the C implementation exactly."""
     gen = HCH(base=10, digit_class=2, key=b'test')
     out = [gen.next() for _ in range(20)]
-    expected = [6, 1, 6, 1, 2, 7, 6, 5, 6, 9, 1, 2, 9, 2, 3, 8, 1, 6, 9, 4]
+    expected = [3, 8, 1, 2, 7, 1, 5, 4, 7, 4, 2, 5, 8, 7, 8, 9, 2, 9, 6, 7]
     assert out == expected, f"Cross-check failed: {out} != {expected}"
 
     gen2 = HCH(base=10, digit_class=3, key=b'test')
     out2 = [gen2.next() for _ in range(20)]
-    expected2 = [8, 6, 5, 7, 6, 5, 6, 9, 9, 2, 1, 8, 1, 6, 9, 5, 3, 9, 5, 1]
+    expected2 = [1, 1, 8, 8, 3, 2, 9, 9, 3, 2, 2, 4, 5, 2, 3, 6, 7, 3, 6, 6]
     assert out2 == expected2, f"Cross-check failed: {out2} != {expected2}"
     print("  Cross-check with C: OK")
 

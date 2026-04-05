@@ -57,7 +57,7 @@ int main(void)
         total++;
 
         /* Rekey at period boundary for infinite stream */
-        if (ctx.counter == 0) {
+        if (total % ctx.block_size == 0) {
             rekey_count++;
             uint8_t new_key[64];
             memcpy(new_key, key, key_len);

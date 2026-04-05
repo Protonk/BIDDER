@@ -20,7 +20,7 @@ sys.path.insert(0, '../..')
 import collections
 import numpy as np
 import matplotlib.pyplot as plt
-from hch_speck import HCHSpeck
+from hch import HCH
 
 
 def extract_all_digits(n, base, d):
@@ -34,7 +34,7 @@ def extract_all_digits(n, base, d):
 
 def full_digit_analysis(base, digit_class, key=b'digit analysis'):
     """Extract all digit positions from a full-period HCH run."""
-    gen = HCHSpeck(base=base, digit_class=digit_class, key=key)
+    gen = HCH(base=base, digit_class=digit_class, key=key)
     period = gen.period
     d = digit_class
 
@@ -44,10 +44,10 @@ def full_digit_analysis(base, digit_class, key=b'digit analysis'):
     all_digits = np.zeros((period, d), dtype=int)
 
     for i in range(period):
-        if gen._counter >= gen.block_size:
-            gen._counter = 0
-        perm_idx = gen._permute(gen._counter)
-        gen._counter += 1
+        if gen.counter >= gen.block_size:
+            gen.counter = 0
+        perm_idx = gen._permute(gen.counter)
+        gen.counter += 1
         n = gen.block_start + perm_idx
         all_digits[i] = extract_all_digits(n, base, d)
 
@@ -154,13 +154,13 @@ def f_test(x): return np.sin(np.pi * x)
 true_val = 2.0 / np.pi
 
 for base, dc in [(10, 3), (10, 4)]:
-    gen = HCHSpeck(base=base, digit_class=dc, key=b'strat multi')
+    gen = HCH(base=base, digit_class=dc, key=b'strat multi')
     period = gen.period
     d = dc
 
     # Single-digit: d evaluations, 1 sample each
     single_samples = np.array([(v - 0.5) / (base - 1)
-                               for v in gen.generate(period)])
+                               for v in [gen.next() for _ in range(period)]])
     est_single = np.mean(f_test(single_samples))
 
     # Multi-digit: period/d evaluations, d samples each

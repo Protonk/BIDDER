@@ -11,11 +11,11 @@ sys.path.insert(0, '../../..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from hch_speck import HCHSpeck
+from hch import HCH
 
 print("Generating uniform source...")
-gen = HCHSpeck(base=10, digit_class=4, key=b'adds then muls')
-raw = np.array(gen.generate(gen.period), dtype=np.float64)
+gen = HCH(base=10, digit_class=4, key=b'adds then muls')
+raw = np.array([gen.next() for _ in range(gen.period)], dtype=np.float64)
 reals = 1.0 + raw / 10.0
 log_reals = np.log10(reals)
 

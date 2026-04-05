@@ -31,7 +31,7 @@ sys.path.insert(0, '../..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from hch_speck import HCHSpeck
+from hch import HCH
 
 
 # --- Test functions ---
@@ -61,8 +61,8 @@ def hch_samples(base, digit_class, key, n):
     [(d-1)/(b-1), d/(b-1)). Within each stratum, we place the
     sample at the midpoint (deterministic stratification).
     """
-    gen = HCHSpeck(base=base, digit_class=digit_class, key=key)
-    raw = gen.generate(n)
+    gen = HCH(base=base, digit_class=digit_class, key=key)
+    raw = [gen.next() for _ in range(n)]
     b = base
     # Map digit d to midpoint of stratum [(d-1)/(b-1), d/(b-1))
     return np.array([(d - 0.5) / (b - 1) for d in raw])

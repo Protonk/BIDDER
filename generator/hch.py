@@ -101,8 +101,7 @@ class HCH:
                 f"block_size {self.block_size} exceeds 2^32")
 
         # Choose mode: speck32 or feistel
-        ratio = (1 << 32) / self.block_size
-        if ratio <= MAX_CYCLE_WALK_RATIO:
+        if (1 << 32) <= MAX_CYCLE_WALK_RATIO * self.block_size:
             self._mode = 0  # speck32
             speck_key = hashlib.sha256(key).digest()[:8]
             self._rk = _speck32_expand_key(speck_key)
@@ -113,9 +112,10 @@ class HCH:
                 s += 1
             self._L_size = s
             self._R_size = s
+            key_hash = hashlib.sha256(key).digest()
             self._fk = []
             for i in range(FEISTEL_ROUNDS):
-                h = hashlib.sha256(key + struct.pack('<I', i)).digest()
+                h = hashlib.sha256(key_hash + struct.pack('<I', i)).digest()
                 self._fk.append(int.from_bytes(h[:8], 'little'))
 
         self.counter = 0
