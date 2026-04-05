@@ -31,7 +31,8 @@ This repo is three things at once:
 
 ## Structure
 
-    acm_core.py             Core n-prime and Champernowne real definitions
+    acm_core.py             Core definitions (Python)
+    acm_core.h, acm_core.c  Core definitions (C)
 
     generator/
       bidder.py              BIDDER generator (Python)
@@ -40,9 +41,11 @@ This repo is three things at once:
       BIDDER.md              Design document and findings
 
     tests/
-      test_bidder.py         Python generator tests (18 tests)
-      test_speck.py          Speck cipher tests (9 Appendix C vectors)
-      test_bidder_c.c        C generator tests
+      test_acm_core.py       Core definition tests (Python)
+      test_acm_core_c.c      Core definition tests (C)
+      test_bidder.py         Generator tests (Python)
+      test_speck.py          Speck cipher tests (Appendix C vectors)
+      test_bidder_c.c        Generator tests (C)
       bidder_stream.c        Byte stream emitter for PractRand
       speck_stream.c         Raw Speck counter mode for PractRand
 
@@ -59,16 +62,24 @@ This repo is three things at once:
       reseed/                Reseeding across period boundaries
       wibblywobblies/        Wibble-wobble conservation law
 
+    nasties/                 Known bugs and edge-case documentation
     sources/                 Reference papers (Speck)
 
 ## Building
 
-Python (requires sage for plots, plain python3 for generator):
+Python core tests (requires sage for numpy):
+
+    sage -python tests/test_acm_core.py
+
+Python generator and cipher tests (plain python3):
 
     python3 tests/test_bidder.py
     python3 tests/test_speck.py
 
 C:
+
+    gcc -O2 -o test_acm_core_c tests/test_acm_core_c.c acm_core.c -lm
+    ./test_acm_core_c
 
     gcc -O2 -o test_bidder_c tests/test_bidder_c.c generator/bidder.c -lm
     ./test_bidder_c

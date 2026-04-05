@@ -1,9 +1,11 @@
 /*
  * acm_core.c — ACM-Champernowne core definitions (C implementation)
  *
- * Shot-for-shot remake of acm_core.py. Same functions, same results,
- * different language. The Python and C implementations form two
- * vertices of the DOCS::C::PYTHON audit triangle.
+ * Shot-for-shot remake of acm_core.py for the scalar subset.
+ * Same functions, same results, different language. The Python and
+ * C implementations form two vertices of the DOCS::C::PYTHON audit
+ * triangle. Batch/numpy conveniences (champernowne_array,
+ * running_mean, first_digit_array) are Python-only.
  */
 
 #include "acm_core.h"
@@ -11,13 +13,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <inttypes.h>
 
 
 /* -----------------------------------------------------------------
  * n-prime generation
  * ----------------------------------------------------------------- */
 
-int acm_n_primes(int n, int count, int *out)
+int acm_n_primes(int64_t n, int count, int64_t *out)
 {
     if (n < 1 || count < 1 || out == NULL)
         return -1;
@@ -25,7 +28,7 @@ int acm_n_primes(int n, int count, int *out)
     if (n == 1) {
         /* Ordinary primes by trial division. */
         int found = 0;
-        int candidate = 2;
+        int64_t candidate = 2;
         while (found < count) {
             int is_prime = 1;
             for (int i = 0; i < found; i++) {
@@ -41,10 +44,15 @@ int acm_n_primes(int n, int count, int *out)
         return 0;
     }
 
-    /* n >= 2: elements n*k where k is not divisible by n. */
+    /* n >= 2: elements n*k where k is not divisible by n.
+     * Guard against signed overflow: if n*k would exceed INT64_MAX,
+     * stop and return -1. This limits the usable range to
+     * n * k < 2^63, which is ~9.2e18. */
     int found = 0;
-    int k = 1;
+    int64_t k = 1;
     while (found < count) {
+        if (k > INT64_MAX / n)
+            return -1;  /* overflow: n*k would wrap */
         if (k % n != 0)
             out[found++] = n * k;
         k++;
@@ -54,10 +62,10 @@ int acm_n_primes(int n, int count, int *out)
 
 
 /* -----------------------------------------------------------------
- * Digit counting (decimal digits in an integer)
+ * Digit counting (decimal digits in a 64-bit integer)
  * ----------------------------------------------------------------- */
 
-static int int_digit_count(int x)
+static int int64_digit_count(int64_t x)
 {
     if (x <= 0) return 1;
     int d = 0;
@@ -78,19 +86,23 @@ static int int_digit_count(int x)
  * needs ~10) are unaffected.
  * ----------------------------------------------------------------- */
 
-double acm_champernowne_real(int n, int count)
+double acm_champernowne_real(int64_t n, int count)
 {
     if (n < 1 || count < 1)
         return 0.0;
 
-    int *primes = malloc(count * sizeof(int));
+    int64_t *primes = malloc(count * sizeof(int64_t));
     if (!primes) return 0.0;
-    acm_n_primes(n, count, primes);
+    if (acm_n_primes(n, count, primes) != 0) {
+        free(primes);
+        return 0.0;
+    }
 
     /*
      * Build "1." + concatenated decimal representations.
-     * Max digits per prime is ~10 (for int range), so a 2048-char
-     * buffer is generous for any reasonable count.
+     * Max digits per int64 is 19, so 2048 chars handles count up
+     * to ~100 comfortably. We stop appending when the buffer is
+     * full; strtod only sees the first ~16 fractional digits anyway.
      */
     char buf[2048];
     buf[0] = '1';
@@ -98,9 +110,17 @@ double acm_champernowne_real(int n, int count)
     int pos = 2;
 
     for (int i = 0; i < count; i++) {
-        int written = snprintf(buf + pos, sizeof(buf) - pos, "%d", primes[i]);
+        int remaining = (int)sizeof(buf) - pos;
+        if (remaining <= 1) break;  /* no room left */
+        int written = snprintf(buf + pos, remaining,
+                               "%" PRId64, primes[i]);
+        if (written >= remaining) {
+            /* snprintf truncated — buffer is full. Null terminator
+             * was placed by snprintf at buf[sizeof(buf)-1]. */
+            pos = (int)sizeof(buf) - 1;
+            break;
+        }
         pos += written;
-        if (pos >= (int)sizeof(buf) - 1) break;
     }
     buf[pos] = '\0';
 
@@ -113,21 +133,45 @@ double acm_champernowne_real(int n, int count)
  * Digit count
  * ----------------------------------------------------------------- */
 
-int acm_digit_count(int n, int count)
+int acm_digit_count(int64_t n, int count)
 {
     if (n < 1 || count < 1)
         return -1;
 
-    int *primes = malloc(count * sizeof(int));
+    int64_t *primes = malloc(count * sizeof(int64_t));
     if (!primes) return -1;
-    acm_n_primes(n, count, primes);
+    if (acm_n_primes(n, count, primes) != 0) {
+        free(primes);
+        return -1;
+    }
 
     int total = 0;
     for (int i = 0; i < count; i++)
-        total += int_digit_count(primes[i]);
+        total += int64_digit_count(primes[i]);
 
     free(primes);
     return total;
+}
+
+
+/* -----------------------------------------------------------------
+ * Decomposition in log space
+ * ----------------------------------------------------------------- */
+
+int acm_decompose(int64_t n, int count, double out[3])
+{
+    if (n < 1 || count < 1 || out == NULL)
+        return -1;
+
+    double c = acm_champernowne_real(n, count);
+    if (c == 0.0) return -1;
+    int d = acm_digit_count(n, count);
+    if (d < 0) return -1;
+
+    out[0] = log(c);
+    out[1] = log((double)n);
+    out[2] = log((double)d / count);
+    return 0;
 }
 
 

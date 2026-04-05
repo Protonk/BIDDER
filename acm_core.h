@@ -1,12 +1,12 @@
 /*
  * acm_core.h — ACM-Champernowne core definitions (C implementation)
  *
- * n-prime generation, Champernowne real construction, first-digit
- * extraction, and Benford reference. No external dependencies beyond
- * the C standard library.
+ * n-prime generation, Champernowne real construction, decomposition,
+ * first-digit extraction, and Benford reference. No external
+ * dependencies beyond the C standard library.
  *
  * Usage:
- *     int primes[5];
+ *     int64_t primes[5];
  *     acm_n_primes(2, 5, primes);
  *     // primes = {2, 6, 10, 14, 18}
  *
@@ -20,6 +20,8 @@
 #ifndef ACM_CORE_H
 #define ACM_CORE_H
 
+#include <stdint.h>
+
 /*
  * Write the first `count` n-primes into `out`.
  *
@@ -29,7 +31,7 @@
  * Caller must ensure out has room for `count` elements.
  * Returns 0 on success, -1 on invalid input (n < 1 or count < 1).
  */
-int acm_n_primes(int n, int count, int *out);
+int acm_n_primes(int64_t n, int count, int64_t *out);
 
 /*
  * Construct the n-Champernowne real from the first `count` n-primes.
@@ -40,13 +42,25 @@ int acm_n_primes(int n, int count, int *out);
  *
  * Returns 0.0 on invalid input.
  */
-double acm_champernowne_real(int n, int count);
+double acm_champernowne_real(int64_t n, int count);
 
 /*
  * Total decimal digits used by the first `count` n-primes.
  * Returns -1 on invalid input.
  */
-int acm_digit_count(int n, int count);
+int acm_digit_count(int64_t n, int count);
+
+/*
+ * Decompose the n-Champernowne real into log-space components.
+ *
+ * out[0] = ln(champernowne real)
+ * out[1] = ln(n)                   (primality)
+ * out[2] = ln(total_digits / count) (typographic cost)
+ *
+ * Caller must ensure out has room for 3 doubles.
+ * Returns 0 on success, -1 on invalid input.
+ */
+int acm_decompose(int64_t n, int count, double out[3]);
 
 /*
  * Extract the leading significant digit (1-9) of a positive number.

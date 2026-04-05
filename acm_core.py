@@ -224,18 +224,3 @@ def acm_benford_pmf() -> np.ndarray:
     a chi-squared-flavored distance from Benford in one expression.
     """
     return np.array([np.log10(1 + 1/d) for d in range(1, 10)])
-
-
-# ---------------------------------------------------------------------------
-# Quick sanity check
-# ---------------------------------------------------------------------------
-
-if __name__ == '__main__':
-    print("n-primes for n=1..9 (first 5):")
-    for n in range(1, 10):
-        ps = acm_n_primes(n, 5)
-        c = acm_champernowne_real(n, 5)
-        print(f"  n={n}: primes={ps}  C(n)={c}")
-
-    print(f"\nRunning mean at n=10000: {acm_running_mean(acm_champernowne_array(10000))[-1]:.6f}")
-    print(f"Benford pmf: {acm_benford_pmf()}")

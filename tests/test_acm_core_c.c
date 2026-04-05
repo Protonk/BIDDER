@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <inttypes.h>
 #include "../acm_core.h"
 
 static int failures = 0;
@@ -27,14 +28,15 @@ static int failures = 0;
 
 
 /* Leading digit of a positive integer via decimal. */
-static int leading_digit(int n)
+static int leading_digit(int64_t n)
 {
+    if (n < 0) n = -n;
     while (n >= 10) n /= 10;
-    return n;
+    return (int)n;
 }
 
 /* Decimal digit count of a positive integer. */
-static int count_digits(int x)
+static int count_digits(int64_t x)
 {
     if (x <= 0) return 1;
     int d = 0;
@@ -50,16 +52,16 @@ static int count_digits(int x)
 static void test_n1_ordinary_primes(void)
 {
     printf("--- n=1 ordinary primes ---\n");
-    int out[10];
-    int expected5[] = {2, 3, 5, 7, 11};
-    int expected10[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29};
+    int64_t out[10];
+    int64_t expected5[] = {2, 3, 5, 7, 11};
+    int64_t expected10[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29};
 
     acm_n_primes(1, 5, out);
-    CHECK(memcmp(out, expected5, 5 * sizeof(int)) == 0,
+    CHECK(memcmp(out, expected5, 5 * sizeof(int64_t)) == 0,
           "n=1 first 5 primes mismatch");
 
     acm_n_primes(1, 10, out);
-    CHECK(memcmp(out, expected10, 10 * sizeof(int)) == 0,
+    CHECK(memcmp(out, expected10, 10 * sizeof(int64_t)) == 0,
           "n=1 first 10 primes mismatch");
     printf("  OK\n\n");
 }
@@ -67,25 +69,25 @@ static void test_n1_ordinary_primes(void)
 static void test_known_n_primes(void)
 {
     printf("--- Known n-primes ---\n");
-    int out[5];
+    int64_t out[5];
 
-    int e2[] = {2, 6, 10, 14, 18};
+    int64_t e2[] = {2, 6, 10, 14, 18};
     acm_n_primes(2, 5, out);
     CHECK(memcmp(out, e2, sizeof(e2)) == 0, "n=2 mismatch");
 
-    int e3[] = {3, 6, 12, 15, 21};
+    int64_t e3[] = {3, 6, 12, 15, 21};
     acm_n_primes(3, 5, out);
     CHECK(memcmp(out, e3, sizeof(e3)) == 0, "n=3 mismatch");
 
-    int e4[] = {4, 8, 12, 20, 24};
+    int64_t e4[] = {4, 8, 12, 20, 24};
     acm_n_primes(4, 5, out);
     CHECK(memcmp(out, e4, sizeof(e4)) == 0, "n=4 mismatch");
 
-    int e5[] = {5, 10, 15, 20, 30};
+    int64_t e5[] = {5, 10, 15, 20, 30};
     acm_n_primes(5, 5, out);
     CHECK(memcmp(out, e5, sizeof(e5)) == 0, "n=5 mismatch");
 
-    int e10[] = {10, 20, 30, 40, 50};
+    int64_t e10[] = {10, 20, 30, 40, 50};
     acm_n_primes(10, 5, out);
     CHECK(memcmp(out, e10, sizeof(e10)) == 0, "n=10 mismatch");
 
@@ -95,14 +97,16 @@ static void test_known_n_primes(void)
 static void test_divisibility_contract(void)
 {
     printf("--- Divisibility contract (n=2..20, count=20) ---\n");
-    int out[20];
-    for (int n = 2; n <= 20; n++) {
+    int64_t out[20];
+    for (int64_t n = 2; n <= 20; n++) {
         acm_n_primes(n, 20, out);
         for (int i = 0; i < 20; i++) {
             CHECK_FMT(out[i] % n == 0,
-                       "n=%d: %d not divisible by %d", n, out[i], n);
+                       "n=%" PRId64 ": %" PRId64 " not divisible by %" PRId64,
+                       n, out[i], n);
             CHECK_FMT(out[i] % (n * n) != 0,
-                       "n=%d: %d divisible by %d^2", n, out[i], n);
+                       "n=%" PRId64 ": %" PRId64 " divisible by %" PRId64 "^2",
+                       n, out[i], n);
         }
     }
     printf("  OK\n\n");
@@ -111,13 +115,14 @@ static void test_divisibility_contract(void)
 static void test_square_boundary_exclusion(void)
 {
     printf("--- Square boundary exclusion (n=2..50) ---\n");
-    int out[100];
-    for (int n = 2; n <= 50; n++) {
+    int64_t out[100];
+    for (int64_t n = 2; n <= 50; n++) {
         acm_n_primes(n, 100, out);
-        int sq = n * n;
+        int64_t sq = n * n;
         for (int i = 0; i < 100; i++)
             CHECK_FMT(out[i] != sq,
-                       "n=%d: n^2=%d found at index %d", n, sq, i);
+                       "n=%" PRId64 ": n^2=%" PRId64 " found at index %d",
+                       n, sq, i);
     }
     printf("  OK\n\n");
 }
@@ -125,26 +130,27 @@ static void test_square_boundary_exclusion(void)
 static void test_first_n_minus_1_below_square(void)
 {
     printf("--- First n-1 below n^2, n-th above ---\n");
-    for (int n = 2; n <= 20; n++) {
-        int *out = malloc(n * sizeof(int));
+    for (int64_t n = 2; n <= 20; n++) {
+        int cnt = (int)n;
+        int64_t *out = malloc(cnt * sizeof(int64_t));
         /* First n-1 should be n, 2n, ..., (n-1)*n */
-        acm_n_primes(n, n - 1, out);
-        for (int i = 0; i < n - 1; i++) {
+        acm_n_primes(n, cnt - 1, out);
+        for (int i = 0; i < cnt - 1; i++) {
             CHECK_FMT(out[i] == n * (i + 1),
-                       "n=%d: prime[%d]=%d, expected %d",
+                       "n=%" PRId64 ": prime[%d]=%" PRId64 ", expected %" PRId64,
                        n, i, out[i], n * (i + 1));
             CHECK_FMT(out[i] < n * n,
-                       "n=%d: prime[%d]=%d >= n^2=%d",
+                       "n=%" PRId64 ": prime[%d]=%" PRId64 " >= n^2=%" PRId64,
                        n, i, out[i], n * n);
         }
         /* n-th n-prime should be (n+1)*n, above n^2 */
-        acm_n_primes(n, n, out);
-        CHECK_FMT(out[n - 1] == n * (n + 1),
-                   "n=%d: %d-th n-prime=%d, expected %d",
-                   n, n, out[n - 1], n * (n + 1));
-        CHECK_FMT(out[n - 1] > n * n,
-                   "n=%d: %d-th n-prime=%d <= n^2=%d",
-                   n, n, out[n - 1], n * n);
+        acm_n_primes(n, cnt, out);
+        CHECK_FMT(out[cnt - 1] == n * (n + 1),
+                   "n=%" PRId64 ": %" PRId64 "-th n-prime=%" PRId64 ", expected %" PRId64,
+                   n, n, out[cnt - 1], n * (n + 1));
+        CHECK_FMT(out[cnt - 1] > n * n,
+                   "n=%" PRId64 ": %" PRId64 "-th n-prime=%" PRId64 " <= n^2=%" PRId64,
+                   n, n, out[cnt - 1], n * n);
         free(out);
     }
     printf("  OK\n\n");
@@ -153,14 +159,101 @@ static void test_first_n_minus_1_below_square(void)
 static void test_monotonicity(void)
 {
     printf("--- Monotonicity (n=1..20, count=30) ---\n");
-    int out[30];
-    for (int n = 1; n <= 20; n++) {
+    int64_t out[30];
+    for (int64_t n = 1; n <= 20; n++) {
         acm_n_primes(n, 30, out);
         for (int i = 1; i < 30; i++)
             CHECK_FMT(out[i] > out[i - 1],
-                       "n=%d: non-monotone at %d: %d >= %d",
+                       "n=%" PRId64 ": non-monotone at %d: %" PRId64 " >= %" PRId64,
                        n, i, out[i - 1], out[i]);
     }
+    printf("  OK\n\n");
+}
+
+
+/* ================================================================
+ * Large-n regression (former int overflow)
+ * ================================================================ */
+
+static void test_large_n(void)
+{
+    printf("--- Large n (int64 overflow regression) ---\n");
+
+    /* GPT-5.4 found this: n=1500000000, count=2 overflowed 32-bit int.
+     * Python gives [1500000000, 3000000000]. */
+    int64_t out[2];
+    int64_t n = 1500000000LL;
+    acm_n_primes(n, 2, out);
+    CHECK_FMT(out[0] == 1500000000LL,
+              "first prime: %" PRId64, out[0]);
+    CHECK_FMT(out[1] == 3000000000LL,
+              "second prime: %" PRId64, out[1]);
+
+    /* Verify champernowne_real and digit_count also work. */
+    double c = acm_champernowne_real(n, 2);
+    CHECK_FMT(fabs(c - 1.15000000003) < 1e-10,
+              "C(1500000000, 2) = %.15f", c);
+
+    int dc = acm_digit_count(n, 2);
+    CHECK_FMT(dc == 20,
+              "digit_count(1500000000, 2) = %d", dc);
+
+    /* Also check a value where n*k > INT32_MAX for k > 2. */
+    int64_t out5[5];
+    acm_n_primes(1000000000LL, 5, out5);
+    for (int i = 0; i < 5; i++) {
+        CHECK_FMT(out5[i] > 0,
+                   "n=1e9: prime[%d]=%" PRId64 " is non-positive", i, out5[i]);
+        CHECK_FMT(out5[i] % 1000000000LL == 0,
+                   "n=1e9: %" PRId64 " not divisible by n", out5[i]);
+    }
+
+    /* int64 overflow guard: n near INT64_MAX should fail cleanly
+     * through the entire API, not just acm_n_primes. */
+    int64_t big_out[2];
+    int64_t big_n = INT64_MAX / 2 + 10;
+    int rc = acm_n_primes(big_n, 2, big_out);
+    CHECK_FMT(rc == -1,
+              "acm_n_primes(overflow) should return -1, got %d", rc);
+
+    double big_c = acm_champernowne_real(big_n, 2);
+    CHECK_FMT(big_c == 0.0,
+              "acm_champernowne_real(overflow) should return 0.0, got %.15f", big_c);
+
+    int big_dc = acm_digit_count(big_n, 2);
+    CHECK_FMT(big_dc == -1,
+              "acm_digit_count(overflow) should return -1, got %d", big_dc);
+
+    double dec_out[3];
+    int dec_rc = acm_decompose(big_n, 2, dec_out);
+    CHECK_FMT(dec_rc == -1,
+              "acm_decompose(overflow) should return -1, got %d", dec_rc);
+
+    printf("  OK\n\n");
+}
+
+
+/* ================================================================
+ * Buffer safety: champernowne_real with large count
+ * ================================================================ */
+
+static void test_champernowne_large_count(void)
+{
+    printf("--- Champernowne large count (buffer safety) ---\n");
+
+    /* count=1000 would produce ~3000+ chars of concatenated primes,
+     * well past the 2048-byte buffer. This must not crash. The
+     * returned double will be truncated but must be a valid number
+     * in [1, 2). */
+    double c = acm_champernowne_real(1, 1000);
+    CHECK_FMT(c >= 1.0 && c < 2.0,
+              "C(1, 1000) = %.15f, expected in [1, 2)", c);
+
+    /* Same with a larger n. */
+    c = acm_champernowne_real(50, 500);
+    CHECK_FMT(c >= 1.0 && c < 2.0,
+              "C(50, 500) = %.15f, expected in [1, 2)", c);
+
     printf("  OK\n\n");
 }
 
@@ -181,11 +274,11 @@ static void test_known_champernowne(void)
 static void test_first_n_prime_is_n(void)
 {
     printf("--- First n-prime is n (n=2..999) ---\n");
-    int out[1];
-    for (int n = 2; n <= 999; n++) {
+    int64_t out[1];
+    for (int64_t n = 2; n <= 999; n++) {
         acm_n_primes(n, 1, out);
         CHECK_FMT(out[0] == n,
-                   "n=%d: first n-prime=%d", n, out[0]);
+                   "n=%" PRId64 ": first n-prime=%" PRId64, n, out[0]);
     }
     printf("  OK\n\n");
 }
@@ -193,13 +286,13 @@ static void test_first_n_prime_is_n(void)
 static void test_leading_digit_preservation(void)
 {
     printf("--- Leading digit preservation (n=2..9999) ---\n");
-    int out[1];
-    for (int n = 2; n <= 9999; n++) {
+    int64_t out[1];
+    for (int64_t n = 2; n <= 9999; n++) {
         acm_n_primes(n, 1, out);
         int fd_prime = leading_digit(out[0]);
         int fd_n = leading_digit(n);
         CHECK_FMT(fd_prime == fd_n,
-                   "n=%d: leading digit of first n-prime (%d) is %d, expected %d",
+                   "n=%" PRId64 ": leading digit of first n-prime (%" PRId64 ") is %d, expected %d",
                    n, out[0], fd_prime, fd_n);
     }
     printf("  OK\n\n");
@@ -208,10 +301,10 @@ static void test_leading_digit_preservation(void)
 static void test_range(void)
 {
     printf("--- Range [1.1, 2.0) for n >= 10 ---\n");
-    for (int n = 10; n < 1000; n++) {
+    for (int64_t n = 10; n < 1000; n++) {
         double c = acm_champernowne_real(n, 5);
         CHECK_FMT(c >= 1.1 && c < 2.0,
-                   "n=%d: C(n)=%.10f out of range", n, c);
+                   "n=%" PRId64 ": C(n)=%.10f out of range", n, c);
     }
     printf("  OK\n\n");
 }
@@ -286,11 +379,11 @@ static void test_first_digit_integer_accuracy(void)
 static void test_first_digit_champernowne(void)
 {
     printf("--- first_digit on Champernowne reals ---\n");
-    for (int n = 1; n <= 1000; n++) {
+    for (int64_t n = 1; n <= 1000; n++) {
         double c = acm_champernowne_real(n, 5);
         int fd = acm_first_digit(c);
         CHECK_FMT(fd == 1,
-                   "n=%d: first_digit(C(n))=%d, expected 1 (C(n)=%.10f)",
+                   "n=%" PRId64 ": first_digit(C(n))=%d, expected 1 (C(n)=%.10f)",
                    n, fd, c);
     }
     printf("  OK\n\n");
@@ -346,24 +439,59 @@ static void test_digit_count_known(void)
 static void test_digit_count_consistency(void)
 {
     printf("--- digit_count consistency (n=1..49) ---\n");
-    for (int n = 1; n < 50; n++) {
+    for (int64_t n = 1; n < 50; n++) {
         int counts[] = {1, 5, 10};
         for (int ci = 0; ci < 3; ci++) {
             int count = counts[ci];
-            int *primes = malloc(count * sizeof(int));
+            int64_t *primes = malloc(count * sizeof(int64_t));
             acm_n_primes(n, count, primes);
             int expected = 0;
-            for (int i = 0; i < count; i++) {
-                int p = primes[i];
-                expected += count_digits(p);
-            }
+            for (int i = 0; i < count; i++)
+                expected += count_digits(primes[i]);
             int actual = acm_digit_count(n, count);
             CHECK_FMT(actual == expected,
-                       "n=%d, count=%d: digit_count=%d != %d",
+                       "n=%" PRId64 ", count=%d: digit_count=%d != %d",
                        n, count, actual, expected);
             free(primes);
         }
     }
+    printf("  OK\n\n");
+}
+
+
+/* ================================================================
+ * Decompose
+ * ================================================================ */
+
+static void test_decompose(void)
+{
+    printf("--- Decompose ---\n");
+    double out[3];
+
+    /* n=2, count=5: C(2,5) = 1.26101418, digit_count = 8 */
+    acm_decompose(2, 5, out);
+    double c = acm_champernowne_real(2, 5);
+    CHECK_FMT(fabs(out[0] - log(c)) < 1e-15,
+              "ln(champernowne): %.15f != %.15f", out[0], log(c));
+    CHECK_FMT(fabs(out[1] - log(2.0)) < 1e-15,
+              "ln(primality): %.15f != %.15f", out[1], log(2.0));
+    CHECK_FMT(fabs(out[2] - log(8.0 / 5.0)) < 1e-15,
+              "ln(digitfrac): %.15f != %.15f", out[2], log(8.0 / 5.0));
+
+    /* n=10, count=5: C(10,5) = 1.102030405, digit_count = 10 */
+    acm_decompose(10, 5, out);
+    c = acm_champernowne_real(10, 5);
+    CHECK_FMT(fabs(out[0] - log(c)) < 1e-15,
+              "ln(champernowne): %.15f != %.15f", out[0], log(c));
+    CHECK_FMT(fabs(out[1] - log(10.0)) < 1e-15,
+              "ln(primality): %.15f != %.15f", out[1], log(10.0));
+    CHECK_FMT(fabs(out[2] - log(10.0 / 5.0)) < 1e-15,
+              "ln(digitfrac): %.15f != %.15f", out[2], log(10.0 / 5.0));
+
+    /* Invalid input */
+    CHECK(acm_decompose(0, 5, out) == -1, "decompose(0,5) should fail");
+    CHECK(acm_decompose(2, 0, out) == -1, "decompose(2,0) should fail");
+
     printf("  OK\n\n");
 }
 
@@ -377,13 +505,13 @@ static void test_cross_language(void)
     printf("--- Cross-language check (Python values) ---\n");
 
     /* n_primes */
-    int out[10];
+    int64_t out[10];
     acm_n_primes(3, 5, out);
-    int e3[] = {3, 6, 12, 15, 21};
+    int64_t e3[] = {3, 6, 12, 15, 21};
     CHECK(memcmp(out, e3, sizeof(e3)) == 0, "n_primes(3,5) mismatch");
 
     acm_n_primes(1, 5, out);
-    int e1[] = {2, 3, 5, 7, 11};
+    int64_t e1[] = {2, 3, 5, 7, 11};
     CHECK(memcmp(out, e1, sizeof(e1)) == 0, "n_primes(1,5) mismatch");
 
     /* champernowne_real */
@@ -417,22 +545,13 @@ static void test_cross_language(void)
 
 /* ================================================================
  * Champernowne precision: cross-language round-trip
- *
- * Both Python (float()) and C (strtod()) parse the same concatenated
- * string as an IEEE 754 double. This test asserts they produce
- * bit-identical results across a range of string lengths — from
- * well within double precision (4 fractional digits) through well
- * past it (38 fractional digits). The pairs that exceed ~16 digits
- * verify that both languages truncate identically, which is the
- * audit property.
  * ================================================================ */
 
 static void test_champernowne_precision(void)
 {
     printf("--- Champernowne precision (cross-language round-trip) ---\n");
 
-    /* Python-computed values (sage -python, IEEE 754 double repr). */
-    struct { int n; int count; double py_value; int frac_digits; } cases[] = {
+    struct { int64_t n; int count; double py_value; int frac_digits; } cases[] = {
         {    2,  3,  1.261,                4 },
         {    2,  5,  1.26101418,           8 },
         {    5,  5,  1.51015203,           9 },
@@ -451,15 +570,9 @@ static void test_champernowne_precision(void)
 
     for (int i = 0; i < n_cases; i++) {
         double c = acm_champernowne_real(cases[i].n, cases[i].count);
-        /*
-         * Bit-identical check: both should produce the same double
-         * from the same string. Allow 0 ULP for short strings,
-         * 1 ULP for long strings (> 16 frac digits) as a concession
-         * to any platform strtod variance.
-         */
         double tol = (cases[i].frac_digits <= 16) ? 0.0 : 5e-16;
         CHECK_FMT(fabs(c - cases[i].py_value) <= tol,
-                   "n=%d count=%d: C=%.17g, Python=%.17g (frac_digits=%d)",
+                   "n=%" PRId64 " count=%d: C=%.17g, Python=%.17g (frac_digits=%d)",
                    cases[i].n, cases[i].count, c, cases[i].py_value,
                    cases[i].frac_digits);
     }
@@ -481,6 +594,8 @@ int main(void)
     test_square_boundary_exclusion();
     test_first_n_minus_1_below_square();
     test_monotonicity();
+    test_large_n();
+    test_champernowne_large_count();
 
     test_known_champernowne();
     test_first_n_prime_is_n();
@@ -503,6 +618,7 @@ int main(void)
     test_digit_count_known();
     test_digit_count_consistency();
 
+    test_decompose();
     test_cross_language();
     test_champernowne_precision();
 
