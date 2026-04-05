@@ -1,7 +1,6 @@
-# ACM-Champernowne
+# BIDDER
 
-Arithmetic Congruence Monoids encoded as Champernowne reals, and
-the BIDDER block generator that falls out of them.
+Arithmetic Congruence Monoids encoded as Champernowne reals, and the BIDDER block generator that falls out of them. Named for George Bidder's logarithms, which everyone seems to forget about.
 
 ## What this is
 
