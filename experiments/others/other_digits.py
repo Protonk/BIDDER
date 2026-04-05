@@ -20,7 +20,7 @@ sys.path.insert(0, '../..')
 import collections
 import numpy as np
 import matplotlib.pyplot as plt
-from hch import HCH
+from bidder import Bidder
 
 
 def extract_all_digits(n, base, d):
@@ -33,8 +33,8 @@ def extract_all_digits(n, base, d):
 
 
 def full_digit_analysis(base, digit_class, key=b'digit analysis'):
-    """Extract all digit positions from a full-period HCH run."""
-    gen = HCH(base=base, digit_class=digit_class, key=key)
+    """Extract all digit positions from a full-period Bidder run."""
+    gen = Bidder(base=base, digit_class=digit_class, key=key)
     period = gen.period
     d = digit_class
 
@@ -133,7 +133,7 @@ for base, dc in [(10, 3), (10, 4)]:
 print("=== Multi-digit stratified sampling ===\n")
 
 def integrate_multdigit(func, true_val, base, dc, key, n_samples):
-    """Integrate using all d digits from each HCH evaluation."""
+    """Integrate using all d digits from each Bidder evaluation."""
     digits, period, d = full_digit_analysis(base, dc, key)
     # Use first n_samples evaluations, extract all d digits as samples
     samples = []
@@ -154,7 +154,7 @@ def f_test(x): return np.sin(np.pi * x)
 true_val = 2.0 / np.pi
 
 for base, dc in [(10, 3), (10, 4)]:
-    gen = HCH(base=base, digit_class=dc, key=b'strat multi')
+    gen = Bidder(base=base, digit_class=dc, key=b'strat multi')
     period = gen.period
     d = dc
 
@@ -287,7 +287,7 @@ base_art, dc_art = 10, 4
 digits_art, period_art, d_art = full_digit_analysis(base_art, dc_art,
                                                       key=b'art')
 
-# Interleave: for each HCH evaluation, lay out all d digits in sequence.
+# Interleave: for each Bidder evaluation, lay out all d digits in sequence.
 # Row = evaluation index, column = digit position within that evaluation.
 # Then tile multiple evaluations per row for width.
 n_evals = 600

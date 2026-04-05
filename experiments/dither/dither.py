@@ -1,16 +1,16 @@
 """
-dither.py — Dithering comparison: HCH uniform vs numpy PRNG.
+dither.py — Dithering comparison: BIDDER uniform vs numpy PRNG.
 
 Takes a smooth gradient image and dithers it to 1-bit (black/white)
 using three noise sources:
 
-  1. HCH generator (exact uniform at block boundary)
+  1. BIDDER generator (exact uniform at block boundary)
   2. numpy PRNG (statistical uniform)
   3. No dither (raw threshold)
 
 For each source we dither at two sizes:
-  - N = block boundary (exact uniform for HCH)
-  - N = non-boundary (mid-sawtooth for HCH)
+  - N = block boundary (exact uniform for BIDDER)
+  - N = non-boundary (mid-sawtooth for BIDDER)
 
 The test image is a smooth horizontal gradient from 0 to 1,
 sized so that each column has a constant gray level. Banding
@@ -24,7 +24,7 @@ sys.path.insert(0, '../..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from hch import HCH
+from bidder import Bidder
 
 
 def make_gradient(width, height):
@@ -32,12 +32,12 @@ def make_gradient(width, height):
     return np.tile(np.linspace(0, 1, width), (height, 1))
 
 
-def dither_with_hch(image, base, digit_class, key):
-    """Dither an image using HCH generator output as threshold noise."""
+def dither_with_bidder(image, base, digit_class, key):
+    """Dither an image using BIDDER generator output as threshold noise."""
     h, w = image.shape
     n_pixels = h * w
 
-    gen = HCH(base=base, digit_class=digit_class, key=key)
+    gen = Bidder(base=base, digit_class=digit_class, key=key)
     raw = [gen.next() for _ in range(n_pixels)]
 
     # Map digits {1, ..., base-1} to [0, 1)
@@ -84,18 +84,18 @@ print("Generating dithered images...")
 
 # --- Small gradient (block boundary) ---
 grad_exact = make_gradient(w_exact, h_exact)
-hch_exact = dither_with_hch(grad_exact, base, dc, b'dither exact')
+bidder_exact = dither_with_bidder(grad_exact, base, dc, b'dither exact')
 np_exact = dither_with_numpy(grad_exact, seed=42)
 thresh_exact = dither_threshold(grad_exact)
 
 # --- Small gradient (mid-sawtooth) ---
 grad_mid = make_gradient(w_mid, h_mid)
-hch_mid = dither_with_hch(grad_mid, base, dc, b'dither mid')
+bidder_mid = dither_with_bidder(grad_mid, base, dc, b'dither mid')
 np_mid = dither_with_numpy(grad_mid, seed=43)
 
 # --- Larger gradient (block boundary, base 16) ---
 grad_lg = make_gradient(w_lg, h_lg)
-hch_lg = dither_with_hch(grad_lg, base_lg, dc_lg, b'dither large')
+bidder_lg = dither_with_bidder(grad_lg, base_lg, dc_lg, b'dither large')
 np_lg = dither_with_numpy(grad_lg, seed=44)
 
 # --- Radial gradient (more interesting shape) ---
@@ -107,7 +107,7 @@ yy, xx = np.mgrid[0:h_exact, 0:w_exact]
 radial = np.sqrt((xx - cx)**2 + (yy - cy)**2) / np.sqrt(cx**2 + cy**2)
 radial = np.clip(radial, 0, 1)
 
-hch_radial = dither_with_hch(radial, base, dc, b'dither radial')
+bidder_radial = dither_with_bidder(radial, base, dc, b'dither radial')
 np_radial = dither_with_numpy(radial, seed=45)
 
 
@@ -126,22 +126,22 @@ def show(ax, img, title, cmap='gray'):
 
 # Row 1: Block boundary (30x30 = 900 = period)
 show(axes[0, 0], grad_exact, f'Source gradient ({w_exact}x{h_exact})')
-show(axes[0, 1], hch_exact, f'HCH dither (period boundary)')
+show(axes[0, 1], bidder_exact, f'BIDDER dither (period boundary)')
 show(axes[0, 2], np_exact, f'numpy dither')
 
 # Row 2: Mid-sawtooth (30x28 = 840)
 show(axes[1, 0], grad_mid, f'Source gradient ({w_mid}x{h_mid})')
-show(axes[1, 1], hch_mid, f'HCH dither (mid-period)')
+show(axes[1, 1], bidder_mid, f'BIDDER dither (mid-period)')
 show(axes[1, 2], np_mid, f'numpy dither')
 
 # Row 3: Larger (64x60 = 3840 = period, base 16)
 show(axes[2, 0], grad_lg, f'Source gradient ({w_lg}x{h_lg})')
-show(axes[2, 1], hch_lg, f'HCH dither (base 16, period boundary)')
+show(axes[2, 1], bidder_lg, f'BIDDER dither (base 16, period boundary)')
 show(axes[2, 2], np_lg, f'numpy dither')
 
 # Row 4: Radial gradient (30x30)
 show(axes[3, 0], radial, f'Radial gradient ({w_exact}x{h_exact})')
-show(axes[3, 1], hch_radial, f'HCH dither (radial)')
+show(axes[3, 1], bidder_radial, f'BIDDER dither (radial)')
 show(axes[3, 2], np_radial, f'numpy dither (radial)')
 
 plt.subplots_adjust(wspace=0.05, hspace=0.15)
@@ -152,5 +152,5 @@ print("-> dither.png")
 # --- Quantitative: count black pixels per column (should track gradient) ---
 print("\nBlack pixel fraction per column (30x30 gradient, first 10 cols):")
 print("  Column gray: ", [f"{grad_exact[0,c]:.3f}" for c in range(10)])
-print("  HCH black%:  ", [f"{1 - hch_exact[:,c].mean():.3f}" for c in range(10)])
+print("  BIDDER black%:  ", [f"{1 - bidder_exact[:,c].mean():.3f}" for c in range(10)])
 print("  numpy black%: ", [f"{1 - np_exact[:,c].mean():.3f}" for c in range(10)])

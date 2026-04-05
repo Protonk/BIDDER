@@ -5,21 +5,21 @@
  * Each counter value is encrypted and written as 4 LE bytes.
  * This is standard counter-mode Speck — should pass PractRand easily.
  *
- * Build: gcc -O2 -o speck_stream tests/speck_stream.c generator/hch.c -lm
+ * Build: gcc -O2 -o speck_stream tests/speck_stream.c generator/bidder.c -lm
  */
 
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
 
-/* Import Speck internals from hch.c */
+/* Import Speck internals from bidder.c */
 extern void speck32_expand_key(const uint8_t key[8], uint16_t rk[22]);
 extern uint32_t speck32_encrypt(uint32_t pt, const uint16_t rk[22]);
 
 int main(void)
 {
     uint8_t seed[] = "Speck32 PractRand";
-    /* SHA-256 the seed to get 8 key bytes (reuse from hch.c would be
+    /* SHA-256 the seed to get 8 key bytes (reuse from bidder.c would be
        nice but let's keep it simple — just use the first 8 bytes) */
     uint8_t key[8];
     /* Simple key derivation: just XOR-fold the seed into 8 bytes */

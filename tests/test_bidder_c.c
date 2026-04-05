@@ -1,5 +1,5 @@
 /*
- * test_hch_c.c — Tests for the C implementation of HCH.
+ * test_bidder_c.c — Tests for the C implementation of BIDDER.
  *
  * Verifies:
  *   1. Speck32/64 test vector from the paper
@@ -8,14 +8,14 @@
  *   4. Determinism (reset)
  *   5. Cross-check against Python (printed for manual comparison)
  *
- * Build: gcc -O2 -o test_hch_c tests/test_hch_c.c generator/hch.c -lm
- * Run:   ./test_hch_c
+ * Build: gcc -O2 -o test_bidder_c tests/test_bidder_c.c generator/bidder.c -lm
+ * Run:   ./test_bidder_c
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../generator/hch.h"
+#include "../generator/bidder.h"
 
 static int failures = 0;
 
@@ -60,9 +60,9 @@ static void test_uniformity(uint64_t base, uint32_t digit_class)
     printf("--- Uniformity: base=%llu, d=%u ---\n",
            (unsigned long long)base, digit_class);
 
-    hch_ctx ctx;
-    int rc = hch_init(&ctx, base, digit_class, (const uint8_t *)"test", 4);
-    CHECK(rc == 0, "hch_init failed");
+    bidder_ctx ctx;
+    int rc = bidder_init(&ctx, base, digit_class, (const uint8_t *)"test", 4);
+    CHECK(rc == 0, "bidder_init failed");
 
     uint64_t period = ctx.block_size;
     uint32_t alphabet = (uint32_t)(base - 1);
@@ -73,7 +73,7 @@ static void test_uniformity(uint64_t base, uint32_t digit_class)
     CHECK(counts != NULL, "alloc failed");
 
     for (uint64_t i = 0; i < period; i++) {
-        uint32_t d = hch_next(&ctx);
+        uint32_t d = bidder_next(&ctx);
         CHECK(d >= 1 && d < base, "output out of range");
         counts[d]++;
     }
@@ -104,13 +104,13 @@ static void test_uniformity(uint64_t base, uint32_t digit_class)
 static void test_key_sensitivity(void)
 {
     printf("--- Key sensitivity ---\n");
-    hch_ctx a, b;
-    hch_init(&a, 10, 3, (const uint8_t *)"alpha", 5);
-    hch_init(&b, 10, 3, (const uint8_t *)"bravo", 5);
+    bidder_ctx a, b;
+    bidder_init(&a, 10, 3, (const uint8_t *)"alpha", 5);
+    bidder_init(&b, 10, 3, (const uint8_t *)"bravo", 5);
 
     int differ = 0;
     for (int i = 0; i < 50; i++) {
-        if (hch_next(&a) != hch_next(&b))
+        if (bidder_next(&a) != bidder_next(&b))
             differ = 1;
     }
     CHECK(differ, "different keys produced identical output");
@@ -125,18 +125,18 @@ static void test_key_sensitivity(void)
 static void test_reset(void)
 {
     printf("--- Reset ---\n");
-    hch_ctx ctx;
-    hch_init(&ctx, 10, 3, (const uint8_t *)"reset", 5);
+    bidder_ctx ctx;
+    bidder_init(&ctx, 10, 3, (const uint8_t *)"reset", 5);
 
     uint32_t first[50];
     for (int i = 0; i < 50; i++)
-        first[i] = hch_next(&ctx);
+        first[i] = bidder_next(&ctx);
 
-    hch_reset(&ctx);
+    bidder_reset(&ctx);
 
     int match = 1;
     for (int i = 0; i < 50; i++) {
-        if (hch_next(&ctx) != first[i])
+        if (bidder_next(&ctx) != first[i])
             match = 0;
     }
     CHECK(match, "reset did not reproduce output");
@@ -153,16 +153,16 @@ static void test_crosscheck(void)
     printf("--- Cross-check (compare with Python) ---\n");
 
     printf("  base=10 d=2 key='test':\n    C:  ");
-    hch_ctx ctx;
-    hch_init(&ctx, 10, 2, (const uint8_t *)"test", 4);
+    bidder_ctx ctx;
+    bidder_init(&ctx, 10, 2, (const uint8_t *)"test", 4);
     for (int i = 0; i < 20; i++)
-        printf("%u ", hch_next(&ctx));
+        printf("%u ", bidder_next(&ctx));
     printf("\n");
 
     printf("  base=10 d=3 key='test':\n    C:  ");
-    hch_init(&ctx, 10, 3, (const uint8_t *)"test", 4);
+    bidder_init(&ctx, 10, 3, (const uint8_t *)"test", 4);
     for (int i = 0; i < 20; i++)
-        printf("%u ", hch_next(&ctx));
+        printf("%u ", bidder_next(&ctx));
     printf("\n\n");
 }
 
@@ -174,17 +174,17 @@ static void test_crosscheck(void)
 static void test_wraparound(void)
 {
     printf("--- Period wraparound ---\n");
-    hch_ctx ctx;
-    hch_init(&ctx, 10, 2, (const uint8_t *)"wrap", 4);
+    bidder_ctx ctx;
+    bidder_init(&ctx, 10, 2, (const uint8_t *)"wrap", 4);
 
     uint32_t first_period[90];
     for (int i = 0; i < 90; i++)
-        first_period[i] = hch_next(&ctx);
+        first_period[i] = bidder_next(&ctx);
 
     /* Counter should have wrapped */
     int match = 1;
     for (int i = 0; i < 90; i++) {
-        if (hch_next(&ctx) != first_period[i])
+        if (bidder_next(&ctx) != first_period[i])
             match = 0;
     }
     CHECK(match, "period wraparound failed");
@@ -198,7 +198,7 @@ static void test_wraparound(void)
 
 int main(void)
 {
-    printf("=== HCH C implementation tests ===\n\n");
+    printf("=== BIDDER C implementation tests ===\n\n");
 
     test_speck_vector();
 

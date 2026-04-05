@@ -4,13 +4,13 @@
 
 Python tests (no dependencies beyond stdlib):
 
-    python3 tests/test_hch.py
+    python3 tests/test_bidder.py
     python3 tests/test_speck.py
 
 C tests:
 
-    gcc -O2 -o test_hch_c tests/test_hch_c.c generator/hch.c -lm
-    ./test_hch_c
+    gcc -O2 -o test_bidder_c tests/test_bidder_c.c generator/bidder.c -lm
+    ./test_bidder_c
 
 Plots and experiments require `sage -python`, not `python3`.
 sage carries numpy and matplotlib internally.
@@ -20,7 +20,7 @@ sage carries numpy and matplotlib internally.
 - `acm_core.py`, `acm_sawtooth.py`, `acm_benford.py` — original
   ACM-Champernowne exploration scripts. These are the project's
   origin. Don't modify without reason.
-- `generator/` — the HCH block generator (Python + C). Has its
+- `generator/` — the BIDDER block generator (Python + C). Has its
   own `AGENTS.md` with implementation-specific rules.
 - `tests/` — all test suites. Keep green.
 - `experiments/` — exploration scripts and visualizations.
@@ -42,7 +42,7 @@ script and output PNGs. Follow these patterns:
 
 ## Design doc
 
-`generator/HCH-BLOCK-GEN.md` is the source of truth for the
+`generator/BIDDER.md` is the source of truth for the
 generator's design, findings, and open questions. Update it
 when a question is answered or a finding is confirmed.
 

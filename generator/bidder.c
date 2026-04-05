@@ -1,12 +1,12 @@
 /*
- * hch.c — Hilbert-Champernowne-Hyland block generator (C implementation)
+ * bidder.c — BIDDER block generator (C implementation)
  *
  * Stupid simple. One file, one struct, three functions. Speck32/64 for
  * tight-fit blocks, balanced Feistel for small blocks. SHA-256 for key
  * derivation (bundled below, no external deps).
  */
 
-#include "hch.h"
+#include "bidder.h"
 #include <string.h>
 
 /* ================================================================
@@ -129,7 +129,7 @@ uint32_t speck32_encrypt(uint32_t pt, const uint16_t rk[22])
 
 
 /* ================================================================
- * HCH generator
+ * BIDDER generator
  * ================================================================ */
 
 static uint64_t ipow(uint64_t base, uint32_t exp, int *overflow)
@@ -166,7 +166,7 @@ static uint32_t leading_digit(uint64_t n, uint64_t base)
     return (uint32_t)n;
 }
 
-int hch_init(hch_ctx *ctx, uint64_t base, uint32_t digit_class,
+int bidder_init(bidder_ctx *ctx, uint64_t base, uint32_t digit_class,
              const uint8_t *key, uint32_t key_len)
 {
     if (base < 2 || digit_class < 1)
@@ -190,7 +190,7 @@ int hch_init(hch_ctx *ctx, uint64_t base, uint32_t digit_class,
 
     uint64_t speck_block = (uint64_t)1 << 32;
 
-    if (speck_block <= (uint64_t)HCH_MAX_CYCLE_WALK_RATIO * ctx->block_size) {
+    if (speck_block <= (uint64_t)BIDDER_MAX_CYCLE_WALK_RATIO * ctx->block_size) {
         /* Speck32/64 mode */
         ctx->mode = 0;
         uint8_t hash[32];
@@ -206,7 +206,7 @@ int hch_init(hch_ctx *ctx, uint64_t base, uint32_t digit_class,
         /* Hash the full key once, then derive round keys from the hash */
         uint8_t key_hash[32];
         sha256(key, key_len, key_hash);
-        for (int i = 0; i < HCH_FEISTEL_ROUNDS; i++) {
+        for (int i = 0; i < BIDDER_FEISTEL_ROUNDS; i++) {
             uint8_t buf[36]; /* 32-byte hash + 4-byte index */
             memcpy(buf, key_hash, 32);
             buf[32] = (uint8_t)(i);
@@ -224,7 +224,7 @@ int hch_init(hch_ctx *ctx, uint64_t base, uint32_t digit_class,
     return 0;
 }
 
-static uint32_t permute_speck(const hch_ctx *ctx, uint32_t index)
+static uint32_t permute_speck(const bidder_ctx *ctx, uint32_t index)
 {
     uint32_t val = index;
     for (;;) {
@@ -234,7 +234,7 @@ static uint32_t permute_speck(const hch_ctx *ctx, uint32_t index)
     }
 }
 
-static uint32_t permute_feistel(const hch_ctx *ctx, uint32_t index)
+static uint32_t permute_feistel(const bidder_ctx *ctx, uint32_t index)
 {
     uint32_t L_size = ctx->L_size;
     uint32_t R_size = ctx->R_size;
@@ -243,7 +243,7 @@ static uint32_t permute_feistel(const hch_ctx *ctx, uint32_t index)
         uint32_t L = index / R_size;
         uint32_t R = index % R_size;
 
-        for (int i = 0; i < HCH_FEISTEL_ROUNDS; i++) {
+        for (int i = 0; i < BIDDER_FEISTEL_ROUNDS; i++) {
             uint64_t rk = ctx->feistel_keys[i];
             uint32_t f = (uint32_t)(((R + (rk >> (i * 3))) ^
                                      (rk >> (i * 5 + 1))) % L_size);
@@ -259,7 +259,7 @@ static uint32_t permute_feistel(const hch_ctx *ctx, uint32_t index)
     }
 }
 
-uint32_t hch_next(hch_ctx *ctx)
+uint32_t bidder_next(bidder_ctx *ctx)
 {
     if (ctx->counter >= ctx->block_size)
         ctx->counter = 0;
@@ -275,7 +275,7 @@ uint32_t hch_next(hch_ctx *ctx)
     return leading_digit(n, ctx->base);
 }
 
-void hch_reset(hch_ctx *ctx)
+void bidder_reset(bidder_ctx *ctx)
 {
     ctx->counter = 0;
 }

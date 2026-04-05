@@ -1,7 +1,7 @@
 """
 contamination.py — How operations contaminate a uniform source.
 
-Start with the HCH generator producing perfectly uniform digits.
+Start with the BIDDER generator producing perfectly uniform digits.
 Then watch what happens as we apply operations:
 
   Row 1: Raw uniform output (the irreducibles)
@@ -24,11 +24,11 @@ sys.path.insert(0, '../../..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from hch import HCH
+from bidder import Bidder
 
 # --- Generate uniform source ---
 print("Generating uniform source...")
-gen = HCH(base=10, digit_class=4, key=b'contamination')
+gen = Bidder(base=10, digit_class=4, key=b'contamination')
 N = gen.period  # 9000 outputs, exactly uniform
 raw = np.array([gen.next() for _ in range(N)], dtype=np.float64)
 

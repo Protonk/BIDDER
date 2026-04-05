@@ -1,36 +1,36 @@
 /*
- * hch_stream.c — Emit raw bytes from the HCH generator to stdout.
+ * bidder_stream.c — Emit raw bytes from the BIDDER generator to stdout.
  *
  * For piping to PractRand's RNG_test:
- *   ./hch_stream | RNG_test stdin
+ *   ./bidder_stream | RNG_test stdin
  *
  * Uses base 65536, digit_class 2 (tight Speck32 fit, period ~4.3G).
  * Each output symbol d in {1..65535} is written as 2 little-endian bytes.
  * Wraps at period boundary and rekeys for the next period.
  *
- * Build: gcc -O2 -o hch_stream tests/hch_stream.c generator/hch.c -lm
+ * Build: gcc -O2 -o bidder_stream tests/bidder_stream.c generator/bidder.c -lm
  */
 
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
-#include "../generator/hch.h"
+#include "../generator/bidder.h"
 
 int main(void)
 {
-    hch_ctx ctx;
+    bidder_ctx ctx;
     uint64_t base = 65536;
     uint32_t digit_class = 2;
-    uint8_t key[] = "HCH PractRand test";
+    uint8_t key[] = "BIDDER PractRand test";
     uint32_t key_len = sizeof(key) - 1;
 
-    int rc = hch_init(&ctx, base, digit_class, key, key_len);
+    int rc = bidder_init(&ctx, base, digit_class, key, key_len);
     if (rc != 0) {
-        fprintf(stderr, "hch_init failed\n");
+        fprintf(stderr, "bidder_init failed\n");
         return 1;
     }
 
-    fprintf(stderr, "HCH stream: base=%llu d=%u period=%llu mode=%s\n",
+    fprintf(stderr, "BIDDER stream: base=%llu d=%u period=%llu mode=%s\n",
             (unsigned long long)base, digit_class,
             (unsigned long long)ctx.block_size,
             ctx.mode == 0 ? "speck32" : "feistel");
@@ -42,7 +42,7 @@ int main(void)
     uint32_t rekey_count = 0;
 
     for (;;) {
-        uint32_t d = hch_next(&ctx);
+        uint32_t d = bidder_next(&ctx);
 
         /* Write symbol as 2 little-endian bytes */
         buf[buf_pos++] = (uint8_t)(d & 0xFF);
@@ -65,7 +65,7 @@ int main(void)
             new_key[key_len+1] = (uint8_t)(rekey_count >> 8);
             new_key[key_len+2] = (uint8_t)(rekey_count >> 16);
             new_key[key_len+3] = (uint8_t)(rekey_count >> 24);
-            hch_init(&ctx, base, digit_class, new_key, key_len + 4);
+            bidder_init(&ctx, base, digit_class, new_key, key_len + 4);
 
             fprintf(stderr, "  rekey #%u at %llu bytes\n",
                     rekey_count, total * 2);

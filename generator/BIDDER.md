@@ -1,4 +1,4 @@
-# HCH Block Generator
+# BIDDER Generator
 
 Hilbert-Champernowne-Hyland uniform block generator. A pseudorandom
 number generator that achieves exact output uniformity by
@@ -15,7 +15,7 @@ produce output distributions that are statistically close to
 uniform. The quality is verified empirically (TestU01, PractRand).
 No finite prefix of the output is exactly uniform — it converges.
 
-HCH factors the problem in two. An algebraic substrate provides
+BIDDER factors the problem in two. An algebraic substrate provides
 exact uniformity. A keyed permutation provides disorder. The
 substrate guarantees the distribution; the permutation provides
 unpredictability proportional to its PRP quality. Neither
@@ -126,21 +126,21 @@ Block size (b-1) * b^(d-1) must not exceed 2^32.
 Both implementations have identical feature sets and produce
 identical output for identical inputs.
 
-**Python.** `generator/hch.py`. Speck32/64 and Feistel fallback.
-SHA-256 via hashlib. Class `HCH` with `next()`, `reset()`, and
+**Python.** `generator/bidder.py`. Speck32/64 and Feistel fallback.
+SHA-256 via hashlib. Class `Bidder` with `next()`, `reset()`, and
 Python iterator protocol.
 
-**C.** `generator/hch.h` + `generator/hch.c`. Speck32/64 and
+**C.** `generator/bidder.h` + `generator/bidder.c`. Speck32/64 and
 Feistel. Bundled SHA-256. No external dependencies. Functions
-`hch_init()`, `hch_next()`, `hch_reset()`.
+`bidder_init()`, `bidder_next()`, `bidder_reset()`.
 
 **Reference.** `generator/speck.py`. Full Speck family (all 10
 variants, all 9 Appendix C test vectors). Used for cipher
 verification, not by the generator.
 
-**Tests.** `tests/test_hch.py` (18 tests including cross-language
+**Tests.** `tests/test_bidder.py` (18 tests including cross-language
 check against hardcoded C output), `tests/test_speck.py` (13
-tests), `tests/test_hch_c.c` (10 tests including cross-language
+tests), `tests/test_bidder_c.c` (10 tests including cross-language
 print for manual comparison).
 
 
@@ -165,23 +165,23 @@ peak's duration relative to the total sample.
 
 ### Interferometry
 
-Under random-draw sampling, the HCH generator is
+Under random-draw sampling, the BIDDER generator is
 indistinguishable from numpy: same power spectrum, same addition
 heatmap, same rolling shutter structure. The Speck permutation
 destroys the deterministic phase structure of the raw ACM source.
 
 Under consecutive-draw (sliding-window) sampling, the raw ACM
 source shows resolved phase gradients that numpy destroys. But
-the HCH generator, having been permuted, looks like numpy here
+the BIDDER generator, having been permuted, looks like numpy here
 too. The permutation is mixing well.
 
 ### Contamination under arithmetic
 
-These experiments use HCH as a known-uniform starting point to
+These experiments use BIDDER as a known-uniform starting point to
 explore how arithmetic operations deform distributions. The
-findings characterize uniform distributions generally, not HCH
+findings characterize uniform distributions generally, not BIDDER
 specifically — any exact-uniform source would produce the same
-results. The value of HCH here is as a calibration tool: a
+results. The value of BIDDER here is as a calibration tool: a
 provably uniform origin for gestalt exploration of how addition
 and multiplication interact with digit-frequency structure.
 
@@ -205,7 +205,7 @@ Multiplication is a one-way contaminant of uniform distributions.
 
 ### Stratified sampling
 
-When HCH output is used for Monte Carlo integration, each output
+When BIDDER output is used for Monte Carlo integration, each output
 digit maps to a stratum. At block boundaries, every stratum has
 been visited exactly equally — free stratification with no
 overhead.
@@ -223,7 +223,7 @@ discretization).
 
 ### Dithering
 
-Tested as a noise source for 1-bit image dithering. Both HCH and
+Tested as a noise source for 1-bit image dithering. Both BIDDER and
 numpy produce comparable visual results. Exact marginal uniformity
 does not help dithering — what dithering needs is spatial
 uniformity (blue noise), which the generator does not provide.
@@ -239,23 +239,23 @@ Tested with PractRand 0.95 (core test suite, standard folding).
 (raw encrypted indices, 4 bytes per output) passes PractRand clean
 through 16MB with zero anomalies. The PRP is sound.
 
-**The leading-digit extraction fails.** HCH output (leading base-b
+**The leading-digit extraction fails.** BIDDER output (leading base-b
 digits, {1, ..., b-1}) fails PractRand at 8MB on the FPF-14+6/16
 cross-correlation test. The cause: the output alphabet excludes 0.
 PractRand expects byte-stream uniformity over {0, ..., 2^n - 1}.
-HCH produces stratum-uniform output over {1, ..., b-1}. The
+BIDDER produces stratum-uniform output over {1, ..., b-1}. The
 missing value is structural and detectable.
 
 **This is the right result.** PractRand tests whether a byte stream
-is indistinguishable from random. HCH is not a byte-stream PRNG —
+is indistinguishable from random. BIDDER is not a byte-stream PRNG —
 it is a stratum-coverage generator. Its uniformity guarantee is
 over a non-power-of-2 alphabet that excludes 0. Testing it with
 PractRand is a category error, like testing a Sobol sequence with
-a runs test. The correct test for HCH is whether the stratum
+a runs test. The correct test for BIDDER is whether the stratum
 coverage is exact at block boundaries — which it is, by
 construction.
 
-Test code: `tests/hch_stream.c` (HCH byte emitter),
+Test code: `tests/bidder_stream.c` (BIDDER byte emitter),
 `tests/speck_stream.c` (raw Speck counter mode).
 
 
@@ -371,17 +371,17 @@ the Feistel fallback's limited diffusion is not a defensible
 basis for unpredictability. Use only the Speck32/64 mode
 (tight-fit blocks) in such contexts, and evaluate whether 22
 rounds of Speck32 meets the application's security requirements
-independently of HCH's uniformity claims.
+independently of BIDDER's uniformity claims.
 
 For applications that only need statistical uniformity (Monte
 Carlo simulation, game randomness, general-purpose PRNG), a
 conventional generator like xoshiro or AES-CTR is simpler and
-faster. HCH's value is in the provability, not the performance.
+faster. BIDDER's value is in the provability, not the performance.
 
 
 ## Open questions
 
-1. **Composition.** Can HCH blocks at different bases or digit
+1. **Composition.** Can BIDDER blocks at different bases or digit
    classes be composed (e.g., via Chinese Remainder Theorem) to
    decouple period from alphabet size?
 
@@ -404,4 +404,5 @@ faster. HCH's value is in the provability, not the performance.
   this idea to irreducible elements of ACMs.
 - **Hyland** (2026): identified the exact uniformity of leading
   digits in the ACM-Champernowne construction and proposed its
-  application to pseudorandom generation.
+  application to pseudorandom generation. The original name
+  "HCH" (Hilbert-Champernowne-Hyland) was later renamed to BIDDER.

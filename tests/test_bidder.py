@@ -1,12 +1,12 @@
 """
-test_hch.py — Tests for the HCH block generator.
+test_bidder.py — Tests for the BIDDER block generator.
 
 Verifies exact uniformity, key sensitivity, determinism, mode selection,
 and full-period bijection for multiple base/digit-class combinations.
 
-Tests apply to both the Python (hch.py) and C (hch.c) implementations.
+Tests apply to both the Python (bidder.py) and C (bidder.c) implementations.
 
-Run: python3 tests/test_hch.py
+Run: python3 tests/test_bidder.py
 """
 
 import collections
@@ -15,7 +15,7 @@ import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'generator'))
 
-from hch import HCH
+from bidder import Bidder
 
 
 # =====================================================================
@@ -24,7 +24,7 @@ from hch import HCH
 
 def _check_exact_uniformity(base, digit_class, key=b'test'):
     """Generate a full period and verify every digit appears equally."""
-    gen = HCH(base=base, digit_class=digit_class, key=key)
+    gen = Bidder(base=base, digit_class=digit_class, key=key)
     output = [gen.next() for _ in range(gen.period)]
     counts = collections.Counter(output)
     expected = gen.period // (base - 1)
@@ -68,16 +68,16 @@ def test_uniformity_base2_d10():
 # =====================================================================
 
 def test_different_keys_different_output():
-    gen_a = HCH(base=10, digit_class=3, key=b'alpha')
-    gen_b = HCH(base=10, digit_class=3, key=b'bravo')
+    gen_a = Bidder(base=10, digit_class=3, key=b'alpha')
+    gen_b = Bidder(base=10, digit_class=3, key=b'bravo')
     out_a = [gen_a.next() for _ in range(50)]
     out_b = [gen_b.next() for _ in range(50)]
     assert out_a != out_b, "Different keys produced identical output"
     print("  Key sensitivity: OK")
 
 def test_same_key_same_output():
-    gen_a = HCH(base=10, digit_class=3, key=b'same')
-    gen_b = HCH(base=10, digit_class=3, key=b'same')
+    gen_a = Bidder(base=10, digit_class=3, key=b'same')
+    gen_b = Bidder(base=10, digit_class=3, key=b'same')
     out_a = [gen_a.next() for _ in range(100)]
     out_b = [gen_b.next() for _ in range(100)]
     assert out_a == out_b
@@ -89,7 +89,7 @@ def test_same_key_same_output():
 # =====================================================================
 
 def test_reset():
-    gen = HCH(base=10, digit_class=3, key=b'reset test')
+    gen = Bidder(base=10, digit_class=3, key=b'reset test')
     first = [gen.next() for _ in range(50)]
     gen.reset()
     second = [gen.next() for _ in range(50)]
@@ -97,7 +97,7 @@ def test_reset():
     print("  Reset: OK")
 
 def test_period_wraparound():
-    gen = HCH(base=10, digit_class=2, key=b'wrap')
+    gen = Bidder(base=10, digit_class=2, key=b'wrap')
     first_period = [gen.next() for _ in range(gen.period)]
     second_period = [gen.next() for _ in range(gen.period)]
     assert first_period == second_period, "Period wraparound failed"
@@ -110,14 +110,14 @@ def test_period_wraparound():
 
 def test_feistel_fallback():
     """Small blocks use Feistel (cycle-walk ratio too high for Speck)."""
-    gen = HCH(base=10, digit_class=2, key=b'small')
+    gen = Bidder(base=10, digit_class=2, key=b'small')
     assert gen._mode == 1, f"Expected feistel (1), got {gen._mode}"
     _check_exact_uniformity(10, 2, key=b'small')
     print(f"  Feistel fallback: OK ({gen})")
 
 def test_speck_mode_tight_fit():
     """Tight-fit blocks use Speck32 directly."""
-    gen = HCH(base=65536, digit_class=2, key=b'tight')
+    gen = Bidder(base=65536, digit_class=2, key=b'tight')
     assert gen._mode == 0, f"Expected speck32 (0), got {gen._mode}"
     print(f"  Speck tight fit: OK ({gen})")
 
@@ -127,7 +127,7 @@ def test_speck_mode_tight_fit():
 # =====================================================================
 
 def test_output_range():
-    gen = HCH(base=100, digit_class=2, key=b'range test')
+    gen = Bidder(base=100, digit_class=2, key=b'range test')
     for _ in range(gen.period):
         v = gen.next()
         assert 1 <= v <= 99, f"Out of range: {v}"
@@ -139,7 +139,7 @@ def test_output_range():
 # =====================================================================
 
 def test_bijection_small():
-    gen = HCH(base=10, digit_class=3, key=b'bijection')
+    gen = Bidder(base=10, digit_class=3, key=b'bijection')
     seen = set()
     for i in range(gen.period):
         idx = gen._permute(i)
@@ -154,7 +154,7 @@ def test_bijection_small():
 # =====================================================================
 
 def test_iterator():
-    gen = HCH(base=10, digit_class=2, key=b'iter')
+    gen = Bidder(base=10, digit_class=2, key=b'iter')
     output = list(gen)
     assert len(output) == gen.period
     counts = collections.Counter(output)
@@ -170,12 +170,12 @@ def test_iterator():
 
 def test_cross_check():
     """Output must match the C implementation exactly."""
-    gen = HCH(base=10, digit_class=2, key=b'test')
+    gen = Bidder(base=10, digit_class=2, key=b'test')
     out = [gen.next() for _ in range(20)]
     expected = [3, 8, 1, 2, 7, 1, 5, 4, 7, 4, 2, 5, 8, 7, 8, 9, 2, 9, 6, 7]
     assert out == expected, f"Cross-check failed: {out} != {expected}"
 
-    gen2 = HCH(base=10, digit_class=3, key=b'test')
+    gen2 = Bidder(base=10, digit_class=3, key=b'test')
     out2 = [gen2.next() for _ in range(20)]
     expected2 = [1, 1, 8, 8, 3, 2, 9, 9, 3, 2, 2, 4, 5, 2, 3, 6, 7, 3, 6, 6]
     assert out2 == expected2, f"Cross-check failed: {out2} != {expected2}"
@@ -187,7 +187,7 @@ def test_cross_check():
 # =====================================================================
 
 def test_properties():
-    gen = HCH(base=10, digit_class=3, key=b'props')
+    gen = Bidder(base=10, digit_class=3, key=b'props')
     assert gen.period == 900
     assert gen.block_start == 100
     assert gen.block_size == 900
@@ -199,7 +199,7 @@ def test_properties():
 # =====================================================================
 
 if __name__ == '__main__':
-    print("=== HCH generator tests ===\n")
+    print("=== BIDDER generator tests ===\n")
 
     test_uniformity_base10_d2()
     test_uniformity_base10_d3()
@@ -224,4 +224,4 @@ if __name__ == '__main__':
     test_cross_check()
     test_properties()
 
-    print("\nAll HCH tests passed.")
+    print("\nAll BIDDER tests passed.")

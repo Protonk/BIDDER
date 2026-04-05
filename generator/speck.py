@@ -13,7 +13,7 @@ The round function for all variants is:
 
 with a=7, b=2 for Speck32/64, and a=8, b=3 for all others.
 
-For HCH use, SPECK_PARAMS maps each block size to the *max-key*
+For BIDDER use, SPECK_PARAMS maps each block size to the *max-key*
 variant. The full table is available as SPECK_ALL for testing.
 """
 
@@ -40,7 +40,7 @@ SPECK_ALL = {
     (128, 256): (64, 4, 8, 3, 34),
 }
 
-# Max-key variants for each block size (used by HCH)
+# Max-key variants for each block size (used by BIDDER)
 # Value: (word_bits, key_words, alpha, beta, rounds, key_bits)
 SPECK_PARAMS = {
     32:  (16, 4, 7, 2, 22,  64),

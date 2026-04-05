@@ -1,17 +1,17 @@
 """
-hch.py — Hilbert-Champernowne-Hyland block generator
-=====================================================
+bidder.py — BIDDER block generator
+===================================
 
-Python implementation matching hch.c exactly. Speck32/64 for
+Python implementation matching bidder.c exactly. Speck32/64 for
 tight-fit blocks, balanced Feistel for small blocks. SHA-256
 for key derivation.
 
 Blocks up to 2^32. Three operations: init, next, reset.
 
 Usage:
-    from hch import HCH
+    from bidder import Bidder
 
-    gen = HCH(base=65536, digit_class=2, key=b'secret')
+    gen = Bidder(base=65536, digit_class=2, key=b'secret')
     for i in range(100):
         print(gen.next())
 """
@@ -20,7 +20,7 @@ import hashlib
 import math
 import struct
 
-# Constants matching hch.h
+# Constants matching bidder.h
 SPECK32_ROUNDS = 22
 FEISTEL_ROUNDS = 8
 MAX_CYCLE_WALK_RATIO = 64
@@ -66,12 +66,12 @@ def _speck32_encrypt(pt, rk):
 
 
 # =====================================================================
-# HCH generator
+# BIDDER generator
 # =====================================================================
 
-class HCH:
+class Bidder:
     """
-    HCH block generator.
+    BIDDER block generator.
 
     Parameters
     ----------
@@ -178,4 +178,4 @@ class HCH:
 
     def __repr__(self):
         mode = 'speck32' if self._mode == 0 else 'feistel'
-        return f"HCH(base={self.base}, d={self.digit_class}, {mode}, period={self.period})"
+        return f"Bidder(base={self.base}, d={self.digit_class}, {mode}, period={self.period})"

@@ -15,7 +15,7 @@ import hashlib
 import struct
 import numpy as np
 import matplotlib.pyplot as plt
-from hch import HCH
+from bidder import Bidder
 
 
 def rekey(old_key, period_num):
@@ -30,7 +30,7 @@ def generate_rekeyed_stream(base, digit_class, seed_key, n_periods):
     per_period_counts = []
 
     for p in range(n_periods):
-        gen = HCH(base=base, digit_class=digit_class, key=key)
+        gen = Bidder(base=base, digit_class=digit_class, key=key)
         period_output = [gen.next() for _ in range(gen.period)]
         full_stream.extend(period_output)
         per_period_counts.append(collections.Counter(period_output))
@@ -142,7 +142,7 @@ for d in range(1, base):
 first_20 = []
 key = b'reseed test'
 for p in range(5):
-    gen = HCH(base=base, digit_class=dc, key=key)
+    gen = Bidder(base=base, digit_class=dc, key=key)
     first_20.append([gen.next() for _ in range(20)])
     key = rekey(key, p)
 

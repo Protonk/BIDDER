@@ -1,15 +1,15 @@
 """
-stratified.py — Stratified sampling: HCH vs numpy vs Sobol-like.
+stratified.py — Stratified sampling: BIDDER vs numpy vs Sobol-like.
 
 Estimate integrals of known functions by averaging f(x_i) over samples
 drawn from three sources:
 
-  1. HCH generator (exact stratum coverage at block boundaries)
+  1. BIDDER generator (exact stratum coverage at block boundaries)
   2. numpy PRNG (random sampling)
   3. Systematic stratification (divide [0,1] into N equal bins, sample
      one point per bin — the classical method)
 
-The HCH generator in base b assigns each sample to one of b-1 strata
+The BIDDER generator in base b assigns each sample to one of b-1 strata
 {1, ..., b-1}. At a block boundary, each stratum has been visited
 exactly the same number of times — free stratification. At non-boundary
 counts, the coverage is deterministically uneven (the sawtooth).
@@ -31,7 +31,7 @@ sys.path.insert(0, '../..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from hch import HCH
+from bidder import Bidder
 
 
 # --- Test functions ---
@@ -53,15 +53,15 @@ functions = [
 
 # --- Sampling methods ---
 
-def hch_samples(base, digit_class, key, n):
+def bidder_samples(base, digit_class, key, n):
     """
-    Generate n samples in [0, 1) from the HCH generator.
+    Generate n samples in [0, 1) from the BIDDER generator.
 
     Each output digit d in {1, ..., base-1} maps to the interval
     [(d-1)/(b-1), d/(b-1)). Within each stratum, we place the
     sample at the midpoint (deterministic stratification).
     """
-    gen = HCH(base=base, digit_class=digit_class, key=key)
+    gen = Bidder(base=base, digit_class=digit_class, key=key)
     raw = [gen.next() for _ in range(n)]
     b = base
     # Map digit d to midpoint of stratum [(d-1)/(b-1), d/(b-1))
@@ -102,10 +102,10 @@ results = {}  # (func_name, method) -> list of (n, error)
 
 for fi, (func, true_val, name) in enumerate(functions):
     print(f"  {name}...")
-    for method in ['hch', 'numpy', 'systematic']:
+    for method in ['bidder', 'numpy', 'systematic']:
         errors = []
         for n in sizes:
-            if method == 'hch':
+            if method == 'bidder':
                 # Pick digit_class so period >= n
                 if n <= 90:
                     d_c = 2
@@ -113,7 +113,7 @@ for fi, (func, true_val, name) in enumerate(functions):
                     d_c = 3
                 else:
                     d_c = 4
-                xs = hch_samples(base, d_c, b'strat', n)
+                xs = bidder_samples(base, d_c, b'strat', n)
             elif method == 'numpy':
                 xs = numpy_samples(n, seed=42 + fi)
             else:
@@ -163,12 +163,12 @@ for fi, (func, true_val, name) in enumerate(functions):
     ax.loglog(ns_env, med, color='#6ec6ff', linewidth=0.8, alpha=0.5,
               label='numpy (median, 100 trials)')
 
-    # HCH
-    hch_data = results[(name, 'hch')]
-    ns_h = [e[0] for e in hch_data]
-    errs_h = [e[1] for e in hch_data]
+    # BIDDER
+    bidder_data = results[(name, 'bidder')]
+    ns_h = [e[0] for e in bidder_data]
+    errs_h = [e[1] for e in bidder_data]
     ax.loglog(ns_h, [max(e, 1e-16) for e in errs_h],
-              color='#ffcc5c', linewidth=1.2, label='HCH')
+              color='#ffcc5c', linewidth=1.2, label='BIDDER')
 
     # Systematic
     sys_data = results[(name, 'systematic')]

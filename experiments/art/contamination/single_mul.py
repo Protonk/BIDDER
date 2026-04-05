@@ -12,10 +12,10 @@ sys.path.insert(0, '../../..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from hch import HCH
+from bidder import Bidder
 
 print("Generating uniform source...")
-gen = HCH(base=10, digit_class=4, key=b'single mul')
+gen = Bidder(base=10, digit_class=4, key=b'single mul')
 raw = np.array([gen.next() for _ in range(gen.period)], dtype=np.float64)
 reals = 1.0 + raw / 10.0
 log_reals = np.log10(reals)

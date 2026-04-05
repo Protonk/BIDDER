@@ -2,9 +2,9 @@
 
 ## Cross-language parity
 
-The Python (`hch.py`) and C (`hch.h` + `hch.c`) implementations
+The Python (`bidder.py`) and C (`bidder.h` + `bidder.c`) implementations
 must produce identical output for identical inputs. The cross-check
-test in `tests/test_hch.py` enforces this with hardcoded expected
+test in `tests/test_bidder.py` enforces this with hardcoded expected
 values. Any change to one implementation must be mirrored in the
 other.
 
@@ -30,7 +30,7 @@ generator unless both Python and C are updated together.
 The output alphabet is {1, ..., b-1}. The leading base-b digit
 is never 0. This is structural and intentional. Do not "fix"
 the output to include 0. The PractRand finding in
-`HCH-BLOCK-GEN.md` documents why this is correct.
+`BIDDER.md` documents why this is correct.
 
 ## Constants
 
