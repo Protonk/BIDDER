@@ -364,10 +364,13 @@ For uses requiring strong PRP properties, the Speck32/64 mode
 
 The exact-uniformity guarantee is most valuable where uniformity
 must be **auditable** — verifiable by inspecting the construction,
-not by running statistical tests on the output. Candidate
-applications: reproducible quadrature, deterministic allocation
-schemes, simulation calibration. The guarantee is structural
-("inspect the algebra") rather than empirical ("test the samples").
+not by running statistical tests on the output. This means
+uniformity can be written into a specification rather than
+demonstrated in a test report: the bound is a theorem, not a
+confidence interval. Candidate applications: reproducible
+quadrature, deterministic allocation schemes, simulation
+calibration. The guarantee is structural ("inspect the algebra")
+rather than empirical ("test the samples").
 
 For high-stakes adversarial settings (lotteries, clinical trials),
 the Feistel fallback's limited diffusion is not a defensible

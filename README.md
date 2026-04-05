@@ -1,6 +1,10 @@
 # BIDDER
 
-Arithmetic Congruence Monoids encoded as Champernowne reals, and the BIDDER block generator that falls out of them. Named for George Bidder's logarithms, which everyone seems to forget about.
+> Numbers are weird and perfect uniformity is (almost uniformly) a trap. Do not use BIDDER to generate secrets.
+
+Arithmetic Congruence Monoids encoded as Champernowne reals, and
+the BIDDER block generator that falls out of them. Named for
+George Bidder's logarithms, which everyone seems to forget about.
 
 ## What this is
 
@@ -9,8 +13,21 @@ irreducible elements (n-primes). Concatenating these into a decimal
 real produces a signal whose leading-digit distribution is exactly
 uniform — not Benford, not approximately uniform, exactly uniform.
 
-This repo explores that construction and builds a pseudorandom
-number generator (BIDDER) on top of it.
+This repo is three things at once:
+
+- **Math.** The construction, the proofs, the sawtooth, the
+  epsilon function, the relationship between addition and
+  multiplication. ([ACM-CHAMPERNOWNE.md](ACM-CHAMPERNOWNE.md),
+  [EARLY-FINDINGS.md](EARLY-FINDINGS.md))
+
+- **Art.** Visualizations that make the algebra visible — digit
+  fabrics, moire sieves, rolling shutters, epsilon landscapes.
+  ([PITCH.md](experiments/art/PITCH.md))
+
+- **Cryptography.** A pseudorandom number generator (BIDDER) that
+  achieves exact output uniformity by construction, built on
+  Speck32/64 and the block-boundary guarantee. Not that kind of
+  crypto. ([BIDDER.md](generator/BIDDER.md))
 
 ## Structure
 
@@ -32,18 +49,17 @@ number generator (BIDDER) on top of it.
       speck_stream.c         Raw Speck counter mode for PractRand
 
     experiments/
-      sawtooth.py            5-decade sawtooth + running mean
-      art/                   Visualizations (fabric, sunflower, PITCH.md)
+      sawtooth/              Sawtooth and residual analysis
       shutter/               Rolling shutter (addition vs multiplication)
       sieves/                Moire sieves and sieve carpet
-      sunflower/             Phyllotaxis sunflower
+      art/                   Visualizations (fabric, contamination, collapse)
       math/arcs/             Epsilon landscape
       stats/                 Uniformity demo, source comparison, interferometry
-      stratified/            Stratified sampling comparison
+      stratified/            Stratified sampling at block boundaries
       dither/                Dithering comparison
       others/                Multi-digit extraction analysis
       reseed/                Reseeding across period boundaries
-      art/contamination/     How arithmetic contaminates uniform distributions
+      wibblywobblies/        Wibble-wobble conservation law
 
     sources/                 Reference papers (Speck)
 
