@@ -174,8 +174,15 @@ too. The permutation is mixing well.
 
 ### Contamination under arithmetic
 
-Outputs from the HCH generator start exactly uniform. Under
-repeated operations:
+These experiments use HCH as a known-uniform starting point to
+explore how arithmetic operations deform distributions. The
+findings characterize uniform distributions generally, not HCH
+specifically — any exact-uniform source would produce the same
+results. The value of HCH here is as a calibration tool: a
+provably uniform origin for gestalt exploration of how addition
+and multiplication interact with digit-frequency structure.
+
+Results:
 
 - **Pure addition**: the rolling shutter. Digit concentration
   cycles 1→9→1 forever, never converging to Benford.
@@ -305,15 +312,73 @@ deviation curve.
 Experiment: `experiments/reseed/reseed_test.py`.
 
 
+## Known limitations
+
+### Period-alphabet coupling
+
+The period is (b-1) * b^(d-1). The alphabet size is b-1. These
+are not independently tunable. A large alphabet (large b) with
+a long period requires large d, and the block size grows as
+b^d. The 2^32 ceiling means:
+
+| base | max d | max period     |
+|------|-------|----------------|
+| 10   | 9     | ~900M          |
+| 256  | 2     | 65,280         |
+| 65536| 2     | ~4.3G          |
+
+For base 256, the period is only 65,280 — short for many
+applications. Rekeying extends the stream indefinitely, but
+the per-period uniformity guarantee only holds within each
+period of 65,280 outputs.
+
+Multi-digit extraction partially addresses this: with d=2 and
+base 256, each Speck evaluation yields 2 digits (positions 0
+and 1), and position 1 includes 0 — giving a full {0, ..., 255}
+byte. But the period constraint remains.
+
+The composition question (CRT-based combination of generators
+at different bases) is the most promising path to decoupling
+period from alphabet. It is unexplored.
+
+### Feistel fallback strength
+
+The balanced Feistel uses 8 rounds with a simple round function:
+`((R + (rk >> (i*3))) ^ (rk >> (i*5+1))) % L_size`. This has
+limited diffusion. For the small blocks where it's used, the
+uniformity guarantee does not depend on PRP quality — it's
+structural. The Feistel needs only to be a bijection (which it
+is by construction) and provide enough disorder that sequential
+outputs don't look sorted. For allocation and stratification
+use cases, this bar is lower than for cryptographic applications.
+For uses requiring strong PRP properties, the Speck32/64 mode
+(tight-fit blocks) should be preferred.
+
+### Use case scope
+
+The exact-uniformity guarantee is most valuable where uniformity
+must be **auditable** — verifiable by inspecting the construction,
+not by running statistical tests on the output. Candidate
+applications: clinical trial randomization, lottery draws,
+regulatory allocation, reproducible quadrature. The guarantee is
+structural ("inspect the algebra") rather than empirical ("test
+the samples").
+
+For applications that only need statistical uniformity (Monte
+Carlo simulation, game randomness, general-purpose PRNG), a
+conventional generator like xoshiro or AES-CTR is simpler and
+faster. HCH's value is in the provability, not the performance.
+
+
 ## Open questions
 
-1. **Structure-aware permutation.** Can a permutation exploit
+1. **Composition.** Can HCH blocks at different bases or digit
+   classes be composed (e.g., via Chinese Remainder Theorem) to
+   decouple period from alphabet size?
+
+2. **Structure-aware permutation.** Can a permutation exploit
    the digit-block structure to reduce cost without sacrificing
    PRP quality?
-
-2. **Composition.** Can HCH blocks at different bases or digit
-   classes be composed (e.g., via Chinese Remainder Theorem) to
-   cover arbitrary domain sizes without cycle-walking?
 
 3. **Spatial structure.** Can the generator be extended to produce
    spatially uniform (blue noise) output, or is a post-processing
