@@ -17,3 +17,4 @@ speck_stream
 
 # PractRand build (external, lives in /tmp)
 build/
+experiments/.DS_Store
