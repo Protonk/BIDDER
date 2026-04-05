@@ -15,7 +15,7 @@ sys.path.insert(0, '../../..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from acm_core import champernowne_array
+from acm_core import acm_champernowne_array
 
 N = 10000
 n_steps = 500
@@ -23,7 +23,7 @@ n_samples = 8000
 
 # --- Build both sources ---
 print("Building ACM source...")
-acm_reals = champernowne_array(N)
+acm_reals = acm_champernowne_array(N)
 acm_log = np.log10(acm_reals)
 
 print("Building Python uniform source...")

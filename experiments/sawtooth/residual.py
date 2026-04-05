@@ -5,7 +5,7 @@ Subtract the first-order decade template
 
     T(n) = 1 + n / 10^(floor(log10(n)) + 1)
 
-from C(n) = champernowne_real(n, 5) to isolate the subleading
+from C(n) = acm_champernowne_real(n, 5) to isolate the subleading
 contribution of the later concatenated blocks.
 
 The top panel shows the raw residual R(n) = C(n) - T(n).
@@ -21,7 +21,7 @@ sys.path.insert(0, ROOT)
 
 import numpy as np
 import matplotlib.pyplot as plt
-from acm_core import champernowne_real
+from acm_core import acm_champernowne_real
 
 
 N = 100_000
@@ -30,7 +30,7 @@ COUNT = 5
 print(f"Computing residual view for C(n), n=1..{N} ...")
 vals = np.empty(N)
 for i in range(N):
-    vals[i] = champernowne_real(i + 1, COUNT)
+    vals[i] = acm_champernowne_real(i + 1, COUNT)
     if (i + 1) % 10000 == 0:
         print(f"  {i + 1}/{N}")
 

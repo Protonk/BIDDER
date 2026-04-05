@@ -11,7 +11,7 @@ sys.path.insert(0, '../..')
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
-from acm_core import n_primes
+from acm_core import acm_n_primes
 
 N_ROWS = 500      # n = 2..501
 N_PRIMES = 200    # first 200 n-primes per row
@@ -20,7 +20,7 @@ print("Computing sieve carpet...")
 carpet = np.zeros((N_ROWS, N_PRIMES - 1))
 for i in range(N_ROWS):
     n = i + 2  # skip n=1
-    ps = n_primes(n, N_PRIMES)
+    ps = acm_n_primes(n, N_PRIMES)
     gaps = np.diff(ps)
     carpet[i, :] = np.array(gaps) / n
 

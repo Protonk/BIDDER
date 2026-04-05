@@ -11,14 +11,14 @@ sys.path.insert(0, '..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from acm_core import champernowne_real
+from acm_core import acm_champernowne_real
 
 N = 100_000
 
 print("Computing Champernowne reals (n=1..100000)...")
 vals = np.empty(N)
 for i in range(N):
-    vals[i] = champernowne_real(i + 1, 5)
+    vals[i] = acm_champernowne_real(i + 1, 5)
     if (i + 1) % 10000 == 0:
         print(f"  {i+1}/{N}")
 

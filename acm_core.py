@@ -78,7 +78,7 @@ from typing import List, Tuple
 # Core generators
 # ---------------------------------------------------------------------------
 
-def n_primes(n: int, count: int = 5) -> List[int]:
+def acm_n_primes(n: int, count: int = 5) -> List[int]:
     """
     Return the first `count` n-primes.
 
@@ -86,7 +86,11 @@ def n_primes(n: int, count: int = 5) -> List[int]:
     For n >= 2: elements n*k where k is not divisible by n.
 
     These are the irreducible elements of the multiplicative monoid nZ+.
+    Returns None on invalid input (n < 1 or count < 1).
     """
+    if n < 1 or count < 1:
+        return None
+
     if n == 1:
         primes = []
         candidate = 2
@@ -105,24 +109,39 @@ def n_primes(n: int, count: int = 5) -> List[int]:
     return result
 
 
-def champernowne_real(n: int, count: int = 5) -> float:
+def acm_champernowne_real(n: int, count: int = 5) -> float:
     """
     Construct the n-Champernowne real from the first `count` n-primes.
 
     Concatenates the decimal representations of the n-primes after "1."
     Example: n=2, count=5 -> primes [2,6,10,14,18] -> 1.26101418
+
+    Precision: the concatenated string is parsed as an IEEE 754 double
+    via float(). Only the first ~16 significant decimal digits of the
+    fractional part survive the conversion. For large n or large count,
+    the trailing n-primes contribute nothing to the returned value.
+    This caps effective precision at ~53 bits. The leading-digit
+    property (which needs 1 digit) and the sawtooth structure (which
+    needs ~10) are unaffected.
+
+    Returns 0.0 on invalid input.
     """
-    primes = n_primes(n, count)
+    primes = acm_n_primes(n, count)
+    if primes is None:
+        return 0.0
     s = ''.join(str(p) for p in primes)
     return float('1.' + s)
 
 
-def digit_count(n: int, count: int = 5) -> int:
+def acm_digit_count(n: int, count: int = 5) -> int:
     """
     Total decimal digits used by the first `count` n-primes.
     This is the "typographic cost" of the Champernowne encoding.
+    Returns -1 on invalid input.
     """
-    primes = n_primes(n, count)
+    primes = acm_n_primes(n, count)
+    if primes is None:
+        return -1
     return sum(len(str(p)) for p in primes)
 
 
@@ -130,7 +149,7 @@ def digit_count(n: int, count: int = 5) -> int:
 # Decomposition in log space
 # ---------------------------------------------------------------------------
 
-def decompose(n: int, count: int = 5) -> Tuple[float, float, float]:
+def acm_decompose(n: int, count: int = 5) -> Tuple[float, float, float]:
     """
     Return (ln_champernowne, ln_primality, ln_digitfrac) for a given n.
 
@@ -138,8 +157,8 @@ def decompose(n: int, count: int = 5) -> Tuple[float, float, float]:
     ln_primality    = ln(n)
     ln_digitfrac    = ln(total_digits / count)
     """
-    c = champernowne_real(n, count)
-    d = digit_count(n, count)
+    c = acm_champernowne_real(n, count)
+    d = acm_digit_count(n, count)
     return (
         np.log(c),
         np.log(n) if n > 0 else 0.0,
@@ -148,17 +167,17 @@ def decompose(n: int, count: int = 5) -> Tuple[float, float, float]:
 
 
 # ---------------------------------------------------------------------------
-# Batch computation
+# Batch computation (numpy convenience — no C equivalent)
 # ---------------------------------------------------------------------------
 
-def champernowne_array(n_max: int, count: int = 5) -> np.ndarray:
+def acm_champernowne_array(n_max: int, count: int = 5) -> np.ndarray:
     """
     Return array of Champernowne reals for n = 1, 2, ..., n_max.
     """
-    return np.array([champernowne_real(n, count) for n in range(1, n_max + 1)])
+    return np.array([acm_champernowne_real(n, count) for n in range(1, n_max + 1)])
 
 
-def running_mean(arr: np.ndarray) -> np.ndarray:
+def acm_running_mean(arr: np.ndarray) -> np.ndarray:
     """
     Running (cumulative) mean of an array.
     """
@@ -169,34 +188,40 @@ def running_mean(arr: np.ndarray) -> np.ndarray:
 # First-digit extraction
 # ---------------------------------------------------------------------------
 
-def first_digit(x: float) -> int:
+def acm_first_digit(x: float) -> int:
     """
     Extract the leading significant digit (1-9) of a positive number.
     Uses log10 to avoid string manipulation.
+    Returns 0 for non-positive input.
     """
     if x <= 0:
-        return 1
+        return 0
     l = np.log10(x)
     frac = l - np.floor(l)
-    return min(int(10**frac), 9)
+    return min(int(10**frac + 1e-9), 9)
 
 
-def first_digit_array(arr: np.ndarray) -> np.ndarray:
+def acm_first_digit_array(arr: np.ndarray) -> np.ndarray:
     """
     Vectorized first-digit extraction for an array of positive numbers.
     """
     log_arr = np.log10(arr)
     frac = log_arr - np.floor(log_arr)
-    return np.minimum((10**frac).astype(int), 9)
+    return np.minimum((10**frac + 1e-9).astype(int), 9)
 
 
 # ---------------------------------------------------------------------------
 # Benford reference
 # ---------------------------------------------------------------------------
 
-def benford_pmf() -> np.ndarray:
+def acm_benford_pmf() -> np.ndarray:
     """
-    Return Benford's law probabilities for digits 1-9.
+    Return Benford's law probabilities for digits 1-9 as a numpy array.
+
+    Computes log10(1 + 1/d) for d = 1..9 and returns all nine values
+    at once. This is convenient for vectorized comparisons against
+    observed digit distributions: subtract, square, sum, and you have
+    a chi-squared-flavored distance from Benford in one expression.
     """
     return np.array([np.log10(1 + 1/d) for d in range(1, 10)])
 
@@ -208,9 +233,9 @@ def benford_pmf() -> np.ndarray:
 if __name__ == '__main__':
     print("n-primes for n=1..9 (first 5):")
     for n in range(1, 10):
-        ps = n_primes(n, 5)
-        c = champernowne_real(n, 5)
+        ps = acm_n_primes(n, 5)
+        c = acm_champernowne_real(n, 5)
         print(f"  n={n}: primes={ps}  C(n)={c}")
 
-    print(f"\nRunning mean at n=10000: {running_mean(champernowne_array(10000))[-1]:.6f}")
-    print(f"Benford pmf: {benford_pmf()}")
+    print(f"\nRunning mean at n=10000: {acm_running_mean(acm_champernowne_array(10000))[-1]:.6f}")
+    print(f"Benford pmf: {acm_benford_pmf()}")

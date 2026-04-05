@@ -22,10 +22,10 @@ sys.path.insert(0, '../..')
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
-from acm_core import champernowne_array
+from acm_core import acm_champernowne_array
 
 N = 10000
-vals = champernowne_array(N)
+vals = acm_champernowne_array(N)
 ns = np.arange(1, N + 1, dtype=float)
 
 digit_class = np.floor(np.log10(ns)).astype(int)

@@ -17,7 +17,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
-from acm_core import n_primes
+from acm_core import acm_n_primes
 
 # ── hyperspace colormap ──────────────────────────────────────────────
 
@@ -46,7 +46,7 @@ GAMMA    = 2.0     # slightly gentler than shattered's 2.5
 print("Building digit strings …")
 fabric = np.zeros((N_ROWS, N_DIGITS), dtype=int)
 for i, n in enumerate(range(1, N_ROWS + 1)):
-    ps = n_primes(n, 40)
+    ps = acm_n_primes(n, 40)
     s = ''.join(str(p) for p in ps)
     for j, ch in enumerate(s[:N_DIGITS]):
         fabric[i, j] = int(ch)

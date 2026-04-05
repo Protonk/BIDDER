@@ -15,18 +15,21 @@ Usage:
     python acm_benford.py
 """
 
+import sys
+sys.path.insert(0, '../..')
+
 import matplotlib.pyplot as plt
 import numpy as np
 from acm_core import (
-    champernowne_array, first_digit_array, first_digit, benford_pmf
+    acm_champernowne_array, acm_first_digit_array, acm_first_digit, acm_benford_pmf
 )
 
 
 N = 10000
-reals = champernowne_array(N)
+reals = acm_champernowne_array(N)
 log_reals = np.log10(reals)
 rng = np.random.default_rng(42)
-benford = benford_pmf()
+benford = acm_benford_pmf()
 
 
 # =====================================================================
@@ -34,7 +37,7 @@ benford = benford_pmf()
 # =====================================================================
 
 print("Plotting first-digit histogram...")
-fds = first_digit_array(reals)
+fds = acm_first_digit_array(reals)
 counts = np.array([np.sum(fds == d) for d in range(1, 10)])
 fracs = counts / N
 
@@ -100,7 +103,7 @@ fig, ax = plt.subplots(figsize=(12, 6))
 for idx, k in enumerate(add_ks):
     indices = rng.integers(0, N, size=(n_samples, k))
     sums = np.sum(reals[indices], axis=1)
-    fds_a = np.array([first_digit(v) for v in sums])
+    fds_a = np.array([acm_first_digit(v) for v in sums])
     digit_fracs = [np.sum(fds_a == d) / n_samples for d in range(1, 10)]
     offset = (idx - 1.5) * bar_width
     ax.bar(x + offset, digit_fracs, width=bar_width, color=colors_add[idx],

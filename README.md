@@ -11,7 +11,7 @@ George Bidder's logarithms, which everyone seems to forget about.
 For each positive integer n, the multiplicative monoid nZ+ has
 irreducible elements (n-primes). Concatenating these into a decimal
 real produces a signal whose leading-digit distribution is exactly
-uniform — not Benford, not approximately uniform, exactly uniform.
+uniform — not approximately uniform, exactly uniform.
 
 This repo is three things at once:
 
@@ -32,8 +32,6 @@ This repo is three things at once:
 ## Structure
 
     acm_core.py             Core n-prime and Champernowne real definitions
-    acm_sawtooth.py         Sawtooth structure and decomposition plots
-    acm_benford.py          Benford convergence and rolling shutter analysis
 
     generator/
       bidder.py              BIDDER generator (Python)

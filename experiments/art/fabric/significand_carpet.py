@@ -19,7 +19,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from acm_core import n_primes
+from acm_core import acm_n_primes
 
 N_ROWS   = 600    # n = 1..600
 N_DIGITS = 80     # raw digit positions
@@ -31,7 +31,7 @@ print("Building digit strings …")
 fabric = np.zeros((N_ROWS, N_DIGITS), dtype=int)
 
 for i, n in enumerate(range(1, N_ROWS + 1)):
-    ps = n_primes(n, 40)
+    ps = acm_n_primes(n, 40)
     s = ''.join(str(p) for p in ps)
     for j, ch in enumerate(s[:N_DIGITS]):
         fabric[i, j] = int(ch)

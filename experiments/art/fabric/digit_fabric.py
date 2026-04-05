@@ -13,7 +13,7 @@ sys.path.insert(0, '../..')
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
-from acm_core import n_primes
+from acm_core import acm_n_primes
 
 N_ROWS = 600    # n = 1..600
 N_DIGITS = 80   # first 80 digits of each Champernowne encoding
@@ -23,7 +23,7 @@ fabric = np.full((N_ROWS, N_DIGITS), -1, dtype=int)
 
 for i, n in enumerate(range(1, N_ROWS + 1)):
     # Get enough n-primes to fill N_DIGITS digits
-    ps = n_primes(n, 40)
+    ps = acm_n_primes(n, 40)
     s = ''.join(str(p) for p in ps)
     for j, ch in enumerate(s[:N_DIGITS]):
         fabric[i, j] = int(ch)

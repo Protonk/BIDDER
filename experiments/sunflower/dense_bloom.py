@@ -17,7 +17,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
-from acm_core import champernowne_array
+from acm_core import acm_champernowne_array
 
 # ── iridescent colormap ──────────────────────────────────────────────
 # Dark violet base → electric blue → cyan flash → magenta → hot gold
@@ -45,7 +45,7 @@ cmap_iri = LinearSegmentedColormap('iridescent', _iri, N=512)
 N = 80000
 
 print(f"Computing C(n) for n = 1…{N:,} …")
-vals = champernowne_array(N)
+vals = acm_champernowne_array(N)
 ns = np.arange(1, N + 1, dtype=float)
 
 # ── phyllotaxis layout ───────────────────────────────────────────────

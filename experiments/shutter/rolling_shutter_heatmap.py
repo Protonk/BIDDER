@@ -12,10 +12,10 @@ sys.path.insert(0, '../..')
 
 import numpy as np
 import matplotlib.pyplot as plt
-from acm_core import champernowne_array
+from acm_core import acm_champernowne_array
 
 N = 10000
-reals = champernowne_array(N)
+reals = acm_champernowne_array(N)
 rng = np.random.default_rng(42)
 
 # High-res: 500 rows (number of additions), 9 columns (digits)

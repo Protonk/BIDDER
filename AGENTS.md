@@ -17,9 +17,8 @@ sage carries numpy and matplotlib internally.
 
 ## Repo structure
 
-- `acm_core.py`, `acm_sawtooth.py`, `acm_benford.py` — original
-  ACM-Champernowne exploration scripts. These are the project's
-  origin. Don't modify without reason.
+- `acm_core.py` — core n-prime and Champernowne real definitions.
+  Imported by all experiment scripts. Don't modify without reason.
 - `generator/` — the BIDDER block generator (Python + C). Has its
   own `AGENTS.md` with implementation-specific rules.
 - `tests/` — all test suites. Keep green.

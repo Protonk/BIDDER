@@ -14,11 +14,14 @@ Usage:
     sage acm_sawtooth.py       # also works under SageMath
 """
 
+import sys
+sys.path.insert(0, '../..')
+
 import matplotlib.pyplot as plt
 import numpy as np
 from acm_core import (
-    champernowne_real, champernowne_array, running_mean,
-    digit_count, n_primes
+    acm_champernowne_real, acm_champernowne_array, acm_running_mean,
+    acm_digit_count, acm_n_primes
 )
 
 
@@ -29,13 +32,13 @@ ns = np.arange(1, N + 1)
 # --- Compute all quantities ---
 
 print("Computing Champernowne reals...")
-vals = champernowne_array(N)
-rmean = running_mean(vals)
+vals = acm_champernowne_array(N)
+rmean = acm_running_mean(vals)
 
 # Decomposition layers
 ln_champ = np.log(vals)
 ln_prim = np.log(ns.astype(float))
-ln_digit = np.array([np.log(digit_count(n, 5) / 5.0) for n in ns])
+ln_digit = np.array([np.log(acm_digit_count(n, 5) / 5.0) for n in ns])
 ln_rmean = np.log(rmean)
 
 

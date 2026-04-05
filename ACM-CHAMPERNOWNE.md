@@ -75,12 +75,12 @@ positive integers with every multiple of n deleted:
 | 3 |  1  |  2  |  4  |  5  |  7  |  8  | 10  | 11  | 13  |
 | 4 |  1  |  2  |  3  |  5  |  6  |  7  |  9  | 10  | 11  |
 | 5 |  1  |  2  |  3  |  4  |  6  |  7  |  8  |  9  | 11  |
-| ...| ... | ... | ... | ... | ... | ... | ... | ... | ... |
+|...| ... | ... | ... | ... | ... | ... | ... | ... | ... |
 
 Row 1 is the only row that applies further filtering (primality testing)
 beyond the single deletion rule. All other rows accept all survivors.
 
-## What Is New Here
+## What Is Possible Now
 
 The ACM literature studies the algebraic structure of non-unique factorization.
 The Champernowne encoding is a bridge to:
