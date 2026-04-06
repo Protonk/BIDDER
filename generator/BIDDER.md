@@ -1,8 +1,6 @@
 # BIDDER Generator
 
-Hilbert-Champernowne-Hyland uniform block generator. A pseudorandom
-number generator that achieves exact output uniformity by
-construction, not by statistical convergence.
+A pseudorandomnumber generator that achieves exact output uniformity by construction.
 
 Status: implemented in Python and C. Speck test vectors verified
 against the NSA specification. Cross-language output parity confirmed.
@@ -43,8 +41,6 @@ radix point to form a real number C_b(n). The leading base-b digit
 of C_b(n) is the leading base-b digit of n.
 
 ### The uniformity guarantee
-
->Hyland (2026): identified the exact uniformity of leading digits in the ACM-Champernowne construction
 
 In base b, the integers in a complete digit block
 [b^(d-1), b^d - 1] have their leading base-b digits exactly
@@ -157,7 +153,7 @@ print for manual comparison).
 Verified across base 2, 7, 10, 16, 256 and digit classes 2-10.
 Full-period digit counts are exactly `period / (b-1)` for every
 digit, for every key tested. The deviation at the period boundary
-is 0.0000000000 — not approximately zero, zero.
+is 0.
 
 ### Deviation sawtooth
 

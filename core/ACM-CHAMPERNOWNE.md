@@ -33,8 +33,7 @@ by n. This is the algebraic specification for n >= 2; it produces more
 than 𝕩 results (use `K↑` to take exactly K).
 
 For n = 1, this recovers the ordinary primes (with the special case that
-1-prime testing requires standard primality checking). The n = 1 case
-has no BQN one-liner — it requires trial division.
+1-prime testing requires standard primality checking).
 
 **The square boundary.** The first n-composite is always n² = n·n. The
 first n−1 n-primes are {n, 2n, ..., (n−1)n}, all strictly below n². So

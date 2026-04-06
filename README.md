@@ -102,9 +102,7 @@ C:
 ## Key findings
 
 - Leading digits of ACM-Champernowne reals are exactly uniform
-  (1/9 each, by `LeadingInt10`; see `core/BLOCK-UNIFORMITY.md`)
-- Multiplication contaminates uniform distributions toward Benford irreversibly
-- Addition cycles digit concentration forever (rolling shutter)
+  (1/9 each, by `LeadingInt10`; see `core/BLOCK-UNIFORMITY.md`)\
 - The BIDDER generator achieves exact uniformity at block boundaries by construction
 - All d digit positions of each permuted index are independently uniform
 - Rekeying at period boundaries introduces no detectable seam
