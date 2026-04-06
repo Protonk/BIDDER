@@ -25,6 +25,17 @@ counting measure perfectly. This is the signature of the missing
 multiplicative structure — the monoid nℤ⁺ has non-unique factorization,
 so the multiplicative dynamics that produce Benford's law are absent.
 
+In BQN (`LeadingInt10` from `guidance/BQN-AGENT.md`; see
+`core/BLOCK-UNIFORMITY.md` for the counting argument):
+
+```bqn
+LeadingInt10 ← {⊑ Digits10 𝕩}
+Digits10     ← {𝕩<10 ? ⟨𝕩⟩ ; (𝕊⌊𝕩÷10)∾⟨10|𝕩⟩}
+
+LeadingInt10¨ 1+↕9999          # 9999 leading digits, partitioned:
+                                # 1111 of each digit 1-9
+```
+
 
 ## 2. The Sawtooth and Its Range
 
@@ -34,6 +45,13 @@ The function f(n) = C(n) (the n-Champernowne real) traces a sawtooth with:
 - Teeth: one per digit class (1-digit n, 2-digit n, 3-digit n, ...)
 - Slope within each tooth: ~10^{-d} for d-digit n
 - Drop at powers of 10: from ~2.0 to ~1.1
+
+The real C(n) is built from the exact digit stream `ChamDigits10`
+(`guidance/BQN-AGENT.md`), then parsed to a float:
+
+```bqn
+ChamDigits10 ← {⥊ Digits10¨ 𝕩}
+```
 
 In log space, ln(f(n)) sweeps [ln(1.1), ln(2)] = [0.0953, 0.6931],
 which is the range of ln(1+m) for m ∈ [0.1, 1] — the base-10 mantissa range.
@@ -120,6 +138,19 @@ between curve and secant is a concave bump maximized at:
 
 where slope ≈ 0.664 is the secant slope on [0.1, 1]. This is the base-10
 cousin of ε(m) = log₂(1+m) − m from the floating-point pseudo-logarithm.
+
+The sawtooth curve itself is `{10⋆⁼1+𝕩}` (i.e. log₁₀(1+m)) on the
+mantissa range m ∈ [0.1, 1]. The log-based leading-digit extractor
+`LD10` (`guidance/BQN-AGENT.md`; mirrors `acm_first_digit` in
+`core/acm_core.py`) is related:
+
+```bqn
+LD10 ← {⌊𝕩÷10⋆⌊10⋆⁼𝕩}
+```
+
+**Caveat:** in floating point, `⌊log₁₀(x)⌋` can undercount at exact
+powers of 10. The implementation adds `+1e-9`. See
+`nasties/FIRST-DIGIT.md`.
 
 The maximum error ε₁₀(m*) ≈ 0.0445 per tooth. It does not grow with the
 digit class — it is scale-invariant.

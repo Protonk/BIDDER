@@ -9,10 +9,11 @@ For each positive integer k, the sieve density is:
 
     density(k) = |{ n in 2..N : k is an n-prime }|
 
-An integer k is an n-prime when n divides k but n² does not.
-So density(k) counts the divisors of k that appear exactly
-once in its factorization — divisors n where k/n is not itself
-divisible by n.
+An integer k is an n-prime when n divides k but n² does not —
+that is, when k appears in the output of `n NPn2`
+(`guidance/BQN-AGENT.md`). So density(k) counts the divisors of
+k that appear exactly once in its factorization — divisors n
+where k/n is not itself divisible by n.
 
 - **Primes** have density 1. A prime p is only divisible by p
   itself (among n >= 2), so only the monoid pZ+ claims it.

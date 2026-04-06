@@ -4,6 +4,11 @@ binary_core.py — shared utilities for binary Champernowne streams
 
 Root module for the binary/ tree. Provides stream generation, RLE,
 and entry-boundary tracking for binary concatenations of n-primes.
+
+BQN companions (see guidance/BQN-AGENT.md):
+    binary_stream    -> BStream
+    rle              -> (prose only — no tidy one-liner)
+    entry_boundaries -> (prose only)
 """
 
 import sys, os

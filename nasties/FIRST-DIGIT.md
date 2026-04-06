@@ -2,10 +2,20 @@
 
 ## The bug
 
-`first_digit` in `acm_core.py` extracts the leading significant digit
-via `int(10**frac)` where `frac` is the fractional part of log10(x).
-When `10**frac` should be exactly an integer but IEEE 754 delivers
-something like 7.999999999999999, `int()` truncates to 7.
+The exact mathematical definition of leading significant digit is
+(`LD10` from `guidance/BQN-AGENT.md`):
+
+```bqn
+LD10 ← {⌊𝕩÷10⋆⌊10⋆⁼𝕩}
+```
+
+This is exact math. In floating point, `⌊10⋆⁼𝕩⌋` (i.e. `⌊log₁₀(x)⌋`)
+can undercount at exact powers of 10.
+
+`first_digit` in `acm_core.py` implements `LD10` as `int(10**frac)`
+where `frac` is the fractional part of log10(x). When `10**frac`
+should be exactly an integer but IEEE 754 delivers something like
+7.999999999999999, `int()` truncates to 7.
 
 Affected integers in 1..9999:
 

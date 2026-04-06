@@ -6,6 +6,13 @@
  * C implementations form two vertices of the DOCS::C::PYTHON audit
  * triangle. Batch/numpy conveniences (champernowne_array,
  * running_mean, first_digit_array) are Python-only.
+ *
+ * BQN companions (see guidance/BQN-AGENT.md):
+ *   acm_n_primes          -> NPn2 (n >= 2 only)
+ *   acm_champernowne_real -> parse of "1." ++ ChamDigits10
+ *   acm_digit_count       -> DigitCount10
+ *   acm_first_digit       -> LD10 (with +1e-9 guard)
+ *   acm_benford           -> Benford10
  */
 
 #include "acm_core.h"

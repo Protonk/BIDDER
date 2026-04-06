@@ -7,8 +7,10 @@ Run: `sage -python moire_sieves.py` and `sage -python sieve_carpet.py`
 
 ## Moire Sieves
 
-A bitmap where pixel (k, n) is lit if integer k is an n-prime. Rows are
-monoid indices n = 1..400. Columns are integers 1..600. The fan of
+A bitmap where pixel (k, n) is lit if integer k is an n-prime — that
+is, if n divides k but n² does not. For n >= 2, row n is the finite
+prefix of `n NPn2 count` (`guidance/BQN-AGENT.md`). Rows are monoid
+indices n = 1..400. Columns are integers 1..600. The fan of
 diagonal rays — each the line val = n*k for successive k — creates
 natural moire interference.
 

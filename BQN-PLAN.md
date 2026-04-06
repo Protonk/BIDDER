@@ -38,19 +38,17 @@ implementation's generate-and-collect behavior.
 
 ## Phases
 
-### Phase 1 — Public entry docs
+### Phase 1 — Decimal math docs (keystone)
 
-These are the docs a reader or agent is most likely to open first. Put
-the BQN here before lighter art docs or source-file headers.
+This phase defines all decimal BQN vocabulary in the docs that matter
+most. `core/ACM-CHAMPERNOWNE.md` is the keystone: it introduces
+`NPn2`, `ChamDigits10`, `LeadingInt10`, `LD10`, `Benford10`, and the
+`K↑` idiom. Every later phase copies from the patterns set here.
+Review ACM-CHAMPERNOWNE.md before proceeding to the other Phase 1
+docs — if the BQN is wrong there, everything downstream inherits the
+error.
 
-**`README.md`**
-
-| Section | Add |
-|---------|-----|
-| What this is | One compact BQN block or two short blocks introducing `NPn2`, `ChamDigits10`, and `LeadingInt10`. Keep it minimal; README should orient, not teach the whole vocabulary. |
-| Key findings | Where the prose names exact uniformity or Benford, point back to the canonical BQN names rather than re-deriving them at length. |
-
-**`core/ACM-CHAMPERNOWNE.md`**
+**`core/ACM-CHAMPERNOWNE.md`** (do first, review before continuing)
 
 | Section | Add |
 |---------|-----|
@@ -59,6 +57,27 @@ the BQN here before lighter art docs or source-file headers.
 | The Sieve Table | The sieve quotients are `{(0≠𝕨|·)⊸/ 1+↕𝕩×𝕨}` — the multiplier list before scaling by n. One-liner beside the table. |
 | What Is Possible Now > first-digit distribution | `LeadingInt10` for the theorem-level claim. `Benford10` for the reference distribution. |
 | What Is Possible Now > epsilon | The epsilon bump formula inline. |
+
+**`README.md`**
+
+| Section | Add |
+|---------|-----|
+| What this is | One compact BQN block or two short blocks introducing `NPn2`, `ChamDigits10`, and `LeadingInt10`. Keep it minimal; README should orient, not teach the whole vocabulary. |
+| Key findings | Where the prose names exact uniformity or Benford, point back to the canonical BQN names rather than re-deriving them at length. |
+
+**`sources/EARLY-FINDINGS.md`**
+
+| Section | Add |
+|---------|-----|
+| 1. Exact Uniformity | `LeadingInt10` definition. Note that the count is `LeadingInt10¨ 1+↕9999` partitioned by value. |
+| 2. The Sawtooth | `ChamDigits10` (what the real is built from). |
+| 6. The epsilon Connection | Epsilon formula. Cross-ref to `LD10` caveat in FIRST-DIGIT.md. |
+
+**`nasties/FIRST-DIGIT.md`**
+
+| Section | Add |
+|---------|-----|
+| The bug | `LD10` as the exact mathematical definition. Then: "In floating point, `⌊10⋆⁼𝕩` can undercount at exact powers of 10. The Python/C implementations add `+1e-9`." |
 
 **`experiments/stats/uniformity/UNIFORMITY.md`**
 
@@ -75,23 +94,10 @@ the BQN here before lighter art docs or source-file headers.
 | Opening description or "What makes it non-obvious" | One short BQN reference tying the image back to `LD10` on sums of Champernowne reals, with a sentence that this is the real-valued helper, not the integer theorem-level extractor. |
 
 
-### Phase 2 — Secondary math docs
+### Phase 2 — Binary
 
-These are still central, but they mostly repeat or deepen the Phase 1
-math vocabulary.
-
-**`sources/EARLY-FINDINGS.md`**
-
-| Section | Add |
-|---------|-----|
-| 1. Exact Uniformity | `LeadingInt10` definition. Note that the count is `LeadingInt10¨ 1+↕9999` partitioned by value. |
-| 2. The Sawtooth | `ChamDigits10` (what the real is built from). |
-| 6. The epsilon Connection | Epsilon formula. Cross-ref to `LD10` caveat in FIRST-DIGIT.md. |
-
-
-### Phase 3 — Binary and nasties
-
-These extend the vocabulary to base 2 and document edge cases.
+Introduces `BinDigits`, `BStream`, `V2`, and the epsilon_2 identity.
+Depends on Phase 1 (`BStream` uses `NPn2` in its examples).
 
 **`experiments/binary/BINARY.md`**
 
@@ -102,17 +108,14 @@ These extend the vocabulary to base 2 and document edge cases.
 | 4. RLE | `V2` definition. The trailing-zero count of an n-prime `n*k` is `V2 n×k` (which for even n is at least `V2 n`). |
 | 5. The epsilon Connection | The epsilon_2 formula: `{(2⋆⁼1+𝕩)-𝕩}` for `m` in [0,1). Note this IS the SlideRule function. |
 
-**`nasties/FIRST-DIGIT.md`**
-
-| Section | Add |
-|---------|-----|
-| The bug | `LD10` as the exact mathematical definition. Then: "In floating point, `⌊10⋆⁼𝕩` can undercount at exact powers of 10. The Python/C implementations add `+1e-9`." |
+**`experiments/binary/forest/boundary_stitch/BOUNDARY_STITCH.md`** —
+`V2` definition for the barcode pattern.
 
 
-### Phase 4 — Experiment and art docs
+### Phase 3 — Experiment and art docs
 
-These are lighter touches. One or two BQN references per doc, pointing
-back to the canonical names defined in Phase 1.
+Mechanical application. One or two BQN references per doc, pointing
+back to the canonical names defined in Phases 1-2. No new vocabulary.
 
 **`experiments/art/sieves/SIEVES.md`** — Note that the sieve at row n
 is the finite prefix `count↑ n NPn2 count`. Reference `NPn2` and note
@@ -130,20 +133,18 @@ parsed from `ChamDigits10`. Reference `ChamDigits10`.
 **`experiments/math/arcs/ARCS.md`** — The epsilon bump formula if
 it discusses the secant-vs-curve error. Light touch only.
 
-**`experiments/binary/forest/boundary_stitch/BOUNDARY_STITCH.md`** —
-`V2` definition for the barcode pattern.
 
+### Phase 4 — Source-file headers
 
-### Phase 5 — Source-file headers
-
-Intentional, not accidental: top-of-file block comments in mathematically
-central source files are in scope when they help map the implementation
-back to the canonical BQN names. Keep them short. Do not spread this to
-plotting code, cipher internals, or anything under `generator/**`.
+Intentional, not accidental: top-of-file block comments in
+mathematically central source files are in scope when they help map
+the implementation back to the canonical BQN names. Keep them short.
+Do not spread this to plotting code, cipher internals, or anything
+under `generator/**`.
 
 Last, not first. By this point every doc demonstrates the BQN. The
-source files get a brief mapping comment at the top of the module, not
-the definitions themselves (those still live in the docs).
+source files get a brief mapping comment at the top of the module,
+not the definitions themselves (those still live in the docs).
 
 **`core/acm_core.py`** — Add a short comment block listing the BQN
 names that correspond to each public function:

@@ -13,6 +13,19 @@ irreducible elements (n-primes). Concatenating these into a decimal
 real produces a signal whose leading-digit distribution is exactly
 uniform — not approximately uniform, exactly uniform.
 
+```bqn
+NPn2         ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}       # n-primes for n >= 2
+Digits10     ← {𝕩<10 ? ⟨𝕩⟩ ; (𝕊⌊𝕩÷10)∾⟨10|𝕩⟩}
+ChamDigits10 ← {⥊ Digits10¨ 𝕩}               # exact digit concatenation
+LeadingInt10 ← {⊑ Digits10 𝕩}                # leading digit of an integer
+
+ChamDigits10 (5↑ 3 NPn2 5)   # ⟨3,6,1,2,1,5,2,1⟩ — digits of C(3)
+LeadingInt10 3                # 3 — the leading digit of n is the
+                              #     leading digit of C(n)
+```
+
+See `guidance/BQN-AGENT.md` for the full canonical vocabulary.
+
 This repo is three things at once:
 
 - **Math.** The construction, the proofs, the sawtooth, the
@@ -88,7 +101,8 @@ C:
 
 ## Key findings
 
-- Leading digits of ACM-Champernowne reals are exactly uniform (1/9 each)
+- Leading digits of ACM-Champernowne reals are exactly uniform
+  (1/9 each, by `LeadingInt10`; see `core/BLOCK-UNIFORMITY.md`)
 - Multiplication contaminates uniform distributions toward Benford irreversibly
 - Addition cycles digit concentration forever (rolling shutter)
 - The BIDDER generator achieves exact uniformity at block boundaries by construction

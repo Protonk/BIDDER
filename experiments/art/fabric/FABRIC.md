@@ -1,9 +1,11 @@
 # Digit Fabric
 
 Each row is one n (1-600). Each column is a digit position in the
-concatenated n-prime string. Color encodes digit value (0-9). The result
-is a 600 x 80 textile whose warp and weft are number theory and
-typography.
+concatenated n-prime string. Color encodes digit value (0-9). For
+n >= 2, each row is `ChamDigits10 (K↑ n NPn2 K)` — the exact
+digit stream of the first K n-primes (`guidance/BQN-AGENT.md`).
+The result is a 600 x 80 textile whose warp and weft are number
+theory and typography.
 
 Run: `sage -python digit_fabric.py`
 

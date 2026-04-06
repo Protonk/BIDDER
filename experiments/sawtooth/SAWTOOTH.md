@@ -9,11 +9,10 @@ Run: `sage -python sawtooth.py` and `sage -python residual.py`
 ## Why the teeth repeat after 10^2
 
 `sawtooth.py` plots `champernowne_real(n, 5)`. For `n > 5`, the first
-five `n`-primes are just
+five `n`-primes are just `5↑ n NPn2 5` = `n, 2n, 3n, 4n, 5n`.
 
-`n, 2n, 3n, 4n, 5n`.
-
-So the plotted value is
+So the plotted value is the float parsed from the exact digit stream
+`ChamDigits10 (5↑ n NPn2 5)` (`guidance/BQN-AGENT.md`), i.e.
 
 `C(n) = 1.[n][2n][3n][4n][5n]`
 

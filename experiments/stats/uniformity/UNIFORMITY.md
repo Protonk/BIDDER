@@ -17,7 +17,15 @@ of n. So:
   is a multiple of n^2).
 
 Call the irreducibles the **n-primes**. They are exactly the multiples
-of n that are not multiples of n^2.
+of n that are not multiples of n^2. In BQN (`NPn2` from
+`guidance/BQN-AGENT.md`; mirrors `core/acm_core.py`):
+
+```bqn
+NPn2 ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}    # n-primes for n >= 2
+```
+
+Left argument is n, right argument controls the search range.
+Use `K↑ n NPn2 K` to take exactly K results.
 
 ### Examples
 
@@ -45,11 +53,27 @@ a real number:
 In base 10 with K = 5:
 
     C(2) = 1.26101418      (2-primes: 2, 6, 10, 14, 18)
-    C(7) = 1.714212842     (7-primes: 7, 14, 21, 28, 42)
+    C(7) = 1.714212835     (7-primes: 7, 14, 21, 28, 35)
 
 The encoding packs two kinds of information into one scalar: the
 number-theoretic content (which elements are irreducible) and the
 typographic cost (how many base-b digits each element requires).
+
+In base 10, the exact digit stream — before parsing to a float —
+is `ChamDigits10` (`guidance/BQN-AGENT.md`; the "10" in the name
+marks it as base-10-specific):
+
+```bqn
+Digits10     ← {𝕩<10 ? ⟨𝕩⟩ ; (𝕊⌊𝕩÷10)∾⟨10|𝕩⟩}
+ChamDigits10 ← {⥊ Digits10¨ 𝕩}
+
+ChamDigits10 (5↑ 7 NPn2 5)   # ⟨7,1,4,2,1,2,8,3,5⟩
+                               # digits of 7, 14, 21, 28, 35
+```
+
+Python/C then parse "1." followed by these digits to a float.
+The construction works in any base b; the BQN helpers above are
+the base-10 instance.
 
 
 ## Exact uniformity of leading digits
@@ -70,7 +94,21 @@ Therefore: **the leading digits of C_b(n), taken over any complete
 digit block of n values, are exactly uniform over {1, ..., b-1}
 with probability 1/(b-1) each.**
 
-This is exact. It holds for any K >= 1 and any base b >= 2.
+This is exact. It holds for any K >= 1 and any base b >= 2. See
+`core/BLOCK-UNIFORMITY.md` for the counting argument.
+
+In base 10, the integer leading-digit extractor and its Benford
+contrast (`guidance/BQN-AGENT.md`; base-10 instances):
+
+```bqn
+LeadingInt10 ← {⊑ Digits10 𝕩}       # leading digit of a positive integer
+Benford10    ← {10⋆⁼1+÷𝕩}            # log₁₀(1 + 1/d) — Benford reference
+```
+
+`LeadingInt10` gives 1/9 for each digit over a complete base-10
+block. `Benford10` gives the contrasting log-weighted distribution
+that multiplication converges to. The same structure holds in any
+base b, with 1/(b-1) replacing 1/9.
 
 
 ## The generator

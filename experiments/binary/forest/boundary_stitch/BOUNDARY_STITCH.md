@@ -14,10 +14,18 @@ Do this for several values of n, side by side.
 ## What We Expect
 
 **The v_2 barcode.** For n = 2^m, every n-prime is divisible by 2^m,
-so the last m bits of every entry are 0. These guaranteed trailing
-zeros should appear as m solid dark columns immediately to the left
-of the join. The join itself (column 0, the leading 1 of the next
-entry) is a solid bright column. The pattern is:
+so the last m bits of every entry are 0. The 2-adic valuation
+(`V2` from `guidance/BQN-AGENT.md`; exact math — local `v2` helpers
+appear in the binary experiment scripts):
+
+```bqn
+V2 ← {0=2|𝕩 ? 1+𝕊⌊𝕩÷2 ; 0}    # positive integers only
+```
+
+The guaranteed trailing zeros appear as `V2 n` solid dark columns
+immediately to the left of the join. The join itself (column 0, the
+leading 1 of the next entry) is a solid bright column. The pattern
+is:
 
 ```
 n = 2   (v_2 = 1):   ?  ?  ?  0 | 1  ?  ?  ?

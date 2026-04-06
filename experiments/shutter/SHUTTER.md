@@ -22,6 +22,15 @@ converges. A thousand additions produce a distribution further from
 Benford than seven multiplications. The image is a proof-by-picture
 of this asymmetry.
 
+The leading digit of each sum is extracted by `LD10`
+(`guidance/BQN-AGENT.md`; mirrors `acm_first_digit` in
+`core/acm_core.py`) — the log-based real-valued extractor, not the
+integer-level `LeadingInt10` used in the block-uniformity theorem:
+
+```bqn
+LD10 ← {⌊𝕩÷10⋆⌊10⋆⁼𝕩}
+```
+
 ## Format
 
 Tall vertical panel (8" x 16"), dark background, inferno colormap.

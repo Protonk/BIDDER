@@ -15,6 +15,18 @@ Stream:   0.10|110|1010|1110|10010|10110|11010|11110|...
 Flat:     0.101101010111010010101101101011110...
 ```
 
+In BQN (`BinDigits`, `BStream` from `guidance/BQN-AGENT.md`; mirrors
+`experiments/binary/binary_core.py`):
+
+```bqn
+NPn2      ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}
+BinDigits ← {𝕩<2 ? ⟨𝕩⟩ ; (𝕊⌊𝕩÷2)∾⟨2|𝕩⟩}
+BStream   ← {⥊ BinDigits¨ 𝕩}
+
+BStream (8↑ 2 NPn2 8)
+# ⟨1,0,1,1,0,1,0,1,0,1,1,1,0,1,0,0,1,0,1,0,1,1,0,1,1,0,1,0,1,1,1,1,0⟩
+```
+
 The entry boundaries disappear into a single bit stream. What follows is
 what changes, what breaks, and what becomes visible.
 
@@ -88,6 +100,9 @@ is:
 fraction of 1s = (d + 1) / (2d)
 ```
 
+In BQN: `{(𝕩+1)÷2×𝕩}` for bit-length d. This approaches 1/2 from
+above but never reaches it.
+
 | Bit-length d | Fraction of 1s | Excess over 1/2 |
 |---|---|---|
 | 1 | 1.000 | 0.500 |
@@ -146,6 +161,18 @@ every boundary's leading 1. This creates a guaranteed "01" transition
 at every boundary (for n=2), or "001" (for n=4), or "0001" (for n=8).
 These are **invisible in base 10** but glaringly visible in RLE.
 
+The 2-adic valuation that drives this (`V2` from
+`guidance/BQN-AGENT.md`; exact math — local `v2` helpers appear in
+experiment scripts like `forest/rle_spectroscopy/rle_spectroscopy.py`):
+
+```bqn
+V2 ← {0=2|𝕩 ? 1+𝕊⌊𝕩÷2 ; 0}    # positive integers only
+```
+
+The trailing-zero count of an n-prime n×k is at least `V2 n`.
+For even n, every boundary has a guaranteed dark stripe of width
+`V2 n` in the stitch image.
+
 **RLE as an n-detector:** The run-length distribution of the binary
 Champernowne stream carries a fingerprint of n's 2-adic structure.
 Given the stream, you could estimate v_2(n) from the excess of short
@@ -169,7 +196,13 @@ base-10 mantissa was identified as a "base-10 cousin" of the
 floating-point correction epsilon(m) = log_2(1+m) - m from SlideRule.
 
 In base 2, the sawtooth **IS** epsilon. Not an analog — the function
-itself.
+itself. In BQN:
+
+```bqn
+{(2⋆⁼1+𝕩)-𝕩}                    # ε₂(m) = log₂(1+m) − m
+```
+
+for mantissa m ∈ [0, 1). This is the exact SlideRule function.
 
 The binary Champernowne fraction for n in the d-bit class:
 
