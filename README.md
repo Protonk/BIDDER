@@ -54,8 +54,7 @@ This repo is three things at once:
     experiments/
       sawtooth/              Sawtooth and residual analysis
       shutter/               Rolling shutter (addition vs multiplication)
-      sieves/                Moire sieves and sieve carpet
-      art/                   Visualizations (fabric, contamination, collapse)
+      art/                   Visualizations (fabric, sieves, contamination, collapse)
       math/arcs/             Epsilon landscape
       stats/                 Uniformity demo, source comparison, interferometry
       stratified/            Stratified sampling at block boundaries

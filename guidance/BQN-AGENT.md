@@ -1,283 +1,346 @@
-# BQN for Specification
-
-BQN is the documentation language of this project. It expresses
-constructions as executable one-liners alongside the C and Python
-implementations. It is not the primary implementation language. It
-is a lens — terse, grammatically regular, and readable once you
-know five rules.
-
-This document is a reference for agents producing BQN expressions
-in this codebase. It covers enough of the language to express the
-ACM-Champernowne pipeline and its variants. It does not cover the
-full language.
-
-
-## Grammar
-
-BQN has four roles. Every token occupies exactly one role, and
-the role is determined by its spelling:
-
-| Role     | Case/shape  | Example         | What it is              |
-|----------|-------------|-----------------|-------------------------|
-| Subject  | lowercase   | `x`, `3`, `⟨⟩`  | Data. A value.          |
-| Function | Uppercase   | `+`, `⌽`, `F`   | Takes 1 or 2 subjects.  |
-| 1-mod    | superscript | `˜`, `¨`, `⌜`   | Takes 1 operand (left). |
-| 2-mod    | superfixed  | `∘`, `⊸`, `⟜`   | Takes 2 operands.       |
-
-Functions apply to subjects and return subjects.
-Modifiers take functions (or subjects) and return functions.
-
-That is the entire grammar. There are no exceptions, no context-
-dependent reinterpretation, no verb/adverb ambiguity. If you know
-a token's role, you know how it combines.
+# BQN Agent Guidance
 
+BQN is intended to become the compact documentation language for the
+mathematical substrate of this repo. Right now, BQN lives in this guidance file, while the actual
+project still speaks primarily in Python, C, prose, and plots.
 
-## Evaluation
+Treat BQN here as an adoption target: BQN blocks appear inline in
+existing `.md` docs alongside prose, as compact restatements of
+constructions already implemented in Python and C. Short block comments
+at the top of mathematically central source files are also acceptable
+when they help map an implementation back to the canonical BQN names.
+There is no standalone `acm_core.bqn` to maintain — the BQN is
+annotation, not a third implementation.
 
-BQN evaluates **right to left**, like all APL descendants.
+Hard boundary: `generator/**` is out of scope for BQN. The product side
+should stay BQN-free. If a generator doc needs mathematical provenance,
+point back to the math docs rather than importing BQN into
+`generator/**`.
 
-```
-   3 × 4 + 1     ⍝ 3 × (4 + 1) = 15, not (3×4)+1
-```
+This file should help an agent do two things:
 
-A function with a left argument is **dyadic** (two arguments).
-Without one, it is **monadic** (one argument). Most symbols have
-both a monadic and a dyadic meaning:
+1. write BQN that matches the repo we actually have
+2. add BQN blocks to project docs where they clarify the algebra
 
-| Symbol | Monadic         | Dyadic            |
-|--------|-----------------|-------------------|
-| `+`    | (identity)      | add               |
-| `-`    | negate          | subtract          |
-| `×`    | sign            | multiply          |
-| `÷`    | reciprocal      | divide            |
-| `⌊`    | floor           | min               |
-| `⌈`    | ceiling         | max               |
-| `|`    | absolute value  | modulo            |
-| `⋆`    | e^x             | power             |
-| `√`    | square root     | nth root          |
-| `⌽`    | reverse         | rotate            |
-| `↑`    | prefixes        | take              |
-| `↓`    | suffixes        | drop              |
-| `/`    | indices         | replicate/filter  |
-| `⊔`    | group           | group by          |
-| `∾`    | join            | join to           |
-| `≠`    | length          | not equal         |
-| `⥊`    | deshape (flat)  | reshape           |
+## Scope
 
+BQN belongs in this repo when it clarifies a mathematical construction
+that already exists in code:
 
-## Modifiers (the important ones)
+- `acm_n_primes` for `n >= 2`
+- decimal digit expansion and concatenation
+- leading-digit extraction
+- digit-count / typographic-cost ideas
+- Benford reference expressions
+- binary Champernowne stream construction
+- small algebraic helpers such as `v2`
 
-```
-F¨ x        ⍝ map: apply F to each element of x
-F˜ x        ⍝ self: x F x
-x F⌜ y      ⍝ table: F applied to all pairs (outer product)
-F´ x        ⍝ fold (reduce) x by F
-F` x        ⍝ scan x by F
-F∘G x       ⍝ compose: F(G(x))
-F⊸G x       ⍝ bind left: (F x) G x.   dyadic: x F⊸G y = (F x) G y
-x F⟜G y     ⍝ bind right: x F (G y).   monadic: F⟜G x = (G x) F x... no:
-```
+BQN does **not** belong in this repo for:
 
-The two bind modifiers `⊸` and `⟜` are the workhorses. They
-partially apply:
+- numpy batch conveniences
+- plotting code
+- experiment harnesses
+- `generator/**` docs and source files
+- Speck internals
+- SHA-256 internals
+- Feistel plumbing
+- C memory management details
+- CLI/build/test instructions
 
-```
-   3⊸+ x       ⍝ 3 + x       (left argument fixed to 3)
-   +⟜3 x       ⍝ x + 3       (right argument fixed to 3)
-   F⊸G x       ⍝ (F x) G x   (monadic: F computes the left arg)
-   F⟜G x       ⍝ x F (G x)   (monadic: G computes the right arg)
-```
+For BIDDER specifically, keep BQN on the ACM side only. The generator
+may inherit mathematical provenance from `core/` and experiment docs,
+but `generator/**` should remain prose and implementation, not BQN.
 
-The train (fork): `F G H` applied to `x` means `(F x) G (H x)`.
-Three functions in a row form an implicit fork. This is how you
-write point-free expressions.
 
+## The Repo Shapes The BQN
 
-## Blocks and assignment
+The repo has several constraints that BQN guidance should reflect.
 
-```
-   F ← {𝕩 + 1}          ⍝ monadic function (𝕩 = right arg)
-   G ← {𝕨 × 𝕩}          ⍝ dyadic function (𝕨 = left, 𝕩 = right)
-   𝕊                     ⍝ self-reference (for recursion)
-   {𝕤⋄ body}             ⍝ 𝕤 declares the block as a function
-```
+### 1. `n = 1` is a real special case
 
-Multiple statements separated by `⋄` or newlines. The last
-expression is the return value.
+`core/acm_core.py` treats `n = 1` as ordinary primes. That is not the
+same construction as the clean monoid sieve for `n >= 2`.
 
+So:
 
-## Arrays
+- use BQN one-liners for the `n >= 2` monoid case
+- document the `n = 1` branch explicitly in prose
+- do not hide trial division inside a "clean" ACM formula and pretend
+  it is the same thing
 
-```
-   ⟨1, 2, 3⟩            ⍝ list
-   3‿4‿5                 ⍝ strand notation (same as above, shorter)
-   ↕ n                   ⍝ range: 0, 1, ..., n-1
-   1 + ↕ n               ⍝ range: 1, 2, ..., n
-   x / y                 ⍝ filter: keep elements of y where x is 1
-```
+### 2. Exact concatenation matters more than float parsing
 
+`acm_champernowne_real` returns a Python float / C double, which means
+long concatenations are truncated by IEEE 754 precision. That is an
+implementation convenience, not the mathematical heart of the object.
 
-## Predicates and filtering
+So in BQN:
 
-```
-   2 | x                 ⍝ x mod 2
-   0 = 2 | x             ⍝ is x even?
-   (0≠n|·)⊸/ n×1+↕m     ⍝ n-primes: multiples of n where n∤k
-```
+- specify the exact digit list or exact digit string first
+- mention float parsing only as an implementation step in Python/C
+- do not make the lossy float representation the primary spec
 
-The last line is the core ACM filter, explained below.
+### 3. Integer leading digits and log-based leading digits are different roles
 
+This repo uses two related but distinct ideas:
 
-## The ACM-Champernowne Pipeline in BQN
+- theorem-level leading digit of an integer `n`
+- utility-level `acm_first_digit(x)` for positive real `x`
 
-### n-primes (n ≥ 2)
+When documenting exact block uniformity, prefer integer-digit extraction
+via decimal digits, not the log-based helper. Use the log formula only
+when you are mirroring `acm_first_digit`.
 
-The n-primes of monoid n are {n·k : n∤k, k ≥ 1}.
+### 4. Binary work is separate, not an afterthought
 
-```
-   NP ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}
-```
+The binary tree under `experiments/binary/` has its own vocabulary:
 
-Left arg `𝕨` = n, right arg `𝕩` = count (upper bound on how
-many k values to scan; output may be shorter). `1+↕𝕩×𝕨` is the
-candidate k values. `𝕨×` multiplies by n. The filter `(0≠𝕨|·)⊸/`
-keeps only those where k mod n ≠ 0.
+- binary concatenation
+- run-length encoding
+- entry boundaries
+- `v2`
 
-Usage: `2 NP 20` gives the first several 2-primes.
+Take care when adapting BQN here.
 
-To get exactly K n-primes, generate more than enough and take K:
 
-```
-   NPK ← {𝕩↑ (0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}
-```
+## Minimal BQN Needed Here
 
-### Champernowne real
+This repo does not need a full BQN course. An agent only needs the
+small slice that expresses the constructions above.
 
-Concatenate decimal digit lists and interpret:
+### Evaluation
 
-```
-   CDigits ← {⥊10{𝕨⊸(⌊∘÷˜)⟜(|˜)⍟(↕1+·⌊𝕨⊸⋆⁼)𝕩}¨ 𝕩}
-```
+BQN evaluates right to left.
 
-This is harder to read and probably not worth golfing. For
-specification purposes, the clearer form is:
-
-```
-   Digits ← {𝕩{𝕩<1 ? ⟨⟩ ; (𝕊⌊𝕩÷10)∾⟨10|𝕩⟩}𝕩}
-   CDigits ← ⥊∘Digits¨
-```
-
-`Digits` converts an integer to a list of its decimal digits.
-`CDigits` maps that over an array and flattens. The Champernowne
-real is then `1` followed by a decimal point and `CDigits` of
-the n-prime list.
-
-### Leading digit
-
-```
-   LD ← {⌊𝕩÷10⋆⌊10⋆⁼𝕩}
-```
-
-Floor of x divided by 10 to the floor of its base-10 log.
-
-### Benford reference
-
-```
-   Benford ← {10⋆⁼1+÷𝕩}
-```
-
-`log10(1 + 1/d)`.
-
-
-## Binary Champernowne
-
-For the binary experiments (Mallorn Seed), the pipeline changes:
-
-```
-   BinDigits ← {𝕩{𝕩<1 ? ⟨⟩ ; (𝕊⌊𝕩÷2)∾⟨2|𝕩⟩}𝕩}
-   BStream ← ⥊∘BinDigits¨
-```
-
-Or, more idiomatically, using base conversion:
-
-```
-   BStream ← ⥊ 2{⌽𝕨⊸(⌊∘÷˜)⍟(↕1+·⌊𝕨⊸⋆⁼)𝕩}¨ ·
-```
-
-### RLE
-
-```
-   RLE ← {≠¨⊸(⟨⊑¨,≠¨⟩) ⊔𝕩}
-```
-
-Group consecutive equal elements, return value-length pairs.
-(The exact BQN for this depends on taste; the point is that
-grouping and counting are single operations.)
-
-### 2-adic valuation
-
-```
-   V2 ← {0=2|𝕩 ? 1+𝕊⌊𝕩÷2 ; 0}
-```
-
-Count trailing factors of 2, recursively.
-
-
-## Style Guide for This Project
-
-**One-liners, not programs.** Each BQN expression should be a
-single definition or a single pipeline. If it needs more than
-two lines, it is too complex for its role here — simplify the
-idea or leave it to Python.
-
-**Name the construction.** Assign each expression to a named
-function. `NP`, `CDigits`, `LD`, `Benford`, `V2`. These names
-should match the terminology in ACM-CHAMPERNOWNE.md and the
-Python/C function names where possible.
-
-**Gloss every expression.** Every BQN line in the docs should
-have a plain-English comment or a preceding sentence explaining
-what it computes. The BQN is a formula, not a replacement for
-the explanation.
-
-**Don't optimize.** Clarity over brevity. If a two-character
-savings makes the expression harder to gloss, keep the longer
-version. This is specification, not golf.
-
-**Test nothing.** BQN expressions in this project are not tested
-in CI. They are documentation. The C and Python implementations
-are the tested artifacts. If a BQN expression and a Python
-function disagree, the Python is authoritative.
-
-**Mark the role.** When adding BQN to a document, use a fenced
-code block with language tag `bqn`:
-
-````
 ```bqn
-   NP ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}   # first ~𝕩 n-primes of monoid 𝕨
-```
-````
-
-
-## Installing BQN
-
-For verifying expressions interactively:
-
-```
-# CBQN (C implementation, recommended)
-git clone https://github.com/dzaima/CBQN && cd CBQN && make
-./BQN -e '2 {(0≠𝕨|·)⊸/𝕨×1+↕𝕩×𝕨} 20'
-
-# Or use the online REPL: https://mlochbaum.github.io/BQN/try
+3 × 4 + 1   # 3 × (4 + 1)
 ```
 
-No BQN dependency is required to build or run any part of this
-project. It is a documentation tool only — until it isn't.
+### Blocks
+
+```bqn
+F ← {𝕩 + 1}
+G ← {𝕨 × 𝕩}
+```
+
+### Arrays and ranges
+
+```bqn
+⟨1,2,3⟩
+↕ 5        # 0 1 2 3 4
+1 + ↕ 5    # 1 2 3 4 5
+```
+
+### Workhorse modifiers
+
+```bqn
+F¨ x        # map
+F´ x        # fold
+F⊸G x       # left bind / derived left argument
+F⟜G x       # right bind / derived right argument
+```
+
+That is enough for almost everything this repo should say in BQN.
 
 
-## Reference
+## Canonical Project Constructions
+
+These are the expressions worth standardizing first. They are aligned
+to the current repo and should be preferred over clever alternatives.
+
+### `NPn2` - n-primes for `n >= 2`
+
+This mirrors the monoid sieve in `core/acm_core.py` and `core/acm_core.c`.
+
+```bqn
+NPn2 ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}
+```
+
+Meaning:
+
+- left argument `𝕨` is `n`
+- right argument `𝕩` is the requested count (approximate — see note)
+- generate candidate multipliers `k = 1..n×count`
+- keep the multipliers `k` where `n∤k` (i.e. `n*k` is not divisible by `n²`)
+- multiply surviving multipliers by `n` to get n-primes
+
+**Important:**
+
+- This is for `n >= 2`. `n = 1` remains prose plus Python/C, not
+  this one-liner.
+- This produces approximately `(n-1)×count` results, not exactly
+  `count`. The Python/C implementations generate-and-collect until
+  they have exactly `count` n-primes. The BQN one-liner is the
+  algebraic specification (which n-primes exist), not a port of the
+  stopping logic. If you need exactly `count`, take the first `count`
+  elements of the result.
+
+### `Digits10` - exact decimal digits of a positive integer
+
+```bqn
+Digits10 ← {𝕩<10 ? ⟨𝕩⟩ ; (𝕊⌊𝕩÷10)∾⟨10|𝕩⟩}
+```
+
+Use this as the base object for theorem-level statements. It is closer
+to what the project actually cares about than the float parse.
+
+### `ChamDigits10` - exact decimal concatenation
+
+```bqn
+ChamDigits10 ← {⥊ Digits10¨ 𝕩}
+```
+
+Given a list of integers, return the exact flattened digit stream.
+
+This is the recommended BQN specification for the Champernowne payload.
+If a doc needs the actual real, explain that Python/C then parse:
+
+- `"1." + concatenated decimal digits`
+
+and that only the prefix survives in binary floating-point.
+
+### `DigitCount10` - typographic cost
+
+```bqn
+DigitCount10 ← {+´ ≠¨ Digits10¨ 𝕩}
+```
+
+This mirrors `acm_digit_count` conceptually, though the repo computes
+the count directly from integers rather than by materializing nested
+digit lists.
+
+### `LeadingInt10` - leading decimal digit of an integer
+
+```bqn
+LeadingInt10 ← {⊑ Digits10 𝕩}
+```
+
+Use this for positional-notation theorems and exact block claims.
+
+### `LD10` - leading significant digit of a positive real
+
+This mirrors `acm_first_digit`.
+
+```bqn
+LD10 ← {⌊𝕩÷10⋆⌊10⋆⁼𝕩}
+```
+
+**Caveat:** This is the mathematical definition. In floating point,
+`⌊log10(x)⌋` can undercount at exact powers of 10 (the same class of
+bug documented in `nasties/FIRST-DIGIT.md`). The Python/C
+implementations carry a `+1e-9` guard. Treat `LD10` as exact math;
+note the guard when discussing the implementation.
+
+Use this only when the repo is already discussing positive reals.
+
+### `Benford10` - Benford reference
+
+```bqn
+Benford10 ← {10⋆⁼1+÷𝕩}
+```
+
+This is `log10(1 + 1/d)` for digit `d`.
+
+### Binary core
+
+These mirror `experiments/binary/binary_core.py`.
+
+```bqn
+BinDigits ← {𝕩<2 ? ⟨𝕩⟩ ; (𝕊⌊𝕩÷2)∾⟨2|𝕩⟩}
+BStream   ← {⥊ BinDigits¨ 𝕩}
+V2        ← {0=2|𝕩 ? 1+𝕊⌊𝕩÷2 ; 0}
+```
+
+`BStream` takes a list of integers and returns the concatenated bit
+stream. In the repo, those integers are usually the first `count`
+n-primes of a chosen monoid.
+
+`V2` is the 2-adic valuation: the number of times 2 divides `𝕩`.
+Defined for positive integers only — `V2(0)` infinite-loops because
+0 is always even. The Python implementations guard `n == 0` explicitly.
+
+### RLE and boundary helpers
+
+These matter to the binary work, but they do not have to be one-line
+golf. Use a block if it is clearer. The goal is to specify:
+
+- consecutive equal-bit run grouping
+- cumulative entry lengths / boundary positions
+
+If a tidy one-liner harms readability, stop. Python is better.
+
+
+## Naming Rules
+
+Use names that make base and role obvious:
+
+- `NPn2`, not just `NP`, when the formula excludes the `n = 1` case
+- `Digits10`, `ChamDigits10`, `DigitCount10`, `LeadingInt10`, `LD10`
+- `BinDigits`, `BStream`, `V2`
+
+If a name should correspond to an implementation artifact, point to the
+implementation path right next to it in prose:
+
+- `core/acm_core.py`
+- `core/acm_core.c`
+- `experiments/binary/binary_core.py`
+
+
+## Verification
+
+BQN blocks are a fourth vertex in the DOCS :: C :: PYTHON triangle.
+They stay honest the same way: by testing against known values.
+
+When adding a BQN expression to a doc:
+
+- verify it against the reference values in `tests/test_acm_core.py`
+  (e.g. `3 NPn2 5` should start with `3, 6, 9, 15, ...`)
+- if the BQN expression is an exact-math specification, note where it
+  diverges from the lossy implementation (float truncation, stopping
+  logic, edge-case guards)
+- if Python or C change, check that the BQN gloss still matches
+
+BQN is annotation — if it drifts from the implementation, the
+implementation wins and the BQN gets updated.
+
+
+## How To Write BQN In This Repo
+
+Every BQN block added to a project doc should satisfy all of these:
+
+1. It names a construction the repo already uses.
+2. It says which file(s) implement that construction.
+3. It says whether it is exact math, an implementation mirror, or an
+   abstraction over an implementation detail.
+4. It is readable enough that the gloss can be checked line by line.
+
+Good:
+
+```bqn
+NPn2 ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}
+```
+
+"First `count` n-primes for `n >= 2`; mirrors the sieve logic of
+`core/acm_core.py`."
+
+Bad:
+
+```bqn
+F←{((0≠𝕨|·)⊸/𝕨×1+↕𝕩×𝕨)∾...}
+```
+
+## References
+
+Project docs the BQN mirrors:
+
+- [ACM-CHAMPERNOWNE.md](../core/ACM-CHAMPERNOWNE.md) — the math
+- [FIRST-DIGIT.md](../nasties/FIRST-DIGIT.md) — the truncation bug (`LD10` caveat)
+- `core/acm_core.py`, `core/acm_core.c` — implementations
+- `experiments/binary/binary_core.py` — binary constructions
+
+BQN language:
 
 - Language spec: https://mlochbaum.github.io/BQN
-- Primer: https://mlochbaum.github.io/BQN/doc/quick.html
-- All built-ins: https://mlochbaum.github.io/BQN/doc/primitive.html
-- CBQN source: https://github.com/dzaima/CBQN
+- Quick reference: https://mlochbaum.github.io/BQN/doc/quick.html
+- Built-ins: https://mlochbaum.github.io/BQN/doc/primitive.html
+- CBQN: https://github.com/dzaima/CBQN

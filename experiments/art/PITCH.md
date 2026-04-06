@@ -9,8 +9,8 @@ image that works on its own terms, not just as a plot with a caption.
 |-------------------|---------------------------|------------------------------|
 | Rolling Shutter   | `experiments/shutter/`    | [SHUTTER.md](../shutter/SHUTTER.md) |
 | Digit Fabric      | `experiments/art/fabric/` | [FABRIC.md](fabric/FABRIC.md)       |
-| Moire Sieves      | `experiments/sieves/`     | [SIEVES.md](../sieves/SIEVES.md)    |
-| Sieve Carpet      | `experiments/sieves/`     | [SIEVES.md](../sieves/SIEVES.md)    |
+| Moire Sieves      | `experiments/art/sieves/` | [SIEVES.md](sieves/SIEVES.md)       |
+| Sieve Carpet      | `experiments/art/sieves/` | [SIEVES.md](sieves/SIEVES.md)       |
 | Epsilon Landscape  | `experiments/math/arcs/`  | [ARCS.md](../math/arcs/ARCS.md)     |
 
 
