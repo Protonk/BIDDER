@@ -1,207 +1,244 @@
 """
 reseed_test.py — Can we rekey at the period boundary without issue?
 
-Three questions:
-  1. Does each rekeyed period still have exact uniformity?
-  2. Is there a detectable seam at the boundary between periods?
-  3. Does the cross-period stream look different from a single period?
+Questions:
+  1. Does each rekeyed period remain exactly uniform?
+  2. Is there a measurable seam at the boundary between periods?
+  3. If there is one, how large is it relative to a permutation null?
+
+This version sweeps several (base, digit_class) settings and replaces
+the old hand-rolled chi-squared cutoff with a permutation test on the
+boundary-vs-interior bigram distribution.
 """
 
-import sys, os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../generator'))
-
-import collections
 import hashlib
+import os
 import struct
+import sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, '..', '..', 'generator'))
+
 import numpy as np
 import matplotlib.pyplot as plt
 from bidder import Bidder
 
 
 def rekey(old_key, period_num):
-    """Derive a new key from the old key and the period counter."""
     return hashlib.sha256(old_key + struct.pack('<Q', period_num)).digest()
 
 
 def generate_rekeyed_stream(base, digit_class, seed_key, n_periods):
-    """Generate n_periods full periods, rekeying at each boundary."""
     key = seed_key
-    full_stream = []
-    per_period_counts = []
+    periods = []
 
-    for p in range(n_periods):
+    for period_num in range(n_periods):
         gen = Bidder(base=base, digit_class=digit_class, key=key)
-        period_output = [gen.next() for _ in range(gen.period)]
-        full_stream.extend(period_output)
-        per_period_counts.append(collections.Counter(period_output))
-        key = rekey(key, p)
+        periods.append(np.fromiter((gen.next() for _ in range(gen.period)),
+                                   dtype=np.int16, count=gen.period))
+        key = rekey(key, period_num)
 
-    return full_stream, per_period_counts
-
-
-# =====================================================================
-# Test 1: Per-period exact uniformity survives rekeying
-# =====================================================================
-
-print("=== Test 1: Per-period uniformity ===\n")
-
-base, dc = 10, 3  # period = 900
-n_periods = 100
-
-stream, period_counts = generate_rekeyed_stream(
-    base, dc, b'reseed test', n_periods)
-
-period = 900
-expected = period // (base - 1)  # 100
-all_exact = True
-
-for p, counts in enumerate(period_counts):
-    for d in range(1, base):
-        if counts[d] != expected:
-            print(f"  Period {p}: digit {d} count {counts[d]} != {expected}")
-            all_exact = False
-
-print(f"  {n_periods} periods, each period exactly uniform: {all_exact}")
-print(f"  Total stream length: {len(stream)}")
+    return np.concatenate(periods)
 
 
-# =====================================================================
-# Test 2: Seam detection — is the boundary visible?
-# =====================================================================
+def per_period_uniformity(stream, base, period):
+    expected = period // (base - 1)
+    blocks = stream.reshape(-1, period)
+    exact = True
 
-print("\n=== Test 2: Seam detection ===\n")
+    for counts in (np.bincount(block, minlength=base) for block in blocks):
+        if not np.all(counts[1:base] == expected):
+            exact = False
+            break
 
-# Look at digit bigrams (consecutive pairs) across the whole stream.
-# If there's a seam, the bigrams at period boundaries will have a
-# different distribution than bigrams within a period.
-
-stream_arr = np.array(stream)
-
-# All bigrams
-all_bigrams = collections.Counter(
-    zip(stream_arr[:-1].tolist(), stream_arr[1:].tolist()))
-
-# Bigrams at period boundaries (last of period N, first of period N+1)
-boundary_bigrams = collections.Counter()
-for p in range(n_periods - 1):
-    idx = (p + 1) * period - 1  # last element of period p
-    boundary_bigrams[(stream_arr[idx], stream_arr[idx + 1])] += 1
-
-# Bigrams NOT at boundaries
-interior_bigrams = collections.Counter()
-for i in range(len(stream_arr) - 1):
-    if (i + 1) % period != 0:  # skip boundary positions
-        interior_bigrams[(stream_arr[i], stream_arr[i + 1])] += 1
-
-# Chi-squared test: are boundary bigrams drawn from the same
-# distribution as interior bigrams?
-n_boundary = sum(boundary_bigrams.values())
-n_interior = sum(interior_bigrams.values())
-
-# Expected boundary count for each bigram = n_boundary * (interior_count / n_interior)
-chi2 = 0
-df = 0
-for bigram in set(list(all_bigrams.keys())):
-    obs = boundary_bigrams.get(bigram, 0)
-    interior_rate = interior_bigrams.get(bigram, 0) / n_interior
-    exp = n_boundary * interior_rate
-    if exp > 0.5:  # only count cells with reasonable expected count
-        chi2 += (obs - exp) ** 2 / exp
-        df += 1
-
-# With ~81 bigrams and 99 boundary transitions, df is around 80
-# Chi-squared critical value at 0.05 for df=80 is ~101.9
-print(f"  Boundary bigrams: {n_boundary}")
-print(f"  Interior bigrams: {n_interior}")
-print(f"  Chi-squared: {chi2:.2f} (df={df})")
-print(f"  Threshold (0.05, df={df}): ~{df + 2 * (2*df)**0.5:.0f}")
-seam_detected = chi2 > df + 3 * (2 * df) ** 0.5  # ~3 sigma
-print(f"  Seam detected: {seam_detected}")
+    return exact, expected
 
 
-# =====================================================================
-# Test 3: Cross-period digit distribution
-# =====================================================================
-
-print("\n=== Test 3: Cross-period distribution ===\n")
-
-# The full stream spans n_periods periods. At each period boundary,
-# the distribution is exact. But is the CROSS-PERIOD distribution
-# also well-behaved?
-
-total_counts = collections.Counter(stream)
-total = len(stream)
-print(f"  Total stream: {total} symbols")
-for d in range(1, base):
-    frac = total_counts[d] / total
-    expected_frac = 1.0 / (base - 1)
-    print(f"    digit {d}: {total_counts[d]} ({frac:.6f}), "
-          f"expected {expected_frac:.6f}")
-
-# Are all periods producing different sequences?
-first_20 = []
-key = b'reseed test'
-for p in range(5):
-    gen = Bidder(base=base, digit_class=dc, key=key)
-    first_20.append([gen.next() for _ in range(20)])
-    key = rekey(key, p)
-
-print(f"\n  First 20 outputs per period (5 periods):")
-for p, seq in enumerate(first_20):
-    print(f"    Period {p}: {seq}")
-all_different = len(set(tuple(s) for s in first_20)) == len(first_20)
-print(f"  All sequences different: {all_different}")
+def bigram_ids(stream, base):
+    alphabet = base - 1
+    return (stream[:-1] - 1) * alphabet + (stream[1:] - 1)
 
 
-# =====================================================================
-# Plot: running deviation across period boundaries
-# =====================================================================
+def total_variation(boundary_counts, interior_counts):
+    boundary = boundary_counts / np.sum(boundary_counts)
+    interior = interior_counts / np.sum(interior_counts)
+    return 0.5 * np.abs(boundary - interior).sum()
+
+
+def seam_permutation_test(ids, boundary_mask, alphabet_size, n_perm, seed):
+    boundary_ids = ids[boundary_mask]
+    interior_ids = ids[~boundary_mask]
+
+    boundary_counts = np.bincount(boundary_ids, minlength=alphabet_size)
+    interior_counts = np.bincount(interior_ids, minlength=alphabet_size)
+    observed = total_variation(boundary_counts, interior_counts)
+
+    rng = np.random.default_rng(seed)
+    total_counts = np.bincount(ids, minlength=alphabet_size)
+    n_total = len(ids)
+    n_boundary = np.sum(boundary_mask)
+    null_stats = np.empty(n_perm, dtype=np.float64)
+
+    for trial in range(n_perm):
+        chosen = rng.choice(n_total, size=n_boundary, replace=False)
+        chosen_counts = np.bincount(ids[chosen], minlength=alphabet_size)
+        rest_counts = total_counts - chosen_counts
+        null_stats[trial] = total_variation(chosen_counts, rest_counts)
+
+    p_value = (1 + np.sum(null_stats >= observed)) / (n_perm + 1)
+    z_score = (observed - null_stats.mean()) / max(null_stats.std(), 1e-12)
+
+    return {
+        'observed_tv': observed,
+        'null_stats': null_stats,
+        'p_value': p_value,
+        'z_score': z_score,
+        'boundary_count': int(n_boundary),
+        'interior_count': int(np.sum(~boundary_mask)),
+    }
+
+
+def evaluate_setting(base, digit_class, n_periods, seed_key, n_perm):
+    probe = Bidder(base=base, digit_class=digit_class, key=seed_key)
+    period = probe.period
+    stream = generate_rekeyed_stream(base, digit_class, seed_key, n_periods)
+    exact, expected = per_period_uniformity(stream, base, period)
+
+    ids = bigram_ids(stream, base)
+    boundary_mask = np.zeros(len(ids), dtype=bool)
+    boundary_mask[np.arange(1, n_periods) * period - 1] = True
+    seam = seam_permutation_test(
+        ids, boundary_mask, (base - 1) ** 2, n_perm=n_perm,
+        seed=base * 10_000 + digit_class,
+    )
+
+    total_counts = np.bincount(stream, minlength=base)[1:base]
+    exact_total = np.all(total_counts == expected * n_periods)
+
+    return {
+        'base': base,
+        'digit_class': digit_class,
+        'period': period,
+        'n_periods': n_periods,
+        'stream': stream,
+        'per_period_exact': exact,
+        'total_exact': exact_total,
+        'expected_per_digit': expected,
+        **seam,
+    }
+
+
+print("=== Rekey sweep ===\n")
+
+settings = [
+    (10, 2, 400),
+    (10, 3, 250),
+    (10, 4, 120),
+    (16, 2, 300),
+    (16, 3, 140),
+]
+n_perm = 800
+seed_key = b'reseed test'
+
+results = []
+for base, digit_class, n_periods in settings:
+    result = evaluate_setting(base, digit_class, n_periods, seed_key, n_perm)
+    results.append(result)
+    print(
+        f"base={base:>2}, d={digit_class}, period={result['period']}, "
+        f"periods={n_periods}, exact_per_period={result['per_period_exact']}, "
+        f"exact_total={result['total_exact']}"
+    )
+    print(
+        f"  seam TV={result['observed_tv']:.5f}, "
+        f"null median={np.median(result['null_stats']):.5f}, "
+        f"p={result['p_value']:.4f}, z={result['z_score']:.2f}, "
+        f"boundary bigrams={result['boundary_count']}"
+    )
+
+
+print("\n=== Canonical prefix diversity ===\n")
+
+canonical = next(
+    result for result in results
+    if result['base'] == 10 and result['digit_class'] == 3
+)
+period = canonical['period']
+blocks = canonical['stream'].reshape(canonical['n_periods'], period)
+prefixes = [tuple(block[:20].tolist()) for block in blocks[:5]]
+all_different = len(set(prefixes)) == len(prefixes)
+
+for idx, prefix in enumerate(prefixes):
+    print(f"  Period {idx}: {list(prefix)}")
+print(f"  First five prefixes all different: {all_different}")
+
 
 print("\nPlotting...")
 
-fig, axes = plt.subplots(2, 1, figsize=(18, 10), sharex=True)
+fig, axes = plt.subplots(2, 1, figsize=(18, 11),
+                         gridspec_kw={'height_ratios': [2.2, 1.2]})
 fig.patch.set_facecolor('#0a0a0a')
 
-# Top: running max deviation over the full multi-period stream
+# Top panel: running deviation for the canonical setting
 ax = axes[0]
 ax.set_facecolor('#0a0a0a')
+target = 1.0 / (canonical['base'] - 1)
+counts_running = np.zeros(canonical['base'], dtype=np.int64)
+deviation = np.empty(len(canonical['stream']), dtype=np.float64)
 
-target = 1.0 / (base - 1)
-counts_running = np.zeros(base, dtype=int)
-dev = np.empty(len(stream))
-for i, d in enumerate(stream):
-    counts_running[d] += 1
-    fracs = counts_running[1:base] / (i + 1)
-    dev[i] = np.max(np.abs(fracs - target))
+for idx, digit in enumerate(canonical['stream']):
+    counts_running[digit] += 1
+    fracs = counts_running[1:canonical['base']] / (idx + 1)
+    deviation[idx] = np.max(np.abs(fracs - target))
 
-ns = np.arange(1, len(stream) + 1)
-ax.plot(ns, dev, linewidth=0.3, color='#ffcc5c', alpha=0.9)
+ns = np.arange(1, len(canonical['stream']) + 1)
+ax.plot(ns, deviation, linewidth=0.35, color='#ffcc5c', alpha=0.9)
 
-# Mark period boundaries
-for p in range(1, n_periods):
-    ax.axvline(x=p * period, color='white', linewidth=0.2, alpha=0.2)
+for period_num in range(1, canonical['n_periods']):
+    ax.axvline(x=period_num * canonical['period'], color='white',
+               linewidth=0.2, alpha=0.18)
 
 ax.set_ylabel('max deviation', color='white', fontsize=11)
-ax.set_title(f'Running deviation across {n_periods} rekeyed periods '
-             f'(base {base}, d={dc})',
-             color='white', fontsize=13, pad=10)
+ax.set_title(
+    f"Running deviation across {canonical['n_periods']} rekeyed periods "
+    f"(base {canonical['base']}, d={canonical['digit_class']})",
+    color='white', fontsize=13, pad=10
+)
 ax.tick_params(colors='white')
+for spine in ax.spines.values():
+    spine.set_color('#333')
 
-# Bottom: zoom on first 5 periods
+# Bottom panel: seam statistic across the sweep
 ax = axes[1]
 ax.set_facecolor('#0a0a0a')
-zoom = 5 * period
-ax.plot(ns[:zoom], dev[:zoom], linewidth=0.6, color='#ffcc5c', alpha=0.9)
-for p in range(1, 5):
-    ax.axvline(x=p * period, color='#ff6f61', linewidth=1, alpha=0.5,
-               linestyle='--')
-    ax.text(p * period + 10, dev[:zoom].max() * 0.9, f'rekey',
-            color='#ff6f61', fontsize=8, alpha=0.7)
-ax.set_xlabel('output index', color='white', fontsize=11)
-ax.set_ylabel('max deviation', color='white', fontsize=11)
-ax.set_title('Zoom: first 5 periods', color='white', fontsize=12, pad=8)
-ax.set_xlim(0, zoom)
+
+labels = [f"b={r['base']}, d={r['digit_class']}" for r in results]
+x = np.arange(len(results))
+observed = np.array([r['observed_tv'] for r in results])
+null_med = np.array([np.median(r['null_stats']) for r in results])
+null_p10 = np.array([np.percentile(r['null_stats'], 10) for r in results])
+null_p90 = np.array([np.percentile(r['null_stats'], 90) for r in results])
+
+ax.fill_between(x, null_p10, null_p90, color='#6ec6ff', alpha=0.18,
+                label='permutation null (10th-90th pct)')
+ax.plot(x, null_med, color='#6ec6ff', linewidth=1.2, label='null median')
+ax.scatter(x, observed, color='#ff6f61', s=45, zorder=3, label='observed seam TV')
+
+for idx, result in enumerate(results):
+    y = max(observed[idx], null_p90[idx])
+    ax.text(x[idx], y * 1.05 + 1e-4, f"p={result['p_value']:.3f}",
+            color='white', fontsize=8, ha='center')
+
+ax.set_xticks(x)
+ax.set_xticklabels(labels, color='white')
+ax.set_ylabel('total variation', color='white', fontsize=11)
+ax.set_title('Boundary-vs-interior seam test across settings',
+             color='white', fontsize=12, pad=8)
 ax.tick_params(colors='white')
+for spine in ax.spines.values():
+    spine.set_color('#333')
+ax.legend(fontsize=9, framealpha=0.3, labelcolor='white',
+          facecolor='#1a1a1a', loc='upper right')
 
 plt.tight_layout()
 plt.savefig('reseed_test.png', dpi=200, facecolor='#0a0a0a', bbox_inches='tight')

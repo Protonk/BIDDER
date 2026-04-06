@@ -9,12 +9,15 @@ The multiplication disc's static Benford gradient becomes
 concentric rings that lock in almost immediately.
 """
 
+import os
 import sys
-sys.path.insert(0, '../..')
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, ROOT)
 
 import numpy as np
 import matplotlib.pyplot as plt
-from acm_core import acm_champernowne_array
+from acm_core import acm_champernowne_array, acm_first_digit_array
 
 N = 10000
 reals = acm_champernowne_array(N)
@@ -25,14 +28,16 @@ rng_mul = np.random.default_rng(42)
 n_steps = 500
 n_samples = 8000
 
+
+def first_digits_from_log_fracs(fracs):
+    return np.minimum((10**fracs + 1e-9).astype(int), 9)
+
 print("Building addition heatmap...")
 heat_add = np.zeros((n_steps, 9))
 for i, k in enumerate(range(1, n_steps + 1)):
     indices = rng_add.integers(0, N, size=(n_samples, k))
     sums = np.sum(reals[indices], axis=1)
-    log_sums = np.log10(sums)
-    fracs = log_sums - np.floor(log_sums)
-    fds = np.minimum((10**fracs).astype(int), 9)
+    fds = acm_first_digit_array(sums)
     for d in range(1, 10):
         heat_add[i, d - 1] = np.sum(fds == d) / n_samples
     if (i + 1) % 50 == 0:
@@ -44,7 +49,7 @@ for i, k in enumerate(range(1, n_steps + 1)):
     indices = rng_mul.integers(0, N, size=(n_samples, k))
     log_products = np.sum(log_reals[indices], axis=1)
     fracs = log_products - np.floor(log_products)
-    fds = np.minimum((10**fracs).astype(int), 9)
+    fds = first_digits_from_log_fracs(fracs)
     for d in range(1, 10):
         heat_mul[i, d - 1] = np.sum(fds == d) / n_samples
     if (i + 1) % 50 == 0:

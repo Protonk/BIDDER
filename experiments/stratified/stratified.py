@@ -1,40 +1,33 @@
 """
-stratified.py — Stratified sampling: BIDDER vs numpy vs Sobol-like.
+stratified.py — Stratified sampling: BIDDER vs randomized controls.
 
 Estimate integrals of known functions by averaging f(x_i) over samples
-drawn from three sources:
+drawn from several sources:
 
-  1. BIDDER generator (exact stratum coverage at block boundaries)
-  2. numpy PRNG (random sampling)
-  3. Systematic stratification (divide [0,1] into N equal bins, sample
-     one point per bin — the classical method)
+  1. BIDDER (ensemble over many keys)
+  2. numpy uniform PRNG
+  3. Repeated fixed strata with the same b-1 alphabet as BIDDER
+  4. Midpoints of n equal bins (the classical deterministic baseline)
+  5. Jittered one-per-bin sampling (1D Latin-hypercube equivalent)
 
-The BIDDER generator in base b assigns each sample to one of b-1 strata
-{1, ..., b-1}. At a block boundary, each stratum has been visited
-exactly the same number of times — free stratification. At non-boundary
-counts, the coverage is deterministically uneven (the sawtooth).
-
-We track the estimation error |estimate - true| as a function of N for
-all three methods, over several test functions with known integrals.
-
-Test functions on [0, 1]:
-  f1(x) = x           integral = 0.5
-  f2(x) = x^2         integral = 1/3
-  f3(x) = sin(pi*x)   integral = 2/pi
-  f4(x) = exp(x)      integral = e - 1
-  f5(x) = 1/(1+25x^2) integral = atan(5)/5  (Runge-like, peaked)
+The comparison is still 1D, but it is now fairer:
+  - BIDDER is shown as a key ensemble, not a single realization.
+  - The fixed-strata baseline matches BIDDER's alphabet size.
+  - Randomized stratified sampling is included alongside raw PRNG.
 """
 
+import hashlib
+import os
 import sys
-sys.path.insert(0, '../../generator')
-sys.path.insert(0, '../..')
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, '..', '..', 'generator'))
+sys.path.insert(0, os.path.join(HERE, '..', '..'))
 
 import numpy as np
 import matplotlib.pyplot as plt
 from bidder import Bidder
 
-
-# --- Test functions ---
 
 def f1(x): return x
 def f2(x): return x**2
@@ -42,154 +35,199 @@ def f3(x): return np.sin(np.pi * x)
 def f4(x): return np.exp(x)
 def f5(x): return 1.0 / (1.0 + 25.0 * x**2)
 
+
 functions = [
     (f1, 0.5,                    'f(x) = x'),
-    (f2, 1.0/3.0,                'f(x) = x²'),
-    (f3, 2.0/np.pi,              'f(x) = sin(πx)'),
+    (f2, 1.0 / 3.0,              'f(x) = x²'),
+    (f3, 2.0 / np.pi,            'f(x) = sin(πx)'),
     (f4, np.e - 1.0,             'f(x) = eˣ'),
     (f5, np.arctan(5.0) / 5.0,   'f(x) = 1/(1+25x²)'),
 ]
 
 
-# --- Sampling methods ---
+def bidder_period(base, digit_class):
+    return (base - 1) * (base ** (digit_class - 1))
 
-def bidder_samples(base, digit_class, key, n):
-    """
-    Generate n samples in [0, 1) from the BIDDER generator.
 
-    Each output digit d in {1, ..., base-1} maps to the interval
-    [(d-1)/(b-1), d/(b-1)). Within each stratum, we place the
-    sample at the midpoint (deterministic stratification).
-    """
+def bidder_stream(base, digit_class, key):
     gen = Bidder(base=base, digit_class=digit_class, key=key)
-    raw = [gen.next() for _ in range(n)]
-    b = base
-    # Map digit d to midpoint of stratum [(d-1)/(b-1), d/(b-1))
-    return np.array([(d - 0.5) / (b - 1) for d in raw])
+    period = gen.period
+    return np.fromiter(
+        ((gen.next() - 0.5) / (base - 1) for _ in range(period)),
+        dtype=np.float64,
+        count=period,
+    )
 
 
-def numpy_samples(n, seed):
-    """n uniform random samples in [0, 1)."""
-    return np.random.default_rng(seed).uniform(0, 1, size=n)
+def numpy_stream(n, seed):
+    return np.random.default_rng(seed).uniform(0.0, 1.0, size=n)
 
 
-def systematic_samples(n):
-    """
-    Classical stratified: divide [0,1] into n equal bins,
-    take the midpoint of each.
-    """
-    return (np.arange(n) + 0.5) / n
+def fixed_strata_stream(base, n):
+    strata = (np.arange(base - 1, dtype=np.float64) + 0.5) / (base - 1)
+    reps = (n + len(strata) - 1) // len(strata)
+    return np.tile(strata, reps)[:n]
 
 
-# --- Run estimation ---
+def midpoint_stream(n):
+    return (np.arange(n, dtype=np.float64) + 0.5) / n
+
+
+def lhs_jittered_stream(n, seed):
+    rng = np.random.default_rng(seed)
+    return (np.arange(n, dtype=np.float64) + rng.random(n)) / n
+
+
+def summarize_errors(estimates, true_val):
+    errors = np.abs(estimates - true_val)
+    return (
+        np.median(errors),
+        np.percentile(errors, 10),
+        np.percentile(errors, 90),
+    )
+
 
 base = 10
-dc = 4  # period = 9000
-period = 9000
+digit_classes = [2, 3, 4]
+periods = {dc: bidder_period(base, dc) for dc in digit_classes}
+boundaries = [periods[2], periods[3], periods[4]]
 
-# Sample sizes to test: include block boundaries and non-boundaries
-# Block boundaries for base 10: 9, 90, 900, 9000
 sizes = sorted(set(
     list(range(10, 200, 5)) +
     list(range(200, 1000, 20)) +
-    list(range(1000, 9001, 100)) +
-    [9, 90, 900, 9000]  # exact boundaries
+    list(range(1000, periods[4] + 1, 100)) +
+    boundaries
 ))
 
+max_n = max(sizes)
+bidder_keys = [
+    hashlib.sha256(f'stratified-key-{i}'.encode('ascii')).digest()
+    for i in range(24)
+]
+numpy_trials = 64
+lhs_trials = 64
+
+
 print(f"Testing {len(sizes)} sample sizes, {len(functions)} functions...")
+print(f"  BIDDER keys: {len(bidder_keys)}")
+print(f"  numpy trials: {numpy_trials}")
+print(f"  jittered-strata trials: {lhs_trials}")
 
-results = {}  # (func_name, method) -> list of (n, error)
+print("Precomputing sample streams...")
+bidder_cache = {
+    dc: np.vstack([bidder_stream(base, dc, key) for key in bidder_keys])
+    for dc in digit_classes
+}
+numpy_cache = np.vstack([
+    numpy_stream(max_n, 10_000 + trial)
+    for trial in range(numpy_trials)
+])
+lhs_cache = np.vstack([
+    lhs_jittered_stream(max_n, 20_000 + trial)
+    for trial in range(lhs_trials)
+])
+fixed_cache = {n: fixed_strata_stream(base, n) for n in sizes}
+midpoint_cache = {n: midpoint_stream(n) for n in sizes}
 
-for fi, (func, true_val, name) in enumerate(functions):
+
+def bidder_prefix_matrix(n):
+    if n <= periods[2]:
+        dc = 2
+    elif n <= periods[3]:
+        dc = 3
+    else:
+        dc = 4
+    return bidder_cache[dc][:, :n]
+
+
+results = {}
+
+for func, true_val, name in functions:
     print(f"  {name}...")
-    for method in ['bidder', 'numpy', 'systematic']:
-        errors = []
-        for n in sizes:
-            if method == 'bidder':
-                # Pick digit_class so period >= n
-                if n <= 90:
-                    d_c = 2
-                elif n <= 900:
-                    d_c = 3
-                else:
-                    d_c = 4
-                xs = bidder_samples(base, d_c, b'strat', n)
-            elif method == 'numpy':
-                xs = numpy_samples(n, seed=42 + fi)
-            else:
-                xs = systematic_samples(n)
+    bidder_summary = []
+    numpy_summary = []
+    lhs_summary = []
+    fixed_errors = []
+    midpoint_errors = []
 
-            estimate = np.mean(func(xs))
-            errors.append((n, abs(estimate - true_val)))
-
-        results[(name, method)] = errors
-
-
-# --- Also: run numpy 100 times and take the median error envelope ---
-print("  numpy variance envelope...")
-numpy_envelope = {}
-for fi, (func, true_val, name) in enumerate(functions):
-    envelope = []
     for n in sizes:
-        errs = []
-        for trial in range(100):
-            xs = numpy_samples(n, seed=trial * 1000 + fi)
-            errs.append(abs(np.mean(func(xs)) - true_val))
-        envelope.append((n, np.median(errs), np.percentile(errs, 10),
-                         np.percentile(errs, 90)))
-    numpy_envelope[name] = envelope
+        bidder_estimates = np.mean(func(bidder_prefix_matrix(n)), axis=1)
+        numpy_estimates = np.mean(func(numpy_cache[:, :n]), axis=1)
+        lhs_estimates = np.mean(func(lhs_cache[:, :n]), axis=1)
+
+        bidder_summary.append((n,) + summarize_errors(bidder_estimates, true_val))
+        numpy_summary.append((n,) + summarize_errors(numpy_estimates, true_val))
+        lhs_summary.append((n,) + summarize_errors(lhs_estimates, true_val))
+
+        fixed_estimate = np.mean(func(fixed_cache[n]))
+        midpoint_estimate = np.mean(func(midpoint_cache[n]))
+        fixed_errors.append((n, abs(fixed_estimate - true_val)))
+        midpoint_errors.append((n, abs(midpoint_estimate - true_val)))
+
+    results[(name, 'bidder')] = bidder_summary
+    results[(name, 'numpy')] = numpy_summary
+    results[(name, 'lhs')] = lhs_summary
+    results[(name, 'fixed')] = fixed_errors
+    results[(name, 'midpoint')] = midpoint_errors
 
 
-# --- Plot ---
 print("Plotting...")
 
 fig, axes = plt.subplots(2, 3, figsize=(24, 14))
 fig.patch.set_facecolor('#0a0a0a')
 
-# Mark block boundaries
-boundaries = [9, 90, 900, 9000]
 
-for fi, (func, true_val, name) in enumerate(functions):
+def plot_ensemble(ax, data, color, label):
+    ns = [row[0] for row in data]
+    med = [max(row[1], 1e-16) for row in data]
+    p10 = [max(row[2], 1e-16) for row in data]
+    p90 = [max(row[3], 1e-16) for row in data]
+    ax.fill_between(ns, p10, p90, color=color, alpha=0.14)
+    ax.loglog(ns, med, color=color, linewidth=1.2, label=label)
+
+
+for fi, (_, _, name) in enumerate(functions):
     ax = axes[fi // 3, fi % 3]
     ax.set_facecolor('#0a0a0a')
 
-    # numpy envelope (10th-90th percentile)
-    env = numpy_envelope[name]
-    ns_env = [e[0] for e in env]
-    med = [e[1] for e in env]
-    p10 = [e[2] for e in env]
-    p90 = [e[3] for e in env]
-    ax.fill_between(ns_env, p10, p90, color='#6ec6ff', alpha=0.15)
-    ax.loglog(ns_env, med, color='#6ec6ff', linewidth=0.8, alpha=0.5,
-              label='numpy (median, 100 trials)')
+    plot_ensemble(ax, results[(name, 'bidder')], '#ffcc5c',
+                  f'BIDDER (median, {len(bidder_keys)} keys)')
+    plot_ensemble(ax, results[(name, 'numpy')], '#6ec6ff',
+                  f'numpy (median, {numpy_trials} trials)')
+    plot_ensemble(ax, results[(name, 'lhs')], '#88d8b0',
+                  f'jittered strata (median, {lhs_trials} trials)')
 
-    # BIDDER
-    bidder_data = results[(name, 'bidder')]
-    ns_h = [e[0] for e in bidder_data]
-    errs_h = [e[1] for e in bidder_data]
-    ax.loglog(ns_h, [max(e, 1e-16) for e in errs_h],
-              color='#ffcc5c', linewidth=1.2, label='BIDDER')
+    fixed_data = results[(name, 'fixed')]
+    ax.loglog(
+        [row[0] for row in fixed_data],
+        [max(row[1], 1e-16) for row in fixed_data],
+        color='#ff6f61',
+        linewidth=1.0,
+        label=f'fixed {base - 1}-strata midpoints',
+    )
 
-    # Systematic
-    sys_data = results[(name, 'systematic')]
-    ns_s = [e[0] for e in sys_data]
-    errs_s = [e[1] for e in sys_data]
-    ax.loglog(ns_s, [max(e, 1e-16) for e in errs_s],
-              color='#ff6f61', linewidth=1.0, alpha=0.7, label='systematic')
+    midpoint_data = results[(name, 'midpoint')]
+    ax.loglog(
+        [row[0] for row in midpoint_data],
+        [max(row[1], 1e-16) for row in midpoint_data],
+        color='white',
+        linewidth=0.8,
+        alpha=0.5,
+        linestyle='--',
+        label='midpoints of n bins',
+    )
 
-    # Mark block boundaries
-    for bnd in boundaries:
-        if bnd <= max(ns_h):
-            ax.axvline(x=bnd, color='white', linewidth=0.3, alpha=0.3)
+    for boundary in boundaries:
+        if boundary <= max_n:
+            ax.axvline(x=boundary, color='white', linewidth=0.3, alpha=0.25)
 
-    # 1/sqrt(N) reference
-    ns_ref = np.array(ns_h, dtype=float)
+    ns_ref = np.array(sizes, dtype=np.float64)
     ax.loglog(ns_ref, 0.3 / np.sqrt(ns_ref), color='white',
               linewidth=0.5, linestyle=':', alpha=0.3, label='1/√N')
 
     ax.set_title(name, color='white', fontsize=13, pad=10)
     ax.tick_params(colors='white')
-    ax.set_ylim(1e-6, 1)
+    ax.set_ylim(1e-8, 1)
     for spine in ax.spines.values():
         spine.set_color('#333')
 
@@ -197,10 +235,9 @@ axes[0, 0].set_ylabel('|estimate - true|', color='white', fontsize=11)
 axes[1, 0].set_ylabel('|estimate - true|', color='white', fontsize=11)
 axes[1, 0].set_xlabel('N samples', color='white', fontsize=11)
 axes[1, 1].set_xlabel('N samples', color='white', fontsize=11)
-axes[0, 0].legend(fontsize=9, framealpha=0.3, labelcolor='white',
+axes[0, 0].legend(fontsize=8, framealpha=0.3, labelcolor='white',
                   facecolor='#1a1a1a', loc='lower left')
 
-# Hide the 6th panel
 axes[1, 2].set_visible(False)
 
 plt.subplots_adjust(wspace=0.12, hspace=0.2)

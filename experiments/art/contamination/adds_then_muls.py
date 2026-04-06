@@ -5,9 +5,12 @@ The rolling shutter runs for 1000 steps, then 10 muls
 re-assert Benford. One graph.
 """
 
+import os
 import sys
-sys.path.insert(0, '../../../generator')
-sys.path.insert(0, '../../..')
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'generator'))
+sys.path.insert(0, os.path.join(HERE, '..', '..', '..'))
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -27,10 +30,9 @@ n_total = n_adds + n_muls
 rng = np.random.default_rng(42)
 
 
-def first_digits(values):
-    log_v = np.log10(values)
-    frac = log_v - np.floor(log_v)
-    return np.minimum((10**frac).astype(int), 9)
+def first_digits_from_log_values(log_values):
+    frac = log_values - np.floor(log_values)
+    return np.minimum((10**frac + 1e-9).astype(int), 9)
 
 
 print(f"Running {n_total} steps ({n_adds} add, {n_muls} mul)...")
@@ -50,7 +52,7 @@ for step in range(n_total):
         log_values = log_values + log_reals[idx2]
         values = 10**log_values
 
-    fds = first_digits(values)
+    fds = first_digits_from_log_values(log_values)
     for d in range(1, 10):
         heat[step, d - 1] = np.sum(fds == d) / n_trials
 

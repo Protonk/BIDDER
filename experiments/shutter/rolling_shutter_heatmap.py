@@ -7,12 +7,15 @@ advances the sum's leading digit at rate log10(1.55) ~ 0.19 per addition.
 The "shear angle" arctan(0.19) ~ 10.8 degrees is visible in the stripes.
 """
 
+import os
 import sys
-sys.path.insert(0, '../..')
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, ROOT)
 
 import numpy as np
 import matplotlib.pyplot as plt
-from acm_core import acm_champernowne_array
+from acm_core import acm_champernowne_array, acm_first_digit_array
 
 N = 10000
 reals = acm_champernowne_array(N)
@@ -27,9 +30,7 @@ heat = np.zeros((n_steps, 9))
 for i, k in enumerate(range(1, n_steps + 1)):
     indices = rng.integers(0, N, size=(n_samples, k))
     sums = np.sum(reals[indices], axis=1)
-    log_sums = np.log10(sums)
-    fracs = log_sums - np.floor(log_sums)
-    fds = np.minimum((10**fracs).astype(int), 9)
+    fds = acm_first_digit_array(sums)
     for d in range(1, 10):
         heat[i, d - 1] = np.sum(fds == d) / n_samples
     if (i + 1) % 50 == 0:

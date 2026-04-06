@@ -13,9 +13,13 @@ positions and check:
 Science first, then art.
 """
 
+import itertools
+import os
 import sys
-sys.path.insert(0, '../../generator')
-sys.path.insert(0, '../..')
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, '..', '..', 'generator'))
+sys.path.insert(0, os.path.join(HERE, '..', '..'))
 
 import collections
 import numpy as np
@@ -32,26 +36,36 @@ def extract_all_digits(n, base, d):
     return list(reversed(digits))  # leading digit first
 
 
-def full_digit_analysis(base, digit_class, key=b'digit analysis'):
-    """Extract all digit positions from a full-period Bidder run."""
+def full_digit_analysis(base, digit_class, key=b'digit analysis', permuted=True):
+    """Extract all digit positions from a full operating block."""
     gen = Bidder(base=base, digit_class=digit_class, key=key)
     period = gen.period
     d = digit_class
 
-    # Generate full period, but we need the RAW permuted indices, not
-    # just the leading digit. Reconstruct them.
-    gen.reset()
     all_digits = np.zeros((period, d), dtype=int)
 
     for i in range(period):
-        if gen.counter >= gen.block_size:
-            gen.counter = 0
-        perm_idx = gen._permute(gen.counter)
-        gen.counter += 1
-        n = gen.block_start + perm_idx
+        idx = gen._permute(i) if permuted else i
+        n = gen.block_start + idx
         all_digits[i] = extract_all_digits(n, base, d)
 
     return all_digits, period, d
+
+
+def value_range(base, pos):
+    return range(1, base) if pos == 0 else range(base)
+
+
+def occupancy_report(digits, base, positions):
+    expected_values = [value_range(base, pos) for pos in positions]
+    expected_tuples = list(itertools.product(*expected_values))
+    counts = collections.Counter(tuple(row[pos] for pos in positions)
+                                 for row in digits)
+    expected = len(digits) // len(expected_tuples)
+    max_dev = max(abs(counts.get(t, 0) - expected) for t in expected_tuples)
+    unseen = sum(1 for t in expected_tuples if counts.get(t, 0) == 0)
+    exact = all(counts.get(t, 0) == expected for t in expected_tuples)
+    return counts, expected, max_dev, unseen, exact
 
 
 # =====================================================================
@@ -61,28 +75,28 @@ def full_digit_analysis(base, digit_class, key=b'digit analysis'):
 print("=== Marginal uniformity ===\n")
 
 for base, dc in [(10, 2), (10, 3), (10, 4), (16, 2), (16, 3)]:
-    digits, period, d = full_digit_analysis(base, dc)
+    raw_digits, period, d = full_digit_analysis(base, dc, permuted=False)
+    perm_digits, _, _ = full_digit_analysis(base, dc, permuted=True)
     print(f"base={base}, d={dc}, period={period}")
 
-    for pos in range(d):
-        col = digits[:, pos]
-        counts = collections.Counter(col.tolist())
+    for label, digits in [('raw', raw_digits), ('permuted', perm_digits)]:
+        for pos in range(d):
+            col = digits[:, pos]
+            counts = collections.Counter(col.tolist())
 
-        if pos == 0:
-            # Leading digit: {1, ..., b-1}
-            expected = period // (base - 1)
-            vals = range(1, base)
-            label = f"  pos {pos} (leading, {{1..{base-1}}})"
-        else:
-            # Other digits: {0, ..., b-1}
-            expected = period // base
-            vals = range(0, base)
-            label = f"  pos {pos} ({{0..{base-1}}})"
+            if pos == 0:
+                expected = period // (base - 1)
+                vals = range(1, base)
+                pos_label = f"pos {pos} (leading, {{1..{base-1}}})"
+            else:
+                expected = period // base
+                vals = range(0, base)
+                pos_label = f"pos {pos} ({{0..{base-1}}})"
 
-        exact = all(counts.get(v, 0) == expected for v in vals)
-        max_dev = max(abs(counts.get(v, 0) - expected) for v in vals)
-        print(f"{label}: expected {expected} each, "
-              f"max deviation {max_dev}, exact={exact}")
+            exact = all(counts.get(v, 0) == expected for v in vals)
+            max_dev = max(abs(counts.get(v, 0) - expected) for v in vals)
+            print(f"  {label:9s} {pos_label}: expected {expected} each, "
+                  f"max deviation {max_dev}, exact={exact}")
 
     print()
 
@@ -94,34 +108,36 @@ for base, dc in [(10, 2), (10, 3), (10, 4), (16, 2), (16, 3)]:
 print("=== Joint (pairwise) uniformity ===\n")
 
 for base, dc in [(10, 3), (10, 4)]:
-    digits, period, d = full_digit_analysis(base, dc)
+    raw_digits, period, d = full_digit_analysis(base, dc, permuted=False)
+    perm_digits, _, _ = full_digit_analysis(base, dc, permuted=True)
     print(f"base={base}, d={dc}, period={period}")
 
     for p1 in range(d):
         for p2 in range(p1 + 1, d):
-            # Count all (d1, d2) pairs
-            pairs = collections.Counter(
-                zip(digits[:, p1].tolist(), digits[:, p2].tolist()))
+            raw_pairs, expected, raw_max_dev, raw_unseen, raw_exact = (
+                occupancy_report(raw_digits, base, (p1, p2)))
+            perm_pairs, _, perm_max_dev, perm_unseen, perm_exact = (
+                occupancy_report(perm_digits, base, (p1, p2)))
+            n_pairs = len(raw_pairs) + raw_unseen
+            same_counts = raw_pairs == perm_pairs
 
-            # How many distinct pairs should we see?
-            if p1 == 0:
-                n_vals_1 = base - 1  # leading digit: 1..b-1
-            else:
-                n_vals_1 = base      # other: 0..b-1
-            n_vals_2 = base  # pos > 0 is always 0..b-1
+            print(f"  pos ({p1},{p2}): expected {expected} each")
+            print(f"    raw      : seen {len(raw_pairs)}/{n_pairs}, "
+                  f"unseen {raw_unseen}, max_dev={raw_max_dev}, exact={raw_exact}")
+            print(f"    permuted : seen {len(perm_pairs)}/{n_pairs}, "
+                  f"unseen {perm_unseen}, max_dev={perm_max_dev}, exact={perm_exact}")
+            print(f"    raw == permuted counts: {same_counts}")
 
-            n_pairs = n_vals_1 * n_vals_2
-            expected = period / n_pairs
-
-            # Check uniformity
-            counts_list = list(pairs.values())
-            max_dev = max(abs(c - expected) for c in counts_list)
-            exact = all(abs(c - expected) < 0.5 for c in counts_list)
-            n_seen = len(pairs)
-
-            print(f"  pos ({p1},{p2}): {n_seen}/{n_pairs} pairs seen, "
-                  f"expected {expected:.1f} each, max_dev={max_dev:.1f}, "
-                  f"exact={exact}")
+    raw_tuples, expected, raw_max_dev, raw_unseen, raw_exact = (
+        occupancy_report(raw_digits, base, tuple(range(d))))
+    perm_tuples, _, perm_max_dev, perm_unseen, perm_exact = (
+        occupancy_report(perm_digits, base, tuple(range(d))))
+    print(f"  full tuples: expected {expected} each")
+    print(f"    raw      : seen {len(raw_tuples)}/{period}, unseen {raw_unseen}, "
+          f"max_dev={raw_max_dev}, exact={raw_exact}")
+    print(f"    permuted : seen {len(perm_tuples)}/{period}, unseen {perm_unseen}, "
+          f"max_dev={perm_max_dev}, exact={perm_exact}")
+    print(f"    raw == permuted counts: {raw_tuples == perm_tuples}")
 
     print()
 
@@ -183,7 +199,7 @@ for base, dc in [(10, 3), (10, 4)]:
 print("Plotting science view...")
 
 base, dc = 10, 4
-digits, period, d = full_digit_analysis(base, dc, key=b'viz')
+digits, period, d = full_digit_analysis(base, dc, key=b'viz', permuted=True)
 
 fig, axes = plt.subplots(2, 2, figsize=(16, 12))
 fig.patch.set_facecolor('#0a0a0a')

@@ -294,29 +294,41 @@ Experiment: `experiments/others/other_digits.py`.
 ### Reseeding
 
 Rekeying at each period boundary via `SHA-256(old_key || period_counter)`
-works without issue. Tested over 100 consecutive rekeyed periods
-(90,000 total outputs, base 10 d=3):
+preserves the exact-uniformity guarantee. Tested across multiple
+(base, digit_class) settings with permutation-test seam detection:
 
 - **Per-period uniformity preserved.** Every rekeyed period has
-  exactly uniform digit counts. The algebraic guarantee is
-  independent of the key and survives rekeying.
+  exactly uniform digit counts, across all settings tested. The
+  algebraic guarantee is independent of the key and survives
+  rekeying.
 
-- **No detectable seam.** Chi-squared test on boundary bigrams
-  (last output of period N, first output of period N+1) vs
-  interior bigrams: 107.45 with 81 df, below the 3-sigma
-  threshold. The transition is statistically invisible.
-
-- **Cross-period distribution exact.** 90,000 outputs across
-  100 periods: each digit appears exactly 10,000 times. The
-  per-period exactness compounds — 100 periods × 100 per digit
-  = 10,000 per digit, no rounding, no drift.
+- **Cross-period distribution exact.** Per-period exactness
+  compounds: 100 periods × 100 per digit = 10,000 per digit,
+  no rounding, no drift.
 
 - **Each period produces a different sequence.** The rekeyed
   permutation is distinct. No two periods share output order.
 
+- **Seam visibility depends on period size.** A permutation test
+  on boundary-vs-interior bigram total variation shows no
+  detectable seam for d >= 3 (period >= 900 in base 10, >= 3840
+  in base 16). At d=2 (period 90 in base 10, 240 in base 16),
+  the seam is statistically significant. This is expected:
+  within a period, consecutive outputs come from the same
+  permutation, so their bigram distribution reflects the
+  permutation's local structure. At the boundary, consecutive
+  outputs come from two independent permutations, so the bigram
+  is a cross-permutation product. For small blocks the
+  within-period distribution is lumpy enough that the boundary
+  product is detectably different. For larger blocks the
+  permutation mixes well enough that the two distributions
+  converge. The seam is structural (a property of finite
+  permutations, not a cipher weakness) and irrelevant at the
+  block sizes where BIDDER is intended to operate.
+
 The running deviation drops to near zero within the first period
 and stays there indefinitely. Rekey events are invisible in the
-deviation curve.
+deviation curve for d >= 3.
 
 Experiment: `experiments/reseed/reseed_test.py`.
 

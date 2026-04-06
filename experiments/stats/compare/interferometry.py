@@ -16,12 +16,15 @@ Panel 3: Consecutive sums (the crispness test)
   is where the difference lives.
 """
 
+import os
 import sys
-sys.path.insert(0, '../../..')
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+sys.path.insert(0, ROOT)
 
 import numpy as np
 import matplotlib.pyplot as plt
-from acm_core import acm_champernowne_array
+from acm_core import acm_champernowne_array, acm_first_digit_array
 
 N = 10000
 n_steps = 500
@@ -36,6 +39,10 @@ py_reals = rng_source.uniform(1.1, 2.0, size=N)
 py_log = np.log10(py_reals)
 
 
+def first_digits_from_log_fracs(fracs):
+    return np.minimum((10**fracs + 1e-9).astype(int), 9)
+
+
 # =================================================================
 # Build random-draw addition heatmaps (same as shutter_dual)
 # =================================================================
@@ -46,9 +53,7 @@ def build_addition_heat(reals, n_steps, n_samples, seed):
     for i, k in enumerate(range(1, n_steps + 1)):
         indices = rng.integers(0, len(reals), size=(n_samples, k))
         sums = np.sum(reals[indices], axis=1)
-        log_sums = np.log10(sums)
-        fracs = log_sums - np.floor(log_sums)
-        fds = np.minimum((10**fracs).astype(int), 9)
+        fds = acm_first_digit_array(sums)
         for d in range(1, 10):
             heat[i, d - 1] = np.sum(fds == d) / n_samples
     return heat
@@ -74,7 +79,7 @@ def build_consecutive_heat(reals, ks):
         sums = cumsum[k:k + n_windows] - cumsum[:n_windows]
         log_sums = np.log10(sums)
         fracs = log_sums - np.floor(log_sums)
-        fds = np.minimum((10**fracs).astype(int), 9)
+        fds = first_digits_from_log_fracs(fracs)
         for d in range(1, 10):
             heat[i, d - 1] = np.sum(fds == d) / n_windows
     return heat

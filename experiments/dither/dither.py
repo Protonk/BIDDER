@@ -18,9 +18,12 @@ artifacts appear when the dither noise is biased; uniform noise
 produces smooth stippling.
 """
 
+import os
 import sys
-sys.path.insert(0, '../../generator')
-sys.path.insert(0, '../..')
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(HERE, '..', '..', 'generator'))
+sys.path.insert(0, os.path.join(HERE, '..', '..'))
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -40,8 +43,8 @@ def dither_with_bidder(image, base, digit_class, key):
     gen = Bidder(base=base, digit_class=digit_class, key=key)
     raw = [gen.next() for _ in range(n_pixels)]
 
-    # Map digits {1, ..., base-1} to [0, 1)
-    noise = np.array(raw, dtype=np.float64) / base
+    # Map digits {1, ..., base-1} to equal-width stratum midpoints in [0, 1].
+    noise = (np.array(raw, dtype=np.float64) - 0.5) / (base - 1)
     noise = noise.reshape(h, w)
 
     return (image > noise).astype(np.uint8)
@@ -92,11 +95,13 @@ thresh_exact = dither_threshold(grad_exact)
 grad_mid = make_gradient(w_mid, h_mid)
 bidder_mid = dither_with_bidder(grad_mid, base, dc, b'dither mid')
 np_mid = dither_with_numpy(grad_mid, seed=43)
+thresh_mid = dither_threshold(grad_mid)
 
 # --- Larger gradient (block boundary, base 16) ---
 grad_lg = make_gradient(w_lg, h_lg)
 bidder_lg = dither_with_bidder(grad_lg, base_lg, dc_lg, b'dither large')
 np_lg = dither_with_numpy(grad_lg, seed=44)
+thresh_lg = dither_threshold(grad_lg)
 
 # --- Radial gradient (more interesting shape) ---
 # 60x60 = 3600 pixels. Use base 10, dc 4 (period 9000) — not a boundary.
@@ -109,12 +114,13 @@ radial = np.clip(radial, 0, 1)
 
 bidder_radial = dither_with_bidder(radial, base, dc, b'dither radial')
 np_radial = dither_with_numpy(radial, seed=45)
+thresh_radial = dither_threshold(radial)
 
 
 # --- Plot ---
 print("Plotting...")
 
-fig, axes = plt.subplots(4, 3, figsize=(18, 22))
+fig, axes = plt.subplots(4, 4, figsize=(22, 22))
 fig.patch.set_facecolor('#0a0a0a')
 
 def show(ax, img, title, cmap='gray'):
@@ -126,23 +132,27 @@ def show(ax, img, title, cmap='gray'):
 
 # Row 1: Block boundary (30x30 = 900 = period)
 show(axes[0, 0], grad_exact, f'Source gradient ({w_exact}x{h_exact})')
-show(axes[0, 1], bidder_exact, f'BIDDER dither (period boundary)')
-show(axes[0, 2], np_exact, f'numpy dither')
+show(axes[0, 1], thresh_exact, 'Threshold only')
+show(axes[0, 2], bidder_exact, 'BIDDER dither (period boundary)')
+show(axes[0, 3], np_exact, 'numpy dither')
 
 # Row 2: Mid-sawtooth (30x28 = 840)
 show(axes[1, 0], grad_mid, f'Source gradient ({w_mid}x{h_mid})')
-show(axes[1, 1], bidder_mid, f'BIDDER dither (mid-period)')
-show(axes[1, 2], np_mid, f'numpy dither')
+show(axes[1, 1], thresh_mid, 'Threshold only')
+show(axes[1, 2], bidder_mid, 'BIDDER dither (mid-period)')
+show(axes[1, 3], np_mid, 'numpy dither')
 
 # Row 3: Larger (64x60 = 3840 = period, base 16)
 show(axes[2, 0], grad_lg, f'Source gradient ({w_lg}x{h_lg})')
-show(axes[2, 1], bidder_lg, f'BIDDER dither (base 16, period boundary)')
-show(axes[2, 2], np_lg, f'numpy dither')
+show(axes[2, 1], thresh_lg, 'Threshold only')
+show(axes[2, 2], bidder_lg, 'BIDDER dither (base 16, period boundary)')
+show(axes[2, 3], np_lg, 'numpy dither')
 
 # Row 4: Radial gradient (30x30)
 show(axes[3, 0], radial, f'Radial gradient ({w_exact}x{h_exact})')
-show(axes[3, 1], bidder_radial, f'BIDDER dither (radial)')
-show(axes[3, 2], np_radial, f'numpy dither (radial)')
+show(axes[3, 1], thresh_radial, 'Threshold only')
+show(axes[3, 2], bidder_radial, 'BIDDER dither (radial)')
+show(axes[3, 3], np_radial, 'numpy dither (radial)')
 
 plt.subplots_adjust(wspace=0.05, hspace=0.15)
 plt.savefig('dither.png', dpi=200, facecolor='#0a0a0a', bbox_inches='tight')
@@ -152,5 +162,6 @@ print("-> dither.png")
 # --- Quantitative: count black pixels per column (should track gradient) ---
 print("\nBlack pixel fraction per column (30x30 gradient, first 10 cols):")
 print("  Column gray: ", [f"{grad_exact[0,c]:.3f}" for c in range(10)])
+print("  threshold black%:", [f"{1 - thresh_exact[:,c].mean():.3f}" for c in range(10)])
 print("  BIDDER black%:  ", [f"{1 - bidder_exact[:,c].mean():.3f}" for c in range(10)])
 print("  numpy black%: ", [f"{1 - np_exact[:,c].mean():.3f}" for c in range(10)])

@@ -10,12 +10,15 @@ Source comparison — ACM Champernowne vs Python uniform.
 Same RNG seeds, same sample counts, same colormap and scale.
 """
 
+import os
 import sys
-sys.path.insert(0, '../../..')
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+sys.path.insert(0, ROOT)
 
 import numpy as np
 import matplotlib.pyplot as plt
-from acm_core import acm_champernowne_array
+from acm_core import acm_champernowne_array, acm_first_digit_array
 
 N = 10000
 n_steps = 500
@@ -32,6 +35,10 @@ py_reals = rng_source.uniform(1.1, 2.0, size=N)
 py_log = np.log10(py_reals)
 
 
+def first_digits_from_log_fracs(fracs):
+    return np.minimum((10**fracs + 1e-9).astype(int), 9)
+
+
 def build_heatmaps(reals, log_reals, n_steps, n_samples, seed):
     """Build addition and multiplication heatmaps for a source."""
     rng_a = np.random.default_rng(seed)
@@ -43,16 +50,14 @@ def build_heatmaps(reals, log_reals, n_steps, n_samples, seed):
     for i, k in enumerate(range(1, n_steps + 1)):
         idx_a = rng_a.integers(0, len(reals), size=(n_samples, k))
         sums = np.sum(reals[idx_a], axis=1)
-        log_sums = np.log10(sums)
-        fracs = log_sums - np.floor(log_sums)
-        fds = np.minimum((10**fracs).astype(int), 9)
+        fds = acm_first_digit_array(sums)
         for d in range(1, 10):
             heat_add[i, d - 1] = np.sum(fds == d) / n_samples
 
         idx_m = rng_m.integers(0, len(reals), size=(n_samples, k))
         log_products = np.sum(log_reals[idx_m], axis=1)
         fracs = log_products - np.floor(log_products)
-        fds = np.minimum((10**fracs).astype(int), 9)
+        fds = first_digits_from_log_fracs(fracs)
         for d in range(1, 10):
             heat_mul[i, d - 1] = np.sum(fds == d) / n_samples
 

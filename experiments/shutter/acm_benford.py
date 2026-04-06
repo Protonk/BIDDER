@@ -3,7 +3,7 @@ acm_benford.py — Benford convergence and rolling shutter analysis
 ==================================================================
 
 Generates:
-  1. First-digit histogram vs Benford (demonstrating exact uniformity)
+  1. Leading digits of n = 1..N vs Benford (demonstrating exact uniformity)
   2. Convergence to Benford under multiplication (grouped bar chart)
   3. Rolling shutter under addition (grouped bar chart)
   4. Dual heatmap: multiplication (1-1000) vs addition (1-1000)
@@ -12,16 +12,19 @@ Generates:
 All plots saved to current directory.
 
 Usage:
-    python acm_benford.py
+    sage -python acm_benford.py
 """
 
+import os
 import sys
-sys.path.insert(0, '../..')
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, ROOT)
 
 import matplotlib.pyplot as plt
 import numpy as np
 from acm_core import (
-    acm_champernowne_array, acm_first_digit_array, acm_first_digit, acm_benford_pmf
+    acm_champernowne_array, acm_first_digit_array, acm_benford_pmf
 )
 
 
@@ -32,23 +35,32 @@ rng = np.random.default_rng(42)
 benford = acm_benford_pmf()
 
 
+def first_digits_from_log_fracs(fracs):
+    """Leading digits from base-10 log mantissas, with integer-boundary fix."""
+    return np.minimum((10**fracs + 1e-9).astype(int), 9)
+
+
 # =====================================================================
-# Plot 1: First-digit histogram — exact uniformity
+# Plot 1: Leading digits of n — exact uniformity
 # =====================================================================
 
 print("Plotting first-digit histogram...")
-fds = acm_first_digit_array(reals)
+fds = np.fromiter((int(str(n)[0]) for n in range(1, N + 1)),
+                  dtype=np.int32, count=N)
 counts = np.array([np.sum(fds == d) for d in range(1, 10)])
 fracs = counts / N
+uniform = 1.0 / 9.0
 
 fig, ax = plt.subplots(figsize=(10, 6))
 x = np.arange(1, 10)
-ax.bar(x - 0.15, fracs, width=0.3, color='steelblue', label='observed')
+ax.bar(x - 0.15, fracs, width=0.3, color='steelblue', label='observed (n)')
 ax.bar(x + 0.15, benford, width=0.3, color='salmon', alpha=0.7, label='Benford')
+ax.axhline(y=uniform, color='white', linewidth=1, linestyle='--',
+           alpha=0.7, label='uniform = 1/9')
 ax.set_xticks(x)
-ax.set_xlabel('first digit')
+ax.set_xlabel('leading digit')
 ax.set_ylabel('frequency')
-ax.set_title(f'First digit distribution of n-Champernowne reals (n=1..{N})')
+ax.set_title(f'Leading digits of integers n = 1..{N}')
 ax.legend()
 plt.tight_layout()
 plt.savefig('first_digits.png', dpi=200)
@@ -72,7 +84,7 @@ for idx, k in enumerate(mult_ks):
     indices = rng.integers(0, N, size=(n_samples, k))
     log_products = np.sum(log_reals[indices], axis=1)
     fracs_lp = log_products - np.floor(log_products)
-    fds_m = np.minimum((10**fracs_lp).astype(int), 9)
+    fds_m = first_digits_from_log_fracs(fracs_lp)
     digit_fracs = [np.sum(fds_m == d) / n_samples for d in range(1, 10)]
     offset = (idx - 1.5) * bar_width
     ax.bar(x + offset, digit_fracs, width=bar_width, color=colors_mult[idx],
@@ -103,7 +115,7 @@ fig, ax = plt.subplots(figsize=(12, 6))
 for idx, k in enumerate(add_ks):
     indices = rng.integers(0, N, size=(n_samples, k))
     sums = np.sum(reals[indices], axis=1)
-    fds_a = np.array([acm_first_digit(v) for v in sums])
+    fds_a = acm_first_digit_array(sums)
     digit_fracs = [np.sum(fds_a == d) / n_samples for d in range(1, 10)]
     offset = (idx - 1.5) * bar_width
     ax.bar(x + offset, digit_fracs, width=bar_width, color=colors_add[idx],
@@ -139,7 +151,7 @@ def build_heatmap(reals, log_reals, ks, n_samples, rng, mode='mult'):
             sums = np.sum(reals[indices], axis=1)
             log_sums = np.log10(sums)
             fracs = log_sums - np.floor(log_sums)
-        fds = np.minimum((10**fracs).astype(int), 9)
+        fds = first_digits_from_log_fracs(fracs)
         for d in range(1, 10):
             heat[i, d-1] = np.sum(fds == d) / n_samples
     return heat
@@ -196,7 +208,7 @@ def build_consecutive_heatmap(cumsum, ks, N):
         sums = cumsum[k:k+n_windows] - cumsum[:n_windows]
         log_sums = np.log10(sums)
         fracs = log_sums - np.floor(log_sums)
-        fds = np.minimum((10**fracs).astype(int), 9)
+        fds = first_digits_from_log_fracs(fracs)
         for d in range(1, 10):
             heat[i, d-1] = np.sum(fds == d) / n_windows
     return heat
