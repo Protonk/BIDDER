@@ -105,11 +105,11 @@ norm = Normalize(vmin=1.0, vmax=mean_zero_run.max())
 # Size seeds so they nearly touch: approximate area per seed
 # at mid-radius. The spacing between seeds ~ scale * 0.5/sqrt(n_mid).
 # We want dot diameter ≈ that spacing.
-seed_area = 2.5 * (2000.0 / np.sqrt(N_MAX))**2
+seed_area = 2.23 * (2000.0 / np.sqrt(N_MAX))**2
 sizes = np.full(N_MAX, seed_area)
 
 ax.scatter(x, y, c=mean_zero_run, cmap=cmap, norm=norm,
-           s=sizes, edgecolors='none', alpha=0.95)
+           s=sizes, edgecolors='none', alpha=0.85)
 
 plt.savefig('sunflower_attempt.png', dpi=150, pad_inches=0,
             bbox_inches='tight', facecolor='#000000')
