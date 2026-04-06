@@ -155,7 +155,7 @@ Experiments: `experiments/shutter/`, `experiments/art/contamination/`.
 
 At block boundaries, every stratum visited equally — integration
 error drops to near machine epsilon for smooth functions. The
-generator is totalizing: it computes the integral, not an estimate.
+generator is totalizing.
 Experiment: `experiments/stratified/`.
 
 ### Dithering (negative result)
