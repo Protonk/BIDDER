@@ -7,7 +7,7 @@ to each decade, so you can see every tooth and every bounce.
 """
 
 import sys
-sys.path.insert(0, '..')
+sys.path.insert(0, '../../core')
 
 import numpy as np
 import matplotlib.pyplot as plt

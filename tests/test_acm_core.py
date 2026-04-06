@@ -10,7 +10,7 @@ Run: python3 tests/test_acm_core.py
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'core'))
 
 import numpy as np
 from acm_core import (

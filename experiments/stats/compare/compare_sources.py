@@ -14,7 +14,7 @@ import os
 import sys
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
-sys.path.insert(0, ROOT)
+sys.path.insert(0, os.path.join(ROOT, 'core'))
 
 import numpy as np
 import matplotlib.pyplot as plt

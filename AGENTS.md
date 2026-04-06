@@ -7,7 +7,14 @@ Python tests (no dependencies beyond stdlib):
     python3 tests/test_bidder.py
     python3 tests/test_speck.py
 
+Python core tests (requires sage for numpy):
+
+    sage -python tests/test_acm_core.py
+
 C tests:
+
+    gcc -O2 -o test_acm_core_c tests/test_acm_core_c.c core/acm_core.c -lm
+    ./test_acm_core_c
 
     gcc -O2 -o test_bidder_c tests/test_bidder_c.c generator/bidder.c -lm
     ./test_bidder_c
@@ -17,13 +24,16 @@ sage carries numpy and matplotlib internally.
 
 ## Repo structure
 
-- `acm_core.py` — core n-prime and Champernowne real definitions.
-  Imported by all experiment scripts. Don't modify without reason.
+- `core/` — n-prime and Champernowne real definitions (Python + C).
+  `acm_core.py` is imported by all experiment scripts.
+  Don't modify without reason.
 - `generator/` — the BIDDER block generator (Python + C). Has its
   own `AGENTS.md` with implementation-specific rules.
 - `tests/` — all test suites. Keep green.
 - `experiments/` — exploration scripts and visualizations.
-- `sources/` — reference papers. Read-only.
+- `sources/` — reference papers and early findings. Read-only.
+- `nasties/` — known bugs and edge-case documentation.
+- `guidance/` — agent guidance documents.
 
 ## Experiment conventions
 
@@ -34,8 +44,8 @@ script and output PNGs. Follow these patterns:
 - Text color: white
 - Color palette: `#ffcc5c` (yellow), `#6ec6ff` (blue),
   `#ff6f61` (red), `#88d8b0` (green)
-- Scripts use `sage -python` and insert the generator path:
-  `sys.path.insert(0, '../../generator')`
+- Scripts use `sage -python` and insert paths to `core/` and
+  `generator/` via `__file__`-based path construction.
 - Each experiment directory may have a doc named for its folder
   (e.g., `SIEVES.md` in `experiments/sieves/`)
 

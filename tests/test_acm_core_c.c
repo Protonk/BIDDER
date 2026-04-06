@@ -14,7 +14,7 @@
 #include <string.h>
 #include <math.h>
 #include <inttypes.h>
-#include "../acm_core.h"
+#include "../core/acm_core.h"
 
 static int failures = 0;
 

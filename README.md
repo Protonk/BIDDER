@@ -17,8 +17,8 @@ This repo is three things at once:
 
 - **Math.** The construction, the proofs, the sawtooth, the
   epsilon function, the relationship between addition and
-  multiplication. ([ACM-CHAMPERNOWNE.md](ACM-CHAMPERNOWNE.md),
-  [EARLY-FINDINGS.md](EARLY-FINDINGS.md))
+  multiplication. ([ACM-CHAMPERNOWNE.md](core/ACM-CHAMPERNOWNE.md),
+  [EARLY-FINDINGS.md](sources/EARLY-FINDINGS.md))
 
 - **Art.** Visualizations that make the algebra visible — digit
   fabrics, moire sieves, rolling shutters, epsilon landscapes.
@@ -31,8 +31,10 @@ This repo is three things at once:
 
 ## Structure
 
-    acm_core.py             Core definitions (Python)
-    acm_core.h, acm_core.c  Core definitions (C)
+    core/
+      acm_core.py              Core definitions (Python)
+      acm_core.h, acm_core.c   Core definitions (C)
+      ACM-CHAMPERNOWNE.md       Mathematical foundation
 
     generator/
       bidder.py              BIDDER generator (Python)
@@ -63,7 +65,8 @@ This repo is three things at once:
       wibblywobblies/        Wibble-wobble conservation law
 
     nasties/                 Known bugs and edge-case documentation
-    sources/                 Reference papers (Speck)
+    sources/                 Reference papers and early findings
+    guidance/                Agent guidance documents
 
 ## Building
 
@@ -78,7 +81,7 @@ Python generator and cipher tests (plain python3):
 
 C:
 
-    gcc -O2 -o test_acm_core_c tests/test_acm_core_c.c acm_core.c -lm
+    gcc -O2 -o test_acm_core_c tests/test_acm_core_c.c core/acm_core.c -lm
     ./test_acm_core_c
 
     gcc -O2 -o test_bidder_c tests/test_bidder_c.c generator/bidder.c -lm

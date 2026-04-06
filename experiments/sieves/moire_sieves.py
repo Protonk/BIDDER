@@ -8,7 +8,7 @@ and rows are n-values, with a pixel lit if that integer is an n-prime.
 """
 
 import sys
-sys.path.insert(0, '../..')
+sys.path.insert(0, '../../core')
 
 import numpy as np
 import matplotlib.pyplot as plt

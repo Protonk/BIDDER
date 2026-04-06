@@ -6,7 +6,7 @@ scale, and use log normalization to reveal the fine structure.
 """
 
 import sys
-sys.path.insert(0, '../..')
+sys.path.insert(0, '../../core')
 
 import numpy as np
 import matplotlib.pyplot as plt

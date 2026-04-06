@@ -17,7 +17,7 @@ Piece 2: Polar Waveform
 """
 
 import sys
-sys.path.insert(0, '../..')
+sys.path.insert(0, '../../core')
 
 import numpy as np
 import matplotlib.pyplot as plt
