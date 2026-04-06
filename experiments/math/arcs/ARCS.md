@@ -20,7 +20,7 @@ positional systems.
 
 This bump is the error of approximating a logarithm by a straight line.
 In base 2, the bump is `{(2⋆⁼1+𝕩)-𝕩}` — the exact SlideRule function
-(see `experiments/binary/BINARY.md`, section 5). In base 10, the
+(see `experiments/acm-champernowne/base2/BINARY.md`, section 5). In base 10, the
 sawtooth curve is `{10⋆⁼1+𝕩}` on m ∈ [0.1, 1].
 
 It peaks where numbers have the richest factorization structure. The

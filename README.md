@@ -35,7 +35,7 @@ This repo is three things at once:
 
 - **Art.** Visualizations that make the algebra visible — digit
   fabrics, moire sieves, rolling shutters, epsilon landscapes.
-  ([PITCH.md](experiments/art/PITCH.md))
+  ([PITCH.md](experiments/acm-champernowne/base10/art/PITCH.md))
 
 - **Cryptography.** A pseudorandom number generator (BIDDER) that
   achieves exact output uniformity by construction, built on

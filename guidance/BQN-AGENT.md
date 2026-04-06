@@ -93,7 +93,7 @@ when you are mirroring `acm_first_digit`.
 
 ### 4. Binary work is separate, not an afterthought
 
-The binary tree under `experiments/binary/` has its own vocabulary:
+The binary tree under `experiments/acm-champernowne/base2/` has its own vocabulary:
 
 - binary concatenation
 - run-length encoding
@@ -243,7 +243,7 @@ This is `log10(1 + 1/d)` for digit `d`.
 
 ### Binary core
 
-These mirror `experiments/binary/binary_core.py`.
+These mirror `experiments/acm-champernowne/base2/binary_core.py`.
 
 ```bqn
 BinDigits ← {𝕩<2 ? ⟨𝕩⟩ ; (𝕊⌊𝕩÷2)∾⟨2|𝕩⟩}
@@ -283,7 +283,7 @@ implementation path right next to it in prose:
 
 - `core/acm_core.py`
 - `core/acm_core.c`
-- `experiments/binary/binary_core.py`
+- `experiments/acm-champernowne/base2/binary_core.py`
 
 
 ## Verification
@@ -336,7 +336,7 @@ Project docs the BQN mirrors:
 - [ACM-CHAMPERNOWNE.md](../core/ACM-CHAMPERNOWNE.md) — the math
 - [FIRST-DIGIT.md](../nasties/FIRST-DIGIT.md) — the truncation bug (`LD10` caveat)
 - `core/acm_core.py`, `core/acm_core.c` — implementations
-- `experiments/binary/binary_core.py` — binary constructions
+- `experiments/acm-champernowne/base2/binary_core.py` — binary constructions
 
 BQN language:
 

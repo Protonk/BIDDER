@@ -116,7 +116,7 @@ All d digit positions of each permuted index are independently
 uniform — not just the leading digit. Position 0 over {1, ..., b-1};
 positions 1..d-1 over {0, ..., b-1}. All pairwise joints exact.
 Each evaluation yields d independent samples.
-Experiment: `experiments/others/other_digits.py`.
+Experiment: `experiments/bidder/digits/other_digits.py`.
 
 ### Reseeding
 
@@ -124,7 +124,7 @@ Rekeying via SHA-256(old_key || period_counter) preserves exact
 uniformity. No detectable seam for d >= 3. At d=2 (period 90 in
 base 10) the seam is significant — a structural property of finite
 permutations, not a cipher weakness, and irrelevant at intended
-block sizes. Experiment: `experiments/reseed/reseed_test.py`.
+block sizes. Experiment: `experiments/bidder/reseed/reseed_test.py`.
 
 ### PractRand
 
@@ -149,20 +149,20 @@ contaminates toward Benford irreversibly; addition cycles forever
 leaves a permanent scar. These characterize uniform distributions
 generally, not BIDDER specifically. See
 [EARLY-FINDINGS.md](../sources/EARLY-FINDINGS.md), sections 4-5.
-Experiments: `experiments/shutter/`, `experiments/art/contamination/`.
+Experiments: `experiments/acm-champernowne/base10/shutter/`, `experiments/bidder/art/contamination/`.
 
 ### Stratified sampling
 
 At block boundaries, every stratum visited equally — integration
 error drops to near machine epsilon for smooth functions. The
 generator is totalizing.
-Experiment: `experiments/stratified/`.
+Experiment: `experiments/bidder/stratified/`.
 
 ### Dithering (negative result)
 
 Exact marginal uniformity does not help dithering. What dithering
 needs is spatial uniformity (blue noise), which the generator does
-not provide. Experiment: `experiments/dither/`.
+not provide. Experiment: `experiments/bidder/dither/`.
 
 
 ## Known limitations
