@@ -8,10 +8,36 @@ George Bidder's logarithms, which everyone seems to forget about.
 
 ## What this is
 
-For each positive integer n, the multiplicative monoid nZ+ has
-irreducible elements (n-primes). Concatenating these into a decimal
-real produces a signal whose leading-digit distribution is exactly
-uniform — not approximately uniform, exactly uniform.
+For each positive integer n, the multiplicative monoid nZ+ has irreducible elements, which we call n-primes (numbers which would be prime were (n-1) factorization not available). Concatenating these into a decimal real produces a signal whose leading-digit distribution is exactly uniform — not approximately uniform, exactly uniform.
+
+The first few n-primes for small `n`:
+
+| n | first n-primes |
+|---|---|
+| 2  | 2, 6, 10, 14, 18, 22, 26, 30, 34, 38, … |
+| 3  | 3, 6, 12, 15, 21, 24, 30, 33, 39, 42, … |
+| 4  | 4, 8, 12, 20, 24, 28, 36, 40, 44, 52, … |
+| 5  | 5, 10, 15, 20, 30, 35, 40, 45, 55, 60, … |
+| 10 | 10, 20, 30, 40, 50, 60, 70, 80, 90, 110, … |
+
+Concatenating those digits in order gives the Champernowne real `C(n)`:
+
+| n | `C(n)` |
+|---|---|
+| 2  | `0.2610141822263034…` |
+| 3  | `0.3612152124303339…` |
+| 4  | `0.4812202428364044…` |
+| 5  | `0.5101520303540455…` |
+| 10 | `0.1020304050607080…` |
+
+Definitions in this repo are written in BQN, used here as executable
+mathematical notation: dense enough to fit a construction on one
+line, unambiguous enough to actually run, and structurally close to
+the array-and-index style the math itself uses. The full vocabulary
+lives in [guidance/BQN-AGENT.md](guidance/BQN-AGENT.md). Reading BQN
+is not required to follow this README — the prose carries the
+meaning, the tables above show the result, and the block below is
+the precise form for anyone who wants to run it.
 
 ```bqn
 NPn2         ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}       # n-primes for n >= 2
@@ -23,8 +49,6 @@ ChamDigits10 (5↑ 3 NPn2 5)   # ⟨3,6,1,2,1,5,2,1⟩ — digits of C(3)
 LeadingInt10 3                # 3 — the leading digit of n is the
                               #     leading digit of C(n)
 ```
-
-See `guidance/BQN-AGENT.md` for the full canonical vocabulary.
 
 ## Math, art, crypto
 
