@@ -30,14 +30,17 @@ sage carries numpy and matplotlib internally.
 - `generator/` — the BIDDER block generator (Python + C). Has its
   own `AGENTS.md` with implementation-specific rules.
 - `tests/` — all test suites. Keep green.
-- `experiments/` — exploration scripts and visualizations.
+- `experiments/` — exploration scripts and visualizations, organized
+  source-first under `acm-champernowne/`, `bidder/`, `math/`, and
+  `future/`. See `experiments/README.md` for the classification rule.
 - `sources/` — reference papers and early findings. Read-only.
 - `nasties/` — known bugs and edge-case documentation.
 - `guidance/` — agent guidance documents.
 
 ## Experiment conventions
 
-Experiments live in `experiments/<topic>/`, each with its own
+Experiments live under `experiments/<source-family>/` (and a `<base>/`
+level inside `acm-champernowne/`). Each leaf experiment has its own
 script and output PNGs. Follow these patterns:
 
 - Dark background: `#0a0a0a`

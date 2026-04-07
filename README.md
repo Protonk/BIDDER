@@ -31,6 +31,7 @@ This repo is three things at once:
 - **Math.** The construction, the proofs, the sawtooth, the
   epsilon function, the relationship between addition and
   multiplication. ([ACM-CHAMPERNOWNE.md](core/ACM-CHAMPERNOWNE.md),
+  [BINARY.md](experiments/acm-champernowne/base2/BINARY.md),
   [EARLY-FINDINGS.md](sources/EARLY-FINDINGS.md))
 
 - **Art.** Visualizations that make the algebra visible — digit
@@ -47,7 +48,8 @@ This repo is three things at once:
     core/
       acm_core.py              Core definitions (Python)
       acm_core.h, acm_core.c   Core definitions (C)
-      ACM-CHAMPERNOWNE.md       Mathematical foundation
+      ACM-CHAMPERNOWNE.md      Mathematical foundation
+      BLOCK-UNIFORMITY.md      Exact block-boundary uniformity result
 
     generator/
       bidder.py              BIDDER generator (Python)
@@ -65,16 +67,14 @@ This repo is three things at once:
       speck_stream.c         Raw Speck counter mode for PractRand
 
     experiments/
-      sawtooth/              Sawtooth and residual analysis
-      shutter/               Rolling shutter (addition vs multiplication)
-      art/                   Visualizations (fabric, sieves, contamination, collapse)
-      math/arcs/             Epsilon landscape
-      stats/                 Uniformity demo, source comparison, interferometry
-      stratified/            Stratified sampling at block boundaries
-      dither/                Dithering comparison
-      others/                Multi-digit extraction analysis
-      reseed/                Reseeding across period boundaries
-      wibblywobblies/        Wibble-wobble conservation law
+      README.md                Source-first classification rule
+      acm-champernowne/        Experiments on the raw ACM-Champernowne construction
+        base10/                  Decimal digit streams (sawtooth, shutter, stats, art)
+        base2/                   Binary concatenations (forest, art, disparity) + theory
+      bidder/                  Experiments on BIDDER generator output
+                               (dither, reseed, stratified, digits, art)
+      math/                    Base-generic theory (arcs/)
+      future/                  Active ideas not yet in a stable home (wibblywobblies/)
 
     nasties/                 Known bugs and edge-case documentation
     sources/                 Reference papers and early findings
@@ -101,8 +101,22 @@ C:
 
 ## Key findings
 
+### ACM construction
+
 - Leading digits of ACM-Champernowne reals are exactly uniform
-  (1/9 each, by `LeadingInt10`; see `core/BLOCK-UNIFORMITY.md`)\
+  (1/9 each, by `LeadingInt10`; see `core/BLOCK-UNIFORMITY.md`)
+- Bit-balance of n-prime streams has a closed form that depends
+  only on `v_2(n)` (see
+  `experiments/acm-champernowne/base2/HAMMING-BOOKKEEPING.md`)
+- Binary ACM streams carry a real coefficient-level Walsh signature:
+  44 robust universal cells, all collapsing under entry-order shuffle;
+  the brightest are uncorrelated with `v_2(n)` (see
+  `experiments/acm-champernowne/base2/forest/walsh/WALSH.md`)
+- Conjecture: no finite automaton recognizes binary ACM streams
+  (see `experiments/acm-champernowne/base2/FINITE-RECURRENCE.md`)
+
+### BIDDER generator
+
 - The BIDDER generator achieves exact uniformity at block boundaries by construction
 - All d digit positions of each permuted index are independently uniform
 - Rekeying at period boundaries introduces no detectable seam
