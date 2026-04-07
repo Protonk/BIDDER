@@ -1,6 +1,6 @@
 # Mallorn Seed
 
-Ten expeditions into the binary Champernowne of ACMs. Each explores
+Nine expeditions into the binary Champernowne of ACMs. Each explores
 a phenomenon that only exists — or only becomes visible — when ACM
 elements are rendered as bits and concatenated.
 
@@ -65,21 +65,7 @@ structure injects. Where does the deficit concentrate? At small k
 depend on n's factorization?
 
 
-## 5. The Binary Fabric
-
-`forest/bitfield_quilt/`
-
-The digit fabric experiment, reimagined for bits. Render a large image:
-each row is an n-prime (first 800 n-primes of monoid n), each column is
-a bit position (MSB at left, padded to max width). Black = 0, white = 1.
-The leftmost column is all white. Moving right, columns transition toward
-balance. The diagonal weft pattern from the decimal fabric should still
-appear, but now it's black-and-white, and the warp threads are
-bit-position-dependent. Render for several n side by side to see how the
-quilt texture changes with monoid structure.
-
-
-## 6. Echoes in the Stream
+## 5. Echoes in the Stream
 
 `forest/autocorrelation/`
 
@@ -92,7 +78,7 @@ should drift rightward and decay. The decay envelope is the rate at
 which the stream "forgets" its concatenation structure.
 
 
-## 7. Hamming Strata
+## 6. Hamming Strata
 
 `forest/hamming_strata/`
 
@@ -107,7 +93,7 @@ analog of the digit histogram — but it captures correlations that
 single-bit statistics miss.
 
 
-## 8. The Valuation Forest
+## 7. The Valuation Forest
 
 `forest/twoadic_tree/`
 
@@ -122,7 +108,7 @@ question: does 2-adic depth predict stream structure, or are there
 surprises?
 
 
-## 9. The Sawtooth IS Epsilon
+## 8. The Sawtooth IS Epsilon
 
 `forest/epsilon_teeth/`
 
@@ -134,7 +120,7 @@ contribution of n-primality beyond the positional-notation effect. This
 is the experiment that closes the SlideRule bridge.
 
 
-## 10. Walsh Spectrum
+## 9. Walsh Spectrum
 
 `forest/walsh/`
 

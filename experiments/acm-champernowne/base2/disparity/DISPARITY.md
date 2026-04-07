@@ -1,203 +1,192 @@
 # Running Disparity and the Binary Champernowne Stream
 
-## Why This Matters
+## Purpose
 
-The binary Champernowne stream of an ACM has a 1-bias, structured
-run-length statistics, and boundary effects determined by the 2-adic
-valuation of the monoid parameter. These are exactly the properties
-that the telecommunications and magnetic recording industries spent
-fifty years learning to measure, control, and exploit.
+This is a working memo for experiment design.
 
-We did not set out to build a line code. But the binary Champernowne
-stream *is* a constrained binary sequence — constrained by the algebra
-of n-primality. The question is: what tools from constrained coding
-theory can we borrow to characterize and understand our streams?
+The point is not to claim that the binary Champernowne stream of an
+ACM is secretly a practical line code. The point is narrower: the
+telecom and magnetic-recording literatures built a very good language
+for talking about constrained binary streams, and that language gives
+us useful measurements for our own source.
 
-This document collects what we know about those tools.
+In particular, these tools help us reason about:
+
+- bit imbalance over prefixes
+- boundary-conditioned run structure
+- spectral consequences of that structure
+- what scrambling might or might not destroy
+
+
+## Status Legend
+
+This memo mixes four kinds of statements. They should not be read with
+the same force.
+
+- **Imported fact:** standard result from coding theory or symbolic dynamics
+- **Local observation:** already supported by files in this repo
+- **Inference:** plausible takeaway from imported facts plus local evidence
+- **Open question:** something we do not know yet and should test
+
+
+## What We Already Know Locally
+
+The local base-2 work already gives us several strong footholds:
+
+- **Local observation:** the binary stream itself, not leading digits, is
+  the interesting object. See [../BINARY.md](../BINARY.md) and
+  [../binary_core.py](../binary_core.py).
+- **Local observation:** boundary structure depends strongly on
+  `v_2(n)`. Even monoids force trailing zeros before the next entry's
+  leading `1`. See
+  [../forest/boundary_stitch/BOUNDARY_STITCH.md](../forest/boundary_stitch/BOUNDARY_STITCH.md)
+  and
+  [../forest/boundary_stitch/boundary_stitch.py](../forest/boundary_stitch/boundary_stitch.py).
+- **Local observation:** run-length statistics visibly track the
+  monoid's 2-adic structure. See
+  [../forest/rle_spectroscopy/rle_spectroscopy.py](../forest/rle_spectroscopy/rle_spectroscopy.py)
+  and [../art/rle/RLE.md](../art/rle/RLE.md).
+- **Local observation:** the all-`d`-bit baseline
+  `(d+1)/(2d)` is a useful comparison, but the ACM sieve distorts it,
+  sometimes strongly. See
+  [../forest/one_bias/one_bias.py](../forest/one_bias/one_bias.py).
+
+The practical consequence is important:
+
+- **Inference:** the binary ACM stream should be analyzed against a
+  control, not against an abstract “random binary stream” alone.
+- **Inference:** for bit balance, the right first control is “all
+  `d`-bit integers,” because that isolates the sieve residual from the
+  ordinary fixed-MSB bias of binary notation.
 
 
 ## The Core Problem (Theirs)
 
-When you send bits down a wire, through a fiber, or onto a magnetic
-platter, the physical channel imposes constraints:
+When bits move through a physical channel, three issues dominate:
 
-1. **Clock recovery.** The receiver's PLL needs transitions (0→1 or
-   1→0) to stay synchronized. A long run of identical bits starves
-   the PLL. After ~16 identical bits, clock drift causes bit errors.
+1. **Clock recovery.** Long runs of identical bits starve the receiver
+   of transitions.
+2. **Baseline wander.** Sustained imbalance between 1s and 0s pushes
+   the receiver's effective threshold on AC-coupled links.
+3. **Spectral shaping.** Long-range structure moves energy toward low
+   frequencies and creates periodic lines.
 
-2. **Baseline wander.** AC-coupled channels (transformers, series
-   capacitors) block DC. If the stream has more 1s than 0s over a
-   sustained interval, the coupling capacitor charges, shifting the
-   receiver's decision threshold. The receiver can no longer tell
-   0 from 1.
+The standard response is to encode the data so the transmitted stream
+has bounded run lengths, bounded cumulative imbalance, or both.
 
-3. **Spectral flatness.** FEC decoders and DSP equalizers assume the
-   signal has roughly flat spectral content. Long runs create
-   low-frequency peaks that violate this assumption.
-
-The solution: **encode the data** so the transmitted stream has
-bounded run lengths and bounded cumulative imbalance between 1s and
-0s. This is constrained coding.
+- **Imported fact:** constrained coding is largely about controlling
+  these pathologies.
+- **Inference:** our binary ACM stream is not engineered for those
+  goals, but the same measurements still tell us where its structure
+  lives.
 
 
 ## Running Digital Sum and Digital Sum Variation
 
-The fundamental measurement. Given a bit stream b_1, b_2, ..., b_n,
-the **running digital sum** (RDS) at position n is:
+Given a bit stream `b_1, b_2, ..., b_n`, define the **running digital
+sum**:
 
 ```
 RDS(n) = sum_{i=1}^{n} (2*b_i - 1)
 ```
 
-Each 1-bit contributes +1, each 0-bit contributes -1. The RDS is
-a random walk on the integers, biased by the stream's bit balance.
+Each `1` contributes `+1`, each `0` contributes `-1`.
 
-The **digital sum variation** (DSV) of a sequence is the peak-to-peak
-excursion of the RDS:
+The **digital sum variation** is the peak-to-peak excursion:
 
 ```
 DSV = max_{m,n} |RDS(n) - RDS(m)|
 ```
 
-A bounded DSV implies a spectral null at DC — the power spectral
-density S(f) vanishes at f = 0 and grows as f^2 nearby. The tighter
-the DSV bound, the wider the spectral notch.
+- **Imported fact:** bounded DSV implies strong DC suppression.
+- **Imported fact:** a DC-balanced code keeps RDS tightly controlled.
 
-**For our binary Champernowne stream:** The 1-bias of 1/(2d) means
-the RDS has a positive drift of approximately 1/(2d) per bit. The
-DSV is unbounded — it grows without limit. The stream is not DC-free.
-But the *rate* of drift is algebraically determined and shrinks as
-n-primes grow. The boundary effects (long 0-runs at high v_2(n))
-create periodic downward excursions in the RDS. The RDS curve is a
-biased random walk with algebraically-determined kicks.
+For our stream:
+
+- **Local observation:** there is no single universal ACM bit-balance
+  law analogous to the all-`d`-bit formula `(d+1)/(2d)`.
+- **Local observation:** even monoids can drift below `1/2` because
+  forced trailing zeros outweigh the ordinary fixed-MSB excess.
+- **Inference:** RDS should be treated as an empirical observable by
+  monoid, not something already captured by a closed-form positive
+  drift.
+- **Open question:** after removing the empirical trend, do the
+  boundary effects leave a stable monoid-specific residual shape?
 
 
-## 8b/10b: The Gold Standard
+## Imported Tool: 8b/10b
 
 **Paper:** Widmer & Franaszek, "A DC-Balanced, Partitioned-Block,
 8B/10B Transmission Code," IBM J. Res. Dev., 27(5), 440-451, 1983.
 
-Maps 8 data bits to 10 channel bits. Guarantees:
-- Maximum run of 5 identical bits
-- Running disparity bounded to {-1, +1} at symbol boundaries
-- DC-free (bounded DSV)
+8b/10b maps 8 data bits to 10 channel bits and gives:
 
-**How it works.** The 8-bit input is split: 5 bits → 6b sub-block,
-3 bits → 4b sub-block. Each sub-block has a *codeword digital sum*
-(CDS) of 0 or ±2.
+- maximum run length 5
+- running disparity state `RD ∈ {-1, +1}`
+- DC balance through active correction
 
-The encoder maintains a running disparity state: RD ∈ {-1, +1},
-initialized to -1. At each sub-block:
+The mechanism is feedback: the encoder tracks running disparity and
+chooses among alternative encodings to steer the mass back toward zero.
 
-| Current RD | Sub-block CDS | Encoding chosen | Next RD |
-|---|---|---|---|
-| -1 | 0 | neutral form | -1 |
-| -1 | ±2 | +2 form (more 1s) | +1 |
-| +1 | 0 | neutral form | +1 |
-| +1 | ±2 | -2 form (more 0s) | -1 |
+Comma characters are the synchronization lesson here. In practice the
+important fact is not merely “there exists a run of 5,” but that a
+reserved comma pattern is detectable in-stream and used for alignment.
 
-The encoder always selects the encoding that pushes RD back toward
-zero. The two columns (RD- and RD+) of the encoding table are the
-two complementary forms: one with two extra 1s, one with two extra
-0s. The code is a *feedback system* — mass-aware, tracking the
-cumulative imbalance and steering it.
+What we should borrow:
 
-**Special cases for run-length control.** Even with the disparity
-machinery, some neutral-CDS symbols could create runs > 5 at
-sub-block boundaries. Three special cases are handled:
-
-- D.07 (input 00111): uses alternate 6b encodings (000111 or 111000)
-  depending on RD, to break potential runs at the 5b/6b boundary
-- D.x.3 (input 011): uses 0011 or 1100 depending on RD
-- D.x.A7 (alternate for input 111): six specific input values use an
-  alternate 4b encoding to prevent 4+ identical bits at the sub-block
-  join
-
-**Comma characters.** Control symbol K.28.5 encodes as 0011111010 or
-1100000101 — the only valid patterns with a run of exactly 5. Since
-data sequences never produce 5-run, the receiver can detect K.28.5
-anywhere in the stream for bit-level synchronization. The maximum
-run length is not just bounded — it is *reserved* as a signaling
-channel.
-
-**What we learn from this:**
-- The RD tracking mechanism is a *single scalar summary* of the
-  entire history of the stream. At any point, the encoder knows
-  whether the stream is "heavy" (+1) or "light" (-1) and chooses
-  the variant that rebalances. Our binary Champernowne stream has
-  an analogous scalar: the running 1-bit fraction, which is
-  (d+1)/(2d) per bit-length class.
-- The two-column table (positive and negative disparity variants)
-  is a controlled form of the same thing our n-primes do
-  accidentally: some n-primes are "heavy" (many 1-bits) and some
-  are "light" (many 0-bits). The question is whether the ordering
-  imposed by n-primality has any tendency to alternate heavy and
-  light, or whether it drifts.
-- The reserved maximum run (comma character) suggests we look for
-  whether certain run lengths in our stream are *impossible* or
-  *uniquely identifying* — run lengths that could serve as
-  boundary markers.
+- **Imported fact:** one scalar state can be enough to summarize
+  balance history for control purposes.
+- **Inference:** we should ask whether our stream has boundary-local
+  signatures that play a comma-like role, even though nothing here is
+  actively controlled.
+- **Open question:** are there short windows that are unusually
+  boundary-specific, especially as `v_2(n)` grows?
 
 
-## 64b/66b: Statistical vs. Deterministic
+## Imported Tool: 64b/66b
 
-**Standard:** IEEE 802.3ae (10 Gigabit Ethernet).
+**Standard:** IEEE 802.3ae.
 
-Prepends a 2-bit sync header (always 01 or 10 — guaranteed
-transition every 66 bits) to 64 bits of scrambled payload.
+64b/66b prepends a 2-bit sync header (`01` or `10`) to 64 bits of
+scrambled payload. Its scrambler is self-synchronizing, using the
+polynomial:
 
-**The scrambler.** Self-synchronizing LFSR with polynomial
-G(x) = 1 + x^39 + x^58. Each output bit is XOR of the input bit
-with taps at positions 39 and 58 of the shift register. The
-descrambler is the same circuit, self-synchronizing after 58 bits.
+```
+G(x) = 1 + x^39 + x^58
+```
 
-**Key difference from 8b/10b:** The scrambler provides only
-*statistical* guarantees. A run of 64 identical bits is possible
-(probability ~2^{-64}; one expected occurrence per ~29 years at
-10 Gbps). But the overhead is only 3.125% vs. 25%.
+The point is the tradeoff:
 
-**The tradeoff:** 8b/10b is a *theorem* (max run = 5, always). 64b/66b
-is a *confidence interval* (long runs are exponentially unlikely).
-The industry moved from theorem to confidence interval because the
-bandwidth cost of the theorem was too high.
+- **Imported fact:** 8b/10b gives theorem-level guarantees at high
+  overhead.
+- **Imported fact:** 64b/66b gives statistical whitening at low
+  overhead.
 
-**What we learn from this:**
-- Our work moves in the opposite direction. BIDDER's value is the
-  theorem, not the confidence interval. The exact uniformity at
-  block boundaries is a deterministic guarantee, not a statistical
-  one. The telecom industry's experience shows that deterministic
-  guarantees are worth paying for — until the cost gets too high.
-- The scrambler is a bijection (invertible), like our Speck
-  permutation. It destroys structure in the bit stream. The
-  question for us: does the Speck permutation destroy the
-  run-length structure of the binary Champernowne stream, or
-  does some of it survive?
-- The sync header (guaranteed transition every 66 bits) is a form
-  of the boundary structure we already have: every entry in our
-  stream starts with 1. The question is whether the bit before
-  that leading 1 (the trailing bit of the previous entry) creates
-  a reliable transition.
+What we should borrow:
+
+- **Inference:** BIDDER's permutation can be discussed in the same
+  theorem-vs-statistics language.
+- **Open question:** when the source is the binary ACM stream, which
+  observables survive scrambling and which collapse to the control?
+- **Inference:** the sync header is a useful analogy for our known
+  entry boundaries, but only as an analogy. It does not mean the ACM
+  stream is self-synchronizing.
 
 
-## Run-Length Limited (RLL) Codes and Channel Capacity
+## Imported Tool: RLL Codes and Capacity
 
-**(d, k)-RLL constraint:** between consecutive 1-bits, there are at
-least d and at most k consecutive 0-bits. The parameter d suppresses
-high-frequency content (reducing intersymbol interference); k
-guarantees transitions for clock recovery.
+A `(d, k)` run-length-limited constraint means that between
+consecutive `1` bits there are at least `d` and at most `k` zeros.
 
-**Shannon capacity of the (d, k)-constrained channel:**
+Its Shannon capacity is
 
 ```
 C(d, k) = log_2(lambda_max)
 ```
 
-where lambda_max is the largest positive real root of the
-characteristic polynomial of the constraint's adjacency matrix. This
-result is from Shannon (1948), formalized for RLL by Franaszek (1968,
-1970) and Adler, Coppersmith & Hassner (1983).
+where `lambda_max` is the spectral radius of the constraint graph.
 
-**Key capacities:**
+Useful anchor values:
 
 | (d, k) | Capacity | Rate of best code | Efficiency |
 |---|---|---|---|
@@ -206,141 +195,131 @@ result is from Shannon (1948), formalized for RLL by Franaszek (1968,
 | (1, 7) | 0.6793 | 2/3 | 98.3% |
 | (2, 7) | 0.5174 | 1/2 | 96.6% |
 
-The capacity of a (d, k)-channel is irrational for all valid (d, k),
-meaning no finite block code achieves exactly 100% efficiency.
+What we should borrow:
 
-**Historical application:** RLL codes dominated magnetic recording.
-MFM = (1,3)-RLL at rate 1/2, used in hard drives from 1973 into the
-1980s. (2,7)-RLL at rate 1/2 replaced it (IBM 3370, 1979), offering
-50% more storage density. (1,7)-RLL at rate 2/3 became the standard
-by the early 1990s.
-
-**What we learn from this:**
-- Our binary Champernowne stream satisfies a natural (d, k)
-  constraint determined by the monoid. For monoid n with v_2(n) = m:
-  every boundary creates a 0-run of length >= m, so the stream
-  has a *minimum* 0-run length of m at periodic intervals. This is
-  not exactly a (d, k) constraint (which applies between 1-bits
-  globally), but it is a related structural property.
-- The capacity formula gives us a way to measure the "cost" of our
-  stream's constraints. If the binary Champernowne stream of monoid
-  n can be characterized by effective (d, k) parameters, then
-  C(d, k) tells us how much information-carrying capacity the
-  algebraic structure destroys. The deficit 1 - C is the price of
-  n-primality in bits per bit.
-- The irrationality of capacity is intriguing. The golden ratio
-  appears in the simplest case (0,1). Our stream's effective
-  capacity might connect to algebraic numbers determined by n.
+- **Imported fact:** capacity turns a combinatorial constraint into a
+  single scalar.
+- **Inference:** an empirical “effective `(d, k)`” fit could be a
+  useful summary of our stream.
+- **Warning:** an effective `(d, k)` fit is only a summary statistic.
+  It is not the literal law of the ACM source.
+- **Open question:** does a low-dimensional summary like effective
+  `(d, k)` track `v_2(n)` cleanly enough to be useful?
 
 
-## Franaszek's Framework: Sequence-State Coding
+## Imported Tool: Sequence-State Coding
 
 **Papers:**
-- "Sequence-State Coding for Digital Transmission," BSTJ 47(1),
-  143-157, 1968.
-- "Sequence-State Methods for Run-Length-Limited Coding," IBM J.
-  Res. Dev. 14(4), 376-383, 1970.
 
-Franaszek's insight: model the constrained channel as a deterministic
-finite automaton (DFA). The set of allowed sequences forms a *sofic
-shift* — a shift-invariant set describable by a labeled directed
-graph. The states of the DFA capture exactly the information needed
-to determine which symbols can legally follow.
+- Franaszek, "Sequence-State Coding for Digital Transmission," 1968
+- Franaszek, "Sequence-State Methods for Run-Length-Limited Coding," 1970
 
-The **state-splitting algorithm** (Adler, Coppersmith, Hassner 1983)
-provides a constructive method to build finite-state encoders
-achieving any rate below capacity. The key object is the *adjacency
-matrix* A of the constraint graph. Its spectral radius
-(largest eigenvalue) determines the capacity.
+This literature models a constrained channel by a state graph. The
+adjacency matrix then controls counts, rates, and capacity.
 
-**What we learn from this:**
-- Our binary Champernowne stream is generated by a deterministic
-  process (enumerate n-primes, convert to binary, concatenate). This
-  process can be modeled as a finite automaton whose states encode
-  the current position within the binary representation of the
-  current n-prime, plus the position within the sieve (k mod n).
-  The adjacency matrix of this automaton would encode the stream's
-  constraint structure.
-- Franaszek's framework connects constraints to *eigenvalues*. If we
-  build the automaton for our stream, its spectral radius gives the
-  capacity — the information content of the stream per bit. This is
-  a precise, computable measure of how much algebraic structure the
-  ACM injects.
-- The sofic shift perspective connects to symbolic dynamics (Lind &
-  Marcus, 1995). Our stream is a specific element of a shift space
-  defined by n-primality constraints. The entropy of that shift
-  space is another way to quantify the algebraic content.
+What we should borrow:
+
+- **Imported fact:** state-graph models are the right language when a
+  stream really is generated by a finite constraint system.
+- **Inference:** symbolic-dynamics language may still help us describe
+  local forbidden patterns or boundary-conditioned subshifts.
+- **Open question:** is there any finite or finitely-presented model
+  here that is honest enough to be useful?
+
+What we should not claim yet:
+
+- the binary ACM stream is already known to define a finite-state shift
+- the exact entropy of a relevant shift space is already in hand
+- the spectral radius of a yet-to-be-built automaton already measures
+  “the information content of the stream per bit”
+
+Those are research directions, not present results.
 
 
-## Submarine Cables: The Full Stack
+## Imported Tool: The Submarine Stack
 
-Modern undersea fiber optic cables use:
+Modern optical systems layer framing, scrambling, FEC, and modulation.
 
-**Modulation:** Coherent DP-QPSK (4 bits/symbol) or DP-16QAM
-(8 bits/symbol) with probabilistic constellation shaping (PCS) for
-approaching Shannon capacity.
+This matters here only as a modeling analogy:
 
-**FEC:** Soft-decision LDPC codes with ~20% overhead, achieving
-net coding gain of ~12 dB at BER 10^{-15}. Three generations:
-1st (Reed-Solomon hard-decision), 2nd (concatenated codes),
-3rd (soft-decision iterative: LDPC, turbo product codes).
+- **Imported fact:** real systems often separate structure-preserving
+  layers from whitening layers.
+- **Inference:** the ACM binary stream and BIDDER permutation can be
+  treated the same way: source first, scrambling second.
+- **Open question:** which observables survive that second layer?
 
-**Framing:** OTN (ITU-T G.709) with scrambler polynomial
-1 + x + x^3 + x^12 + x^16, reset each frame. Frame alignment
-bytes are NOT scrambled — they are the comma characters of the
-optical layer.
-
-**What we learn from this:**
-- The submarine stack is a sequence of transformations that
-  progressively shape the bit stream: data → FEC encoding →
-  scrambling → modulation → physical channel. Each layer
-  imposes and removes constraints. Our ACM construction is
-  analogous: algebra → binary encoding → concatenation →
-  stream. The "channel" is the mathematical analysis we
-  perform on the stream.
-- Probabilistic constellation shaping (PCS) is particularly
-  interesting. It assigns non-uniform probabilities to symbols
-  to approach channel capacity. Our n-primes have non-uniform
-  bit patterns (the 1-bias, the v_2 trailing zeros). PCS
-  suggests we ask: is the non-uniformity of our stream
-  capacity-approaching for some natural channel, or is it
-  just noise?
-- The un-scrambled frame alignment bytes are exactly analogous
-  to our entry boundaries: known, structured positions in the
-  stream that carry algebraic rather than data content.
+This is the right spirit in which to use the literature. It is not a
+claim that our source belongs in that engineering stack.
 
 
-## What We Can Measure
+## Immediate Experiments
 
-The constrained coding literature gives us a toolkit for
-characterizing our binary Champernowne streams:
+These are the next useful measurements. Each one has a target plot, a
+control, and a criterion for “interesting.”
 
-1. **Running digital sum.** Plot RDS(n) for the stream. The slope
-   is the 1-bias. The excursions around the trend are the boundary
-   effects. The DSV (peak-to-peak excursion after detrending)
-   measures how "wild" the stream is.
+### 1. Global RDS Traces
 
-2. **Effective (d, k) parameters.** Measure the empirical minimum
-   and maximum run lengths (separately for 0-runs and 1-runs).
-   Compute the Shannon capacity C(d, k) as a function of n. This
-   gives a channel-theoretic measure of the algebraic content.
+- **Plot:** `RDS(t)` for several monoids on a common bit index.
+- **Control:** the all-`d`-bit baseline from
+  [../forest/one_bias/one_bias.py](../forest/one_bias/one_bias.py),
+  converted to expected `RDS`.
+- **Interesting if:** odd and even monoids separate cleanly, or the
+  slope clusters by `v_2(n)`.
 
-3. **Power spectral density.** Fourier-transform the ±1 stream.
-   Look for spectral nulls (DC balance) or spectral peaks
-   (periodic structure). The boundary spacing creates a
-   characteristic frequency; the v_2 trailing zeros modulate it.
+### 2. Detrended RDS
 
-4. **Automaton construction.** Build the DFA that generates the
-   stream. Compute the adjacency matrix. Find the spectral radius.
-   This is the most precise measure — it gives the exact entropy
-   of the constrained shift space.
+- **Plot:** `RDS(t) - alpha*t`, with `alpha` fit empirically per
+  monoid.
+- **Control:** shuffled-entry or shuffled-bit versions with the same
+  marginal 1-fraction.
+- **Interesting if:** the residual shows periodic or staircase
+  structure tied to entry boundaries rather than generic noise.
 
-5. **Disparity histogram.** At each entry boundary, record the
-   current RDS value. The distribution of RDS at boundaries
-   characterizes how the stream's mass accumulates across entries.
-   For 8b/10b, this would be a delta function at {-1, +1}. For
-   our stream, it will be a drifting distribution whose shape
-   encodes the interplay between the 1-bias and the v_2 kicks.
+### 3. Boundary-Conditioned Increments
+
+- **Plot:** distribution of `ΔRDS` across windows centered on entry
+  boundaries.
+- **Control:** windows at random interior positions with matched
+  lengths.
+- **Interesting if:** boundaries produce monoid-specific asymmetry or
+  variance not seen in interior windows.
+
+### 4. Run Histogram vs. `v_2(n)`
+
+- **Plot:** 0-run and 1-run histograms as a function of `n`, extending
+  [../forest/rle_spectroscopy/rle_spectroscopy.py](../forest/rle_spectroscopy/rle_spectroscopy.py).
+- **Control:** the same histograms for shuffled entries and for a fair
+  Bernoulli stream with the same global 1-fraction.
+- **Interesting if:** a low-dimensional parameterization by `v_2(n)`
+  explains most of the 0-run structure.
+
+### 5. Power Spectral Density
+
+- **Plot:** PSD of the `±1` stream for several monoids.
+- **Control:** fair Bernoulli and Bernoulli-with-matched-bias.
+- **Interesting if:** there are stable low-frequency peaks or boundary
+  harmonics that survive increasing prefix length.
+
+### 6. Boundary Disparity Histogram
+
+- **Plot:** histogram of `RDS` values sampled only at entry boundaries.
+- **Control:** `RDS` sampled at equally spaced non-boundary positions.
+- **Interesting if:** the boundary sample has a visibly different shape
+  or drift rate, which would mean mass accumulation is not spatially
+  uniform in the stream.
+
+
+## What To Compare Against
+
+These controls should be used repeatedly:
+
+1. **All `d`-bit integers.** This is the right notation-only baseline.
+2. **Fair Bernoulli bits.** This is the randomness baseline.
+3. **Bias-matched Bernoulli bits.** This separates marginal imbalance
+   from boundary structure.
+4. **Entry-shuffled ACM stream.** This tests whether ordering matters.
+5. **BIDDER-scrambled output.** This tests which observables survive
+   scrambling.
 
 
 ## Key References
@@ -357,32 +336,15 @@ characterizing our binary Champernowne streams:
 | Lind, Marcus | 1995 | *An Introduction to Symbolic Dynamics and Coding* | Cambridge |
 
 
-## Open Questions
+## Longer-Horizon Questions
 
-1. Does the ordering of n-primes (by value) tend to alternate
-   "heavy" and "light" entries, creating natural disparity
-   control? Or does it drift systematically?
-
-2. Can we define a "disparity-aware" ordering of n-primes —
-   a permutation that minimizes DSV — and is that permutation
-   related to the Speck permutation or to any natural algebraic
-   ordering?
-
-3. What are the effective (d, k) parameters of the binary
-   Champernowne stream as a function of n and v_2(n)? Is there
-   a closed form?
-
-4. Does the DFA for the binary Champernowne stream have a
-   spectral radius expressible in terms of known constants
-   (related to n, or to the density of n-primes)?
-
-5. The 8b/10b comma character (the unique maximum-run pattern)
-   suggests: are there run-length patterns in our stream that
-   uniquely identify entry boundaries? If so, the stream is
-   self-synchronizing — you can find the boundary positions
-   without external metadata.
-
-6. Probabilistic constellation shaping makes non-uniform symbol
-   distributions capacity-approaching. Our stream's 1-bias is
-   non-uniform. Is it capacity-approaching for any natural
-   channel model, or is the non-uniformity pure overhead?
+1. Does the natural ordering of `n`-primes create a detectable
+   heavy/light alternation, or only a drift?
+2. Can a boundary-aware permutation minimize DSV more effectively than
+   naive shuffling?
+3. Is there a useful closed-form approximation for any of the empirical
+   observables above as a function of `n` and `v_2(n)`?
+4. Are there short patterns that identify entry boundaries with
+   unusually high confidence?
+5. Which binary-ACM observables survive BIDDER-style scrambling, and
+   which are annihilated by it?

@@ -24,5 +24,8 @@ entry-boundary tracking for all experiments in this subtree.
 
 ## Theory
 
-[FINITE-RECURRENCE.md](FINITE-RECURRENCE.md) — conjecture that no
-finite automaton can recognize binary ACM streams.
+- [FINITE-RECURRENCE.md](FINITE-RECURRENCE.md) — conjecture that no
+  finite automaton can recognize binary ACM streams.
+- [HAMMING-BOOKKEEPING.md](HAMMING-BOOKKEEPING.md) — why bit-balance
+  of n-prime streams depends only on `v_2(n)`, with the per-monoid
+  closed form.
