@@ -8,7 +8,6 @@ sys.path.insert(0, os.path.join(_here, "..", ".."))
 sys.path.insert(0, os.path.join(_here, "..", "..", "..", "..", "..", "core"))
 
 import numpy as np
-import matplotlib.pyplot as plt
 from scipy.linalg import hadamard
 
 from acm_core import acm_n_primes
@@ -306,29 +305,6 @@ def save_stage0(streams, candidate_indices, metrics):
         cv=metrics["cv"],
         z=metrics["z"],
     )
-    base = np.load(os.path.join(_here, "walsh_spectra.npz"))
-    order_indices = np.array(sorted(range(BASE_CHUNK), key=lambda i: (sequency_of_index(int(i), BASE_K), i)))
-    heatmap = base["spectra"][:, order_indices]
-    fig, ax = plt.subplots(figsize=(16, 9))
-    fig.patch.set_facecolor("#0a0a0a")
-    ax.set_facecolor("#0a0a0a")
-    vmin = max(float(heatmap[heatmap > 0].min()), 1e-10)
-    im = ax.imshow(heatmap, aspect="auto", cmap="inferno", vmin=vmin, vmax=float(heatmap.max()))
-    ax.set_title("Walsh heatmap in sequency order", color="white", fontsize=14, pad=12)
-    ax.set_xlabel("Walsh subset index sorted by sequency", color="white")
-    ax.set_ylabel("monoid n", color="white")
-    ax.set_yticks(range(len(base["ns"])))
-    ax.set_yticklabels([str(int(n)) for n in base["ns"]], color="white", fontsize=8)
-    ax.tick_params(colors="white")
-    for spine in ax.spines.values():
-        spine.set_color("#444")
-    cbar = plt.colorbar(im, ax=ax, pad=0.02)
-    cbar.ax.yaxis.set_tick_params(color="white")
-    plt.setp(plt.getp(cbar.ax.axes, "yticklabels"), color="white")
-    cbar.outline.set_edgecolor("#444")
-    plt.tight_layout()
-    plt.savefig(os.path.join(_here, "walsh_sequency_heatmap.png"), dpi=200, facecolor="#0a0a0a", bbox_inches="tight")
-    plt.close()
     return robust_indices, rows
 
 

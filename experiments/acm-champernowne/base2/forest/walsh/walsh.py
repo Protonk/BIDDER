@@ -6,16 +6,6 @@ stream, chunk it into 2^K-bit blocks, apply the Walsh-Hadamard
 transform to each chunk, and aggregate the squared magnitudes into
 a per-monoid Walsh power spectrum P[s] = mean over chunks of |W[s]|^2.
 
-Then group the 2^K coefficients by popcount of the index s (the
-order |S| of the Walsh subset) and produce three plots:
-
-  1. walsh_orders.png       — order-resolved spectrum, one curve per
-                              monoid, log y, white-noise baseline.
-  2. walsh_heatmap.png      — full per-(n, s) heatmap, indices sorted
-                              by popcount.
-  3. walsh_high_order.png   — total high-order power (|S| >= 3) vs n,
-                              minus the white-noise baseline.
-
 The Walsh-Hadamard normalization used here is
 
     W[s] = (1 / 2^K) * sum_x  c[x] * (-1)^(popcount(s & x))
@@ -23,9 +13,17 @@ The Walsh-Hadamard normalization used here is
 with c the chunk values mapped to {-1, +1}. With this convention
 Parseval gives sum_s |W[s]|^2 = 1 for any +/-1 chunk, and a fair
 coin yields E[|W[s]|^2] = 1/2^K for every s (the white-noise
-baseline plotted in walsh_orders.png).
+baseline).
 
-See PLAN.md for the design and motivation.
+Output is walsh_spectra.npz; downstream coefficient-level analysis
+lives in walsh_upgrade.py and the visuals in walsh_visuals.py.
+
+Earlier versions of this script also produced order-bucketed plots
+(walsh_orders.png, walsh_heatmap.png, walsh_high_order.png). They
+were removed because the popcount-bucket averages obscured the
+per-coefficient signal that the rest of the pipeline reads — the
+unit of analysis must be the coefficient, not the bucket. See
+WALSH.md for the corrected story.
 """
 
 import sys, os
@@ -36,9 +34,6 @@ sys.path.insert(0, os.path.join(_here, '..', '..', '..', '..', '..', 'core'))  #
 
 import math
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.cm as cm
-from matplotlib.colors import LogNorm
 from scipy.linalg import hadamard
 from binary_core import binary_stream
 
@@ -117,188 +112,16 @@ for n in range(2, N_MAX + 1):
           f"Parseval Σ P = {parseval_check[n]:.6f}")
 
 
-# ── Order-resolved aggregation ───────────────────────────────────────
-
-print("\nGrouping by popcount (order)...")
-
-# Mean P[s] within each popcount bucket
-order_mean = {}
-for n, P in power_spectra.items():
-    om = np.zeros(K + 1)
-    for o in range(K + 1):
-        om[o] = P[POPCOUNT == o].mean()
-    order_mean[n] = om
+# ── High-order summary (kept for the sanity table below) ────────────
 
 WN_BASELINE = 1.0 / CHUNK_SIZE
-
-
-# ── Plot 1: order-resolved spectrum ──────────────────────────────────
-
-print("\nPlotting order-resolved spectrum...")
-
-fig, ax = plt.subplots(figsize=(13, 8))
-fig.patch.set_facecolor('#0a0a0a')
-ax.set_facecolor('#0a0a0a')
-
-v2_max = max(v2(n) for n in power_spectra)
-cmap = cm.get_cmap('viridis')
-
-# Highlighted monoids get explicit labels in the legend
-HIGHLIGHT = {2, 3, 4, 5, 7, 8, 16, 32}
-
-orders = np.arange(K + 1)
-for n in sorted(power_spectra.keys()):
-    om = order_mean[n]
-    color = cmap(v2(n) / max(v2_max, 1))
-    label = f'n={n}  (ν₂={v2(n)})' if n in HIGHLIGHT else None
-    ax.plot(orders, om, '-o', color=color, linewidth=1.4,
-            markersize=5, alpha=0.9, label=label)
-
-ax.axhline(y=WN_BASELINE, color='white', linestyle='--',
-           linewidth=1, alpha=0.7, label=f'white noise = 1/{CHUNK_SIZE}')
-
-ax.set_xlabel('Walsh subset order $|S|$', color='white', fontsize=12)
-ax.set_ylabel(r'mean Walsh power $\langle |W[S]|^2 \rangle$',
-              color='white', fontsize=12)
-ax.set_yscale('log')
-ax.set_title(
-    'Order-resolved Walsh power spectrum of binary Champernowne streams\n'
-    'colored by $\\nu_2(n)$ — darker = higher 2-adic valuation',
-    color='white', fontsize=13, pad=12,
-)
-ax.legend(facecolor='#1a1a1a', edgecolor='#444', labelcolor='white',
-          fontsize=8, loc='best', ncol=2)
-ax.tick_params(colors='white')
-ax.grid(True, alpha=0.1, color='white')
-for spine in ax.spines.values():
-    spine.set_color('#444')
-
-plt.tight_layout()
-plt.savefig('walsh_orders.png', dpi=200, facecolor='#0a0a0a',
-            bbox_inches='tight')
-plt.close()
-print("-> walsh_orders.png")
-
-
-# ── Plot 2: full spectrum heatmap ────────────────────────────────────
-
-print("Plotting full spectrum heatmap...")
-
-# Sort 0..255 first by popcount, then by raw index
-order_indices = np.array(
-    sorted(range(CHUNK_SIZE), key=lambda i: (int(POPCOUNT[i]), i))
-)
-
-ns_sorted = sorted(power_spectra.keys())
-heatmap = np.array([power_spectra[n][order_indices] for n in ns_sorted])
-
-fig, ax = plt.subplots(figsize=(16, 9))
-fig.patch.set_facecolor('#0a0a0a')
-ax.set_facecolor('#0a0a0a')
-
-vmin = max(heatmap[heatmap > 0].min(), 1e-10)
-im = ax.imshow(heatmap, aspect='auto', cmap='inferno',
-               norm=LogNorm(vmin=vmin, vmax=heatmap.max()),
-               interpolation='nearest')
-
-# Vertical lines marking popcount boundaries
-prev_o = int(POPCOUNT[order_indices[0]])
-for i in range(1, len(order_indices)):
-    o = int(POPCOUNT[order_indices[i]])
-    if o != prev_o:
-        ax.axvline(x=i - 0.5, color='white', linewidth=0.4, alpha=0.5)
-        prev_o = o
-
-# Annotate order labels along the top
-prev_o = -1
-for i, idx in enumerate(order_indices):
-    o = int(POPCOUNT[idx])
-    if o != prev_o:
-        ax.text(i + 0.5, -0.7, f'|S|={o}', color='white',
-                fontsize=8, ha='left', va='bottom')
-        prev_o = o
-
-ax.set_xlabel('Walsh subset index (sorted by popcount, then value)',
-              color='white', fontsize=12)
-ax.set_ylabel('monoid $n$', color='white', fontsize=12)
-ax.set_yticks(range(len(ns_sorted)))
-ax.set_yticklabels([f'{n}  (ν₂={v2(n)})' for n in ns_sorted], fontsize=8)
-ax.set_title(
-    'Walsh power spectrum heatmap — rows=monoid, cols=subset (popcount-sorted)',
-    color='white', fontsize=13, pad=18,
-)
-ax.tick_params(colors='white')
-for spine in ax.spines.values():
-    spine.set_color('#444')
-
-cbar = plt.colorbar(im, ax=ax, pad=0.02)
-cbar.set_label('Walsh power $|W[s]|^2$', color='white', fontsize=11)
-cbar.ax.yaxis.set_tick_params(color='white')
-plt.setp(plt.getp(cbar.ax.axes, 'yticklabels'), color='white')
-cbar.outline.set_edgecolor('#444')
-
-plt.tight_layout()
-plt.savefig('walsh_heatmap.png', dpi=200, facecolor='#0a0a0a',
-            bbox_inches='tight')
-plt.close()
-print("-> walsh_heatmap.png")
-
-
-# ── Plot 3: high-order power vs monoid ───────────────────────────────
-
-print("Plotting high-order power vs monoid...")
-
-high_order_power = {}
 high_order_mask = POPCOUNT >= 3
 n_high_cells = int(high_order_mask.sum())
 WN_HIGH = n_high_cells * WN_BASELINE
 
-for n, P in power_spectra.items():
-    high_order_power[n] = float(P[high_order_mask].sum())
-
-ns_arr = np.array(sorted(high_order_power.keys()))
-hop = np.array([high_order_power[n] for n in ns_arr])
-v2_arr = np.array([v2(n) for n in ns_arr])
-excess = hop - WN_HIGH
-colors = [cmap(v / max(v2_max, 1)) for v in v2_arr]
-
-fig, ax = plt.subplots(figsize=(14, 8))
-fig.patch.set_facecolor('#0a0a0a')
-ax.set_facecolor('#0a0a0a')
-
-ax.bar(ns_arr, excess, color=colors, edgecolor='none', alpha=0.92)
-ax.axhline(y=0, color='white', linewidth=0.6, alpha=0.6)
-
-# Annotate v_2 for high-v_2 monoids
-for n, e, v in zip(ns_arr, excess, v2_arr):
-    if v >= 2:
-        ax.annotate(
-            f'ν₂={v}', xy=(n, e),
-            xytext=(0, 4 if e >= 0 else -10), textcoords='offset points',
-            color='white', fontsize=7, ha='center',
-        )
-
-ax.set_xlabel('monoid $n$', color='white', fontsize=12)
-ax.set_ylabel(r'excess high-order Walsh power'
-              + '\n' + r'$\sum_{|S| \geq 3} |W[S]|^2 \, - \,$ white-noise baseline',
-              color='white', fontsize=11)
-ax.set_title(
-    'High-order Walsh power (orders ≥ 3) vs monoid\n'
-    'colored by $\\nu_2(n)$',
-    color='white', fontsize=13, pad=12,
-)
-ax.set_xticks(ns_arr)
-ax.tick_params(colors='white')
-ax.tick_params(axis='x', labelsize=8)
-ax.grid(True, axis='y', alpha=0.1, color='white')
-for spine in ax.spines.values():
-    spine.set_color('#444')
-
-plt.tight_layout()
-plt.savefig('walsh_high_order.png', dpi=200, facecolor='#0a0a0a',
-            bbox_inches='tight')
-plt.close()
-print("-> walsh_high_order.png")
+high_order_power = {
+    n: float(P[high_order_mask].sum()) for n, P in power_spectra.items()
+}
 
 
 # ── Save raw spectra so we can re-analyze without re-running ─────────
