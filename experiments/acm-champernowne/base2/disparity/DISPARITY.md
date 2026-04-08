@@ -20,22 +20,33 @@ In particular, these tools help us reason about:
 
 ## Status Legend
 
-This memo mixes four kinds of statements. They should not be read with
+This memo mixes five kinds of statements. They should not be read with
 the same force.
 
 - **Imported fact:** standard result from coding theory or symbolic dynamics
 - **Local observation:** already supported by files in this repo
 - **Inference:** plausible takeaway from imported facts plus local evidence
+- **Conjecture:** a precisely-stated working assumption we treat as a
+  boundary condition but have not proven in this repo
 - **Open question:** something we do not know yet and should test
 
 
 ## What We Already Know Locally
 
-The local base-2 work already gives us several strong footholds:
+This memo predates the Walsh, Hamming-bookkeeping, and Valuation
+Forest results. Folding those in, the base-2 footholds are now:
 
-- **Local observation:** the binary stream itself, not leading digits, is
-  the interesting object. See [../BINARY.md](../BINARY.md) and
-  [../binary_core.py](../binary_core.py).
+- **Local observation:** the binary stream itself, not leading
+  digits, is the interesting object. See [../BINARY.md](../BINARY.md)
+  and [../binary_core.py](../binary_core.py).
+- **Local observation:** the bit-balance of an n-prime stream has a
+  *closed form* that depends only on `v_2(n)`. For `n = 2^m`, the
+  expected fraction of 1-bits in a `d`-bit n-prime is
+  `1/2 + (1/(2d))·[1 − 2m + m·2^m/(2^m − 1)]`, valid for `d > 2m`.
+  Every monoid sharing the same `v_2` lies on the same curve. See
+  [../HAMMING-BOOKKEEPING.md](../HAMMING-BOOKKEEPING.md) and the
+  empirical confirmation in
+  [../forest/hamming_strata/](../forest/hamming_strata/).
 - **Local observation:** boundary structure depends strongly on
   `v_2(n)`. Even monoids force trailing zeros before the next entry's
   leading `1`. See
@@ -46,18 +57,53 @@ The local base-2 work already gives us several strong footholds:
   monoid's 2-adic structure. See
   [../forest/rle_spectroscopy/rle_spectroscopy.py](../forest/rle_spectroscopy/rle_spectroscopy.py)
   and [../art/rle/RLE.md](../art/rle/RLE.md).
-- **Local observation:** the all-`d`-bit baseline
-  `(d+1)/(2d)` is a useful comparison, but the ACM sieve distorts it,
-  sometimes strongly. See
+- **Local observation:** mean zero-run length, stratified by
+  `v_2(n)`, rises monotonically from `v_2 = 2` downward; the
+  `v_2 = 0` and `v_2 = 1` row means are essentially equal (a
+  plateau the bit-balance argument predicts only weakly).
+  Within-stratum residuals are mostly faint, but the exceptions
+  concentrate at the smallest odd parts and are dominated by
+  `m = 1`. See
+  [../forest/valuation/VALUATION.md](../forest/valuation/VALUATION.md).
+- **Local observation:** the binary ACM stream's coefficient-level
+  Walsh-Hadamard spectrum carries `44` cells that survive a multi-
+  stage robustness bar; *all `44` die under entry-order shuffle*.
+  The 44 split into three populations under length and `v_2`-based
+  controls (`9` length+`v_2` explainable, `15` length-only
+  explainable, `20` neither). The brightest cells are uncorrelated
+  with `v_2(n)`; `v_2(n)` is *one* organizing variable in this
+  family, not the master variable. See
+  [../forest/walsh/WALSH.md](../forest/walsh/WALSH.md).
+- **Local observation:** the all-`d`-bit baseline `(d+1)/(2d)` is a
+  useful comparison, but the ACM sieve distorts it, sometimes
+  strongly. See
   [../forest/one_bias/one_bias.py](../forest/one_bias/one_bias.py).
+- **Conjecture:** no finite-state automaton recognizes a binary ACM
+  stream. See [../FINITE-RECURRENCE.md](../FINITE-RECURRENCE.md).
+  We treat this as a boundary condition on which constrained-coding
+  tools apply literally and which apply only as measurements; see
+  *Imported Tool: Sequence-State Coding* below.
 
-The practical consequence is important:
+The practical consequence is sharper than it was when this memo was
+first written:
 
 - **Inference:** the binary ACM stream should be analyzed against a
-  control, not against an abstract “random binary stream” alone.
-- **Inference:** for bit balance, the right first control is “all
-  `d`-bit integers,” because that isolates the sieve residual from the
-  ordinary fixed-MSB bias of binary notation.
+  control, not against an abstract "random binary stream" alone.
+- **Inference:** for bit balance, the right *first* control is the
+  closed-form `v_2`-stratified curve from
+  [../HAMMING-BOOKKEEPING.md](../HAMMING-BOOKKEEPING.md). The
+  all-`d`-bit baseline `(d+1)/(2d)` is the *second* control: it
+  isolates the sieve residual from the ordinary fixed-MSB bias of
+  binary notation. An empirical fit per monoid is the *third*
+  control and should never be the first thing fit, because it
+  conflates the known closed-form drift with whatever residual is
+  actually interesting.
+- **Inference:** for any spectral observable, the right first
+  control is now the entry-order shuffle. Walsh established that
+  shuffle annihilates the entire 44-cell family at coefficient
+  level; that is the strongest single shuffle result we have, and
+  any new spectral measurement should be reported with shuffle as
+  the default null.
 
 
 ## The Core Problem (Theirs)
@@ -103,15 +149,25 @@ DSV = max_{m,n} |RDS(n) - RDS(m)|
 
 For our stream:
 
-- **Local observation:** there is no single universal ACM bit-balance
-  law analogous to the all-`d`-bit formula `(d+1)/(2d)`.
-- **Local observation:** even monoids can drift below `1/2` because
-  forced trailing zeros outweigh the ordinary fixed-MSB excess.
-- **Inference:** RDS should be treated as an empirical observable by
-  monoid, not something already captured by a closed-form positive
-  drift.
-- **Open question:** after removing the empirical trend, do the
-  boundary effects leave a stable monoid-specific residual shape?
+- **Local observation:** the bit-balance of an n-prime stream has a
+  closed form parameterized by `v_2(n)`. For `n = 2^m`, the per-
+  integer deficit from the all-`d`-bit baseline is
+  `−m·(2^(m-1) − 1)/(2^m − 1)` ones, independent of `d`. See
+  [../HAMMING-BOOKKEEPING.md](../HAMMING-BOOKKEEPING.md). The
+  expected slope of `RDS(t)` is therefore set by `v_2(n)` and the
+  current `d`, not by anything we have to fit.
+- **Local observation:** monoids with `v_2 ≥ 2` drift below `1/2`
+  because the trailing-zero penalty outweighs the bottom-bit
+  constraint bonus. Monoids with `v_2 ≤ 1` approach `1/2` from
+  above; monoids with `v_2 ≥ 2` approach from below.
+- **Inference:** the right detrender for `RDS(t)` is the closed-form
+  drift from `HAMMING-BOOKKEEPING`, not an empirical fit. Empirical
+  fitting would conflate the known structure with whatever residual
+  is actually interesting.
+- **Open question:** after subtracting the closed-form drift, does
+  the residual carry stable monoid-specific structure tied to entry
+  boundaries, or does it look like noise once the `v_2`-driven
+  trend is removed?
 
 
 ## Imported Tool: 8b/10b
@@ -140,7 +196,16 @@ What we should borrow:
   signatures that play a comma-like role, even though nothing here is
   actively controlled.
 - **Open question:** are there short windows that are unusually
-  boundary-specific, especially as `v_2(n)` grows?
+  boundary-specific, especially as `v_2(n)` grows? The Walsh
+  experiment ([../forest/walsh/WALSH.md](../forest/walsh/WALSH.md))
+  showed that all `44` robust coefficient-level cells die under
+  entry-order shuffle, which says short patterns *do* carry
+  ordering information — but does not yet identify which short
+  patterns play the comma-like role. The Walsh boundary test at
+  `k = 8` was degenerate (every 256-bit chunk already contains many
+  boundaries); the right rerun is at `k = 4` or `k = 5` where chunks
+  are short enough to separate interior windows from
+  boundary-straddling ones.
 
 
 ## Imported Tool: 64b/66b
@@ -223,17 +288,40 @@ What we should borrow:
   stream really is generated by a finite constraint system.
 - **Inference:** symbolic-dynamics language may still help us describe
   local forbidden patterns or boundary-conditioned subshifts.
-- **Open question:** is there any finite or finitely-presented model
-  here that is honest enough to be useful?
+- **Conjecture:** no finite-state automaton recognizes the binary ACM
+  stream. See [../FINITE-RECURRENCE.md](../FINITE-RECURRENCE.md).
+  The argument is that entry lengths are unbounded, the natural
+  periodicity lives in `k`-space and is destroyed by the
+  variable-length stretching into bit-stream-space, and two of the
+  three quantities controlling local structure (`v_2` of the entry,
+  position within bit-length class, residue mod `n`) are themselves
+  unbounded. The conjecture is treated as a boundary condition on
+  what we build, not as a result we have proven in this context.
 
-What we should not claim yet:
+What this means for the borrowed tools:
 
-- the binary ACM stream is already known to define a finite-state shift
-- the exact entropy of a relevant shift space is already in hand
-- the spectral radius of a yet-to-be-built automaton already measures
-  “the information content of the stream per bit”
+- Running digital sum, run-length distributions, power spectral
+  density, disparity histograms — these are *measurements* and apply
+  to any bit stream. They do not require finiteness. We use them
+  freely.
+- Shannon capacity of a constrained channel `C = log_2 λ_max` of the
+  adjacency matrix, the state-splitting algorithm, and the eigenvalue
+  characterization of the shift space all require a finite adjacency
+  matrix that we conjecturally do not have. They apply only inside a
+  fixed bit-length *slice* of the stream, where the constraint
+  structure is locally finite.
+- The productive border: each bit-length class is a finite world
+  where Franaszek's tools apply fully. Per-class capacity is
+  computable. Whether the per-class capacities converge to a limit
+  as `d → ∞` is itself an open question, and that limit (if it
+  exists) is what would replace `λ_max` in the non-finite setting.
 
-Those are research directions, not present results.
+What we should not claim:
+
+- the binary ACM stream is a sofic shift
+- there is a single shift-space entropy that the literature's tools
+  compute directly
+- there is a finite automaton waiting to be discovered
 
 
 ## Imported Tool: The Submarine Stack
@@ -268,12 +356,18 @@ control, and a criterion for “interesting.”
 
 ### 2. Detrended RDS
 
-- **Plot:** `RDS(t) - alpha*t`, with `alpha` fit empirically per
-  monoid.
-- **Control:** shuffled-entry or shuffled-bit versions with the same
-  marginal 1-fraction.
-- **Interesting if:** the residual shows periodic or staircase
-  structure tied to entry boundaries rather than generic noise.
+- **Plot:** `RDS(t) − RDS_expected(t)`, where `RDS_expected` is the
+  closed-form drift parameterized by `v_2(n)` from
+  [../HAMMING-BOOKKEEPING.md](../HAMMING-BOOKKEEPING.md). The drift
+  is *not* fit empirically; it is computed from `v_2(n)` and the
+  per-entry bit lengths and subtracted directly.
+- **Control:** entry-shuffled ACM stream with the same set of
+  entries in a permuted order. The shuffled stream has the same
+  closed-form drift, so its detrended residual is the natural null.
+- **Interesting if:** the residual has stable monoid-specific
+  structure — periodic features, staircase shape, excursions
+  exceeding a fair-walk envelope, or systematic difference from the
+  shuffled-control residual.
 
 ### 3. Boundary-Conditioned Increments
 
@@ -283,31 +377,6 @@ control, and a criterion for “interesting.”
   lengths.
 - **Interesting if:** boundaries produce monoid-specific asymmetry or
   variance not seen in interior windows.
-
-### 4. Run Histogram vs. `v_2(n)`
-
-- **Plot:** 0-run and 1-run histograms as a function of `n`, extending
-  [../forest/rle_spectroscopy/rle_spectroscopy.py](../forest/rle_spectroscopy/rle_spectroscopy.py).
-- **Control:** the same histograms for shuffled entries and for a fair
-  Bernoulli stream with the same global 1-fraction.
-- **Interesting if:** a low-dimensional parameterization by `v_2(n)`
-  explains most of the 0-run structure.
-
-### 5. Power Spectral Density
-
-- **Plot:** PSD of the `±1` stream for several monoids.
-- **Control:** fair Bernoulli and Bernoulli-with-matched-bias.
-- **Interesting if:** there are stable low-frequency peaks or boundary
-  harmonics that survive increasing prefix length.
-
-### 6. Boundary Disparity Histogram
-
-- **Plot:** histogram of `RDS` values sampled only at entry boundaries.
-- **Control:** `RDS` sampled at equally spaced non-boundary positions.
-- **Interesting if:** the boundary sample has a visibly different shape
-  or drift rate, which would mean mass accumulation is not spatially
-  uniform in the stream.
-
 
 ## What To Compare Against
 
@@ -339,12 +408,31 @@ These controls should be used repeatedly:
 ## Longer-Horizon Questions
 
 1. Does the natural ordering of `n`-primes create a detectable
-   heavy/light alternation, or only a drift?
+   heavy/light alternation, or only a drift? **Answered in part by
+   Walsh:** the entry-order shuffle test in
+   [../forest/walsh/WALSH.md](../forest/walsh/WALSH.md) shows that
+   *some* order-dependent structure exists for every robust
+   coefficient-level cell. The narrower question — whether the
+   relevant ordering is a heavy/light alternation specifically, or
+   some other ordering — is still open at the bit level.
 2. Can a boundary-aware permutation minimize DSV more effectively than
    naive shuffling?
 3. Is there a useful closed-form approximation for any of the empirical
-   observables above as a function of `n` and `v_2(n)`?
+   observables above as a function of `n` and `v_2(n)`? **Answered
+   for bit balance:** [../HAMMING-BOOKKEEPING.md](../HAMMING-BOOKKEEPING.md)
+   gives the closed-form drift parameterized by `v_2(n)`. The same
+   kind of closed form for run-length distributions, boundary-
+   conditioned increments, and local autocorrelation is still open;
+   the Valuation Forest result that mean zero-run length stratifies
+   cleanly by `v_2` (with localized small-odd-part residuals) is a
+   first empirical step in that direction.
 4. Are there short patterns that identify entry boundaries with
-   unusually high confidence?
+   unusually high confidence? Walsh's boundary-conditioned test at
+   `k = 8` was degenerate; a `k = 4` or `k = 5` rerun is the obvious
+   next step and is listed as an open question in
+   [../forest/walsh/WALSH.md](../forest/walsh/WALSH.md).
 5. Which binary-ACM observables survive BIDDER-style scrambling, and
-   which are annihilated by it?
+   which are annihilated by it? **Still open.** The Walsh experiment
+   used *structural* synthetic controls (length-only, `v_2`-only,
+   entry-order shuffle) but did not run the BIDDER permutation
+   itself. The BIDDER question is untested.

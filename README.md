@@ -20,7 +20,7 @@ The first few n-primes for small `n`:
 | 5  | 5, 10, 15, 20, 30, 35, 40, 45, 55, 60, … |
 | 10 | 10, 20, 30, 40, 50, 60, 70, 80, 90, 110, … |
 
-Concatenating those digits in order gives the Champernowne real `C(n)`:
+Concatenating those digits [as a sequence in order](https://en.wikipedia.org/wiki/Champernowne_constant) gives the Champernowne real `C(n)`:
 
 | n | `C(n)` |
 |---|---|
@@ -30,7 +30,7 @@ Concatenating those digits in order gives the Champernowne real `C(n)`:
 | 5  | `0.5101520303540455…` |
 | 10 | `0.1020304050607080…` |
 
-Definitions in this repo are written in BQN, used here as executable
+Definitions in this repo are written in [BQN](https://mlochbaum.github.io/BQN/), used here as executable
 mathematical notation: dense enough to fit a construction on one
 line, unambiguous enough to actually run, and structurally close to
 the array-and-index style the math itself uses. The full vocabulary
