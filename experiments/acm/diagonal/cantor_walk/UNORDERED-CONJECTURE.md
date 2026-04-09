@@ -176,14 +176,311 @@ know which.
 
 ## Status
 
-Not built. The harness in `recovery_curves.py` provides the table
-construction, the walk enumeration, the rank-1 test, and the
-brute-force assertions; the unordered solver is new code that
-consumes that harness. When we build it, the deliverable is one
-image (a phase diagram) plus the solver itself, plus a `README.md`
-recording the experiment's outcome. Same shape as plots 3, 4, 5.
+**Resolved at `f(N) = 0`** for the full multi-set version. See the
+*Abductive addendum* below for the proof and the empirical
+verification (`verify_greedy.py`). The interesting follow-up is the
+*partial* multi-set version, sketched at the bottom of the
+addendum.
 
-The expected output is one of three answers: the conjecture holds
-at `O(log N)`, holds at a weaker rate, or fails. All three are
-informative, so the experiment is worth running regardless of which
-way it lands.
+The expected output of the original experiment was "one of three
+answers: `O(log N)`, weaker, or fails." The actual answer is
+**below all three**: zero hints suffice. The structure is much
+stronger than the original conjecture imagined.
+
+
+## Abductive addendum: a trivial-greedy proof
+
+While briefing the next experiment, we realized the conjecture
+admits a trivial proof. Greedy reconstruction works on the full
+multi-set with zero hints, deterministically, in `O(N²)` time, on
+every row list we tested. This addendum records the proof and
+notes the pattern: this is the **third time** the n-prime
+construction has surprised us with an "obvious in retrospect"
+linear-algebra-style inversion.
+
+### The theorem
+
+Let `n_1 < n_2 < … < n_N` be a strictly ascending row list with
+each `n_k ≥ 2`. Let `T` be the `N × N` n-prime table with
+`T[k][k'] = j_{k'}(n_k) · n_k`, where
+`j_{k'}(n) = k' + ⌊(k' − 1) / (n − 1)⌋`. Let `V` be the multi-set
+`{T[k][k'] : 1 ≤ k, k' ≤ N}`.
+
+**Theorem.** The following deterministic algorithm reconstructs
+the row list `(n_1, …, n_N)` from `V` and `N` alone, with zero
+hints:
+
+```
+greedy(V, N):
+    rows = []
+    for i = 1, 2, …, N:
+        n_i = min(V)
+        rows.append(n_i)
+        for k' = 1, 2, …, N:
+            v = j_{k'}(n_i) · n_i
+            V.remove(v)        # remove one copy
+    return rows
+```
+
+### The proof
+
+Define `R_i = {T[i][k'] : k' = 1..N}`, the set of cells of row `i`.
+Each `R_i` has exactly `N` distinct values, because `j_{k'}` is
+strictly monotonic in `k'` and so `j_{k'}(n_i) · n_i` is too.
+
+We prove by induction on `i` that at the start of step `i` of the
+algorithm, the working multi-set `V_i` is the multi-set union
+`⋃_{k = i}^N R_k`.
+
+**Base case.** `V_1 = V = ⋃_{k = 1}^N R_k` by definition. ✓
+
+**Inductive step.** Assume `V_i = ⋃_{k = i}^N R_k`. We show:
+
+(a) `min(V_i) = n_i`.
+
+The smallest cell in row `k` is `T[k][1] = j_1(n_k) · n_k`, and
+`j_1(n_k) = 1 + ⌊0 / (n_k − 1)⌋ = 1` for any `n_k ≥ 2`. So the
+smallest cell in row `k` is exactly `n_k`. The smallest cell in
+`V_i` is therefore `min_{k ∈ {i, …, N}} n_k`, which is `n_i` by
+strict ascent.
+
+(b) Removing one copy of each value in `R_i` from `V_i` yields
+`V_{i+1} = ⋃_{k = i + 1}^N R_k`.
+
+For each value `v`, let `m_i(v) = |{k ∈ {i, …, N} : v ∈ R_k}|` be
+the number of rows in `i..N` that contain `v`. Then `v` has
+multiplicity `m_i(v)` in `V_i`. After removing one copy of each
+element of `R_i`:
+
+- If `v ∈ R_i`, then row `i` contributes exactly one copy of `v`
+  (because `j_{k'}` is strictly monotonic, so `v` appears at most
+  once in row `i`). So `m_i(v) = m_{i+1}(v) + 1`, and after removal
+  the multiplicity is `m_i(v) − 1 = m_{i+1}(v)`. ✓
+- If `v ∉ R_i`, then `m_i(v) = m_{i+1}(v)` and the multiplicity is
+  unchanged.
+
+So the resulting multi-set has exactly the multiplicities of
+`⋃_{k = i + 1}^N R_k`, completing the inductive step.
+
+After `N` iterations, `V_{N+1} = ∅` and the algorithm has output
+`(n_1, n_2, …, n_N)` in order. ∎
+
+### Empirical verification
+
+`verify_greedy.py` runs the algorithm against 15 hand-picked row
+lists, including:
+
+- contiguous (`{2, 3, 4}`, `{2..6}`, `{2..21}`)
+- sparse (`{2, 5, 10, 13, 17, 21}`)
+- very sparse (`{3, 7, 11, 100, 1000}`)
+- adversarial-by-design: geometric powers of 2, multiples of 3,
+  Fibonacci-like, `n_2` a multiple of `n_1`, dense with heavy
+  collisions, two close + one far, adjacent + power of 2
+
+All 15 cases pass. The script asserts the recovered row list
+exactly equals the input row list and that the multi-set is empty
+after `N` iterations. Run it with `sage verify_greedy.py`.
+
+### Three corollaries
+
+1. **`f(N) = 0`** for the unordered conjecture as originally
+   stated. Below all three proposed bounds (`O(log N)`, `O(√N)`,
+   `O(1)`). Hints are unnecessary for the full multi-set case.
+
+2. **The algorithm is `O(N²)`** in arithmetic operations: it
+   computes `N` rows of `N` cells each, plus `O(N²)` multi-set
+   operations. No backtracking, no constraint propagation, no
+   search.
+
+3. **The row labels are *literally embedded* in `V` as values.**
+   Each `n_k` is the cell `T[k][1]`, and these `N` cells are the
+   row-wise minima. The receiver doesn't *decode* `n_k` from `V` —
+   they *read it off* the surface of `V` after stripping the
+   earlier rows. The "abductive" reading isn't an inference at all
+   in the unordered setting; it's an extraction.
+
+
+## Notes on a pattern: three surprises now
+
+This is the third time the n-prime construction has handed us an
+"obvious in retrospect" inversion that we initially framed as a
+hard problem. Worth recording the pattern.
+
+### The three surprises
+
+**1. The abductive key itself** (`core/ABDUCTIVE-KEY.md`). The
+diagonal of the n-prime table, divided pointwise by position,
+recovers the row labels. This is the Hadamard inverse of a rank-1
+outer product `(1, 2, …, N)ᵀ ⊗ (n_1, …, n_N)` — one line of intro
+linear algebra. We didn't see it across several sittings of working
+with the table directly; it took a question about Cantor's diagonal
+to surface it. The note in `ABDUCTIVE-KEY.md` says: "the lemma is
+elementary and the main argument is half a page... yet for a solo
+researcher (N = 1) and a single collaborating model (R = 1)
+working examples directly, the inference is not forthcoming."
+
+**2. The cascade key** (`cascade_key/`, plot 4). Once `n_k` is
+decoded from the first patch via the abductive key, every later
+patch in row `k` decodes too — `j_{k'}` is computable from `k'` and
+`n_k` alone, so the entire row is unlocked from a single diagonal
+cell. We initially framed this as "do later patches admit their
+own keys?" The answer turned out to be "no — there's one key, and
+once turned it opens every lock in the row." The patches have
+their own *locks*, not their own keys.
+
+**3. This addendum.** The unordered multi-set `V` carries the row
+labels as its row-wise minima. The greedy "strip the smallest"
+algorithm reconstructs the row list with no hints, in `O(N²)`. We
+initially framed this as a constraint satisfaction problem
+requiring `O(log N)` hints solved by backtracking propagation. The
+real answer is `f(N) = 0` and the algorithm is six lines.
+
+### What the three have in common
+
+All three start from a question of the form *"given an impoverished
+view of the n-prime structure, can we recover the row list?"* — and
+all three resolve to *"yes, and trivially, because the structure is
+much stronger than the impoverished view suggests."*
+
+The common mechanism: **the n-prime construction is rank-1 in
+several different senses, and rank-1 inversions are all easy.** The
+abductive key inverts a rank-1 outer product of two vectors. The
+cascade key inverts a one-parameter family from a single value. The
+greedy extraction inverts a multi-set by reading off the row-wise
+minima. Each of these is the kind of move an introductory linear
+algebra student would call obvious. Each was a real surprise to us
+because we kept *posing the problem as if we didn't know the
+structure*, and then the structure made the problem free.
+
+### A sharper statement of the pattern
+
+**Whenever we ask "can we recover X from a partial view of the
+n-prime table," the answer is almost certainly yes, and the
+construction is almost certainly trivial.** We have empirical
+evidence for this from three independent attempts. The hard
+questions are *not* the recovery questions — those keep collapsing
+— they are the questions about *what the structure itself
+implies*: whether the cascade survives perturbation (plot 4's open
+question), whether the BIDDER family extension preserves block
+uniformity (plot 7), whether the rank-1 substructure shows up in
+unrelated integer sequences (plot 2). Those questions are hard
+because they ask whether the structure *holds* in regimes we
+haven't tested, not whether the structure can be inverted.
+
+### A meta-lesson for future planning
+
+When proposing a new recovery experiment in this area, the first
+thing to check is whether greedy or some equally trivial extraction
+already solves it. If yes, the experiment is moot and we should
+fold it into the README of the relevant plot rather than building
+infrastructure for it. If no, *that's* the informational claim
+worth testing.
+
+Concretely: before briefing on a future "given X, recover the row
+list" experiment, write the half-line description of what the
+greedy or matching extraction would be, and check whether it
+trivially works. The brief should *include* the trivial-extraction
+check as the first paragraph.
+
+We have now spent three brief-write cycles on recovery problems
+that turned out to be free. The fourth time would be embarrassing.
+
+
+## The knife-edge: productive triviality
+
+The leaky parameterization is *productively trivial*. It is also
+a knife-edge, and we should record where the edge is so we do not
+forget.
+
+Triviality of a structural fact can mean two opposite things. It
+can mean **the construction has rich consequences that follow from
+a trivial surface presentation** — the way `(AB)^T = B^T · A^T` is
+one symbol-pushing line and underlies most of matrix theory. The
+trivial presentation is then a **foothold**: results that depend
+on it are real, the elementary fact is doing real work, and we
+should expect more uses to emerge. Or it can mean **the trivial
+presentation is the entire surface area and there is nothing
+beneath it** — every "result" derived from the parameterization is
+the parameterization in costume. The trivial presentation is then
+a **perimeter**: results that depend on it are relabelings, and
+we are progressing by writing the same fact in new sentences.
+
+The danger is sharper in this project than in most settings,
+because **we constructed the n-prime table on purpose**. In
+discovered spaces — the integers, the primes, the digit
+distributions of real-world data — the structure we find is not
+ours and tells us something. In constructed spaces we defined the
+object ourselves, and any "structure" we discover risks being
+structure we put in by definition. The parameterization
+`T[k][k'] = j_{k'}(n_k) · n_k` is literally part of the definition
+of the n-prime table. Everything that follows from "the row
+depends on `n_k`" carries a tautological risk by default.
+
+Mixed evidence so far. **In favor of foothold**: plot 4's cascade
+gave us decoding past the rank-1 region — knowing `n_k` lets you
+compute cells the original abductive key didn't reach. Plot 5's
+recovery rates calibrated the diagonal walk against the rank-1
+boundary in a way the definition did not immediately give us. The
+unordered greedy is a deterministic algorithm with a clean
+complexity bound, derived from the parameterization but not
+identical with it. The abductive key itself supports a one-pass
+identification test on integer sequences that has nothing to do
+with the n-prime construction's original intent. **In favor of
+perimeter**: weaker but worth tracking. Plot 8's failed prediction
+showed the parameterization does not cleanly transfer between
+contexts — plot 9's selector behavior (`cost_prime` picks
+witnesses *near* the prime curve) does not become generator
+behavior (`n_k = p_k` walks witnesses *on* the prime curve), and
+a prediction that assumed it would was wrong. That is not a
+perimeter on its own, but it is a hint that the parameterization
+is local: each result is real on its own, but the structure does
+not extrapolate freely. A second or third such non-transfer would
+start to look like a perimeter.
+
+**The discipline**, when proposing a future result that depends
+on the parameterization: ask whether the result gives us a
+quantity or behavior that wasn't already in the definition. If
+yes, the parameterization is doing real work and the result is
+real. If no, the result is a relabeling — write it down honestly
+as such, and do not lean on it for the next step. When in doubt,
+prefer the perimeter reading. We are operating in a constructed
+space and the costs of false confidence are higher than the costs
+of honest doubt.
+
+
+## What's still open
+
+The original conjecture is resolved. The interesting follow-up is
+the **partial multi-set version**: what happens when the receiver
+has only some of `V`?
+
+Two natural sub-versions:
+
+- **Cantor walk prefix.** The receiver gets the first `m` cells in
+  Cantor antidiagonal order, as an unordered multi-set (so they
+  know `m` and that the cells came from the first `m` walk steps,
+  but not which value corresponds to which step). For each `m`,
+  ask: how many rows are reconstructable? This is the unordered
+  analog of plot 5's recovery curve. Greedy needs all `N` cells of
+  row `k` to peel off `n_k`, and the latest cell of row `k` in
+  Cantor order is `(k, N)` at antidiagonal `k + N`, so the
+  unordered Cantor recovery is *quadratic in `(k + N)`* — slower
+  than the ordered version.
+
+- **Random sample of size `m`.** The receiver gets `m` random
+  elements of `V`. For each `m`, ask: success rate of greedy
+  reconstruction. This is a sample-complexity question. Greedy
+  needs row `k`'s cells to be present in full for each `k`, so the
+  threshold is probably close to `m = N²` — but the per-row
+  breakdown is unknown.
+
+Either sub-version is non-trivial because greedy fails as soon as
+even one cell of a row is missing. The picture is the same shape
+as plot 5's recovery curve, and the harness in `recovery_curves.py`
+plus the verifier in `verify_greedy.py` provide the substrate. The
+solver itself is just greedy with a "have we seen all cells of the
+candidate row?" check.
+
+The Cantor walk prefix version is the one I'd build first. It
+extends plot 5's story directly and the picture overlays on plot
+5's recovery curve panel.

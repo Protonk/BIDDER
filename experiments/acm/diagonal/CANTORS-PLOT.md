@@ -175,11 +175,28 @@ counting raw collisions.
 
 ### What's still open
 
-- **The unordered antidiagonal recovery conjecture**
-  (`cantor_walk/UNORDERED-CONJECTURE.md`). Conjecture: `O(log N)`
-  hints suffice for the receiver to recover the row list from an
-  unordered cell-value stream. Either answer would tell us whether
-  position-as-decoder is doing real work or just labeling.
+- **Unordered antidiagonal recovery**
+  (`cantor_walk/UNORDERED-CONJECTURE.md`). Original conjecture is
+  **resolved at `f(N) = 0`** — greedy reconstructs the row list
+  from the full multi-set with zero hints. Proof and a 15-row-list
+  battery in `cantor_walk/verify_greedy.py`. The interesting
+  follow-up is the *partial* multi-set version (Cantor walk
+  prefix or random sample), whose picture overlays on plot 5's
+  recovery curve.
+
+- **Knife-edge caveat about productive triviality**
+  (`cantor_walk/UNORDERED-CONJECTURE.md`, "The knife-edge"
+  section). The leaky parameterization that makes greedy work,
+  the cascade decode, and the abductive key itself is now
+  responsible for three "obvious in retrospect" inversions in a
+  row. That triviality is either a *foothold* (rich consequences
+  from a trivial surface) or a *perimeter* (no structure beneath
+  the surface, every result a relabeling) — and we are operating
+  in a constructed space, so the perimeter risk is sharper than
+  usual. The discipline: when proposing a result that depends on
+  the parameterization, ask whether it gives us a quantity not
+  already in the definition; when in doubt, prefer the perimeter
+  reading.
 
 - **Plot 4's open question on perturbed cascades.** Is there a
   table — built from spliced rows of different ACM-like
