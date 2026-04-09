@@ -164,14 +164,37 @@ are entirely rank-1 and only the small-`n` rows at the top are
 clipped; in example 2 above, rows 3–6 are full and rows 1–2 are
 truncated. The region is never the whole square unless `n_1 ≥ N + 1`.
 
-Inside any such region the entries are literally an outer product of
-the column vector `(1, 2, …, N)` and the row vector `(n_1, …, n_N)`.
-The diagonal of any outer product `u v^T` is the pointwise product
-`u_k · v_k`, and either factor is recovered from the other by
-pointwise division. The abductive key is that division, with
-`u_k = k`. Once you see that the n-prime table has this rank-1
+The n-prime row at position `k` is parameterized by a single scalar:
+`n_k`. Every cell of row `k` is the function
+`k' → j_{k'}(n_k) · n_k` of that one parameter, where
+`j_{k'}(n) = k' + ⌊(k' − 1) / (n − 1)⌋`. Anything that recovers
+`n_k` recovers the row. In the rank-1 region the function simplifies
+to `T[k][k'] = k' · n_k`, and the entries are literally an outer
+product of the column vector `(1, 2, …, N)` and the row vector
+`(n_1, …, n_N)`. The diagonal of any outer product `u v^T` is the
+pointwise product `u_k · v_k`, and either factor is recovered from
+the other by pointwise division. The abductive key is that division,
+with `u_k = k`. Once you see that the n-prime table has this rank-1
 substructure, the recovery is one line of intro linear algebra. The
 work is in noticing the shape.
+
+A second extraction of `n_k` is even more elementary. The cell
+`T[k][1] = j_1(n_k) · n_k` equals `n_k` for any `n_k ≥ 2`, because
+`j_1 = 1`. So the first cell of every row is its row label, full
+stop. Two settings make use of this. In the cascade picture
+(`experiments/acm/diagonal/cascade_key/`), once `n_k` is decoded by
+any means, every later cell of row `k` is computable from `k'` and
+`n_k` alone via `j_{k'}(n_k) · n_k` — the entire row, including the
+cells past the rank-1 region, unlocks from a single value. In the
+unordered-multi-set picture
+(`experiments/acm/diagonal/cantor_walk/UNORDERED-CONJECTURE.md`),
+the row labels of an `N × N` n-prime table are exactly the row-wise
+minima of the cell values, and a greedy "take the smallest, strip
+its row, repeat" algorithm reconstructs the row list from the
+unordered multi-set with zero hints. The greedy theorem, its proof,
+and an empirical battery of 15 row lists live in
+`experiments/acm/diagonal/cantor_walk/verify_greedy.py` and the
+same folder's `UNORDERED-CONJECTURE.md` addendum.
 
 The two hypotheses of the proof are the same inequality wearing two
 hats. Strict ascent forces `n_k ≥ k + 1`, which is exactly the
@@ -180,14 +203,31 @@ region (`k ≤ n_k − 1`). The induction in the proof and the placement
 of the diagonal inside the rank-1 region are the same fact in two
 notations: the diagonal's slope is calibrated to the rank-1 boundary.
 
-The dual observation is why "key" is the right word: anywhere a
-construction has an unsuspected rank-1 substructure, the diagonal is a
-key — the rest of the rank-1 region is implicit, and a single division
-by position decodes it. The lossy-sieve use of this inverts the usual
-sieve cost model: one parameter, no memory, factorization included.
-The identification use — treating an integer sequence as a one-pass
-test that asks "is this an ACM family in disguise?" — is the one most
-likely to surprise in another context.
+The dual observation is why we keep being surprised by results in
+this area. We do not have a single key that opens many locks; we
+have a single *lock* — "what is `n_k`?" — that is so weakly
+structured the parameter leaks out of every channel we look at.
+Each of the extractions above uses a different channel: the diagonal
+divided by position (the abductive key), the first cell of each row
+(the cascade key), the row-wise minimum of the cell values (the
+greedy extraction). They are not three different insights — they are
+three instances of the same observation, namely that the n-prime row
+is *parameterized by a single scalar*, and single-scalar inversions
+are all easy. (Only the first of the three is literally a rank-1
+matrix inversion in the linear-algebra sense; the cascade uses the
+nonlinear closed form `j_{k'}(n_k) · n_k`, and the greedy extraction
+uses combinatorial facts about strict ascent and complete multi-set
+availability. The unifying word is "single-scalar," not "rank-1.")
+The hard problem in this area isn't recovering `n_k`; that is free in
+at least two structurally distinct ways. The hard problem is noticing in advance that the construction
+has this much structure, so we stop framing recovery questions as if
+they were harder than they are.
+
+The lossy-sieve use of this inverts the usual sieve cost model: one
+parameter, no memory, factorization included. The identification use
+— treating an integer sequence as a one-pass test that asks "is this
+an ACM family in disguise?" — is the one most likely to surprise in
+another context.
 
 
 ## A note on visibility
@@ -203,3 +243,34 @@ not forthcoming. We saw the diagonals, we computed the diagonals, we
 discussed the diagonals across several sittings, and the
 divide-by-column-index step was found only after it was prompted by a
 seemingly unrelated question on Cantor.
+
+We have now found this same kind of "obvious in retrospect" inversion
+three times. The original abductive key (this document) was the first.
+The cascade decoding of plot 4
+(`experiments/acm/diagonal/cascade_key/`) was the second, where we
+initially framed "do later patches admit their own keys" and the
+answer turned out to be "no — there's one key and it opens every lock
+in the row." The row-wise-minimum extraction in the unordered
+conjecture
+(`experiments/acm/diagonal/cantor_walk/UNORDERED-CONJECTURE.md`) was
+the third, where we initially proposed an `O(log N)`-hint backtracking
+solver and the actual answer was that greedy reconstructs from the
+multi-set with zero hints. Each time we framed the question as if we
+did not know the n-prime structure, and each time the structure made
+the question free. The "Notes on a pattern" section of the
+unordered-conjecture document records this and proposes a discipline
+for next time: before posing a recovery experiment in this area, write
+the half-line description of what the trivial extraction would be and
+check whether it already works. The same document's
+immediately-following "The knife-edge: productive triviality" section
+adds the cautious response — the leaky parameterization is either a
+*foothold* (rich consequences from a trivial surface) or a *perimeter*
+(no structure beneath the surface), and we are operating in a
+constructed space where the perimeter risk is sharper than usual. We
+do not yet know whether this pattern is a *principle* (every recovery
+question collapses) or a *coincidence* (we have found three
+accidents). Three is too small a number to choose between those, but
+it is large enough to expect a fourth — and large enough that we
+should ask, before leaning on any future result that depends on the
+parameterization, whether the result gives us a quantity not already
+in the definition.

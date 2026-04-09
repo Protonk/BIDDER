@@ -438,14 +438,155 @@ not extrapolate freely. A second or third such non-transfer would
 start to look like a perimeter.
 
 **The discipline**, when proposing a future result that depends
-on the parameterization: ask whether the result gives us a
-quantity or behavior that wasn't already in the definition. If
-yes, the parameterization is doing real work and the result is
-real. If no, the result is a relabeling — write it down honestly
-as such, and do not lean on it for the next step. When in doubt,
+on the parameterization, has a framing-invariant form: rewrite the
+question as **what is `n_k`, given what data?** If the data
+includes any injective function of `n_k` — the diagonal cell, the
+first cell of the row, the row-wise minimum of the cells, the GCD
+of the row, or any other obvious extraction — stop. The answer is
+whatever inversion you can write down in one line, and the
+experiment is moot. Write the trivial extraction down honestly and
+move on. This rewrite is vocabulary-independent: it lands the same
+way whether the question comes wearing tables, patches, multi-sets,
+walks, or whatever framing the next surprise wears. When in doubt,
 prefer the perimeter reading. We are operating in a constructed
 space and the costs of false confidence are higher than the costs
 of honest doubt.
+
+**The operational shape: recovery, dynamics, and transport.** The
+discipline above has a sharper version that classifies questions in
+advance. The classification has *three* buckets, not two. The
+first two are easy to state; the third is where most of the
+remaining ambiguity lives.
+
+*Recovery questions* — "given some view of the n-prime table, can
+we reconstruct the row list, the row labels, or some property of
+the cells?" — live in the definition. The construction is one
+scalar per row, and any injection from data to scalar inverts
+trivially. Expect these to collapse; they have, three times. The
+abductive key, the cascade key, the greedy extraction, plot 3, and
+plot 9 are all recovery-flavored.
+
+*Dynamical questions* — "given the stream produced by the
+construction, how does it behave under operations that are not
+part of the construction (multiplication, addition, RLE, Walsh,
+PCA, sieving by `v_2`, leading-digit extraction)?" — live in the
+discovery layer. The leading-digit uniformity from
+`core/BLOCK-UNIFORMITY.md`, the bit-balance closed forms in the
+binary subtree, the Walsh signatures, the rolling shutter
+relationship between addition and multiplication — none of these
+are in the definition. They are statements about what the
+construction does *under transformations the construction did not
+specify*. The rank-1 perimeter worry does not bite them on the
+input side, though see the prediction below for how it can bite
+on the *output* side.
+
+*Transport questions* — "does the structure survive perturbation,
+extend to a related construction, or appear as a hidden substrate
+in an unrelated object?" — are the third bucket and the one the
+recovery/dynamics dichotomy alone misclassifies. Plot 4's open
+question (does the cascade survive splicing rows from different
+ACM-like constructions?) is transport. Plot 7 (does the
+mixture-of-uniforms argument carry over to a BIDDER row-family
+extension?) is transport. Plot 2 (does an arbitrary OEIS sequence
+have the abductive-key structure hidden inside?) is transport.
+None of these are pure inversion-from-cells, and none of them are
+pure stream-under-operation. They ask whether the structure
+*travels* between settings the construction did not anticipate.
+
+Transport questions are where the foothold/perimeter question
+genuinely bites, because some transport claims are vacuous (the
+structure trivially extends because the construction's definition
+admits the extension) and some are real (the structure
+non-trivially survives because of something the original
+construction did not specify but happens to support). The
+recovery/dynamics first-sieve doesn't help with transport
+questions; the discipline question needs to be applied at one
+level higher than for recovery: not "is the answer in the
+definition" but "is the *transport itself* in the definition, or
+is it genuinely about the structure crossing into a setting the
+definition did not address?"
+
+**The classifier, in one line each.** *Recovery*: given cells,
+recover something about the rows. (Will collapse.) *Dynamics*:
+given the stream, behavior under `T`. (May be hard.) *Transport*:
+does the structure survive perturbation / extension / recognition
+in a different setting. (Hard or vacuous; check carefully.)
+
+Most of what we have built so far is recovery-flavored, and the
+recovery side has been collapsing as expected. Most of what is
+*unbuilt and worth building* is split between dynamics (the binary
+stream's behavior under operations, the open question about finite
+automata) and transport (plot 7, plot 4's perturbation question,
+plot 2's OEIS sweep). Plot 7 is the highest-payoff transport
+question and the highest-payoff unbuilt experiment full stop.
+
+**One edge case worth flagging.** *Partial-data* recovery — the
+"partial multi-set" follow-up sketched in "What's still open"
+below — looks like a recovery question but is structurally closer
+to dynamics. Greedy collapses the full-data version because the
+row labels are exposed as row-wise minima of the complete
+multi-set, but the partial version asks "as the data arrives,
+when does each row become recoverable?" That is a question about
+the *dynamics of the data stream as it arrives*, not just about
+the table. The recovery-collapses heuristic does not bite there.
+The partial multi-set follow-up is worth building *despite* the
+discipline above, because it lives on the dynamics side of the
+distinction even though its surface presentation is recovery-
+shaped. The lesson: surface presentation can mislead. The
+discipline question — "what is the transformation a function of,
+and is the answer in the construction or in the operation?" —
+needs to be asked at the right level.
+
+**A sharpened prediction: operation-side collapse.** The next
+surprise will probably *not* be another recovery collapse. The
+recovery side has been mined out and the discipline above should
+catch any further attempts on contact. The next surprise will
+probably arrive on the dynamics side, but in a specific failure
+mode that the discipline as currently stated does not catch:
+**a supposedly dynamical observable will turn out to factor
+through a tiny invariant**. Residue data, valuation data,
+digit-block counts, a finite-state summary, a low-rank Walsh
+support — some rich-looking transform of the stream will turn out
+to depend on far less of the stream than expected, and the
+"dynamics is where the genuine work lives" framing will need
+qualification.
+
+**This is not hypothetical.** The binary subtree of the project
+already shows the pattern in three places: bit balance has a
+closed form depending only on `v_2(n)` (a tiny invariant);
+the Walsh signature collapses to ~44 robust universal cells out
+of 1024 (a low-complexity support); the conjecture that no finite
+automaton recognizes binary ACM streams is the *contrapositive* of
+this prediction — it asserts that ACM streams are *not* finite-
+state, against an implicit worry that they might be. If a fourth
+surprise comes, it will probably be a result on the n-prime
+construction proper that mirrors one of these binary findings:
+the kind of result where a transform you expected to spread
+information evenly turns out to concentrate it.
+
+**Two-sided discipline.** The single-question discipline above
+("is the answer already in the definition?") is a check on the
+input side: it asks whether the recovery question has content.
+The operation-side prediction implies we also need a check on
+the output side: **is the chosen observable reducible to a
+low-complexity invariant of the stream?** Both questions need to
+come back "no" before we trust a result. The full discipline:
+
+  1. *Input side.* What is `n_k` (or, more generally, the
+     answer-shaped quantity), given what data? If the data
+     includes any injective function of `n_k`, the question is
+     recovery in costume and will collapse. Stop.
+  2. *Output side.* What is the chosen observable (or transform)
+     a function of? If it factors through a small invariant —
+     `v_p(n)` for some prime `p`, a digit-block count, a
+     finite-state summary, a low-dimensional Walsh support — the
+     question is operation-side collapse and the observable is
+     not seeing what you thought it was seeing. Stop, or
+     reframe to ask whether the small invariant *itself* is
+     interesting.
+
+The fourth surprise, when it comes, will most likely fail check
+(2) rather than check (1). Watch for it.
 
 
 ## What's still open
