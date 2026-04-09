@@ -30,13 +30,14 @@ Concatenating those digits [as a sequence in order](https://en.wikipedia.org/wik
 | 5  | `0.5101520303540455…` |
 | 10 | `0.1020304050607080…` |
 
-Definitions in this repo are written in [BQN](https://mlochbaum.github.io/BQN/), used here as executable
-mathematical notation: dense enough to fit a construction on one
-line, unambiguous enough to actually run, and structurally close to
-the array-and-index style the math itself uses. The full vocabulary
-lives in [guidance/BQN-AGENT.md](guidance/BQN-AGENT.md). Reading BQN
-is not required to follow this README — the prose carries the
-meaning, the tables above show the result, and the block below is
+The mathematical definitions shown in this README and the core theory
+docs are written in [BQN](https://mlochbaum.github.io/BQN/), used here
+as executable mathematical notation: dense enough to fit a construction
+on one line, unambiguous enough to actually run, and structurally
+close to the array-and-index style the math itself uses. The full
+vocabulary lives in [guidance/BQN-AGENT.md](guidance/BQN-AGENT.md).
+Reading BQN is not required to follow this README — the prose carries
+the meaning, the tables above show the result, and the block below is
 the precise form for anyone who wants to run it.
 
 ```bqn
@@ -58,15 +59,26 @@ This repo is three things at once.
 
 > The construction is small but exact, and the consequences keep getting larger.
 
-Leading digits of an ACM-Champernowne real are uniform — not approximately, *exactly* — over every full digit block. From that one fact a small library of results falls out: the sawtooth that the cumulative digit count traces inside a block, the epsilon function that controls its phase, and the rolling-shutter relationship between addition and multiplication that the sawtooth makes visible.
+Leading base-`b` digits of an ACM-Champernowne real are uniform — not
+approximately, *exactly* — over every full digit block in base `b`.
+From that one fact a small library of results falls out: the sawtooth
+that the cumulative digit count traces inside a block, the epsilon
+function that controls its phase, and the rolling-shutter relationship
+between addition and multiplication that the sawtooth makes visible.
 
-The base-2 side is the active frontier. Bit-balance of an n-prime stream has a closed form that depends only on `v_2(n)`. The Walsh-Hadamard spectrum carries 44 robust higher-order coefficients that all collapse under entry-order shuffle and that the `v_2(n)` story explains only a minority of. There is an open conjecture that no finite automaton can recognize a binary ACM stream at all.
+The base-2 side is the active frontier. Bit-balance of an n-prime
+stream has a closed form that depends only on `v_2(n)`. The
+Walsh-Hadamard spectrum carries 44 robust higher-order coefficients
+that all collapse under entry-order shuffle and that the `v_2(n)` story
+explains only a minority of. The current working conjecture is that no
+finite automaton can generate or recognize a binary ACM stream at all.
 
 - [ACM-CHAMPERNOWNE.md](core/ACM-CHAMPERNOWNE.md) — the construction and the proofs
 - [BLOCK-UNIFORMITY.md](core/BLOCK-UNIFORMITY.md) — the exact-uniformity result
 - [BINARY.md](experiments/acm-champernowne/base2/BINARY.md) — what changes in base 2
 - [HAMMING-BOOKKEEPING.md](experiments/acm-champernowne/base2/HAMMING-BOOKKEEPING.md) — closed-form bit balance
 - [WALSH.md](experiments/acm-champernowne/base2/forest/walsh/WALSH.md) — the Walsh signature
+- [FINITE-RECURRENCE.md](experiments/acm-champernowne/base2/FINITE-RECURRENCE.md) — the finite-state boundary condition
 - [MALLORN-SEED.md](experiments/acm-champernowne/base2/forest/MALLORN-SEED.md) — the binary expeditions in flight
 
 ### Art
@@ -161,8 +173,8 @@ C:
 
 ### ACM construction
 
-- Leading digits of ACM-Champernowne reals are exactly uniform
-  (1/9 each, by `LeadingInt10`; see `core/BLOCK-UNIFORMITY.md`)
+- Leading base-`b` digits are exactly uniform on every complete digit
+  block (see `core/BLOCK-UNIFORMITY.md`)
 - Bit-balance of n-prime streams has a closed form that depends
   only on `v_2(n)` (see
   `experiments/acm-champernowne/base2/HAMMING-BOOKKEEPING.md`)
@@ -170,8 +182,9 @@ C:
   44 robust universal cells, all collapsing under entry-order shuffle;
   the brightest are uncorrelated with `v_2(n)` (see
   `experiments/acm-champernowne/base2/forest/walsh/WALSH.md`)
-- Conjecture: no finite automaton recognizes binary ACM streams
-  (see `experiments/acm-champernowne/base2/FINITE-RECURRENCE.md`)
+- Working conjecture / boundary condition: no finite automaton
+  generates or recognizes binary ACM streams (see
+  `experiments/acm-champernowne/base2/FINITE-RECURRENCE.md`)
 
 ### BIDDER generator
 
