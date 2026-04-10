@@ -20,6 +20,7 @@ REPO = os.path.join(HERE, '..')
 
 DOCS = [
     os.path.join(HERE, 'API.md'),
+    os.path.join(HERE, 'RIEMANN-SUM.md'),
     os.path.join(REPO, 'BIDDER.md'),
 ]
 
