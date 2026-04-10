@@ -165,6 +165,145 @@ def test_block_boundary_9999():
 
 
 # =====================================================================
+# Sieved block uniformity — see core/BLOCK-UNIFORMITY.md, sieved version
+# =====================================================================
+
+def _n_primes_in_block(n, b, d):
+    """Direct enumeration of n-primes in [b^(d-1), b^d - 1]."""
+    lo, hi = b ** (d - 1), b ** d - 1
+    k_lo = (lo + n - 1) // n  # ceil(lo / n)
+    k_hi = hi // n            # floor(hi / n)
+    return [n * k for k in range(k_lo, k_hi + 1) if k % n != 0]
+
+
+def _leading_digit_base(x, b):
+    """Leading base-b digit of a positive integer."""
+    while x >= b:
+        x //= b
+    return x
+
+
+def _per_digit_counts(n, b, d):
+    """Counts of each base-b leading digit (1..b-1) among n-primes in block."""
+    counts = [0] * b
+    for p in _n_primes_in_block(n, b, d):
+        counts[_leading_digit_base(p, b)] += 1
+    return counts[1:b]  # drop the unused 0 slot
+
+
+def test_block_uniformity_sieved_sufficient():
+    """Sufficient condition: if n^2 | b^(d-1), then n-primes in
+    [b^(d-1), b^d - 1] have exactly uniform leading base-b digits,
+    each appearing b^(d-1)*(n-1)/n^2 times.
+
+    Sweeps b, n in [2, 10] and d in [1, 5] over all triples that
+    satisfy the hypothesis. See core/BLOCK-UNIFORMITY.md, sieved
+    version, for the proof.
+    """
+    checked = 0
+    for b in range(2, 11):
+        for n in range(2, 11):
+            for d in range(1, 6):
+                if (b ** (d - 1)) % (n * n) != 0:
+                    continue
+                expected = b ** (d - 1) * (n - 1) // (n * n)
+                counts = _per_digit_counts(n, b, d)
+                for j, c in enumerate(counts, start=1):
+                    assert c == expected, (
+                        f"(b,n,d)=({b},{n},{d}): leading digit {j} "
+                        f"got count {c}, expected {expected}")
+                checked += 1
+    assert checked > 0, "no legal triples found in sweep — sweep range broken"
+    print(f"  Sieved block uniformity (sufficient condition, {checked} triples): OK")
+
+
+def test_block_uniformity_sieved_family_e():
+    """Family E (second sufficient family): for d >= 2 and
+    n in [b^(d-1), floor((b^d - 1)/(b-1))], the n-primes in the block
+    are exactly {n, 2n, ..., (b-1)n}, one per leading base-b digit.
+    Disjoint from the smooth family. See core/BLOCK-UNIFORMITY.md.
+    """
+    checked = 0
+    for b in range(2, 11):
+        for d in range(2, 6):
+            L = b ** (d - 1)
+            n_max = (b ** d - 1) // (b - 1)
+            for n in range(L, n_max + 1):
+                # Family E should give exactly uniform counts of 1 each
+                counts = _per_digit_counts(n, b, d)
+                for k, c in enumerate(counts, start=1):
+                    assert c == 1, (
+                        f"Family E (b,n,d)=({b},{n},{d}): leading digit {k} "
+                        f"got count {c}, expected 1")
+                # Family E should be disjoint from the smooth family
+                assert (b ** (d - 1)) % (n * n) != 0, (
+                    f"Family E (b,n,d)=({b},{n},{d}) unexpectedly satisfies "
+                    f"the smooth condition n^2 | b^(d-1); families should be "
+                    f"disjoint for d >= 2")
+                checked += 1
+    assert checked > 0, "no Family E triples found in sweep — sweep range broken"
+    print(f"  Sieved block uniformity (Family E, {checked} triples): OK")
+
+
+def test_block_uniformity_sieved_unconditional_witnesses():
+    """Regression fixture for the canonical witness *outside* both
+    sufficient families: (b, n, d) = (4, 5, 5). Smooth fails because
+    25 does not divide 256. Family E fails because 5 < 256. The
+    counts are nevertheless [41, 41, 41] — a "lucky cancellation"
+    where strip-by-strip asymmetries in the multiples-of-5 and
+    multiples-of-25 counts exactly cancel.
+
+    The earlier (4, 4, 2) witness has been promoted to Family E
+    coverage (it is the j = 0 case for (b, d) = (4, 2)) and is
+    tested by test_block_uniformity_sieved_family_e.
+    """
+    b, n, d = 4, 5, 5
+    expected_each, expected_total = 41, 123
+
+    # Confirm both sufficient families really do fail
+    assert (b ** (d - 1)) % (n * n) != 0, (
+        f"({b},{n},{d}) accidentally satisfies the smooth condition")
+    assert not (b ** (d - 1) <= n <= (b ** d - 1) // (b - 1)), (
+        f"({b},{n},{d}) accidentally lies in Family E")
+
+    counts = _per_digit_counts(n, b, d)
+    total = sum(counts)
+    assert total == expected_total, (
+        f"(b,n,d)=({b},{n},{d}): total {total} != expected {expected_total}")
+    for k, c in enumerate(counts, start=1):
+        assert c == expected_each, (
+            f"(b,n,d)=({b},{n},{d}): leading digit {k} "
+            f"got count {c}, expected uniform {expected_each}")
+    print("  Sieved block uniformity (unconditional witness (4,5,5)): OK")
+
+
+def test_block_uniformity_sieved_spread_bound():
+    """For any (b, n, d), the per-leading-digit n-prime count
+    spread is at most 2. Proof in BLOCK-UNIFORMITY.md (each
+    multiples-of-m count contributes at most 1 to the spread,
+    and we use two of them: m=n and m=n^2). Sweeps the same
+    cube as the sufficient-condition test.
+    """
+    worst = 0
+    worst_at = None
+    for b in range(2, 11):
+        for n in range(2, 11):
+            for d in range(1, 6):
+                counts = _per_digit_counts(n, b, d)
+                if not counts:
+                    continue
+                spread = max(counts) - min(counts)
+                assert spread <= 2, (
+                    f"(b,n,d)=({b},{n},{d}): spread {spread} exceeds "
+                    f"the analytic bound of 2 (counts={counts})")
+                if spread > worst:
+                    worst = spread
+                    worst_at = (b, n, d, counts)
+    print(f"  Sieved block spread bound (<= 2 across sweep): OK "
+          f"(worst seen: spread={worst} at {worst_at})")
+
+
+# =====================================================================
 # first_digit — the extraction works
 # =====================================================================
 
@@ -348,6 +487,11 @@ if __name__ == '__main__':
     test_block_boundary_99()
     test_block_boundary_999()
     test_block_boundary_9999()
+
+    test_block_uniformity_sieved_sufficient()
+    test_block_uniformity_sieved_family_e()
+    test_block_uniformity_sieved_unconditional_witnesses()
+    test_block_uniformity_sieved_spread_bound()
 
     test_first_digit_powers_of_10()
     test_first_digit_boundaries()
