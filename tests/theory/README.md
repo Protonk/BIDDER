@@ -4,9 +4,11 @@ Each row: one proved result, where to find the proof, where to find
 the theory test, where to find the visualization.
 
 Tests in this directory probe the *theory*, not the *implementation*.
-The helpers in `_helpers.py` were distilled from the experiment family
-in `experiments/bidder/unified/`, `experiments/bidder/stratified/`, and
-`experiments/bidder/reseed/`.
+See [RED-TEAM-THEORY.md](RED-TEAM-THEORY.md) for the organizing
+decomposition, the four-layer structure, the falsification criteria,
+and the experiment provenance. The helpers in `_helpers.py` were
+distilled from the experiment family in `experiments/bidder/unified/`,
+`experiments/bidder/stratified/`, and `experiments/bidder/reseed/`.
 
 Run all theory tests:
 

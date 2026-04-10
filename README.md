@@ -133,9 +133,14 @@ Measured:
   for `d ≥ 3`.
 - Stratified sampling at block boundaries is totalizing for smooth
   functions.
-- The theory front is now executable: see
-  [tests/theory/README.md](tests/theory/README.md) and the three
-  red-team files under `tests/theory/`.
+- The theory front is now executable. Three red-team test files
+  under `tests/theory/` attack the structural, quadrature, and
+  statistical layers independently. The organizing document is
+  [RED-TEAM-THEORY.md](tests/theory/RED-TEAM-THEORY.md) — it
+  decomposes the total error `E_N − I = (E_N − R) + (R − I)` into
+  four layers, names what would falsify each claim, and tracks the
+  measured coupling gap between the cipher backend and the ideal
+  without-replacement null.
 
 Not claimed:
 

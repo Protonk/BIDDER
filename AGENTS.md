@@ -22,21 +22,6 @@ C tests:
 Plots and experiments require `sage -python`, not `python3`.
 sage carries numpy and matplotlib internally.
 
-## Repo structure
-
-- `core/` — n-prime and Champernowne real definitions (Python + C).
-  `acm_core.py` is imported by all experiment scripts.
-  Don't modify without reason.
-- `generator/` — the BIDDER block generator (Python + C). Has its
-  own `AGENTS.md` with implementation-specific rules.
-- `tests/` — all test suites. Keep green.
-- `experiments/` — exploration scripts and visualizations, organized
-  source-first under `acm-champernowne/`, `bidder/`, `math/`, and
-  `future/`. See `experiments/README.md` for the classification rule.
-- `sources/` — reference papers and early findings. Read-only.
-- `nasties/` — known bugs and edge-case documentation.
-- `guidance/` — agent guidance documents.
-
 ## Experiment conventions
 
 Experiments live under `experiments/<source-family>/` (and a `<base>/`
@@ -52,14 +37,6 @@ script and output PNGs. Follow these patterns:
 - Each experiment directory may have a doc named for its folder
   (e.g., `SIEVES.md` in `experiments/sieves/`)
 
-## Design doc
+## Signposting is for the birds
 
-`generator/BIDDER.md` is the source of truth for the
-generator's design, findings, and open questions. Update it
-when a question is answered or a finding is confirmed.
-
-## Documentation
-
-Don't create documentation files unless asked. Don't add
-docstrings, comments, or type annotations to code you didn't
-change.
+When creating documentation, say what you want to say briefly enough to not need a road map. Agents and humans can read 400-600 word documents without constant semaphore.
