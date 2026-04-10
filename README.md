@@ -107,34 +107,58 @@ Tested so far, at the parameters we have actually run: full-period digit counts 
 
 Our testing so far confirms the algebraic structure we expected — the substrate behaves as the theorem says it should at every `d` we have tried. But we have not proven all the cryptographically important results about that structure, and we have not even tested the substrate at every block size a user might want. The uniformity result extends naively to any `d`, but extrapolating from a clean theorem is not the same as verifying it where you intend to use it: we do not know that a `2^2048`-sized operating block is not subtly non-uniform in some way that a small-`d` run would never see. Beyond uniformity itself, the cryptographic properties anyone would want for adversarial use — PRP strength of Speck32/64 in this specific composition, key independence, side-channel behavior, robustness under chosen input — are mostly inherited from Speck and have not been independently verified for BIDDER. The epigraph at the top of this file is not rhetorical.
 
-- [BIDDER.md](generator/BIDDER.md) — design doc, observed properties, known limitations, open questions
-- [bidder.py](generator/bidder.py) / [bidder.c](generator/bidder.c) — Python and C implementations, byte-identical output
+- [BIDDER.md](BIDDER.md) — root API reference: `bidder.cipher` and `bidder.sawtooth` in three layers (natural language, Python, BQN)
+- [core/API.md](core/API.md) — detailed cipher-path reference
+- [core/RIEMANN-SUM.md](core/RIEMANN-SUM.md) — the permutation-invariance theorem and finite-population correction
+- [generator/BIDDER.md](generator/BIDDER.md) — cipher design doc, observed properties, known limitations, open questions
+- [coupler.py](generator/coupler.py) / [bidder.c](generator/bidder.c) — alphabet-pinned Python and C implementations, byte-identical output
 - [speck.py](generator/speck.py) — full Speck family reference (all 10 variants, all Appendix C vectors)
+- [experiments/bidder/unified/](experiments/bidder/unified/) — dither, period anatomy, MC diagnostics, Riemann proof, adversarial integrands
 - [experiments/bidder/stratified/](experiments/bidder/stratified/) — the totalizing demonstration
 - [experiments/bidder/reseed/](experiments/bidder/reseed/) — the rekeying experiment
 
 ## Structure
 
+    bidder.py                Root entry point: bidder.cipher() and bidder.sawtooth()
+    BIDDER.md                Root API reference (three-layer: prose, Python, BQN)
+
     core/
       acm_core.py              Core definitions (Python)
       acm_core.h, acm_core.c   Core definitions (C)
       ACM-CHAMPERNOWNE.md      Mathematical foundation
-      BLOCK-UNIFORMITY.md      Exact block-boundary uniformity result
+      BLOCK-UNIFORMITY.md      Exact block-boundary uniformity (integer + sieved lemmas)
+      HARDY-SIDESTEP.md        Closed-form K-th n-prime for n >= 2
+      RIEMANN-SUM.md           Permutation-invariance theorem + FPC
+      API.md                   Detailed cipher-path API reference
+      api.py                   fulfill(period, key) orchestrator
+      sawtooth.py              NPrimeSequence (Hardy closed form)
+      hardy_sidestep.py        Companion verification script
+      api_doc_examples.py      Doc verifier for API.md, RIEMANN-SUM.md, BIDDER.md
 
     generator/
-      bidder.py              BIDDER generator (Python)
-      bidder.h, bidder.c     BIDDER generator (C)
+      coupler.py             Alphabet-pinned BIDDER generator (Python, renamed from bidder.py)
+      bidder.h, bidder.c     BIDDER generator (C, parity with coupler.py)
+      bidder_block.py        Period-only adapter (BidderBlock)
       speck.py               Speck cipher family (reference, all 10 variants)
-      BIDDER.md              Design document and findings
+      BIDDER.md              Cipher design document and findings
+      AGENTS.md              Parity rules and conventions
 
     tests/
-      test_acm_core.py       Core definition tests (Python)
+      test_acm_core.py       Core definition tests + sieved block uniformity (sage)
       test_acm_core_c.c      Core definition tests (C)
-      test_bidder.py         Generator tests (Python)
+      test_bidder.py         Cipher parity tests including at(i) (Python)
+      test_bidder_c.c        Cipher parity tests including bidder_at (C)
+      test_bidder_block.py   BidderBlock contract tests
+      test_api.py            fulfill() tests
+      test_sawtooth.py       NPrimeSequence tests (sage)
+      test_bidder_root.py    Root entry point smoke tests
       test_speck.py          Speck cipher tests (Appendix C vectors)
-      test_bidder_c.c        Generator tests (C)
       bidder_stream.c        Byte stream emitter for PractRand
       speck_stream.c         Raw Speck counter mode for PractRand
+      theory/                Theory red-team tests (see theory/README.md)
+        test_riemann_property.py   Permutation-invariance (structural layer)
+        test_quadrature_rates.py   Euler-Maclaurin rates (quadrature layer)
+        test_fpc_shape.py          Finite-population correction (statistical + coupling)
 
     experiments/
       README.md                Source-first classification rule
@@ -142,7 +166,11 @@ Our testing so far confirms the algebraic structure we expected — the substrat
         base10/                  Decimal digit streams (sawtooth, shutter, stats, art)
         base2/                   Binary concatenations (forest, art, disparity) + theory
       bidder/                  Experiments on BIDDER generator output
-                               (dither, reseed, stratified, digits, art)
+        unified/                 Dither, period anatomy, MC, Riemann, adversarial integrands
+        dither/                  Legacy dither comparison
+        reseed/                  Rekeying experiment
+        stratified/              Stratified sampling comparison
+        digits/, art/            Digit experiments and contamination art
       math/                    Base-generic theory (arcs/)
       future/                  Active ideas not yet in a stable home (wibblywobblies/)
 
@@ -155,11 +183,25 @@ Our testing so far confirms the algebraic structure we expected — the substrat
 Python core tests (requires sage for numpy):
 
     sage -python tests/test_acm_core.py
+    sage -python tests/test_sawtooth.py
 
 Python generator and cipher tests (plain python3):
 
     python3 tests/test_bidder.py
     python3 tests/test_speck.py
+    python3 tests/test_bidder_block.py
+    python3 tests/test_api.py
+    python3 tests/test_bidder_root.py
+
+Theory red-team tests (plain python3):
+
+    python3 tests/theory/test_riemann_property.py
+    python3 tests/theory/test_quadrature_rates.py
+    python3 tests/theory/test_fpc_shape.py
+
+Doc verifier (plain python3):
+
+    python3 core/api_doc_examples.py
 
 C:
 
@@ -194,3 +236,17 @@ C:
 - Stratified sampling with BIDDER is totalizing at block boundaries
 - PractRand: underlying Speck permutation passes clean; leading-digit
   extraction fails by design (alphabet excludes 0)
+- **Riemann-sum property**: at `N = period`, the MC estimate from
+  `bidder.cipher` equals the left-endpoint Riemann sum `R` of the
+  integrand — for any key, any integrand. The key cancels out.
+  (`core/RIEMANN-SUM.md`)
+- **Hardy sidestep**: the K-th n-prime for `n ≥ 2` has a closed form
+  that costs one `divmod` and one multiply on bignums. Locating the
+  `2^4096`-th 2-prime takes microseconds. (`core/HARDY-SIDESTEP.md`)
+- **Sieved block uniformity**: two sufficient families (smooth and
+  Family E) certify exact leading-digit uniformity for n-prime blocks.
+  The spread is ≤ 2 when neither family applies.
+  (`core/BLOCK-UNIFORMITY.md`)
+- **Unified API**: `bidder.cipher(period, key)` for keyed permutations,
+  `bidder.sawtooth(n, count)` for deterministic n-prime sequences.
+  (`BIDDER.md`, `core/API.md`)

@@ -426,10 +426,28 @@ regardless of how it was generated:
 
 ## Companion code
 
+### Theory tests (pass/fail)
+
+- `tests/theory/test_riemann_property.py` — structural layer:
+  key-independence across favorable and adversarial integrands,
+  direct-R match, identity-permutation isolation, permutation sanity.
+- `tests/theory/test_quadrature_rates.py` — quadrature layer:
+  each row of the Euler–Maclaurin table as an assertion. No cipher.
+- `tests/theory/test_fpc_shape.py` — statistical layer + coupling:
+  FPC vs `random.shuffle` baseline, cipher shape, coupling gap
+  measurement.
+
+See `tests/theory/README.md` for the full theorem index.
+
+### Experiments (visual)
+
 - `experiments/bidder/unified/riemann_proof.py` — four-panel
   diagnostic. 10 keys converging to the same N=P value; 200-key
-  histogram showing zero spread; Riemann error vs P following
-  O(1/P²); five integrands confirming key-independence.
+  histogram showing zero spread; Riemann error vs P; five integrands
+  confirming key-independence.
+- `experiments/bidder/unified/adversarial_integrands.py` — quadrature
+  bias across four integrands (sin, x, √x, step). Visualizes the
+  Euler–Maclaurin rates and confirms key-independence under hostile f.
 - `experiments/bidder/unified/mc_diagnostic.py` — MC convergence
   curves, 2D equidistribution, collision counts. Shows the
   dropoff from O(1/√N) to the Riemann floor as N → P.
