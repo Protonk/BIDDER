@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'generator'))
 
 import numpy as np
 import matplotlib.pyplot as plt
-from bidder import Bidder
+from coupler import Bidder
 
 
 def rekey(old_key, period_num):

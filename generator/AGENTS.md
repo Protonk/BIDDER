@@ -2,11 +2,14 @@
 
 ## Cross-language parity
 
-The Python (`bidder.py`) and C (`bidder.h` + `bidder.c`) implementations
-must produce identical output for identical inputs. The cross-check
-test in `tests/test_bidder.py` enforces this with hardcoded expected
-values. Any change to one implementation must be mirrored in the
-other.
+The Python (`coupler.py`, renamed from `bidder.py`) and C
+(`bidder.h` + `bidder.c`) implementations must produce identical
+output for identical inputs. The Python file was renamed to
+`coupler.py` to resolve an import collision with the project-root
+`bidder.py`; the C files keep the `bidder_*` namespace prefix
+unchanged. The cross-check test in `tests/test_bidder.py` enforces
+parity with hardcoded expected values. Any change to one
+implementation must be mirrored in the other.
 
 ## Feature set
 

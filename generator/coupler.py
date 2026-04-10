@@ -1,15 +1,17 @@
 """
-bidder.py — BIDDER block generator
-===================================
+coupler.py — BIDDER block generator (alphabet-pinned cipher)
+=============================================================
 
-Python implementation matching bidder.c exactly. Speck32/64 for
-tight-fit blocks, balanced Feistel for small blocks. SHA-256
-for key derivation.
+Python implementation matching bidder.c / bidder.h exactly. Speck32/64
+for tight-fit blocks, balanced Feistel for small blocks. SHA-256 for
+key derivation. C twin is generator/bidder.c (file name unchanged;
+the Python rename to coupler.py resolved an import collision with
+the project-root bidder.py).
 
-Blocks up to 2^32. Three operations: init, next, reset.
+Blocks up to 2^32. Four operations: init, next, at, reset.
 
 Usage:
-    from bidder import Bidder
+    from coupler import Bidder
 
     gen = Bidder(base=65536, digit_class=2, key=b'secret')
     for i in range(100):

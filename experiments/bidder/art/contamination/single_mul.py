@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.join(HERE, '..', '..', '..', '..', 'core'))
 
 import numpy as np
 import matplotlib.pyplot as plt
-from bidder import Bidder
+from coupler import Bidder
 
 print("Generating uniform source...")
 gen = Bidder(base=10, digit_class=4, key=b'single mul')

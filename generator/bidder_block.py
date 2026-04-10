@@ -14,10 +14,11 @@ import operator
 import os
 import sys
 
-# bidder.py lives in the same directory; whoever imported this module
-# already has generator/ on sys.path, so a bare `from bidder import Bidder`
-# resolves. See "Import strategy, explicit" in core/API-PLAN.md.
-from bidder import Bidder
+# coupler.py lives in the same directory; whoever imported this module
+# already has generator/ on sys.path, so a bare `from coupler import Bidder`
+# resolves. (coupler.py was renamed from bidder.py to avoid a collision
+# with the project-root bidder.py.)
+from coupler import Bidder
 
 
 # Backend cap. base must be in [2, 2^32] in the underlying Bidder, and

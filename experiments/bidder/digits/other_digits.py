@@ -24,7 +24,7 @@ sys.path.insert(0, os.path.join(HERE, '..', '..', '..', 'core'))
 import collections
 import numpy as np
 import matplotlib.pyplot as plt
-from bidder import Bidder
+from coupler import Bidder
 
 
 def extract_all_digits(n, base, d):

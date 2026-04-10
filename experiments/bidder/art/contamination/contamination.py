@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.join(HERE, '..', '..', '..', '..', 'core'))
 
 import numpy as np
 import matplotlib.pyplot as plt
-from bidder import Bidder
+from coupler import Bidder
 
 # --- Generate uniform source ---
 print("Generating uniform source...")

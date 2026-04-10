@@ -16,9 +16,16 @@ import sys
 import traceback
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DOC = os.path.join(HERE, 'API.md')
+REPO = os.path.join(HERE, '..')
 
-# Match the convention in core/api.py and tests/test_api.py
+DOCS = [
+    os.path.join(HERE, 'API.md'),
+    os.path.join(REPO, 'BIDDER.md'),
+]
+
+# The repo root, core/, and generator/ all on sys.path so that both
+# `import bidder` (root) and `from api import ...` (core/) resolve.
+sys.path.insert(0, os.path.abspath(REPO))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, '..', 'generator'))
 
@@ -113,8 +120,10 @@ def run_block(block, label):
         return False, f"{type(e).__name__}: {e}"
 
 
-def main():
-    with open(DOC) as f:
+def verify_doc(doc_path):
+    """Verify one doc file. Returns (n_examples, n_failures)."""
+    name = os.path.basename(doc_path)
+    with open(doc_path) as f:
         text = f.read()
 
     examples = []
@@ -125,25 +134,37 @@ def main():
         else:
             skipped += 1
 
-    print(f"core/API.md: {len(examples)} example blocks, {skipped} signature blocks")
-    print()
+    print(f"{name}: {len(examples)} example blocks, {skipped} signature blocks")
 
     failures = 0
     for i, (block, line_no) in enumerate(examples, start=1):
-        label = f"example #{i:2d} (API.md line {line_no:3d})"
+        label = f"example #{i:2d} ({name} line {line_no:3d})"
         ok, err = run_block(block, label)
         if ok:
             print(f"  OK    {label}")
         else:
             print(f"  FAIL  {label}: {err}")
             failures += 1
-
     print()
-    if failures:
-        print(f"FAILED: {failures}/{len(examples)} example blocks")
+    return len(examples), failures
+
+
+def main():
+    total_examples = 0
+    total_failures = 0
+    for doc in DOCS:
+        if not os.path.exists(doc):
+            print(f"SKIP: {doc} not found\n")
+            continue
+        n, f = verify_doc(doc)
+        total_examples += n
+        total_failures += f
+
+    if total_failures:
+        print(f"FAILED: {total_failures}/{total_examples} example blocks across {len(DOCS)} docs")
         sys.exit(1)
     else:
-        print(f"All {len(examples)} example blocks verified.")
+        print(f"All {total_examples} example blocks verified across {len(DOCS)} docs.")
 
 
 if __name__ == '__main__':
