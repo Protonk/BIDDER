@@ -66,6 +66,16 @@ int bidder_init(bidder_ctx *ctx, uint64_t base, uint32_t digit_class,
  */
 uint32_t bidder_next(bidder_ctx *ctx);
 
+/*
+ * Stateless random access: return the i-th output symbol in
+ * {1, ..., base-1}. Does not touch ctx->counter, and ctx is treated
+ * as logically const (the cipher state is read but not mutated).
+ *
+ * Returns 0 if i is out of range [0, block_size). 0 is never a valid
+ * output, so the caller can use it as a sentinel.
+ */
+uint32_t bidder_at(const bidder_ctx *ctx, uint64_t i);
+
 /* Reset counter to start of period. */
 void bidder_reset(bidder_ctx *ctx);
 

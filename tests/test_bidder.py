@@ -200,6 +200,87 @@ def test_cross_check_mode_boundary():
 
 
 # =====================================================================
+# at(i) — random access (parity work, see core/API-PLAN.md)
+# =====================================================================
+
+def test_at_matches_next_sequence():
+    """at(i) for i in range(period) must equal the next() sequence
+    from a fresh generator.
+    """
+    for base, d in [(10, 2), (10, 3), (16, 2), (7, 3)]:
+        gen_seq = Bidder(base=base, digit_class=d, key=b'at-test')
+        seq = [gen_seq.next() for _ in range(gen_seq.period)]
+        gen_at = Bidder(base=base, digit_class=d, key=b'at-test')
+        rand = [gen_at.at(i) for i in range(gen_at.period)]
+        assert seq == rand, (
+            f"base={base} d={d}: at(i) sequence diverges from next() sequence")
+    print("  at(i) matches next() sequence: OK")
+
+def test_at_is_stateless():
+    """at(i) must not advance the counter; interleaving at() and
+    next() must leave the next() sequence unchanged.
+    """
+    # Build the reference next() sequence on a fresh generator
+    ref = Bidder(base=10, digit_class=3, key=b'stateless')
+    expected = [ref.next() for _ in range(20)]
+
+    # Now interleave at() and next() on a separate generator with the
+    # same key. The next() outputs should still match the reference.
+    gen = Bidder(base=10, digit_class=3, key=b'stateless')
+    out = []
+    for i in range(20):
+        _ = gen.at(i * 7 % gen.period)
+        _ = gen.at(0)
+        out.append(gen.next())
+    assert out == expected, "at(i) leaked into the next() sequence"
+    print("  at(i) is stateless under interleaving: OK")
+
+def test_at_out_of_range_raises():
+    """at(i) must raise ValueError for i not in [0, period)."""
+    gen = Bidder(base=10, digit_class=2, key=b'oor')
+    for bad in [-1, gen.period, gen.period + 1, 2**40]:
+        try:
+            gen.at(bad)
+            assert False, f"at({bad}) should have raised"
+        except ValueError:
+            pass
+    print("  at(i) out-of-range raises ValueError: OK")
+
+def test_at_non_integer_raises():
+    """at(i) must raise TypeError at the API boundary for non-integer
+    indices, not fall through into cipher internals.
+    """
+    gen = Bidder(base=10, digit_class=2, key=b'type')
+    for bad in [1.5, "3", None, [1], (2,)]:
+        try:
+            gen.at(bad)
+            assert False, f"at({bad!r}) should have raised TypeError"
+        except TypeError:
+            pass
+    # bool is a subclass of int and should pass through
+    assert gen.at(True) == gen.at(1)
+    assert gen.at(False) == gen.at(0)
+    print("  at(i) non-integer raises TypeError: OK")
+
+def test_at_cross_check_feistel():
+    """at(i) cross-check against the cached C output for feistel mode."""
+    gen = Bidder(base=10, digit_class=2, key=b'test')
+    out = [gen.at(i) for i in range(20)]
+    expected = [3, 8, 1, 2, 7, 1, 5, 4, 7, 4, 2, 5, 8, 7, 8, 9, 2, 9, 6, 7]
+    assert out == expected, f"at() feistel cross-check: {out} != {expected}"
+    print("  at() cross-check (feistel): OK")
+
+def test_at_cross_check_speck():
+    """at(i) cross-check for Speck mode."""
+    gen = Bidder(base=65536, digit_class=2, key=b'speck parity')
+    out = [gen.at(i) for i in range(10)]
+    expected = [13270, 65198, 24145, 34590, 8655, 22902, 22414, 22244, 30259, 20443]
+    assert gen._mode == 0
+    assert out == expected, f"at() speck cross-check: {out} != {expected}"
+    print("  at() cross-check (speck): OK")
+
+
+# =====================================================================
 # Properties
 # =====================================================================
 
@@ -250,6 +331,14 @@ if __name__ == '__main__':
     test_cross_check_feistel()
     test_cross_check_speck()
     test_cross_check_mode_boundary()
+
+    test_at_matches_next_sequence()
+    test_at_is_stateless()
+    test_at_out_of_range_raises()
+    test_at_non_integer_raises()
+    test_at_cross_check_feistel()
+    test_at_cross_check_speck()
+
     test_rejects_base_too_large()
     test_properties()
 

@@ -168,6 +168,121 @@ static void test_crosscheck(void)
 
 
 /* ================================================================
+ * Test 6a: bidder_at — random access (parity work, see core/API-PLAN.md)
+ * ================================================================ */
+
+static void test_at_matches_next(void)
+{
+    printf("--- bidder_at matches bidder_next sequence ---\n");
+
+    bidder_ctx ctx_seq, ctx_at;
+    bidder_init(&ctx_seq, 10, 3, (const uint8_t *)"at-test", 7);
+    bidder_init(&ctx_at,  10, 3, (const uint8_t *)"at-test", 7);
+
+    int match = 1;
+    uint64_t period = ctx_seq.block_size;
+    for (uint64_t i = 0; i < period; i++) {
+        uint32_t s = bidder_next(&ctx_seq);
+        uint32_t r = bidder_at(&ctx_at, i);
+        if (s != r) match = 0;
+    }
+    CHECK(match, "bidder_at sequence diverges from bidder_next");
+    printf("  OK (period %llu)\n\n", (unsigned long long)period);
+}
+
+static void test_at_is_stateless(void)
+{
+    printf("--- bidder_at is stateless under interleaving ---\n");
+
+    bidder_ctx ctx, ref;
+    bidder_init(&ctx, 10, 3, (const uint8_t *)"stateless", 9);
+    bidder_init(&ref, 10, 3, (const uint8_t *)"stateless", 9);
+
+    /* Build the reference next() sequence first */
+    uint32_t expected[20];
+    for (int i = 0; i < 20; i++)
+        expected[i] = bidder_next(&ref);
+
+    /* Now interleave at() and next() on ctx; the next() outputs should
+       still match the reference */
+    int match = 1;
+    for (int i = 0; i < 20; i++) {
+        (void)bidder_at(&ctx, (uint64_t)(i * 7) % ctx.block_size);
+        (void)bidder_at(&ctx, 0);
+        uint32_t s = bidder_next(&ctx);
+        if (s != expected[i]) match = 0;
+    }
+    CHECK(match, "bidder_at leaked state into bidder_next sequence");
+    printf("  OK\n\n");
+}
+
+static void test_at_out_of_range(void)
+{
+    printf("--- bidder_at out-of-range returns 0 ---\n");
+
+    bidder_ctx ctx;
+    bidder_init(&ctx, 10, 2, (const uint8_t *)"oor", 3);
+    /* period == block_size == 90 */
+    CHECK(bidder_at(&ctx, ctx.block_size) == 0,
+          "at(period) should return 0 sentinel");
+    CHECK(bidder_at(&ctx, ctx.block_size + 1) == 0,
+          "at(period+1) should return 0 sentinel");
+    CHECK(bidder_at(&ctx, UINT64_MAX) == 0,
+          "at(UINT64_MAX) should return 0 sentinel");
+    printf("  OK\n\n");
+}
+
+static void test_at_crosscheck_feistel(void)
+{
+    printf("--- bidder_at cross-check (Python feistel) ---\n");
+
+    bidder_ctx ctx;
+    bidder_init(&ctx, 10, 2, (const uint8_t *)"test", 4);
+    uint32_t expected[20] = {
+        3, 8, 1, 2, 7, 1, 5, 4, 7, 4,
+        2, 5, 8, 7, 8, 9, 2, 9, 6, 7
+    };
+    int match = 1;
+    for (int i = 0; i < 20; i++) {
+        if (bidder_at(&ctx, (uint64_t)i) != expected[i]) {
+            match = 0;
+            printf("  index %d: got %u, expected %u\n",
+                   i, bidder_at(&ctx, (uint64_t)i), expected[i]);
+        }
+    }
+    CHECK(match, "bidder_at feistel cross-check failed");
+    printf("  OK\n\n");
+}
+
+static void test_at_crosscheck_speck(void)
+{
+    printf("--- bidder_at cross-check (Python speck) ---\n");
+
+    /* Same fixture as test_at_cross_check_speck in tests/test_bidder.py:
+       base=65536, d=2 lands in Speck32 mode (tight fit). */
+    bidder_ctx ctx;
+    bidder_init(&ctx, 65536, 2, (const uint8_t *)"speck parity", 12);
+    CHECK(ctx.mode == 0, "expected Speck mode for base=65536 d=2");
+
+    uint32_t expected[10] = {
+        13270, 65198, 24145, 34590, 8655,
+        22902, 22414, 22244, 30259, 20443
+    };
+    int match = 1;
+    for (int i = 0; i < 10; i++) {
+        uint32_t v = bidder_at(&ctx, (uint64_t)i);
+        if (v != expected[i]) {
+            match = 0;
+            printf("  index %d: got %u, expected %u\n",
+                   i, v, expected[i]);
+        }
+    }
+    CHECK(match, "bidder_at speck cross-check failed");
+    printf("  OK\n\n");
+}
+
+
+/* ================================================================
  * Test 6: Period wraparound
  * ================================================================ */
 
@@ -211,6 +326,13 @@ int main(void)
     test_key_sensitivity();
     test_reset();
     test_wraparound();
+
+    test_at_matches_next();
+    test_at_is_stateless();
+    test_at_out_of_range();
+    test_at_crosscheck_feistel();
+    test_at_crosscheck_speck();
+
     test_crosscheck();
 
     if (failures == 0)

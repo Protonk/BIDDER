@@ -18,6 +18,7 @@ Usage:
 
 import hashlib
 import math
+import operator
 import struct
 
 # Constants matching bidder.h
@@ -154,6 +155,36 @@ class Bidder:
             self.counter = 0
         perm = self._permute(self.counter)
         self.counter += 1
+        n = self.block_start + perm
+        b = self.base
+        while n >= b:
+            n //= b
+        return n
+
+    def at(self, i):
+        """Stateless random access: return the i-th output symbol.
+
+        Same shape as next() (an element of {1, ..., base-1}) but
+        without touching self.counter.
+
+        Raises:
+            TypeError: if i is not integer-shaped.
+            ValueError: if i is not in [0, period).
+        """
+        # operator.index() accepts int and any __index__-conforming
+        # type (numpy ints, etc.) and rejects float/str/None with
+        # TypeError. The C side gets this for free from its uint64_t
+        # parameter type; Python has to validate explicitly.
+        try:
+            i = operator.index(i)
+        except TypeError as e:
+            raise TypeError(
+                f"index must be an integer, got {type(i).__name__}"
+            ) from e
+        if not (0 <= i < self.block_size):
+            raise ValueError(
+                f"index {i} out of range [0, {self.block_size})")
+        perm = self._permute(i)
         n = self.block_start + perm
         b = self.base
         while n >= b:

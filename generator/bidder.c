@@ -275,6 +275,21 @@ uint32_t bidder_next(bidder_ctx *ctx)
     return leading_digit(n, ctx->base);
 }
 
+uint32_t bidder_at(const bidder_ctx *ctx, uint64_t i)
+{
+    if (i >= ctx->block_size)
+        return 0;  /* sentinel: 0 is never a valid output */
+
+    uint32_t perm;
+    if (ctx->mode == 0)
+        perm = permute_speck(ctx, (uint32_t)i);
+    else
+        perm = permute_feistel(ctx, (uint32_t)i);
+
+    uint64_t n = ctx->block_start + perm;
+    return leading_digit(n, ctx->base);
+}
+
 void bidder_reset(bidder_ctx *ctx)
 {
     ctx->counter = 0;
