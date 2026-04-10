@@ -1,7 +1,7 @@
 """
 api.py — Public entry point for the BIDDER period-only API.
 
-Companion to core/API-PLAN.md. v1 is intentionally trivial: a single
+Companion to core/API.md. v1 is intentionally trivial: a single
 function `fulfill(period, key)` that delegates to BidderBlock. The
 constructor handles all validation and refusal — fulfill exists as the
 public API entry point so that future composition / catalogue work can
