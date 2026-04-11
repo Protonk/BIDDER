@@ -3,16 +3,19 @@
 A curated reader's guide to the theory work in this repository.
 
 This file is one of three related artifacts.
-[`guidance/network/SURVEY.md`](guidance/network/SURVEY.md) is the exhaustive survey that sorts
-every theory doc into shelves with kernel annotations. A
-forthcoming `summaries/` directory will carry per-shelf compact
-entries for each doc; until they exist, the entries in this
-collection point directly into the survey. This file — the
-collection — is the editorial layer: it commits to a reading
-of what this body of work is for and how to enter it. The
-survey answers *where is X*, the summaries answer *what does X
-say*, and the collection answers *why does X matter, and how
-does it fit with Y*.
+[`guidance/network/SURVEY.md`](guidance/network/SURVEY.md) is
+the exhaustive survey that sorts every theory doc into shelves
+with kernel annotations.
+[`guidance/network/surveys/`](guidance/network/surveys/) holds
+the per-doc compact surveys for the load-bearing entries —
+one file per doc cited in this collection, each structured by
+shelf sub-section (claim / mechanism, setup / headline, etc.).
+The entries in this file point into `guidance/network/surveys/`
+directly. This file — the collection — is the editorial layer:
+it commits to a reading of what this body of work is for and
+how to enter it. The catalog answers *where is X*, the per-doc
+surveys answer *what does X say*, and the collection answers
+*why does X matter, and how does it fit with Y*.
 
 
 ## Preface
@@ -66,17 +69,13 @@ have it:**
    repo's content is *about* how the repo was written — the
    pair-programming phenomenology, the red-team tests, the
    correction discipline, the knife-edge caveat about productive
-   triviality in constructed spaces. These are not decoration;
-   several of them are what a reader comes away with even if the
-   theorems are familiar.
+   triviality in constructed spaces. 
 3. Cross-language parity is enforced. Python and C
-   implementations produce byte-identical output. BQN blocks are
-   exact-math annotation labeled as such. Code examples in
-   markdown docs are rewritten as assertions before execution so
-   the docs cannot drift from the code.
+   implementations produce byte-identical output in critical files. 
+   BQN blocks are exact-math annotation labeled as such. Code, docs,
+   and parallel implementations of either form a triad for comparison.
 4. Negative results are first-class. "The sign was wrong," "the
-   prediction failed," "audited down" are headline phrasings,
-   not footnotes.
+   prediction failed," "audited down" are headline phrasings.
 
 **What the collection does not cover.** The art folders on
 Shelf D of the survey (visualizations of the structure for
