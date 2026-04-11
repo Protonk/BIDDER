@@ -2,19 +2,17 @@
 
 A curated reader's guide to the theory work in this repository.
 
-This file is one of four related artifacts.
-[`SURVEY.md`](SURVEY.md) is the exhaustive survey that sorts
-every theory doc into shelves with kernel annotations.
-[`COLLECTION-PLAN.md`](COLLECTION-PLAN.md) holds the plans that
-coordinate the survey, the forthcoming `summaries/` directory,
-and this file. The summaries will carry per-shelf compact
+This file is one of three related artifacts.
+[`guidance/network/SURVEY.md`](guidance/network/SURVEY.md) is the exhaustive survey that sorts
+every theory doc into shelves with kernel annotations. A
+forthcoming `summaries/` directory will carry per-shelf compact
 entries for each doc; until they exist, the entries in this
 collection point directly into the survey. This file — the
-collection — is the editorial layer: it commits to a reading of
-what this body of work is for and how to enter it. The survey
-answers *where is X*, the summaries answer *what does X say*,
-and the collection answers *why does X matter, and how does it
-fit with Y*.
+collection — is the editorial layer: it commits to a reading
+of what this body of work is for and how to enter it. The
+survey answers *where is X*, the summaries answer *what does X
+say*, and the collection answers *why does X matter, and how
+does it fit with Y*.
 
 
 ## Preface
@@ -137,10 +135,10 @@ substrate the generator rests on.
 
 **Entries.**
 
-- [`core/BLOCK-UNIFORMITY.md`](SURVEY.md#block-uniformity) — the counting lemma; load-bearing for every exact-distribution claim downstream.
-- [`core/HARDY-SIDESTEP.md`](SURVEY.md#hardy-sidestep) — the K-th n-prime in one divmod; why the sidestep is sharp.
-- [`core/ACM-CHAMPERNOWNE.md`](SURVEY.md#acm-champernowne) — the base construction, for vocabulary and literature anchors.
-- [`sources/EARLY-FINDINGS.md`](SURVEY.md#early-findings) — first surprises and open questions, cited by every seed.
+- [`core/BLOCK-UNIFORMITY.md`](guidance/network/surveys/block-uniformity.md) — the counting lemma; load-bearing for every exact-distribution claim downstream.
+- [`core/HARDY-SIDESTEP.md`](guidance/network/surveys/hardy-sidestep.md) — the K-th n-prime in one divmod; why the sidestep is sharp.
+- [`core/ACM-CHAMPERNOWNE.md`](guidance/network/surveys/acm-champernowne.md) — the base construction, for vocabulary and literature anchors.
+- [`sources/EARLY-FINDINGS.md`](guidance/network/surveys/early-findings.md) — first surprises and open questions, cited by every seed.
 
 
 ## Chapter 2: The Generator
@@ -195,11 +193,11 @@ docs in its most explicit form.
 
 **Entries.**
 
-- [`core/RIEMANN-SUM.md`](SURVEY.md#riemann-sum) — why BIDDER is *useful* for Monte Carlo, not just *correct*.
-- [`BIDDER.md`](SURVEY.md#bidder-root) — the user-facing root API in three layers.
-- [`core/API.md`](SURVEY.md#api) — the detailed cipher-path reference with the `UnsupportedPeriodError` discipline.
-- [`generator/BIDDER.md`](SURVEY.md#bidder-generator) — the cipher design doc and the *Proved / Measured / Not claimed* discipline in its most explicit form.
-- [`tests/theory/README.md`](SURVEY.md#tests-theory-readme) — the theorem index between words and the tests that would falsify them.
+- [`core/RIEMANN-SUM.md`](guidance/network/surveys/riemann-sum.md) — why BIDDER is *useful* for Monte Carlo, not just *correct*.
+- [`BIDDER.md`](guidance/network/surveys/bidder-root.md) — the user-facing root API in three layers.
+- [`core/API.md`](guidance/network/surveys/api.md) — the detailed cipher-path reference with the `UnsupportedPeriodError` discipline.
+- [`generator/BIDDER.md`](guidance/network/surveys/bidder-generator.md) — the cipher design doc and the *Proved / Measured / Not claimed* discipline in its most explicit form.
+- [`tests/theory/README.md`](guidance/network/surveys/tests-theory-readme.md) — the theorem index between words and the tests that would falsify them.
 
 
 ## Chapter 3: The Recovery Thread
@@ -278,11 +276,11 @@ the knife-edge section.
 
 **Entries.**
 
-- [`core/ABDUCTIVE-KEY.md`](SURVEY.md#abductive-key) — the rank-1 diagonal recovery and the "note on visibility." The chapter's anchor.
-- [`experiments/acm/diagonal/cantor_walk/UNORDERED-CONJECTURE.md`](SURVEY.md#unordered-conjecture) — the longest and densest meta-layer doc in the repo; the knife-edge and the three surprises.
-- [`experiments/acm/diagonal/CANTORS-PLOT.md`](SURVEY.md#cantors-plot) — the garden map for the diagonal expeditions.
-- [`experiments/acm/diagonal/cascade_key/README.md`](SURVEY.md#cascade-key-readme) — "one key, all locks" as visible geometry.
-- [`experiments/acm/diagonal/cantor_walk/README.md`](SURVEY.md#cantor-walk-readme) — strict ascent as a rate, not just a condition.
+- [`core/ABDUCTIVE-KEY.md`](guidance/network/surveys/abductive-key.md) — the rank-1 diagonal recovery and the "note on visibility." The chapter's anchor.
+- [`experiments/acm/diagonal/cantor_walk/UNORDERED-CONJECTURE.md`](guidance/network/surveys/unordered-conjecture.md) — the longest and densest meta-layer doc in the repo; the knife-edge and the three surprises.
+- [`experiments/acm/diagonal/CANTORS-PLOT.md`](guidance/network/surveys/cantors-plot.md) — the garden map for the diagonal expeditions.
+- [`experiments/acm/diagonal/cascade_key/README.md`](guidance/network/surveys/cascade-key-readme.md) — "one key, all locks" as visible geometry.
+- [`experiments/acm/diagonal/cantor_walk/README.md`](guidance/network/surveys/cantor-walk-readme.md) — strict ascent as a rate, not just a condition.
 
 
 ## Chapter 4: The Binary Frontier
@@ -360,12 +358,12 @@ visibly shows how it treats its own mistakes.
 
 **Entries.**
 
-- [`experiments/acm-champernowne/base2/BINARY.md`](SURVEY.md#binary) — what collapses, sharpens, emerges in base 2; the chapter's vocabulary anchor.
-- [`experiments/acm-champernowne/base2/HAMMING-BOOKKEEPING.md`](SURVEY.md#hamming-bookkeeping) — bit-balance closed form and the per-entry correction.
-- [`experiments/acm-champernowne/base2/disparity/DETRENDED_RDS.md`](SURVEY.md#detrended-rds) — the disparity-domain twin of Walsh's "order matters" finding.
-- [`experiments/acm-champernowne/base2/forest/walsh/WALSH.md`](SURVEY.md#walsh) — the 44-cell robust family and the audit-trail-per-`npz` policy.
-- [`experiments/acm-champernowne/base2/FINITE-RECURRENCE.md`](SURVEY.md#finite-recurrence) — the structural boundary condition the chapter's measurements live inside.
-- [`experiments/acm-champernowne/base2/disparity/rds_wavelet/KINK-INVESTIGATION.md`](SURVEY.md#kink-investigation) — the retraction discipline in its sharpest worked form.
+- [`experiments/acm-champernowne/base2/BINARY.md`](guidance/network/surveys/binary.md) — what collapses, sharpens, emerges in base 2; the chapter's vocabulary anchor.
+- [`experiments/acm-champernowne/base2/HAMMING-BOOKKEEPING.md`](guidance/network/surveys/hamming-bookkeeping.md) — bit-balance closed form and the per-entry correction.
+- [`experiments/acm-champernowne/base2/disparity/DETRENDED_RDS.md`](guidance/network/surveys/detrended-rds.md) — the disparity-domain twin of Walsh's "order matters" finding.
+- [`experiments/acm-champernowne/base2/forest/walsh/WALSH.md`](guidance/network/surveys/walsh.md) — the 44-cell robust family and the audit-trail-per-`npz` policy.
+- [`experiments/acm-champernowne/base2/FINITE-RECURRENCE.md`](guidance/network/surveys/finite-recurrence.md) — the structural boundary condition the chapter's measurements live inside.
+- [`experiments/acm-champernowne/base2/disparity/rds_wavelet/KINK-INVESTIGATION.md`](guidance/network/surveys/kink-investigation.md) — the retraction discipline in its sharpest worked form.
 
 
 ## Chapter 5: The Discipline
@@ -501,13 +499,13 @@ when it finds something.
 
 **Entries.**
 
-- [`guidance/PAIR-PROGRAMMING.md`](SURVEY.md#pair-programming) — the human / cold-agent / in-session-agent triad; the repo's most careful doc about how the work got done.
-- [`tests/theory/RED-TEAM-THEORY.md`](SURVEY.md#red-team-theory) — the four-layer decomposition and the theorem / test / experiment triad.
-- [`guidance/BQN-AGENT.md`](SURVEY.md#bqn-agent) — the *DOCS :: C :: PYTHON* triangle with BQN as a fourth vertex.
-- [`generator/AGENTS.md`](SURVEY.md#generator-agents) — the C / Python parity rule in its most compact enforcement.
-- [`core/api_doc_examples.py`](SURVEY.md#api-doc-examples) — the mechanism that pins English to Python in the three-layer docs.
+- [`guidance/PAIR-PROGRAMMING.md`](guidance/network/surveys/pair-programming.md) — the human / cold-agent / in-session-agent triad; the repo's most careful doc about how the work got done.
+- [`tests/theory/RED-TEAM-THEORY.md`](guidance/network/surveys/red-team-theory.md) — the four-layer decomposition and the theorem / test / experiment triad.
+- [`guidance/BQN-AGENT.md`](guidance/network/surveys/bqn-agent.md) — the *DOCS :: C :: PYTHON* triangle with BQN as a fourth vertex.
+- [`generator/AGENTS.md`](guidance/network/surveys/generator-agents.md) — the C / Python parity rule in its most compact enforcement.
+- [`core/api_doc_examples.py`](guidance/network/surveys/api-doc-examples.md) — the mechanism that pins English to Python in the three-layer docs.
 
-*Related.* The seven-field shape prescribed by [`experiments/acm-champernowne/base2/STRUCT-SIG-PLAN.md`](SURVEY.md#struct-sig-plan) for synthesis notes is this chapter's discipline applied per-observable — a chimney with seven walls instead of two.
+*Related.* The seven-field shape prescribed by [`experiments/acm-champernowne/base2/STRUCT-SIG-PLAN.md`](guidance/network/surveys/struct-sig-plan.md) for synthesis notes is this chapter's discipline applied per-observable — a chimney with seven walls instead of two.
 
 
 ## Reading paths
@@ -728,10 +726,8 @@ have a relabeling, not a result.
 
 ## Selection rule
 
-The collection lists ~22 docs across five chapters
-(including the blank Chapter 5 placeholder). The survey in
-[`COLLECTION-PLAN.md`](COLLECTION-PLAN.md) lists ~70. The
-rule for inclusion:
+The collection lists ~22 docs across five chapters. The survey
+in [`guidance/network/SURVEY.md`](guidance/network/SURVEY.md) lists ~70. The rule for inclusion:
 
 > A doc earns a slot in the collection if the collection's
 > argument depends on it, or if reading it materially changes
