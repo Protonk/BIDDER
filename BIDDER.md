@@ -1,263 +1,483 @@
 # BIDDER
 
-The root API for the BIDDER project. Two construction functions,
-two object types, one file.
+`bidder` is a Python module that constructs two kinds of integer
+sequences and returns them as stateless random-access objects:
 
-Each function is documented in three layers:
+- `bidder.cipher(period, key)` returns a `BidderBlock`: a keyed
+  permutation of `[0, period)`.
+- `bidder.sawtooth(n, count)` returns an `NPrimeSequence`: the first
+  `count` positive multiples of `n` that are not multiples of `n*n`,
+  in ascending order.
 
-- **Natural language** — what the function does.
-- **Python** — the actual signature and a runnable example.
-- **BQN** — what the call corresponds to in the ACM-Champernowne
-  world. BQN is documentation of the math layer; the cipher itself
-  is out of scope for BQN per `guidance/BQN-AGENT.md`.
-
-
-## Quick start
+Both object types expose the same method shape: `.at(i)`, `.period`,
+`len()`, `iter()`, `repr()`.
 
 ```python
 import bidder
 
-# Cipher path: keyed permutation of [0, period)
 B = bidder.cipher(period=10, key=b'doc')
-print(list(B))           # [0, 4, 8, 1, 7, 6, 9, 3, 2, 5]
-
-# Sawtooth path: deterministic n-prime sequence
 S = bidder.sawtooth(n=3, count=10)
-print(list(S))           # [3, 6, 12, 15, 21, 24, 30, 33, 39, 42]
 ```
+
+
+## Surface
+
+The public API is exactly `bidder.__all__`. Every name below is part
+of the contract. Any other attribute reachable via `dir(bidder)` is
+internal and may not be relied on.
+
+| Name                            | Kind      | Summary                                                        |
+|---------------------------------|-----------|----------------------------------------------------------------|
+| `bidder.cipher`                 | function  | Construct a `BidderBlock` from `(period, key)`.                |
+| `bidder.sawtooth`               | function  | Construct an `NPrimeSequence` from `(n, count)`.               |
+| `bidder.BidderBlock`            | class     | Keyed permutation of `[0, period)`.                            |
+| `bidder.NPrimeSequence`         | class     | Ascending enumeration of n-primes.                             |
+| `bidder.MAX_PERIOD_V1`          | int       | Upper bound on `period`. Value: `4294967295`.                  |
+| `bidder.UnsupportedPeriodError` | exception | Raised when `period` exceeds `bidder.MAX_PERIOD_V1`.           |
+
+
+## Shared interface
+
+`BidderBlock` and `NPrimeSequence` share the same method shape:
+
+| Expression      | `BidderBlock`                                               | `NPrimeSequence`                                       |
+|-----------------|-------------------------------------------------------------|--------------------------------------------------------|
+| `obj.at(i)`     | `int` in `[0, period)`; i-th element of the keyed permutation | `int`; i-th n-prime in ascending order                |
+| `obj.period`    | `int`; equals the `period` passed to `bidder.cipher`        | `int`; equals the `count` passed to `bidder.sawtooth` |
+| `len(obj)`      | `int`; equals `obj.period`                                  | `int`; equals `obj.period`                             |
+| `iter(obj)`     | fresh generator yielding every element of `[0, period)` exactly once | fresh generator yielding n-primes in strictly ascending order |
+| `repr(obj)`     | `str`; debug-only, format is not part of the contract       | `str`; debug-only, format is not part of the contract  |
+
+Neither object implements `__next__`; calling `next(obj)` raises
+`TypeError`. Neither object has a `reset` method. Instances are
+immutable with respect to their public interface: repeated calls to
+`.at(i)` with the same `i` return the same value.
 
 
 ## `bidder.cipher`
 
-Return a keyed permutation of `[0, period)`. The order of the
-outputs is determined by the key; the contents are all integers in
-`[0, period)`, each appearing exactly once.
-
-**Python.**
-
 ```python
-def cipher(period: int, key: bytes) -> BidderBlock: ...
+bidder.cipher(period: int, key: bytes | bytearray) -> BidderBlock
 ```
+
+Construct a keyed permutation of `[0, period)`. The returned
+`BidderBlock` is a pure function of `(period, key)`: two calls with
+equal arguments yield two instances whose `.at(i)` outputs agree on
+every `i`.
+
+**Arguments**
+
+- `period` — `int`. Must satisfy `2 <= period <= 4294967295`. The
+  type check is strict: `bool` is rejected even though `bool` is a
+  subclass of `int`.
+- `key` — `bytes` or `bytearray`. Any length is accepted, including
+  the empty byte string `b''`. The exact byte content is the full
+  key input; no normalization, hashing, or padding is applied by the
+  caller-visible contract.
+
+**Returns** a `BidderBlock`.
+
+**Raises**
+
+- `TypeError` — `period` is not exactly `int`, or `key` is not
+  `bytes`/`bytearray`.
+- `ValueError` — `period < 2`.
+- `bidder.UnsupportedPeriodError` — `period > 4294967295`.
+  `UnsupportedPeriodError` is a subclass of `ValueError`.
+
+**Example**
 
 ```python
 import bidder
 
 B = bidder.cipher(period=10, key=b'doc')
-B.period       # 10
-B.at(0)        # 0
-B.at(9)        # 5
-list(B)        # [0, 4, 8, 1, 7, 6, 9, 3, 2, 5]
+print(list(B))
+print(B.at(0), B.at(9), len(B), B.period)
 ```
 
-**BQN.**
+Output:
 
-`bidder.cipher(P, key)` constructs a keyed permutation of `↕ P`.
-Internally this is the `d = 1` case of the integer-block lemma in
-`core/BLOCK-UNIFORMITY.md`:
-
-```bqn
-b⋆d-1 + ↕ (b-1)×b⋆d-1
 ```
-
-With `b = P + 1` and `d = 1`, this evaluates to `1 + ↕ P`. The
-adapter shifts by `−1` so the external set is `↕ P`. The keying
-picks which permutation of this set is returned; BQN does not
-represent the keyed choice.
-
-See `core/API.md` for the full cipher-path reference.
+[0, 4, 8, 1, 7, 6, 9, 3, 2, 5]
+0 5 10 10
+```
 
 
 ## `bidder.sawtooth`
 
-Return the first `count` n-primes of monoid `nZ+` for `n ≥ 2`, in
-ascending order. Deterministic — no key. Random access via the
-Hardy closed form.
-
-**Python.**
-
 ```python
-def sawtooth(n: int, count: int) -> NPrimeSequence: ...
+bidder.sawtooth(n: int, count: int) -> NPrimeSequence
 ```
+
+Construct an ascending enumeration of the first `count` n-primes.
+The n-primes of `n` are the positive multiples of `n` that are not
+multiples of `n*n`. For `n = 3` the sequence begins
+`3, 6, 12, 15, 21, 24, 30, 33, 39, 42, ...`: every positive multiple
+of `3`, with every third term (`9, 18, 27, ...`) deleted.
+
+The returned `NPrimeSequence` is a pure function of `(n, count)`.
+There is no key.
+
+**Arguments**
+
+- `n` — `int`. Must satisfy `n >= 2`. Strict: `bool` rejected.
+- `count` — `int`. Must satisfy `count >= 1`. Strict: `bool`
+  rejected.
+
+There is no upper bound on `n` or on `count`. The underlying
+computation is `O(1)` bignum arithmetic per `.at(K)` call, so large
+`count` and large `K` are supported.
+
+**Returns** an `NPrimeSequence`.
+
+**Raises**
+
+- `TypeError` — `n` or `count` is not exactly `int`.
+- `ValueError` — `n < 2`, or `count < 1`.
+
+**Example**
 
 ```python
 import bidder
 
 S = bidder.sawtooth(n=3, count=10)
-S.n            # 3
-S.count        # 10
-S.at(0)        # 3
-S.at(9)        # 42
-list(S)        # [3, 6, 12, 15, 21, 24, 30, 33, 39, 42]
+print(list(S))
+print(S.at(0), S.at(9), len(S), S.period, S.n, S.count)
 ```
 
-The 3-primes are the multiples of 3 that are not multiples of 9:
-`3, 6, 12, 15, 21, 24, 30, 33, 39, 42, …` — every third integer
-with one deletion per period of length 3 (see
-`core/ACM-CHAMPERNOWNE.md`).
+Output:
 
-**BQN.**
-
-The Hardy closed form from `core/HARDY-SIDESTEP.md`:
-
-```bqn
-NthNPn2 ← {𝕨 × 1 + ((𝕨-1)|𝕩-1) + 𝕨 × ⌊(𝕩-1)÷𝕨-1}
+```
+[3, 6, 12, 15, 21, 24, 30, 33, 39, 42]
+3 42 10 10 3 10
 ```
 
-`sawtooth(n, count).at(K)` for `K ∈ [0, count)` is exactly
 
-```bqn
-n NthNPn2 K+1
-```
+## `BidderBlock`
 
-— the `(K+1)`-th n-prime (1-indexed in the BQN convention) of
-monoid `nZ+`. The closed form is `O(1)` bignum work per call:
-one `divmod` and one multiply on `O(log K + log n)`-wide integers.
+A keyed permutation of `[0, period)`. Instances are constructed via
+`bidder.cipher` and are not constructed directly by callers. Aside
+from the immutable `(period, key)` captured at construction, an
+instance has no state.
 
-The n-prime enumerator `NPn2` from `guidance/BQN-AGENT.md` generates
-the same sequence:
+### `BidderBlock.at(i) -> int`
 
-```bqn
-NPn2 ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}
-```
+Return the `i`-th element of the permutation.
 
-The difference: `NPn2` generates a prefix by sieving; `NthNPn2`
-gives random access by index.
+- `i` — any object accepted by `operator.index` (so `int`, `bool`,
+  or any type defining `__index__`). Must satisfy
+  `0 <= i < B.period`. Negative indices are not accepted.
+- Return: an `int` in `[0, B.period)`.
+
+Raises `TypeError` if `i` is not index-like (for example `float` or
+`str`). Raises `ValueError` if `i` is out of range.
+
+Pure in `(period, key, i)`: repeated calls return equal values.
+
+### `BidderBlock.period -> int`
+
+Read-only property. The `period` argument passed to `bidder.cipher`.
+
+### `iter(B)`
+
+Each call returns a fresh independent generator that yields
+`B.at(0), B.at(1), ..., B.at(B.period - 1)` in that order. Two
+iterators obtained from the same `BidderBlock` share no state;
+advancing one does not advance the other.
+
+Iterating a `BidderBlock` yields every integer in `[0, B.period)`
+exactly once.
+
+### `len(B) -> int`
+
+Returns `B.period`.
+
+### `repr(B) -> str`
+
+Returns a string intended for debugging. The exact format is not
+part of the contract and callers must not parse it.
+
+### `next(B)`
+
+Raises `TypeError`. `BidderBlock` is iterable but is not itself an
+iterator; obtain an iterator with `iter(B)` first.
 
 
-## Shared interface shape
+## `NPrimeSequence`
 
-Both objects returned by `cipher` and `sawtooth` satisfy the same
-method set:
+An ascending enumeration of the first `count` n-primes. Instances
+are constructed via `bidder.sawtooth` and are not constructed
+directly by callers.
 
-| Method / property | `BidderBlock`                         | `NPrimeSequence`                      |
-|-------------------|---------------------------------------|---------------------------------------|
-| `.at(i)`          | i-th element of the keyed permutation | K-th n-prime via Hardy closed form    |
-| `.period`         | the requested period `P`              | the requested count                   |
-| `len(B)`          | `P`                                   | `count`                               |
-| `iter(B)`         | fresh generator over `[0, P)`         | fresh generator over n-primes         |
-| `repr(B)`         | `BidderBlock(period=P, cipher=...)`   | `NPrimeSequence(n=N, count=C)`       |
+### `NPrimeSequence.at(K) -> int`
 
-Both raise `TypeError` for non-integer indices and `ValueError` for
-out-of-range indices. Neither implements `__next__` on the object
-itself — `next(B)` raises `TypeError`. There is no `reset()` method.
+Return the `K`-th n-prime (0-indexed) in ascending order.
 
-The shared shape means the same mental model works for both objects
-and the same `for x in obj` / `obj.at(i)` / `len(obj)` code works
-for both. The semantic difference — shuffle vs ascending sequence — is
-the caller's responsibility to know.
+- `K` — any object accepted by `operator.index`. Must satisfy
+  `0 <= K < S.count`. Negative indices are not accepted.
+- Return: an `int` satisfying
+
+  ```python
+  q, r = divmod(K, S.n - 1)
+  S.at(K) == S.n * (q * S.n + r + 1)
+  ```
+
+  equivalently: the `(K + 1)`-th smallest positive multiple of
+  `S.n` that is not a multiple of `S.n * S.n`.
+
+Raises `TypeError` if `K` is not index-like. Raises `ValueError` if
+`K` is out of range.
+
+Pure in `(n, K)`: the value does not depend on `count` beyond the
+`K < count` validity check. Constant-time bignum arithmetic.
+
+### `NPrimeSequence.n -> int`
+
+Read-only property. The `n` argument passed to `bidder.sawtooth`.
+
+### `NPrimeSequence.count -> int`
+
+Read-only property. The `count` argument passed to
+`bidder.sawtooth`.
+
+### `NPrimeSequence.period -> int`
+
+Read-only property. Equal to `NPrimeSequence.count`. Present so
+`BidderBlock` and `NPrimeSequence` expose the same attribute name
+for their length.
+
+### `iter(S)`
+
+Each call returns a fresh independent generator that yields
+`S.at(0), S.at(1), ..., S.at(S.count - 1)` in strictly ascending
+order.
+
+### `len(S) -> int`
+
+Returns `S.count`.
+
+### `repr(S) -> str`
+
+Returns a string intended for debugging. The exact format is not
+part of the contract and callers must not parse it.
+
+### `next(S)`
+
+Raises `TypeError`. `NPrimeSequence` is iterable but is not itself
+an iterator; obtain an iterator with `iter(S)` first.
 
 
-## Constants and exceptions
+## Constants
 
-```python
-import bidder
+### `bidder.MAX_PERIOD_V1 -> int`
 
-bidder.MAX_PERIOD_V1            # 4294967295  ( = 2**32 - 1)
-bidder.UnsupportedPeriodError   # ValueError subclass
-```
+Value: `4294967295`. The largest value accepted for the `period`
+argument of `bidder.cipher`. A call with `period > MAX_PERIOD_V1`
+raises `bidder.UnsupportedPeriodError`. `bidder.sawtooth` has no
+analogous upper bound.
 
-`MAX_PERIOD_V1` is the largest period the cipher path supports in v1.
-The bound comes from the existing cipher backend in
-`generator/coupler.py`, which caps `base` at `2^32` (see
-`generator/AGENTS.md`). The sawtooth path has no analogous cap — the
-Hardy closed form works for any `n` and `count`.
 
-**BQN.**
+## Exceptions
 
-```bqn
-(2⋆32) - 1
-# 4294967295
-```
+All exception types raised by `bidder` are listed below. Message
+strings are reproduced verbatim as the module emits them;
+placeholders in braces are filled at runtime with the offending
+value or type name.
 
-The math layer imposes no upper bound on `P`. The cap is a property
-of the cipher backend, not of the integer-block lemma or the Hardy
-closed form.
+### `TypeError`
+
+| Trigger                                                           | Message                                          |
+|-------------------------------------------------------------------|--------------------------------------------------|
+| `bidder.cipher(period, key)` with `type(period) is not int`       | `period must be int, got {typename}`             |
+| `bidder.cipher(period, key)` with `key` not `bytes`/`bytearray`   | `key must be bytes or bytearray, got {typename}` |
+| `bidder.sawtooth(n, count)` with `type(n) is not int`             | `n must be int, got {typename}`                  |
+| `bidder.sawtooth(n, count)` with `type(count) is not int`         | `count must be int, got {typename}`              |
+| `BidderBlock.at(i)` with `i` not accepted by `operator.index`     | `index must be an integer, got {typename}`      |
+| `NPrimeSequence.at(K)` with `K` not accepted by `operator.index`  | `index must be an integer, got {typename}`      |
+| `next(B)` where `B` is a `BidderBlock`                            | `'BidderBlock' object is not an iterator`        |
+| `next(S)` where `S` is an `NPrimeSequence`                        | `'NPrimeSequence' object is not an iterator`     |
+
+### `ValueError`
+
+| Trigger                                                           | Message                                                                              |
+|-------------------------------------------------------------------|--------------------------------------------------------------------------------------|
+| `bidder.cipher(period, key)` with `period < 2`                    | `period must be >= 2`                                                                |
+| `bidder.sawtooth(n, count)` with `n < 2`                          | `n must be >= 2 (n=1 is ordinary primes; the Hardy closed form does not apply)`      |
+| `bidder.sawtooth(n, count)` with `count < 1`                      | `count must be >= 1`                                                                 |
+| `BidderBlock.at(i)` with `i` outside `[0, period)`                | `index {i} out of range [0, {period})`                                               |
+| `NPrimeSequence.at(K)` with `K` outside `[0, count)`              | `index {K} out of range [0, {count})`                                                |
+
+### `bidder.UnsupportedPeriodError`
+
+Subclass of `ValueError`. An `except ValueError:` clause catches it;
+an `except bidder.UnsupportedPeriodError:` clause catches only this
+specific case.
+
+| Trigger                                                          | Message                                                                 |
+|------------------------------------------------------------------|-------------------------------------------------------------------------|
+| `bidder.cipher(period, key)` with `period > 4294967295`          | `period {period} exceeds v1 cipher backend cap of 4294967295`           |
+
+
+## Invariants
+
+These are positive guarantees the caller may rely on. Each is a
+statement about the public interface, not about internal state.
+
+1. `bidder.cipher(period, key).at(i)` is a pure function of
+   `(period, key, i)` for all valid arguments. Two calls with equal
+   `(period, key, i)` return equal `int` values.
+2. `bidder.sawtooth(n, count).at(K)` is a pure function of `(n, K)`
+   for all valid arguments. The value does not depend on `count`
+   beyond the `K < count` validity check.
+3. For any valid `B = bidder.cipher(period, key)`:
+   `sorted(list(B)) == list(range(period))`. Iterating a
+   `BidderBlock` yields a permutation of `[0, period)`.
+4. For any valid `S = bidder.sawtooth(n, count)`:
+   `list(S)` is strictly increasing.
+5. For any valid `S = bidder.sawtooth(n, count)` and any `K` in
+   `[0, count)`: `S.at(K) % n == 0` and `S.at(K) % (n * n) != 0`.
+6. `len(obj) == obj.period` for both object types.
+7. `iter(obj)` returns a fresh generator on every call. Two
+   generators obtained from the same object advance independently.
+8. `next(obj)` raises `TypeError` for both object types.
+9. `.at(i)` is deterministic across repeated calls on the same
+   instance, and across distinct instances constructed with equal
+   arguments.
+10. `BidderBlock` and `NPrimeSequence` instances hold no mutable
+    public state; there is no method that causes a subsequent call
+    with the same arguments to return a different value.
 
 
 ## Examples
 
-### Build and iterate both paths
+Every example below is runnable verbatim in a Python process that
+has `bidder` importable. The printed output shown is exact.
+
+### Example 1 — build and iterate both paths
 
 ```python
 import bidder
 
 B = bidder.cipher(period=10, key=b'doc')
 S = bidder.sawtooth(n=2, count=5)
-print(list(B))            # [0, 4, 8, 1, 7, 6, 9, 3, 2, 5]
-print(list(S))            # [2, 6, 10, 14, 18]
+print(list(B))
+print(list(S))
 ```
 
-The cipher output is a shuffle of `[0, 10)`. The sawtooth output is
-the first five 2-primes in ascending order.
+Output:
 
-### Random access
+```
+[0, 4, 8, 1, 7, 6, 9, 3, 2, 5]
+[2, 6, 10, 14, 18]
+```
+
+### Example 2 — random access
 
 ```python
 import bidder
 
 B = bidder.cipher(period=50, key=b'mix')
 S = bidder.sawtooth(n=7, count=50)
-B.at(0)        # 7
-S.at(0)        # 7
+print(B.at(0), S.at(0))
 ```
 
-Both `.at(0)` calls return `7` — a coincidence of the parameters,
-not a guarantee. The cipher path's output depends on the key; the
-sawtooth path's output depends on `n`.
+Output:
 
-### Sawtooth at astronomical depth
+```
+7 7
+```
+
+Both values are `7` for the specific arguments shown. `S.at(0)`
+equals `n` for every call to `bidder.sawtooth` because the smallest
+positive multiple of `n` that is not a multiple of `n*n` is `n`
+itself. `B.at(0)` depends on the key and has no analogous identity.
+
+### Example 3 — sawtooth at large index
 
 ```python
 import bidder
 
 S = bidder.sawtooth(n=2, count=2**40)
-S.at(2**40 - 1)     # 4398046511102  ( = 2**42 - 2)
+print(S.at(2**40 - 1))
 ```
 
-The `(2^40)`-th 2-prime, computed in microseconds via the Hardy
-closed form. No enumeration of the preceding 10^12 elements.
+Output:
 
-### Cipher refusal at the backend cap
+```
+4398046511102
+```
+
+The `(2**40)`-th 2-prime, computed by constant-time bignum
+arithmetic; no enumeration of preceding elements.
+
+### Example 4 — concurrent independent iteration
 
 ```python
 import bidder
-from bidder import UnsupportedPeriodError
+
+B = bidder.cipher(period=5, key=b'iter')
+it1 = iter(B)
+it2 = iter(B)
+print(next(it1), next(it1), next(it2))
+```
+
+Output:
+
+```
+0 1 0
+```
+
+`it1` and `it2` are independent generators: advancing `it1` twice
+did not advance `it2`, so `next(it2)` returned the first element
+again.
+
+### Example 5 — period above the cap is refused
+
+```python
+import bidder
 
 try:
     bidder.cipher(period=2**32, key=b'doc')
-except UnsupportedPeriodError as e:
-    print(e)
-    # period 4294967296 exceeds v1 cipher backend cap of 4294967295
+except bidder.UnsupportedPeriodError as e:
+    print(type(e).__name__, "|", str(e))
 ```
 
-The sawtooth path has no cap.
+Output:
 
+```
+UnsupportedPeriodError | period 4294967296 exceeds v1 cipher backend cap of 4294967295
+```
 
-## What is not yet supported
+### Example 6 — permutation invariant
 
-| Item                                  | Reason                                           |
-|---------------------------------------|--------------------------------------------------|
-| Cipher periods `> 2^32 − 1`          | Cipher backend cap. Needs wider Speck or CRT.    |
-| CRT composition                      | Lemma not yet written.                           |
-| Alphabet-pinned cipher               | Use legacy `Bidder` in `generator/coupler.py`.   |
-| n-prime BIDDER variant                | Math ready; cipher path not built.               |
-| `n = 1` (ordinary primes)            | Hardy closed form requires `n ≥ 2`.              |
-| Infinite sawtooth iteration           | `count` is mandatory.                            |
-| Running mean / Champernowne real      | Derived properties; see `core/acm_core.py`.      |
+```python
+import bidder
 
+B = bidder.cipher(period=16, key=b'pi')
+assert sorted(B) == list(range(16))
+print("ok")
+```
 
-## See also
+Output:
 
-- `core/API.md` — detailed cipher-path reference (three-layer format).
-- `core/HARDY-SIDESTEP.md` — the closed form `NthNPn2` for the
-  K-th n-prime, proof, and computational witness.
-- `core/BLOCK-UNIFORMITY.md` — the integer-block lemma, the smooth
-  and Family E sieved lemmas, and the spread bound.
-- `core/ACM-CHAMPERNOWNE.md` — the construction of the
-  n-Champernowne reals.
-- `core/ABDUCTIVE-KEY.md` — the rank-1 lemma and the
-  leaky-parameterization theme.
-- `guidance/BQN-AGENT.md` — canonical BQN names (`NPn2`, `NthNPn2`,
-  `Digits10`, `LeadingInt10`).
-- `generator/AGENTS.md` — cipher feature set, parity rules, the
-  `coupler.py` rename.
+```
+ok
+```
+
+### Example 7 — sawtooth ascending and divisibility invariants
+
+```python
+import bidder
+
+S = bidder.sawtooth(n=5, count=20)
+lst = list(S)
+assert lst == sorted(lst)
+assert all(x % 5 == 0 and x % 25 != 0 for x in lst)
+print("ok")
+```
+
+Output:
+
+```
+ok
+```

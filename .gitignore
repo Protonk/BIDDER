@@ -17,3 +17,6 @@ speck_stream
 
 # PractRand build (external, lives in /tmp)
 build/
+
+# Poor man's build output (see build.py)
+/dist/
