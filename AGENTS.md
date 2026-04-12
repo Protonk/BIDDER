@@ -57,6 +57,28 @@ vectorization. The simplicity is the point. If a workload is
 slow, the answer is to precompute with `list(B)` or restructure
 the caller, not to optimize the backend.
 
+## Importing BIDDER in experiments
+
+Experiments that use BIDDER cipher as their randomness source
+should prefer the C path for speed but fall back to pure Python:
+
+```python
+try:
+    import bidder_c as bidder
+except ImportError:
+    import bidder
+```
+
+Both paths produce identical results. The C path is ~1000x faster
+for `.at()` throughput, which matters for experiments that call it
+millions of times. The Python path works without a build step.
+
+Every experiment must run correctly with *either* import. No
+figure, assertion, or result may depend on which path was taken.
+If an experiment intentionally compares BIDDER against numpy (e.g.
+`bidder_comparison.py`), it uses explicit imports, not the
+fallback pattern.
+
 ## Signposting is for the birds
 
 When creating documentation, say what you want to say briefly enough to not need a road map. Agents and humans can read 400-600 word documents without constant semaphore.

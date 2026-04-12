@@ -2,6 +2,8 @@
 
 > Numbers are weird and perfect uniformity is (almost uniformly) a trap. Do not use BIDDER to generate secrets.
 
+![Every generator is uniform. BIDDER is exact, algebraically. 20 keys, 9000 outputs each, digits 1-9. BIDDER produces exactly 1000 of each digit on every key (blue squares on the reference line). numpy produces approximately 1000 with up to 77 counts of deviation (yellow circles scattered above and below).](exact.png)
+
 Arithmetic Congruence Monoids encoded as Champernowne reals, and
 the [BIDDER](BIDDER.md) block generator that falls out of them. Named for
 George Bidder's logarithms, which everyone seems to forget about.

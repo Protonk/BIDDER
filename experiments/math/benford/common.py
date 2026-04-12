@@ -19,10 +19,27 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 CORE = os.path.join(ROOT, 'core')
 GENERATOR = os.path.join(ROOT, 'generator')
+DIST = os.path.join(ROOT, 'dist')
 
 for path in (CORE, GENERATOR):
     if path not in sys.path:
         sys.path.insert(0, path)
+
+# BIDDER cipher for experiment randomness — prefer C path, fall back
+# to pure Python, fall back to None (numpy-only mode).
+try:
+    sys.path.insert(0, DIST)
+    try:
+        import bidder_c as _bidder
+    except ImportError:
+        import bidder as _bidder
+except ImportError:
+    _bidder = None
+finally:
+    if DIST in sys.path:
+        sys.path.remove(DIST)
+
+HAVE_BIDDER = _bidder is not None
 
 
 SEED = 0xB1DDE12
@@ -177,6 +194,76 @@ def bs12_step_biased(p_plus, p_minus, p_mul, p_div):
             x[mul] *= 2.0
             x[div] *= 0.5
         return x
+
+    return step_fn
+
+
+def bidder_choices(n_walkers, n_steps, name='bs12'):
+    """Pre-generate a (n_steps, n_walkers) int8 choice array using
+    one BidderBlock per walker. Returns choices in {0, 1, 2, 3}.
+    Requires HAVE_BIDDER."""
+    if _bidder is None:
+        raise RuntimeError('bidder not available')
+    choices = np.empty((n_steps, n_walkers), dtype=np.int8)
+    for w in range(n_walkers):
+        B = _bidder.cipher(period=n_steps, key=f'{name}:w{w}'.encode())
+        raw = np.array(list(B), dtype=np.int64)
+        choices[:, w] = (raw % 4).astype(np.int8)
+        if (w + 1) % 5000 == 0:
+            print(f'  bidder choices: {w+1}/{n_walkers}')
+    return choices
+
+
+def bidder_increments(n_walkers, n_steps, lo, hi, name='add'):
+    """Pre-generate a (n_steps, n_walkers) float64 increment array
+    using one BidderBlock per walker. Maps [0, period) to [lo, hi).
+    Requires HAVE_BIDDER."""
+    if _bidder is None:
+        raise RuntimeError('bidder not available')
+    lo, hi = float(lo), float(hi)
+    span = hi - lo
+    increments = np.empty((n_steps, n_walkers), dtype=np.float64)
+    for w in range(n_walkers):
+        B = _bidder.cipher(period=n_steps, key=f'{name}:w{w}'.encode())
+        raw = np.array(list(B), dtype=np.float64)
+        increments[:, w] = lo + span * raw / n_steps
+        if (w + 1) % 5000 == 0:
+            print(f'  bidder increments: {w+1}/{n_walkers}')
+    return increments
+
+
+def make_step_from_choices(choices):
+    """Wrap a pre-generated (n_steps, n_walkers) choice array into a
+    step_fn compatible with run_schedule."""
+    cursor = [0]
+
+    def step_fn(rng, x, n_steps):
+        x = x.copy()
+        for s in range(n_steps):
+            c = choices[cursor[0]]
+            cursor[0] += 1
+            plus = c == 0
+            minus = c == 1
+            mul = c == 2
+            div = c == 3
+            x[plus] += 1.0
+            x[minus] -= 1.0
+            x[mul] *= 2.0
+            x[div] *= 0.5
+        return x
+
+    return step_fn
+
+
+def make_step_from_increments(increments):
+    """Wrap a pre-generated (n_steps, n_walkers) increment array into
+    a step_fn compatible with run_schedule."""
+    cursor = [0]
+
+    def step_fn(rng, x, n_steps):
+        chunk = increments[cursor[0]:cursor[0] + n_steps]
+        cursor[0] += n_steps
+        return x + chunk.sum(axis=0)
 
     return step_fn
 

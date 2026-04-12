@@ -372,6 +372,36 @@ on `count`" to:
 9. Gitignore `libbidder.*` and `dist/bidder_c/`.
 
 
+## Import convention for experiments
+
+Experiments that use BIDDER cipher as their randomness source
+should prefer the C path for speed but fall back to the pure
+Python path gracefully:
+
+```python
+try:
+    import bidder_c as bidder
+except ImportError:
+    import bidder
+```
+
+This means:
+- With `dist/bidder_c/` on the path (user ran `make`): fast.
+- With only `dist/bidder/` on the path (no build step): slow but
+  correct. Every figure, every result, every assertion still works.
+- No experiment is gated behind the C build. No feature requires
+  `make`. The pure Python path is never the "wrong" choice — it is
+  the choice that doesn't require a compiler.
+
+Experiments that intentionally compare BIDDER against numpy (e.g.
+`bidder_comparison.py`, `compare_sources.py`) keep their explicit
+imports. The fallback pattern is only for experiments that use
+BIDDER as their *sole* randomness source.
+
+Document this convention in AGENTS.md so future experiment authors
+follow it.
+
+
 ## Why now
 
 The C is written. The fixtures are pinned. The parity matrix is
