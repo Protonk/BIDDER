@@ -78,6 +78,8 @@ out when you give exact data enough room to move.
 
 > The construction is small but exact, and the consequences keep getting larger.
 
+![The Champernowne real C(n) plotted against n on a log scale. A sawtooth wave: each tooth spans one digit class, and the running mean (blue curve) converges to the exact value 31/20 = 1.55 (red dashed line). The wave is the exact uniformity; the convergence is the proof.](experiments/acm-champernowne/base10/sawtooth/sawtooth.png)
+
 Leading base-`b` digits of an ACM-Champernowne real are uniform — not
 approximately, *exactly* — over every full digit block in base `b`.
 That exact count now supports a compact stable core:
@@ -107,6 +109,8 @@ finite automaton can generate or recognize a binary ACM stream at all.
 ### Generator
 
 > Not that kind of crypto. A **block**-structured randomization tool that mates smoothly with a small, well-understood *block* cipher.
+
+![Side-by-side anatomy of bidder.cipher (left, yellow) and bidder.sawtooth (right, blue). Four rows: output scatter, output histogram, first differences, and autocorrelation. The cipher path is flat, noisy, and uncorrelated — a keyed permutation. The sawtooth path is structured, deterministic, and strongly correlated — exact n-primes in order. Two paths, one interface, opposite guarantees.](experiments/bidder/unified/period_anatomy.png)
 
 BIDDER exists to keep two guarantees separable. An algebraic substrate — the ACM-Champernowne digit block `[b^(d-1), b^d - 1]` — gives exact leading-digit uniformity by a counting argument from positional notation: across the block there are exactly `b^(d-1)` integers with each leading digit, with no error term. A keyed permutation — Speck32/64 in cycle-walking mode for operating blocks well below `2^32`, with a Feistel fallback when the cycle-walking ratio gets bad — provides the disorder. Neither piece is asked to do the other's job. 
 
@@ -179,11 +183,12 @@ Not claimed:
 Art folders coordinate experiments on exact data. The next time someone says some of science is an art you should take it seriously. The below are a random set of examples.
 
 - [`corona_attempt.png`](experiments/acm-champernowne/base2/art/rle/corona_attempt.png) — the sun above. An instructive failure: binary run lengths on polar axes collapse toward the center because short runs dominate exponentially. The "sun" is a failure mode caused by structure of structure.
-- [`rle_ridgeline.png`](experiments/acm-champernowne/base2/art/rle/rle_ridgeline.png) — the same residual histograms stacked as terrain. Warm seam tracks high `v_2(n)`.
 - [`dense_bloom.png`](experiments/acm-champernowne/base10/art/sunflower/dense_bloom.png) — decimal block structure rendered as a bloom.
 - [`escalating_bidder_mul.png`](experiments/bidder/art/contamination/escalating_bidder_mul.png) — 1, then 5, then 10 multiplications in a sea of additions. Each burst deepens the Benford scar. The additive staircase is the Champernowne sawtooth; the multiplicative kick is ε doing its work.
 - [`art_groove.png`](experiments/math/benford/art_groove.png) — four Benford demos rendered as vinyl records. Groove eccentricity is mantissa non-uniformity; a perfect circle is Benford equilibrium. The BS(1,2) walk's record has one bright scratch (the initial delta) and then a machined surface.
 - [`shutter.png`](experiments/math/benford/shutter.png) — the rolling shutter: four regimes of mantissa evolution stacked in time. The load-bearing figure for the Benford migration experiments.
+- [`butterfly.png`](experiments/bidder/bidderize/butterfly.png) — a keyed permutation of 20,000 integers, rotated 45 degrees and cropped to an oval. Colored by output mod 9 on a CMB scale. The density variations are the Feistel round function's fingerprint, almost but not quite uniform.
+- [`epsilon_bumps.png`](experiments/math/arcs/epsilon_bumps.png) — ε(m) = log_b(1+m) − m for bases 2 through 36, superimposed. The function that makes Benford inevitable and the fast inverse square root possible, drawn as a family of arcs that shrink, shift, and decay with base but never vanish.
 
 ## Building
 
