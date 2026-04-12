@@ -8,7 +8,7 @@ Two construction functions:
 
 The cipher path gives a keyed permutation of [0, period).
 The sawtooth path gives the first `count` n-primes of monoid nZ+
-(n >= 2) in ascending order, via the Hardy closed form.
+(n >= 2) in ascending order.
 
 Both objects share interface shape: .at(i), .period, __iter__,
 __len__, __repr__. See BIDDER.md for the full contract.
@@ -34,19 +34,12 @@ from sawtooth import NPrimeSequence   # noqa: E402
 
 
 def cipher(period: int, key: bytes) -> BidderBlock:
-    """Return a keyed permutation of [0, period).
-
-    See BIDDER.md and core/API.md for the full contract.
-    """
+    """Return a keyed permutation of [0, period). See BIDDER.md."""
     return fulfill(period, key)
 
 
 def sawtooth(n: int, count: int) -> NPrimeSequence:
-    """Return the first `count` n-primes of monoid nZ+ (n >= 2).
-
-    Deterministic. Random access via the Hardy closed form.
-    See BIDDER.md and core/HARDY-SIDESTEP.md for the math.
-    """
+    """Return the first `count` n-primes in ascending order. See BIDDER.md."""
     return NPrimeSequence(n, count)
 
 

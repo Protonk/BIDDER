@@ -55,8 +55,8 @@ def test_n_value_error():
         try:
             NPrimeSequence(bad, 10)
             assert False, f"NPrimeSequence({bad}, 10) should raise ValueError"
-        except ValueError:
-            pass
+        except ValueError as e:
+            assert str(e) == "n must be >= 2"
     print("  n value error (n < 2): OK")
 
 def test_count_type_error():

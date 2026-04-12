@@ -319,7 +319,7 @@ try:
     fulfill(period=2**32, key=b'doc')
 except UnsupportedPeriodError as e:
     print(e)
-    # period 4294967296 exceeds v1 cipher backend cap of 4294967295
+    # period 4294967296 exceeds maximum of 4294967295
 ```
 
 Catching `ValueError` also works (it is the parent class), but
@@ -475,7 +475,7 @@ try:
     fulfill(period=2**32, key=b'doc')
 except UnsupportedPeriodError as e:
     print(e)
-    # period 4294967296 exceeds v1 cipher backend cap of 4294967295
+    # period 4294967296 exceeds maximum of 4294967295
 ```
 
 The math allows `period = 2^32`, but the v1 cipher backend caps at

@@ -13,27 +13,13 @@ import operator
 
 
 class NPrimeSequence:
-    """The first `count` n-primes of monoid nZ+ (n >= 2),
-    in ascending order.
-
-    Random access via the Hardy closed form: the K-th n-prime
-    (0-indexed) is n * (q*n + r + 1) where q, r = divmod(K, n - 1).
-    O(1) bignum work per call. Deterministic in (n, count); no key.
-
-    Iterable: each call to iter(S) returns a fresh independent
-    generator. The object is not its own iterator (no __next__, no
-    counter, no reset).
-
-    See core/HARDY-SIDESTEP.md for the closed-form proof.
-    """
+    """Ascending enumeration of the first `count` n-primes. See BIDDER.md."""
 
     def __init__(self, n: int, count: int) -> None:
         if type(n) is not int:
             raise TypeError(f"n must be int, got {type(n).__name__}")
         if n < 2:
-            raise ValueError(
-                "n must be >= 2 (n=1 is ordinary primes; the Hardy "
-                "closed form does not apply)")
+            raise ValueError("n must be >= 2")
         if type(count) is not int:
             raise TypeError(
                 f"count must be int, got {type(count).__name__}")
@@ -43,7 +29,7 @@ class NPrimeSequence:
         self._count = count
 
     def at(self, K: int) -> int:
-        """Return the K-th n-prime (0-indexed) via the Hardy closed form.
+        """Return the K-th n-prime (0-indexed) in ascending order.
 
         Raises:
             TypeError: if K is not integer-shaped.

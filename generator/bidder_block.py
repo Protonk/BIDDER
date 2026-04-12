@@ -28,24 +28,11 @@ MAX_PERIOD_V1 = (1 << 32) - 1
 
 
 class UnsupportedPeriodError(ValueError):
-    """Requested period is mathematically valid but exceeds the v1
-    cipher backend's supported range. Lifting this requires either a
-    wider cipher backend or the deferred CRT composition lemma.
-    """
+    """Raised when `period` exceeds `bidder.MAX_PERIOD_V1`. See BIDDER.md."""
 
 
 class BidderBlock:
-    """A keyed permutation of [0, period). Random-access primitive.
-
-    Period-only mode: callers ask for an integer period, get back a
-    stateless object whose .at(i) returns the i-th element of the
-    permutation. No leading-digit guarantees, no alphabet structure,
-    no counter state on the object.
-
-    The object is iterable: each call to iter(B) returns a fresh
-    independent generator over [0, period). There is no shared cursor
-    and no __next__ on the object itself.
-    """
+    """A keyed permutation of [0, period). See BIDDER.md."""
 
     def __init__(self, period: int, key: bytes) -> None:
         if type(period) is not int:
@@ -55,8 +42,7 @@ class BidderBlock:
             raise ValueError("period must be >= 2")
         if period > MAX_PERIOD_V1:
             raise UnsupportedPeriodError(
-                f"period {period} exceeds v1 cipher backend cap of "
-                f"{MAX_PERIOD_V1}")
+                f"period {period} exceeds maximum of {MAX_PERIOD_V1}")
         if not isinstance(key, (bytes, bytearray)):
             raise TypeError(
                 f"key must be bytes or bytearray, got {type(key).__name__}")

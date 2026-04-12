@@ -20,3 +20,6 @@ build/
 
 # Poor man's build output (see build.py)
 /dist/
+
+# Benford experiment checkpoint data
+/experiments/math/benford/data_*.npz

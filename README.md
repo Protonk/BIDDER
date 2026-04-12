@@ -162,6 +162,7 @@ Not claimed:
 - [core/RIEMANN-SUM.md](core/RIEMANN-SUM.md) — the permutation-invariance theorem and finite-population correction
 - [generator/BIDDER.md](generator/BIDDER.md) — cipher design doc, observed properties, known limitations, open questions
 - [coupler.py](generator/coupler.py) / [bidder.c](generator/bidder.c) — alphabet-pinned Python and C implementations, byte-identical output
+- [bidder.py](bidder.py) / [bidder_root.c](bidder_root.c) — root entry points in Python and C; same two-path surface, with one explicit range limit on the C side: sawtooth values that exceed `uint64_t` report overflow instead of returning Python-style bignums
 - [speck.py](generator/speck.py) — full Speck family reference (all 10 variants, all Appendix C vectors)
 - [experiments/bidder/unified/](experiments/bidder/unified/) — dither, period anatomy, MC diagnostics, Riemann proof, adversarial integrands
 - [experiments/bidder/stratified/](experiments/bidder/stratified/) — the totalizing demonstration
@@ -209,3 +210,6 @@ C:
 
     gcc -O2 -o test_bidder_c tests/test_bidder_c.c generator/bidder.c -lm
     ./test_bidder_c
+
+    gcc -O2 -o test_bidder_root_c tests/test_bidder_root_c.c bidder_root.c generator/bidder.c core/acm_core.c -lm
+    ./test_bidder_root_c

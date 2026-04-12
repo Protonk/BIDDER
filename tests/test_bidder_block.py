@@ -128,8 +128,8 @@ def test_unsupported_period_raises():
             BidderBlock(bad, KEY)
             assert False, (
                 f"BidderBlock({bad}, ...) should have raised UnsupportedPeriodError")
-        except UnsupportedPeriodError:
-            pass
+        except UnsupportedPeriodError as e:
+            assert str(e) == f"period {bad} exceeds maximum of {MAX_PERIOD_V1}"
     # UnsupportedPeriodError is a ValueError subclass — caller can catch either
     try:
         BidderBlock(MAX_PERIOD_V1 + 1, KEY)

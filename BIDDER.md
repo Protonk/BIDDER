@@ -20,6 +20,38 @@ S = bidder.sawtooth(n=3, count=10)
 ```
 
 
+## Installing
+
+`bidder` is a single Python package with no dependencies outside the
+standard library. It is not distributed as a wheel and there is no
+build step on the consumer side.
+
+To use it: place the `bidder/` directory inside a directory on your
+`PYTHONPATH`, or add the parent directory that contains `bidder/` to
+`PYTHONPATH`. A typical placement is a `vendor/`, `third_party/`, or
+project-source subdirectory:
+
+```
+your_project/
+    your_code.py
+    vendor/
+        bidder/
+            __init__.py
+            BIDDER.md
+            ...
+```
+
+With `vendor/` on `PYTHONPATH`:
+
+```python
+import bidder
+
+B = bidder.cipher(period=10, key=b'doc')
+```
+
+Python 3.9 or newer. No native compilation. No configuration.
+
+
 ## Surface
 
 The public API is exactly `bidder.__all__`. Every name below is part
@@ -155,10 +187,21 @@ Output:
 
 ## `BidderBlock`
 
-A keyed permutation of `[0, period)`. Instances are constructed via
-`bidder.cipher` and are not constructed directly by callers. Aside
-from the immutable `(period, key)` captured at construction, an
-instance has no state.
+A keyed permutation of `[0, period)`. An instance holds only the
+`(period, key)` captured at construction; it has no mutable public
+state.
+
+### `bidder.BidderBlock(period, key)`
+
+```python
+bidder.BidderBlock(period: int, key: bytes | bytearray)
+```
+
+Direct constructor. Accepts the same arguments as `bidder.cipher`,
+raises the same exceptions, and returns an instance with the same
+contract. `bidder.cipher(period, key)` and
+`bidder.BidderBlock(period, key)` are equivalent; callers may use
+either form.
 
 ### `BidderBlock.at(i) -> int`
 
@@ -205,9 +248,21 @@ iterator; obtain an iterator with `iter(B)` first.
 
 ## `NPrimeSequence`
 
-An ascending enumeration of the first `count` n-primes. Instances
-are constructed via `bidder.sawtooth` and are not constructed
-directly by callers.
+An ascending enumeration of the first `count` n-primes. An instance
+holds only the `(n, count)` captured at construction; it has no
+mutable public state.
+
+### `bidder.NPrimeSequence(n, count)`
+
+```python
+bidder.NPrimeSequence(n: int, count: int)
+```
+
+Direct constructor. Accepts the same arguments as `bidder.sawtooth`,
+raises the same exceptions, and returns an instance with the same
+contract. `bidder.sawtooth(n, count)` and
+`bidder.NPrimeSequence(n, count)` are equivalent; callers may use
+either form.
 
 ### `NPrimeSequence.at(K) -> int`
 
@@ -302,7 +357,7 @@ value or type name.
 | Trigger                                                           | Message                                                                              |
 |-------------------------------------------------------------------|--------------------------------------------------------------------------------------|
 | `bidder.cipher(period, key)` with `period < 2`                    | `period must be >= 2`                                                                |
-| `bidder.sawtooth(n, count)` with `n < 2`                          | `n must be >= 2 (n=1 is ordinary primes; the Hardy closed form does not apply)`      |
+| `bidder.sawtooth(n, count)` with `n < 2`                          | `n must be >= 2`                                                                     |
 | `bidder.sawtooth(n, count)` with `count < 1`                      | `count must be >= 1`                                                                 |
 | `BidderBlock.at(i)` with `i` outside `[0, period)`                | `index {i} out of range [0, {period})`                                               |
 | `NPrimeSequence.at(K)` with `K` outside `[0, count)`              | `index {K} out of range [0, {count})`                                                |
@@ -315,7 +370,7 @@ specific case.
 
 | Trigger                                                          | Message                                                                 |
 |------------------------------------------------------------------|-------------------------------------------------------------------------|
-| `bidder.cipher(period, key)` with `period > 4294967295`          | `period {period} exceeds v1 cipher backend cap of 4294967295`           |
+| `bidder.cipher(period, key)` with `period > 4294967295`          | `period {period} exceeds maximum of 4294967295`                         |
 
 
 ## Invariants
@@ -346,6 +401,80 @@ statement about the public interface, not about internal state.
 10. `BidderBlock` and `NPrimeSequence` instances hold no mutable
     public state; there is no method that causes a subsequent call
     with the same arguments to return a different value.
+
+
+## Performance
+
+`bidder` is pure Python. There is no C extension, no NumPy
+dependency, and no JIT. Each `.at(i)` call runs several rounds of
+a Feistel cipher in interpreted Python.
+
+For small to moderate workloads — iterating a `BidderBlock` of
+period 10,000, or calling `.at(i)` in a loop up to a few million
+times — this is fast enough to be imperceptible. For workloads
+that call `.at()` hundreds of millions of times (for example,
+using a `BidderBlock` as a per-element random number source for a
+large Monte Carlo simulation), the per-call overhead adds up.
+Generating 20,000 full permutations of period 20,000 takes
+roughly 20 minutes on a 2020-era laptop.
+
+This is a known property of the implementation, not a bug. The
+design trades speed for simplicity: no compilation step, no
+platform-specific binaries, no build dependencies. If a workload
+is bottlenecked on `.at()` throughput, the correct response is to
+restructure the workload (precompute and cache with `list(B)`,
+reduce the number of calls, or batch with `iter(B)`), not to
+rewrite the cipher backend.
+
+
+## Recipes
+
+Patterns built on the primitive surface. Each recipe is fully
+specified by `bidder`'s public contract — no hidden state, no
+additional runtime assumptions — and its correctness follows from the
+invariants above.
+
+### Uniform symbols over a chosen alphabet
+
+To obtain a keyed, deterministic sequence of symbols drawn from an
+alphabet of size `k`, where every symbol appears exactly `m` times and
+the order is a keyed permutation: pick `period = k * m`, construct a
+`BidderBlock`, and reduce each output modulo `k`.
+
+```python
+import bidder
+
+k = 9
+m = 1000
+B = bidder.cipher(period=k * m, key=b'instrument-check')
+symbols = [(B.at(i) % k) + 1 for i in range(B.period)]
+assert len(symbols) == k * m
+assert all(1 <= s <= k for s in symbols)
+for s in range(1, k + 1):
+    assert symbols.count(s) == m
+print("ok")
+```
+
+Output:
+
+```
+ok
+```
+
+Why this works: `B.at` is a bijection on `[0, k*m)` (invariant 3), so
+the preimage of each residue class modulo `k` has exactly `m`
+elements. Reducing modulo `k` therefore yields each of the `k`
+residues exactly `m` times. Adding `1` shifts the alphabet to
+`{1, 2, ..., k}`; the `+ 1` is a presentation choice, not a
+correctness requirement.
+
+The order in which symbols appear is a keyed permutation: different
+keys give different orders, and a fresh `BidderBlock` constructed
+with the same `(period, key)` reproduces the same order exactly.
+
+The construction requires `k * m <= bidder.MAX_PERIOD_V1`. Any `k`
+and `m` with `k >= 2`, `m >= 1`, and `k * m <= 4294967295` are
+accepted.
 
 
 ## Examples
@@ -445,7 +574,7 @@ except bidder.UnsupportedPeriodError as e:
 Output:
 
 ```
-UnsupportedPeriodError | period 4294967296 exceeds v1 cipher backend cap of 4294967295
+UnsupportedPeriodError | period 4294967296 exceeds maximum of 4294967295
 ```
 
 ### Example 6 — permutation invariant
