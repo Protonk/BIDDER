@@ -68,11 +68,11 @@ list(B)
 # [0, 4, 8, 1, 7, 6, 9, 3, 2, 5]
 ```
 
-## Construction, generator, gallery
+## Construction, generator, art
 
 This repo is now best read in three passes: the exact construction,
-the keyed generator that sits on top of it, and the gallery of
-coordinate experiments that turned the structure into pictures.
+the keyed generator that sits on top of it, and the art that falls
+out when you give exact data enough room to move.
 
 ### Construction
 
@@ -174,11 +174,16 @@ Not claimed:
 
 > Uniform numbers, given too much room, make a star.
 
+![Binary run lengths of n-prime streams plotted on polar axes. Short runs dominate exponentially, collapsing the plot toward the center and producing concentric rings of light. The result looks like a sun — bright core, banded corona, radial spikes at long rare runs. An instructive failure: the visualization was meant to show structure in the runs, but the structure of the structure made a star instead.](experiments/acm-champernowne/base2/art/rle/corona_attempt.png)
+
 Art folders coordinate experiments on exact data. The next time someone says some of science is an art you should take it seriously. The below are a random set of examples.
 
-- [`corona_attempt.png`](experiments/acm-champernowne/base2/art/rle/corona_attempt.png) — an instructive failure: binary run lengths on polar axes collapse toward the center because short runs dominate exponentially. The "sun" is a failure mode caused by structure of structure.
+- [`corona_attempt.png`](experiments/acm-champernowne/base2/art/rle/corona_attempt.png) — the sun above. An instructive failure: binary run lengths on polar axes collapse toward the center because short runs dominate exponentially. The "sun" is a failure mode caused by structure of structure.
 - [`rle_ridgeline.png`](experiments/acm-champernowne/base2/art/rle/rle_ridgeline.png) — the same residual histograms stacked as terrain. Warm seam tracks high `v_2(n)`.
 - [`dense_bloom.png`](experiments/acm-champernowne/base10/art/sunflower/dense_bloom.png) — decimal block structure rendered as a bloom.
+- [`escalating_bidder_mul.png`](experiments/bidder/art/contamination/escalating_bidder_mul.png) — 1, then 5, then 10 multiplications in a sea of additions. Each burst deepens the Benford scar. The additive staircase is the Champernowne sawtooth; the multiplicative kick is ε doing its work.
+- [`art_groove.png`](experiments/math/benford/art_groove.png) — four Benford demos rendered as vinyl records. Groove eccentricity is mantissa non-uniformity; a perfect circle is Benford equilibrium. The BS(1,2) walk's record has one bright scratch (the initial delta) and then a machined surface.
+- [`shutter.png`](experiments/math/benford/shutter.png) — the rolling shutter: four regimes of mantissa evolution stacked in time. The load-bearing figure for the Benford migration experiments.
 
 ## Building
 
