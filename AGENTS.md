@@ -54,8 +54,17 @@ period 20k takes ~20 minutes vs. milliseconds for numpy.
 
 Do not "fix" this by rewriting the cipher in C or adding NumPy
 vectorization. The simplicity is the point. If a workload is
-slow, the answer is to precompute with `list(B)` or restructure
-the caller, not to optimize the backend.
+slow, the answer is to precompute with `list(B)`, restructure
+the caller, or use the C build (`import bidder_c`).
+
+The C implementation lives at `bidder_root.c` +
+`generator/bidder.c`, with an opaque FFI layer in
+`bidder_opaque.c` (all symbols prefixed `bdo_`). Build with
+`make`. The shared library is consumed by `dist/bidder_c/` via
+ctypes. If you modify the cipher backend, you must update both
+`generator/coupler.py` (Python) and `generator/bidder.c` (C),
+then run `python3 tests/test_dual_parity.py` to verify they
+agree.
 
 ## Importing BIDDER in experiments
 

@@ -9,7 +9,9 @@ concrete stream family.
   surface over (mantissa, base) space, bridging the floating-point
   epsilon function to the Champernowne sawtooth across all bases.
   [ARCS.md](arcs/ARCS.md)
-- **benford/** — Mixed additive and multiplicative walks viewed through
-  rolling-shutter log-mantissa densities. The phase-1 outputs are the
-  shutter composite, the base sweep, and per-demo convergence lines.
-  [BENFORD.md](benford/BENFORD.md)
+- **benford/** — Benford migration under mixed additive/multiplicative
+  dynamics. Four ensemble demos (BS(1,2) walk, add/mult alternating,
+  front-loaded freeze, pure-add contrapositive), plus rolling-shutter
+  composites, exact-state tracers, exponential convergence rate
+  measurement, base-fingerprint scan, and BIDDER-vs-numpy comparison
+  figures. [BENFORD.md](benford/BENFORD.md)

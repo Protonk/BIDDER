@@ -141,6 +141,40 @@ EXTRA: list[tuple[str, str]] = [
     ("BIDDER.md", "BIDDER.md"),
 ]
 
+# ---- bidder_c package: ctypes wrapper + shared library ----
+
+PKG_C = os.path.join(DIST, "bidder_c")
+
+BIDDER_C_INIT = '''\
+"""
+bidder_c — C-accelerated BIDDER with the same contract as bidder/.
+
+Same API, same exceptions, same BIDDER.md. Loads libbidder from this
+package directory via ctypes. Requires compilation (make) before use.
+"""
+
+from ._native import (  # noqa: F401
+    cipher,
+    sawtooth,
+    BidderBlock,
+    NPrimeSequence,
+    MAX_PERIOD_V1,
+    UnsupportedPeriodError,
+)
+
+__all__ = [
+    "cipher", "sawtooth",
+    "BidderBlock", "NPrimeSequence",
+    "MAX_PERIOD_V1", "UnsupportedPeriodError",
+]
+'''
+
+# The shared library name depends on platform.
+if sys.platform == "darwin":
+    _LIB_NAME = "libbidder.dylib"
+else:
+    _LIB_NAME = "libbidder.so"
+
 
 def main() -> None:
     if os.path.isdir(DIST):
@@ -148,6 +182,8 @@ def main() -> None:
     os.makedirs(PKG)
 
     written: list[str] = []
+
+    # ---- Pure Python package (dist/bidder/) ----
 
     for src_rel, dest_rel, edits in MODULES:
         src = os.path.join(HERE, src_rel)
@@ -173,6 +209,38 @@ def main() -> None:
         dest = os.path.join(PKG, dest_rel)
         shutil.copy2(src, dest)
         written.append(os.path.relpath(dest, DIST))
+
+    # ---- C-accelerated package (dist/bidder_c/) ----
+
+    lib_src = os.path.join(HERE, _LIB_NAME)
+    if not os.path.isfile(lib_src):
+        print(f"warning: {_LIB_NAME} not found; skipping bidder_c/. "
+              f"Run 'make' first.", file=sys.stderr)
+    else:
+        os.makedirs(PKG_C)
+
+        # __init__.py
+        init_dest = os.path.join(PKG_C, "__init__.py")
+        with open(init_dest, "w") as f:
+            f.write(BIDDER_C_INIT)
+        written.append(os.path.relpath(init_dest, DIST))
+
+        # _native.py
+        native_src = os.path.join(HERE, "bidder_c_native.py")
+        native_dest = os.path.join(PKG_C, "_native.py")
+        shutil.copy2(native_src, native_dest)
+        written.append(os.path.relpath(native_dest, DIST))
+
+        # libbidder
+        lib_dest = os.path.join(PKG_C, _LIB_NAME)
+        shutil.copy2(lib_src, lib_dest)
+        written.append(os.path.relpath(lib_dest, DIST))
+
+        # BIDDER.md
+        doc_src = os.path.join(HERE, "BIDDER.md")
+        doc_dest = os.path.join(PKG_C, "BIDDER.md")
+        shutil.copy2(doc_src, doc_dest)
+        written.append(os.path.relpath(doc_dest, DIST))
 
     print(f"dist/ built with {len(written)} files:")
     for rel in sorted(written):

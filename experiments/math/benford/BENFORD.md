@@ -2,59 +2,48 @@
 
 Four ensemble demos plus several views of the same checkpoint data.
 
-**Per-demo trajectories** (one panel each):
-- `add_mult_alternating_l1.png`
-- `bs12_walk_l1.png`
-- `front_loaded_l1.png`
-- `pure_add_l1.png`
-- `bs12_biased_l1.png`
-
-**Composite views** (all four demos side by side):
+**Core figures** (10):
 - `shutter.png` — continuous log10 mantissa, 256 bins, rolling shutter.
-- `shutter_digits.png` — same data projected into 9 first-digit bins;
-  load-bearing figure.
+- `shutter_digits.png` — same data projected into 9 first-digit bins.
 - `shutter_polar.png` — first-digit dial, time as radius, for the
   two contrasting mixed-walk demos.
-- `reciprocal.png` — final-step positions windowed to
-  `median/10 .. median*10`, with a `1/x` reference overlay.
 - `base_fingerprint.png` — L1-to-uniform of `log_b` mantissa on the
-  final step, scanned continuously for `b` in `[2, 40]`, now including
+  final step, scanned continuously for `b` in `[2, 40]`, including
   the biased walk.
-
-**BS(1,2) investigation:**
-- `bs12_rate.png` — dedicated 1M-walker short run showing exponential L1
-  decay with half-life ~20 steps.
-- `tracers.png` — 64 exact-state walker trajectories (left: log10|x|,
-  right: group-element complexity in bits, growing as t^0.50).
+- `bs12_rate.png` — dedicated 1M-walker short run showing exponential
+  L1 decay with half-life ~20 steps.
+- `tracers_v2.png` — three-panel exact-state tracer (log10|x|,
+  mantissa convergence, group-element complexity growing as t^0.50).
+- `bidder_shutter.png` — BIDDER cipher vs numpy PRNG, 2x2 comparison.
+- `art_groove.png` — four demos rendered as vinyl records.
+- `art_skyline.png` — BS(1,2) vs pure-add as a nighttime skyline.
 
 Checkpoint data is written to `data_<name>.npz` and ignored by git.
 
 
 ## What is in the figures
 
-`shutter_digits.png` is the load-bearing picture. Each row is one
-checkpointed first-digit histogram, stacked bottom-to-top in time.
-Projection from the stored 256-bin log10-mantissa histograms is exact
-under piecewise-constant weighting. The initial delta at digit 1 in
-the three delta-seeded demos is excluded from the color range so the
-rest of each panel reads at full contrast.
+`shutter.png` is the load-bearing picture. Each row is one
+checkpointed log-mantissa histogram, stacked top-to-bottom in time.
+The four panels show the four regimes: add/mult alternating (stripe
+pattern), BS(1,2) walk (converges to flat), front-loaded freeze
+(vertical barcode), pure add (Champernowne diagonal sweep).
 
-`shutter.png` keeps the continuous 256-bin view for its sub-digit
-detail. It is where the `front_loaded` "vertical barcode" effect is
-most visible, because continuous mantissa preserves the exact frozen
-positions.
+`shutter_digits.png` projects the same data into 9 first-digit bins.
+More immediately readable as "which digit has the mass."
 
 `shutter_polar.png` is the dial form: angle is first-digit sector (1
 at top, reading clockwise), radius is op index (centre is the initial
 state, edge is the final state). Two panels: the slow add/mult
 alternation and the fast-converging BS(1,2) walk.
 
-`reciprocal.png` takes each demo's final positive-`x` snapshot,
-windows to `median/10 .. median*10`, and overlays a normalized `1/x`
-curve. Panel titles report the window retention fraction.
-
 `base_fingerprint.png` plots the terminal `L1` curve over `b` in
 `[2, 40]` for `pure_add`, `bs12_walk`, and `bs12_biased`.
+
+`tracers_v2.png` shows 32 exact-state walkers across three panels:
+scale diffusion (log10|x|), mantissa convergence (the spectral gap
+made visible as individual walkers filling [0,1)), and group-element
+complexity (sqrt(t) growth).
 
 
 ## What the runs showed

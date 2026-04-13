@@ -21,5 +21,10 @@ build/
 # Poor man's build output (see build.py)
 /dist/
 
-# Benford experiment checkpoint data
+# Experiment checkpoint data
 /experiments/math/benford/data_*.npz
+/experiments/bidder/bidderize/data_*.npz
+
+# Dual release build artifacts (see DUAL-PLAN.md)
+libbidder.*
+test_bidder_root_c

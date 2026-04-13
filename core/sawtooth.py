@@ -10,6 +10,7 @@ arithmetic.
 """
 
 import operator
+import sys
 
 
 class NPrimeSequence:
@@ -20,11 +21,18 @@ class NPrimeSequence:
             raise TypeError(f"n must be int, got {type(n).__name__}")
         if n < 2:
             raise ValueError("n must be >= 2")
+        if n.bit_length() > 64:
+            raise OverflowError(
+                f"n must fit in a 64-bit unsigned integer, got {n}")
         if type(count) is not int:
             raise TypeError(
                 f"count must be int, got {type(count).__name__}")
         if count < 1:
             raise ValueError("count must be >= 1")
+        if count > sys.maxsize:
+            raise OverflowError(
+                f"count must be at most sys.maxsize ({sys.maxsize}),"
+                f" got {count}")
         self._n = n
         self._count = count
 

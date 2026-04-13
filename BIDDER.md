@@ -156,9 +156,10 @@ There is no key.
 - `count` — `int`. Must satisfy `count >= 1`. Strict: `bool`
   rejected.
 
-There is no upper bound on `n` or on `count`. The underlying
-computation is `O(1)` bignum arithmetic per `.at(K)` call, so large
-`count` and large `K` are supported.
+`n` must be at most `2^64 − 1`. `count` must be at most
+`sys.maxsize` (typically `2^63 − 1`). The underlying computation
+is `O(1)` integer arithmetic per `.at(K)` call, so large `count`
+and large `K` are supported within these bounds.
 
 **Returns** an `NPrimeSequence`.
 
@@ -166,6 +167,8 @@ computation is `O(1)` bignum arithmetic per `.at(K)` call, so large
 
 - `TypeError` — `n` or `count` is not exactly `int`.
 - `ValueError` — `n < 2`, or `count < 1`.
+- `OverflowError` — `n` exceeds `2^64 − 1`, or `count` exceeds
+  `sys.maxsize`.
 
 **Example**
 
@@ -284,7 +287,7 @@ Raises `TypeError` if `K` is not index-like. Raises `ValueError` if
 `K` is out of range.
 
 Pure in `(n, K)`: the value does not depend on `count` beyond the
-`K < count` validity check. Constant-time bignum arithmetic.
+`K < count` validity check. Constant-time integer arithmetic.
 
 ### `NPrimeSequence.n -> int`
 
@@ -328,8 +331,7 @@ an iterator; obtain an iterator with `iter(S)` first.
 
 Value: `4294967295`. The largest value accepted for the `period`
 argument of `bidder.cipher`. A call with `period > MAX_PERIOD_V1`
-raises `bidder.UnsupportedPeriodError`. `bidder.sawtooth` has no
-analogous upper bound.
+raises `bidder.UnsupportedPeriodError`.
 
 
 ## Exceptions
@@ -371,6 +373,13 @@ specific case.
 | Trigger                                                          | Message                                                                 |
 |------------------------------------------------------------------|-------------------------------------------------------------------------|
 | `bidder.cipher(period, key)` with `period > 4294967295`          | `period {period} exceeds maximum of 4294967295`                         |
+
+### `OverflowError`
+
+| Trigger                                                          | Message                                                                 |
+|------------------------------------------------------------------|-------------------------------------------------------------------------|
+| `bidder.sawtooth(n, count)` with `n > 2^64 − 1`                  | `n must fit in a 64-bit unsigned integer, got {n}`                     |
+| `bidder.sawtooth(n, count)` with `count > sys.maxsize`            | `count must be at most sys.maxsize ({sys.maxsize}), got {count}`       |
 
 
 ## Invariants
@@ -425,6 +434,13 @@ is bottlenecked on `.at()` throughput, the correct response is to
 restructure the workload (precompute and cache with `list(B)`,
 reduce the number of calls, or batch with `iter(B)`), not to
 rewrite the cipher backend.
+
+A C implementation with the same contract is available as
+`bidder_c`. It requires compilation (`make`) and exposes the same
+`cipher` and `sawtooth` functions via a ctypes wrapper. The C path
+is roughly 1000x faster for `.at()` throughput. Both packages ship
+the same `BIDDER.md` and have identical behavior on all valid
+inputs.
 
 
 ## Recipes
@@ -536,7 +552,7 @@ Output:
 4398046511102
 ```
 
-The `(2**40)`-th 2-prime, computed by constant-time bignum
+The `(2**40)`-th 2-prime, computed by constant-time integer
 arithmetic; no enumeration of preceding elements.
 
 ### Example 4 — concurrent independent iteration

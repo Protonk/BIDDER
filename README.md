@@ -186,9 +186,7 @@ Art folders coordinate experiments on exact data. The next time someone says som
 - [`dense_bloom.png`](experiments/acm-champernowne/base10/art/sunflower/dense_bloom.png) — decimal block structure rendered as a bloom.
 - [`escalating_bidder_mul.png`](experiments/bidder/art/contamination/escalating_bidder_mul.png) — 1, then 5, then 10 multiplications in a sea of additions. Each burst deepens the Benford scar. The additive staircase is the Champernowne sawtooth; the multiplicative kick is ε doing its work.
 - [`art_groove.png`](experiments/math/benford/art_groove.png) — four Benford demos rendered as vinyl records. Groove eccentricity is mantissa non-uniformity; a perfect circle is Benford equilibrium. The BS(1,2) walk's record has one bright scratch (the initial delta) and then a machined surface.
-- [`shutter.png`](experiments/math/benford/shutter.png) — the rolling shutter: four regimes of mantissa evolution stacked in time. The load-bearing figure for the Benford migration experiments.
 - [`butterfly.png`](experiments/bidder/bidderize/butterfly.png) — a keyed permutation of 20,000 integers, rotated 45 degrees and cropped to an oval. Colored by output mod 9 on a CMB scale. The density variations are the Feistel round function's fingerprint, almost but not quite uniform.
-- [`epsilon_bumps.png`](experiments/math/arcs/epsilon_bumps.png) — ε(m) = log_b(1+m) − m for bases 2 through 36, superimposed. The function that makes Benford inevitable and the fast inverse square root possible, drawn as a family of arcs that shrink, shift, and decay with base but never vanish.
 
 ## Building
 

@@ -185,6 +185,34 @@ def test_astronomical_K():
 
 
 # =====================================================================
+# Input caps (dual-release contract)
+# =====================================================================
+
+def test_n_overflow():
+    """n > 2^64 - 1 must raise OverflowError."""
+    try:
+        NPrimeSequence(1 << 65, 1)
+        assert False, "should have raised OverflowError"
+    except OverflowError:
+        pass
+    print("  n overflow cap: OK")
+
+
+def test_count_overflow():
+    """count > sys.maxsize must raise OverflowError."""
+    import sys as _sys
+    try:
+        NPrimeSequence(2, _sys.maxsize + 1)
+        assert False, "should have raised OverflowError"
+    except OverflowError:
+        pass
+    # sys.maxsize itself should be accepted (not raise)
+    # but we don't construct it because that would allocate nothing
+    # useful — just verify the boundary.
+    print("  count overflow cap: OK")
+
+
+# =====================================================================
 # Entry point
 # =====================================================================
 
@@ -196,6 +224,8 @@ if __name__ == '__main__':
     test_n_value_error()
     test_count_type_error()
     test_count_value_error()
+    test_n_overflow()
+    test_count_overflow()
     test_at_out_of_range()
     test_at_type_error()
     test_properties()

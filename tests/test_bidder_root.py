@@ -53,6 +53,22 @@ def test_sawtooth_small_sweep():
         assert S.at(0) == n  # first n-prime is n itself
     print("  sawtooth small sweep: OK")
 
+def test_sawtooth_n_overflow():
+    try:
+        bidder.sawtooth(1 << 65, 1)
+        assert False, "should have raised OverflowError"
+    except OverflowError:
+        pass
+    print("  sawtooth n overflow cap: OK")
+
+def test_sawtooth_count_overflow():
+    try:
+        bidder.sawtooth(2, sys.maxsize + 1)
+        assert False, "should have raised OverflowError"
+    except OverflowError:
+        pass
+    print("  sawtooth count overflow cap: OK")
+
 
 # =====================================================================
 # Re-exports
@@ -105,6 +121,8 @@ if __name__ == '__main__':
     test_cipher_small_sweep()
     test_sawtooth_returns_nprime_sequence()
     test_sawtooth_small_sweep()
+    test_sawtooth_n_overflow()
+    test_sawtooth_count_overflow()
     test_reexports()
     test_clean_import()
 
