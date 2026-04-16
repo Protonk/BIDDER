@@ -6,8 +6,9 @@ references. This paper either closes in that space or not at all.
 ## Core drafting discipline
 
 Columbo. Show the answer first, then show why no one else
-found it. The four-failure diagnosis belongs after the result,
-not in the opening. [meirl.jpg](./meirl.jpg)
+found it. 
+
+![meirl.jpg](./meirl.jpg)
 
 
 ## What the paper is
