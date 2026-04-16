@@ -170,9 +170,8 @@ PNAS readers who care about Benford's law:
   the spectral gap identification is stated at the strongest
   level we can prove. These are the referees.
 
-The main text must serve the first two groups. In order to be read by those two groups it needs to serve the third: the reviers.
-
-1600 words.
+The main text must serve the first two groups. To do that, it
+has to satisfy the third: the referees.
 
 ## The register: undergraduate-accessible, cite-precise
 
@@ -475,9 +474,13 @@ then show why no one else found it.
 ### 1. Intro and statement of claim (200 words)
 
 Open cold. Benford's law, one sentence. The question "why,"
-one sentence .Then the claim: the mechanism is the function epsilon(m) = log_2(1+m) - m, the nonlinear part of the coordinate map between linear and logarithmic mantissa. It is the spectral gap of the BS(1,2)-induced mixed-arithmetic Markov operator on the mantissa circle.
-
-Convergence is exponential. The rate is a functional of
+one sentence — the existing explanations each fail at a
+specific point. Then the claim: the mechanism is the function
+epsilon(m) = log_2(1+m) - m, the nonlinear part of the
+coordinate map between linear and logarithmic mantissa. It is
+the spectral gap of the BS(1,2)-induced mixed-arithmetic
+Markov operator on the mantissa circle. Convergence is
+exponential. The rate is a functional of
 epsilon. The mechanism terminates at the concavity of the
 binary logarithm.
 
@@ -647,7 +650,8 @@ The random walk on BS(1,2) converges exponentially to the
 Benford distribution. The rate is controlled by ε. The
 only escape is pure addition.
 
-Future work is not needed.
+100 words. No future work, no hedging. End on the
+substrate.
 
 
 ## The word budget
