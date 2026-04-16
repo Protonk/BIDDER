@@ -7,7 +7,7 @@ references. This paper either closes in that space or not at all.
 
 Columbo. Show the answer first, then show why no one else
 found it. The four-failure diagnosis belongs after the result,
-not in the opening. [Image #1]
+not in the opening. [meirl.jpg](./meirl.jpg)
 
 
 ## What the paper is
