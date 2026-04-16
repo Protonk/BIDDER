@@ -3,6 +3,12 @@
 Target: PNAS Brief Report. ~1600 words, 2 figures, 15
 references. This paper either closes in that space or not at all.
 
+## Core drafting discipline
+
+Columbo. Show the answer first, then show why no one else
+found it. The four-failure diagnosis belongs after the result,
+not in the opening. [Image #1]
+
 
 ## What the paper is
 
@@ -561,10 +567,20 @@ R² = 0.99 on the exponential fit).
 Two figures, each carrying setup that the prose would
 otherwise spend words describing.
 
-**Figure 1** (the random walk converging): shows the walk's
-mantissa distribution settling into Benford equilibrium.
-Caption defines op-index and BS(1,2) operationally. The
-reader *sees* convergence before the prose argues it.
+**Figure 1** (convergence rates, log-log): titled
+"Convergence to Benford requires mixing." Single panel,
+log-log axes, three curves: addition only (flat — no
+convergence), alternating add/mult (straight line —
+algebraic decay), mixed BS(1,2) (concave down — exponential
+convergence). Direct curve labels, no legend box. A dotted
+line marks the finite-sample L₁ floor. The log-log format
+is the argument: the three regimes have three qualitatively
+different *shapes*, not just three speeds. A reader who
+sees the figure already holds the theorem's content — mixing
+is the condition, and the rate is exponential. Caption
+defines L₁ distance to Benford, names the three regimes
+operationally (±1, sequenced add-then-mult, simultaneous
+¼-probability each), and states N = 50,000 walkers.
 
 **Figure 2** (the Cayley graph): shows the binary tiling with
 generators labeled. Caption names the group relation
@@ -749,16 +765,23 @@ qualitatively different effects on the mantissa.
 
 ### Goal 3: Two figures, each carrying setup
 
-Two separate figures: the random walk converging to Benford, and the Cayley graph of BS(1,2).
+Two separate figures: the L₁ convergence plot and the
+Cayley graph of BS(1,2).
 
 Why: the figures' job is no longer to show evidence — it's
-to carry definitions that would otherwise cost prose words.
-The random-walk figure defines op-index and shows what
-convergence looks like. The Cayley graph defines the
-generators and shows the geometry. Between them, they
-replace ~160 words of descriptive prose in the group-setup
-and mechanism sections, which is how the word budget
-absorbs two figures without expanding.
+to carry definitions and claims that would otherwise cost
+prose words. The convergence figure (log-log, three curves)
+carries the theorem's content visually: three regimes, three
+qualitatively different curve shapes, the title itself
+stating the claim. The alternating-add/mult curve does
+double duty — it appears in both the figure and the
+robustness section, showing that having both operations is
+necessary but not sufficient, and that the figure already
+demonstrates the sensitivity boundary. The Cayley graph
+defines the generators and shows the geometry. Between them,
+they replace ~160 words of descriptive prose in the
+group-setup and mechanism sections, which is how the word
+budget absorbs two figures without expanding.
 
 ## The references
 
@@ -801,16 +824,16 @@ space in the final 15, and only if they do work in the main text):
   Sava-Huss's horizontal-displacement estimate.
 - Kaimanovich & Vershik (1983) — boundary theory; spectral
   gap context.
-- Kontorovich & Miller — Benford convergence rates via
-  Fourier methods. Cited in Miller & Takloo-Bighash (2006),
-  Ch. 11, as *the* application of CLT-rate Fourier analysis
-  to Benford. This is the closest prior work from the analytic
-  number theory side. If they establish an algebraic rate,
-  they're in the power-law column of our Hamming table. If
-  they get no quantitative rate, they're in the CLT column.
-  Either way, our exponential rate via BS(1,2) supersedes —
-  but we need to know exactly what they proved and position
-  against it.
+- Kontorovich & Miller — asymptotic Benford behavior in
+  special analytic settings via Gaussian limit laws for
+  logarithms, Poisson summation, and equidistribution.
+  Cited in Miller & Takloo-Bighash (2006), Ch. 11, as a
+  Fourier-analysis route to Benford. This is the closest prior
+  work from the analytic number theory side, but it belongs
+  with the CLT/Fourier line of the Hamming diagnosis, not the
+  power-law line: their method is system-specific and
+  asymptotic, and does not identify the mixed-arithmetic
+  mechanism or furnish the exponential rate proved here.
 - Tsao (1974) — leading-digit proportions via iterated
   averaging. Parallel result to Schatte via different route.
   Cited in FOURIER'S STAR.
