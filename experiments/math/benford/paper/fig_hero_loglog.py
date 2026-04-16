@@ -113,7 +113,7 @@ def main():
     # Noise floor
     ax.axhline(noise_floor, color='#999999', linestyle=':', linewidth=0.8,
                zorder=1)
-    ax.text(1.2, noise_floor * 0.70, 'sampling floor',
+    ax.text(1.2, noise_floor * 0.70, 'finite-sample L$_1$ floor',
             fontsize=7, color='#888888', ha='left', va='top')
 
     # Direct curve labels

@@ -170,12 +170,9 @@ PNAS readers who care about Benford's law:
   the spectral gap identification is stated at the strongest
   level we can prove. These are the referees.
 
-The main text must serve the first two groups. A PNAS
-Brief Report has 1600 words to make both the physicists and
-the statisticians feel they got what they came for, while giving
-the dynamicists enough actual proof, not deferred proof, to sign
-off on the claim.
+The main text must serve the first two groups. In order to be read by those two groups it needs to serve the third: the reviers.
 
+1600 words.
 
 ## The register: undergraduate-accessible, cite-precise
 
@@ -275,107 +272,18 @@ reappearing because you didn't commit to one clean handoff
 the first time. Each prior result gets one appearance, does
 its job, and is done.
 
-**The crank-adjacency risk.** Accessibility is the register
-most likely to trip a reviewer's crank-adjacency alarm,
-because most Benford cranks also write accessibly. The defense
-is specificity. Cranks wave at the phenomenon; we name a
-specific group, state a specific theorem, cite specific prior
-work with specific characterizations of what it did and didn't
-do. Accessibility plus specificity reads as confident
-exposition. Accessibility without specificity reads as
-evasion.
-
 Every citation must do a specific job — naming what a prior
 result did, what it didn't do, or what machinery the proof
 rests on. No citation is there to signal familiarity. A
 skeptical reader sees literature command not from density but
 from precision: each name appears because the paper needs it,
 and what the paper needs from it is stated. Much may be
-needed. That is what separates this paper from the paper a
-reviewer would reject on vibes.
-
-
-## What must be true before we draft
-
-These are in priority order.
-
-1. **The proof must close.** Specifically: the wrapped-Cauchy
-   comparison (or identity) in step (b), and the biased-walk
-   treatment in step (c). If either is shaky, the theorem
-   statement has to change, and the rhetoric changes with it.
-   Do not draft around the gap. Bring the argument to the point
-   where we know whether the spectral-gap identification is
-   exact or only a lower bound, then write the paper in that
-   register.
-
-2. **The rate prediction must be quantitative.** The simulation
-   gives lambda ~ 0.035. The theorem gives lambda = 2*pi*gamma*rho.
-   We need gamma and rho as explicit numbers for the symmetric
-   walk, and the predicted lambda needs to be in the same
-   neighborhood as 0.035. If the bound is off by 10x, we state
-   it as a bound and don't oversell the match. If it's within a
-   factor of 2, we can say "the predicted rate agrees with
-   simulation to within [factor]." This quantitative comparison is
-   the difference between a paper that *says* "spectral gap" and a
-   paper that *measures* one.
-
-3. **Anything beyond BS(1,2) must arrive with status attached.**
-   The theorem is stated for BS(1,2). Any broader sentence about
-   "mixed arithmetic" must be either a corollary with an explicit
-   embedding argument or a labeled conjecture. There is no
-   ambient overclaiming prose.
-
-4. **The existing simulations must be publication-grade.** The data
-   exist. The figures are dark-background diagnostic plots. They
-   need to be redrawn for PNAS column width, white background,
-   correct fonts, and colorblind-safe palettes. The data don't
-   change; the rendering does. This is the smallest item but it
-   blocks submission.
-
-5. **The related work must be positioned as a field of
-   specific failures, not a background section.** The four
-   prior explanations (Hill, CLT-for-logs, spread-across-scales,
-   power-law mixing) are not "related work" in the usual sense
-   — they are the *reason the paper exists*. Each one fails at
-   a named point, and the paper's opening movement names those
-   points. This is a stronger positioning than "complementary,
-   not competing." It's: "here are the four things the field
-   has tried, here is exactly where each one breaks, and here
-   is the one function that fixes all four."
-
-   The three closest ancestors get specific positioning:
-   - **Hill (1995):** gives the fixed point. We give the
-     dynamics that converge to it. Hill's theorem becomes a
-     corollary: scale-invariance holds because the Benford
-     distribution is the unique fixed point of the epsilon
-     contraction, and a contraction's fixed point is invariant
-     under the contraction's generators.
-   - **Schatte (1986):** our direct ancestor. Proved exponential
-     convergence under pure multiplication and non-convergence
-     under pure addition. We close the gap: mixed arithmetic
-     converges exponentially, and the rate is epsilon.
-   - **Diaconis (1977):** "sufficiently many significant digits"
-     implies approximate Benford. Our result gives the
-     mechanism beneath his observation and replaces "sufficiently
-     many" with an explicit exponential rate.
-
-   At 1600 words, none of these gets a full paragraph. But
-   the four-failure framing in movement 1 does the heavy
-   positioning work — by the time a referee reaches the
-   theorem, they already know where it sits relative to
-   everything else.
+needed. 
 
 
 ## The proof problem
 
-The earlier version of the proof story used three ingredients:
-transfer operator, wrapped Cauchy structure, visit rate. That
-framing was invented before the Schatte analysis was complete.
-Now we have three sources that triangulate on a cleaner proof
-story, and the mechanism section of the paper should reflect
-this.
-
-That isn't a problem. The problem is we need to get there in ~700 words, accessible to a mathematics undergrad. 
+We have three sources that triangulate on a cleaner proof story, and the mechanism section of the paper should reflect this. That isn't a problem. The problem is we need to get there in ~700 words, accessible to a mathematics undergrad. 
 
 ### The Schatte–FOURIER'S STAR backbone
 
@@ -455,6 +363,21 @@ theorem's prediction. It's also a natural citation for the
 robustness section: the result is not sensitive to arithmetic
 details, only to whether multiplication is present.
 
+### What must be true before we draft
+
+These are in priority order.
+
+1. **The proof must close.** Specifically: the wrapped-Cauchy
+   comparison (or identity) in step (b), and the biased-walk
+   treatment in step (c). If either is shaky, the theorem
+   statement has to change, and the rhetoric changes with it.
+   Do not draft around the gap. 
+
+2. **The rate prediction must be quantitative.** The simulation
+   gives lambda ~ 0.035. The theorem gives lambda = 2*pi*gamma*rho.
+   We need gamma and rho as explicit numbers for the symmetric
+   walk, and the predicted lambda needs to be in the same
+   neighborhood as 0.035. 
 
 ## Specific risks
 
@@ -511,7 +434,7 @@ details, only to whether multiplication is present.
 
 ## The failure modes
 
-What kills the paper at review:
+What kills the paper:
 
 - **"This is known."** A referee who works on random walks on
   solvable groups may feel that exponential mixing on BS(1,2) is
@@ -535,17 +458,6 @@ What kills the paper at review:
   relies on a deferred lemma, omitted estimate, or "see elsewhere"
   move, the paper will read like a claim in search of a proof.
 
-- **"Why PNAS?"** This is a theorem about a specific solvable
-  group and a specific function. What makes it PNAS-broad rather
-  than Annals-of-Probability narrow? Answer: the Hamming
-  diagnosis. The paper doesn't just prove a theorem — it
-  positions the theorem against a field of failed explanations
-  that PNAS readers already know about, and shows that the
-  theorem resolves all four simultaneously. That framing is
-  what makes it broad. If section 6 (the diagnosis) fails to
-  land, the paper reads as a specialist result in a generalist
-  venue.
-
 - **"The generalization is hand-waving."** The theorem is for
   BS(1,2). Any sentence beyond that has to arrive as theorem,
   corollary, or conjecture. If the paper slides from "BS(1,2)
@@ -563,21 +475,11 @@ then show why no one else found it.
 ### 1. Intro and statement of claim (200 words)
 
 Open cold. Benford's law, one sentence. The question "why,"
-one sentence — the existing explanations (name them, don't
-review them) each fail at a specific point. Then the claim:
-the mechanism is the function epsilon(m) = log_2(1+m) - m,
-the nonlinear part of the coordinate map between linear and
-logarithmic mantissa. It is the spectral gap of the BS(1,2)-
-induced mixed-arithmetic Markov operator on the mantissa
-circle.
+one sentence .Then the claim: the mechanism is the function epsilon(m) = log_2(1+m) - m, the nonlinear part of the coordinate map between linear and logarithmic mantissa. It is the spectral gap of the BS(1,2)-induced mixed-arithmetic Markov operator on the mantissa circle.
+
 Convergence is exponential. The rate is a functional of
 epsilon. The mechanism terminates at the concavity of the
 binary logarithm.
-
-200 words. No history, no survey, no hedging, no
-cross-references to other fields. The reader knows what the
-paper claims by the bottom of the first column.
-
 
 ### 2. Theorems, compactly stated (150 words)
 
@@ -615,25 +517,15 @@ mantissa perturbation factors through epsilon because the
 coordinate map from linear to log scale is psi(m) = log_2(1+m)
 = m + epsilon(m).
 
-This is where the reader sees *why* epsilon enters. It's not a
-coincidence or an analogy. It's the coordinate Jacobian. When
+This is where the reader sees *why* epsilon enters. It's the coordinate Jacobian. When
 you add 1 to a number and ask what happened to its mantissa,
 the answer passes through log_2(1+m), and the departure from
 linearity is literally epsilon. The group structure of BS(1,2)
 makes this departure accumulate coherently rather than canceling.
 
-250 words. The reader leaves this section knowing: what the
-group is, what the two generators do to the mantissa, why
-epsilon is the nonlinear part and not a metaphor, and what the
-geometry looks like. No extra geometric excursus: if the
-figure and these 250 words cannot make the geometry legible,
-the paper is not ready.
-
 ### 4. Mechanism / proof (300 words)
 
-This section is the proof, not a teaser. It does not reproduce
-every Fourier-coefficient estimate, but it must carry the
-actual mechanism: pure addition gives the Cesàro obstruction,
+This section must carry the actual mechanism: pure addition gives the Cesàro obstruction,
 multiplication inserts the coordinate change ψ = id + ε, the
 BS(1,2) relation forces that reweighting into the walk, and
 positivity of ε opens the spectral gap. The main text presents
@@ -660,14 +552,6 @@ and on the visit frequency of the walk's vertical
 coordinate map has its maximal nonlinearity. For the
 symmetric measure, λ ≈ 0.035/step (simulation, 10⁶ walkers,
 R² = 0.99 on the exponential fit).
-
-300 words. The reader leaves this section knowing: the group
-is BS(1,2), its random walk converges to Benford, the rate
-is exponential and controlled by ε, and the proof mechanism is
-on the page rather than deferred. They do *not* get every
-auxiliary estimate, but they do get the argument's
-load-bearing steps.
-
 
 ### 5. Figures with captions (150 words total)
 
@@ -731,14 +615,6 @@ The asymmetry Hamming named disappears because the group
 relation bab⁻¹ = a² contains the interaction rather than
 leaving it to be reconstructed.
 
-300 words. The Schatte paragraph is the anchor — it gives
-the diagnostic its analytical weight. The four-way scoring
-is brisk by comparison because the reader already holds
-the answer. No Fourier details, no Cauchy recognition, no
-basis-vs-degree framing. Name the obstruction, name the
-mechanism, and move.
-
-
 ### 7. Robustness and sensitivity (150 words)
 
 This section replaces what was previously "Why BS(1,2)
@@ -759,11 +635,6 @@ boundary?
   1986, confirmed by simulation). This is the *only* escape:
   remove multiplication entirely.
 
-150 words. Three bullet points, each naming the perturbation,
-the outcome, and the reason. This section tells the reader
-that the result isn't fragile — it degrades only at the one
-boundary (pure addition) where the theory says it must.
-
 
 ### 8. Conclusion (100 words)
 
@@ -776,11 +647,7 @@ The random walk on BS(1,2) converges exponentially to the
 Benford distribution. The rate is controlled by ε. The
 only escape is pure addition.
 
-100 words. No future work, no hedging. End on the
-substrate. The paper's one-sentence summary: "Random walks
-on BS(1,2) converge exponentially to the Benford
-distribution, and the rate is controlled by the concavity
-of the binary logarithm."
+Future work is not needed.
 
 
 ## The word budget
@@ -888,50 +755,6 @@ generators and shows the geometry. Between them, they
 replace ~160 words of descriptive prose in the group-setup
 and mechanism sections, which is how the word budget
 absorbs two figures without expanding.
-
-#### The figures
-
-Two figures. Each does a different job.
-
-**Figure 1: The random walk converging to Benford.** A
-visualization of the BS(1,2) walk's mantissa distribution
-converging to equilibrium under mixed arithmetic. This is
-the paper's thesis made visible: the walk mixes addition
-and multiplication, and the mantissa settles into the
-Benford distribution. The caption carries operational
-definitions — what op-index means, what BS(1,2) is in
-concrete terms (double and add-one). Trust the picture to
-carry the setup: the reader sees equilibrium, the caption
-names the parts, and the prose doesn't need to re-describe
-what the reader is already looking at.
-
-**Figure 2: The Cayley graph of BS(1,2).** The binary tiling,
-with generators labeled. Geodesic (multiplication) vertical,
-horocyclic (addition) horizontal. A sample walk path. The
-caption defines the two generators operationally and names
-the group relation bab⁻¹ = a². This figure replaces the
-250-word group-setup section's heaviest lifting — the reader
-sees the geometry, the caption names the algebra, and the
-prose can be shorter because the picture is doing the work.
-
-**The discipline:** these two figures together should let the
-group-setup and mechanism sections shed ~80 words of
-descriptive prose each. The figures define; the prose
-argues. If a sentence is describing what a figure shows,
-cut the sentence.
-
-Both figures must be legible at PNAS column width (~8.7 cm).
-White backgrounds, PNAS-compatible fonts, colorblind-safe
-palette. The random-walk visualization exists as diagnostic
-data; it needs to be recomposed for publication. The Cayley
-graph is new — draw it clean from the start.
-
-All other figures (the epsilon bump, the four-regime shutter,
-the base-agnosticism scan, the biased-walk convergence, the
-state-complexity growth, the wrapped Cauchy kernels) are cut
-from this paper. If one of them turns out to be indispensable,
-it has to replace Figure 1 or Figure 2; there is no overflow.
-
 
 ## The references
 
