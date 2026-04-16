@@ -65,7 +65,7 @@ the binary logarithm, which is a fact about ln 2.
    framing. Every word serves the Benford result.
 
 
-## Why the paper exists: the field of failed explanations
+## Why the paper exists
 
 Benford's law has been "explained" many times. Every existing
 explanation fails in a specific, nameable way, and the failures
@@ -74,82 +74,12 @@ gaps. This is our leverage. The paper doesn't enter a crowded
 field — it enters a field where everyone agrees the question is
 open and each prior attempt demonstrates *which part* is hard.
 
-**Hill (1995): scale-invariance.** Benford is the unique
-distribution on significands invariant under multiplication by
-any constant. This is a characterization theorem — it identifies
-the fixed point. It does not explain why real data should be
-scale-invariant in the first place. The explanatory burden
-regresses one level: "Benford because scale-invariant" becomes
-"why scale-invariant?" Hill's theorem is the *what*. The *why*
-is still open. Our result gives the *why*: epsilon is a
-contraction, and the Benford distribution is its unique fixed
-point. Scale-invariance falls out as a *consequence* of the
-contraction, not a *premise*.
-
-**Central-limit-for-logs.** If you multiply many independent
-random variables, the log of the product is a sum, and CLT
-gives an approximately normal distribution of logs, which
-projects to approximately Benford significands. This is the
-textbook explanation and it has two problems. First, it
-requires conditions: independence, common distribution (or at
-least Lindeberg), and enough factors. Real data don't come with
-those guarantees. Financial returns are correlated. Physical
-measurements are not products of iid variables. The conditions
-are assumptions about the data-generating process, and the
-data-generating process is exactly what we don't know. Second,
-CLT gives no usable rate of convergence for the significand
-distribution specifically. Berry-Esseen controls the normal
-approximation of the log, but the projection to the mantissa
-circle can amplify or attenuate the error in ways CLT doesn't
-track. Our result: no independence assumption, no identical-
-distribution assumption, exponential rate.
-
-**Spread-over-orders-of-magnitude.** Data that spans many orders
-of magnitude tends toward Benford. True — and necessary, since
-data confined to one order of magnitude has a constrained
-leading-digit distribution. But it is not sufficient. *Why*
-does spanning orders of magnitude give Benford rather than some
-other distribution on the mantissa circle? A uniform
-distribution on [1, 10^6] is not Benford. A log-uniform
-distribution is. "Spread across scales" tells you the support
-is wide enough; it does not tell you the shape. Our result:
-the shape is determined by epsilon regardless of the initial
-spread. Spanning orders of magnitude is what gives the
-ergodicity (the irrational rotation from multiplication); the
-*contraction* that selects Benford specifically is epsilon's
-job.
-
-**Power-law generators.** If data are drawn from a distribution
-with a power-law tail (Pareto, Zipf), the significand
-distribution converges to Benford as the exponent parameter
-varies — or more precisely, as you sample from a mixture of
-power laws. This is correct and gives genuine Benford
-convergence. The problem is speed: the convergence is
-algebraic (polynomial in the number of mixed components or the
-tail range), not exponential. For small samples or narrow
-parameter ranges, the approximation is poor, yet empirical
-Benford conformity is often strong even in modest datasets.
-Our result: exponential convergence. The half-life is ~20
-operations in the symmetric BS(1,2) walk. Twenty steps, not
-twenty thousand.
-
-**What epsilon gives that none of them do:** a single,
-identified mechanism (not a distributional assumption), minimal
-conditions (any nondegenerate measure on the BS(1,2)
-generators), an exponential rate (not algebraic, not
-uncontrolled), and an explanation that doesn't regress (the
-contraction exists because ln 2 is irrational, full stop).
-Four failures, one function.
-
-The paper must name these four failures in the main text. In
-the Columbo structure, they come *after* the result (section
-6, the Hamming diagnosis). The reader arrives at the diagnosis
-already holding the answer — epsilon, with an exponential
-rate — and checks each prior attempt against it. The four
-deficits are specific: no mechanism, no rate, wrong
-conditions, or explanatory regress. Sections 1-4 deliver the
-mechanism, the rate, the conditions, and the terminus. Section
-6 turns around and shows why no one else got there.
+The four failures (Hill, CLT-for-logs, spread-across-scales,
+power-law mixing) are diagnosed in detail in Section 6 of
+the rhetorical arc. In the Columbo structure, they come
+*after* the result: the reader arrives at the diagnosis
+already holding the answer and checks each prior attempt
+against it.
 
 
 ## The audience problem
@@ -221,37 +151,6 @@ of them in sequence, with two figures carrying the setup, is
 structurally identical to a Miller undergraduate chapter —
 compressed and aimed at a peer audience rather than a student
 audience.
-
-**The implicit demonstration.** A reader who finishes the paper
-and thinks "I could have understood that as a junior" has been
-handed the actual content of the resolution: the mystery
-wasn't hiding behind advanced mathematics, it was hiding
-behind the absence of one group-theoretic observation. If the
-paper reads as difficult, the reader will suspect the
-difficulty is doing load-bearing work. If it reads as clear,
-the reader will register that clarity as a claim — this was
-always within reach, and the substrate is the reason it now
-is. The register matches the thesis.
-
-**The discipline this imposes.** Every time a sentence gets
-technical, ask whether the technicality is carrying weight or
-performing rigor. Schatte's Fourier machinery is the classic
-trap — it's what makes his paper feel serious, and importing
-even a little of it would make this paper feel like it needs
-that machinery to work. It doesn't. Hamming's asymmetry plus
-"Schatte proved no finite averaging suffices" is all the
-diagnostic weight the paper needs to carry. The positive
-result doesn't need machinery at all; the group relation does
-the work.
-
-**Paragraph heuristic.** If you showed it to a strong
-undergraduate math major, could they read it once and explain
-it back? If no, either the paragraph is doing more than it
-needs to, or the concept needs one more sentence of
-plain-prose onboarding. The Brief Report budget is tight, but
-plain-prose onboarding is cheaper per word than technical
-compression. Five words of "think of this as" often saves
-fifteen words of careful qualification later.
 
 **Three sentence-level disciplines:**
 
@@ -427,17 +326,7 @@ These are in priority order.
   conversion rate is directly computable from ε, the
   identification is exact.
 
-- **Operator-language precision.** The plan currently uses the
-  strongest operator words — "ε is the spectral gap," "the
-  operator is a contraction" — while the theorem section, as
-  stated, only guarantees exponential convergence with a lower
-  bound on the rate. Those are close but not identical claims.
-  The live fork is this: do we actually know the object whose
-  gap we are naming, or do we only know a rate controlled by ε?
-  Before drafting, either the operator, function space, and norm
-  have to be specified tightly enough to justify the stronger
-  language, or the prose has to step down one notch and say
-  exactly what is proved.
+- **Operator-language precision.** See the claim gate below.
 
 
 ## The failure modes
@@ -446,19 +335,11 @@ What kills the paper:
 
 - **"This is known."** A referee who works on random walks on
   solvable groups may feel that exponential mixing on BS(1,2) is
-  folklore. Defense, and it's strong: (a) no one has identified
-  the spectral gap of Benford convergence with a specific,
-  named function and given a quantitative rate; (b) the existing
-  "explanations" of Benford are all either characterization
-  theorems without dynamics (Hill), distributional assumptions
-  without rates (CLT-for-logs), necessary conditions that aren't
-  sufficient (spread-across-scales), or convergence without speed
-  (power-law mixing). If the result were known, one of those four
-  would have settled the question. None has. The field's own
-  track record is our evidence that the result is new. This
-  defense works even if the *mixing* is expected, because the
-  contribution is the *rate identification* plus the *unification
-  of four failure modes under one function*.
+  folklore. Defense: the four-failure diagnosis in Section 6 is
+  the evidence. If the result were known, one of those four
+  attempts would have settled the question. None has. The
+  contribution is the rate identification plus the unification
+  of four failure modes under one function.
 
 - **"The proof isn't actually there."** In a 1600-word paper with
   no supplemental escape hatch, every sentence in the mechanism
@@ -689,84 +570,7 @@ Rough allocation, 1600 words:
 | Conclusion | 100 | The substrate resolves the asymmetry |
 
 
-### Goal 1: The prior-work diagnosis comes after the result
-
-The earlier plan opened with the four failed explanations as
-motivation: "here's what's missing, and now here's epsilon."
-This allocation reverses the order: state the claim, prove it,
-*then* turn around and Hamming-diagnose the prior
-attempts.
-
-Why this is better for PNAS: the reader who opens a paper
-titled "Why Benford" already knows the question is open. They
-don't need to be convinced that prior explanations are
-inadequate — they've read them. What earns their attention is
-arriving at the answer fast (200 words), seeing the machinery
-(250 + 300 words), and *then* getting the retrospective
-satisfaction of understanding exactly which bit each prior
-attempt was missing. The diagnosis is more powerful when the
-reader already holds the correct answer and can check each
-prior attempt against it. It's the difference between a
-detective novel (withhold the answer, build suspense) and a
-Columbo episode (show the answer first, then show why no one
-else found it). For a 1600-word paper, Columbo is right.
-
-The diagnosis is "Hamming-framed": treat the correct
-explanation as a codeword with four features — identified
-mechanism, exponential rate, minimal conditions,
-non-regressive — and score each prior attempt by which bits
-it has and which it's missing:
-
-| Explanation | Mechanism | Exp. rate | Minimal cond. | Non-regressive |
-|-------------|:---------:|:---------:|:-------------:|:--------------:|
-| Hill / scale-inv. | -- | -- | yes | **no** |
-| CLT-for-logs | yes | **no** | **no** | yes |
-| Spread-across-scales | **no** | -- | yes | yes |
-| Power-law mixing | yes | **no** (algebraic) | **no** | yes |
-| **This paper (epsilon)** | **yes** | **yes** | **yes** | **yes** |
-
-"--" means the feature doesn't apply (Hill doesn't give
-dynamics, so "rate" is N/A; spread-across-scales isn't a
-convergence theorem, so "rate" is N/A). The table might not
-appear literally in the paper — 300 words of prose can carry
-the same content — but the table is the *structure* the prose
-follows. Each prior attempt gets two sentences: what it
-provides, and which bit is flipped. No survey, no generosity,
-no "complementary." Diagnosis.
-
-This framing also protects against the "this is known" referee.
-If the result were known, one of the four cells in the bottom
-row would already be filled. The table shows they aren't.
-
-
-### Goal 2: The group theory stays in the main text
-
-The group *is* the argument. The paper's claim
-isn't "epsilon is correlated with Benford convergence." It's
-"epsilon is the spectral gap of a specific operator on a
-specific group, and that group is the algebraic model of mixed
-arithmetic." A reader who doesn't see the group doesn't see
-*why* epsilon enters, only *that* it enters. 250 words is
-enough for:
-
-- BS(1,2) = <a, b | bab^{-1} = a^2>. One sentence.
-- Generator a: x -> 2x (geodesic on the binary tiling,
-  rigid rotation of log-mantissa by log_10 2). Two sentences.
-- Generator b: x -> x+1 (horocyclic step, state-dependent
-  perturbation whose log-scale effect is epsilon). Two
-  sentences.
-- The Cayley graph is the binary tiling of the Poincaré
-  half-plane. One sentence, one citation (Bowen).
-- The mantissa lives on the horocyclic coordinate;
-  multiplication moves along geodesics, addition moves along
-  horocycles. Two sentences.
-
-That's ~120 words of definitions plus ~130 words of
-orientation. The reader walks out of this section knowing where
-epsilon sits in the geometry and why the two generators have
-qualitatively different effects on the mantissa.
-
-### Goal 3: Two figures, each carrying setup
+### Design rationale: two figures, each carrying setup
 
 Two separate figures: the L₁ convergence plot and the
 Cayley graph of BS(1,2).
