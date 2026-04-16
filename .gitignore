@@ -28,3 +28,6 @@ build/
 # Dual release build artifacts (see DUAL-PLAN.md)
 libbidder.*
 test_bidder_root_c
+
+# Local paper/source PDFs
+/sources/*.pdf
