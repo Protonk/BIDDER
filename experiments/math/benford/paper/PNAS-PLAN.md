@@ -432,6 +432,8 @@ These are in priority order.
   operator is a contraction" — while the theorem section, as
   stated, only guarantees exponential convergence with a lower
   bound on the rate. Those are close but not identical claims.
+  The live fork is this: do we actually know the object whose
+  gap we are naming, or do we only know a rate controlled by ε?
   Before drafting, either the operator, function space, and norm
   have to be specified tightly enough to justify the stronger
   language, or the prose has to step down one notch and say
@@ -867,6 +869,34 @@ That's 121 words. The four failures are compressed to three
 (spread-across-scales folds into the power-law line). Epsilon
 is introduced as a mathematical object, not as a CS artifact.
 The last sentence names the terminus.
+
+
+## The claim gate
+
+Two bins only. The title, intro, theorem statement,
+significance statement, conclusion, and figure captions may
+use only language from the first bin.
+
+**Goes in the paper**
+- The BS(1,2) mixed-arithmetic walk converges exponentially to
+  Benford.
+- The rate satisfies lambda >= f(epsilon, mu) > 0.
+- Epsilon is the nonlinear coordinate term that controls the
+  rate.
+- The theorem is for BS(1,2), not for "mixed arithmetic in
+  general."
+
+**Stays out of the paper**
+- Epsilon is the spectral gap.
+- The operator is a contraction.
+- Exact gap identification.
+- Any statement broader than the BS(1,2) theorem unless it is
+  explicitly marked as conjecture or remark.
+
+**Promotion test.** A claim moves from "stays out" to "goes in"
+only if the paper can answer immediately and precisely: which
+operator, on what function space, in what norm, and whether the
+statement is exact or only a lower bound.
 
 
 ## The title
