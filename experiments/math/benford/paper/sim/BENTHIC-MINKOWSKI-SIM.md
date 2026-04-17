@@ -59,8 +59,9 @@ T = ℝ/ℤ. Three quantities appear and are not interchangeable:
   equivalently the Parseval sum over nonzero Fourier modes.
   This plan's primary diagnostic.
 - **L₁(n) = ∫ |h(m)| dm** (up to the bin-count discretization
-  the sim uses; equivalently (1/B)Σ|freq_j/N − 1/B|). This is
-  the sibling plans' target statistic.
+  the sim uses; equivalently Σ|freq_j/N − 1/B|). This is the
+  sibling plans' target statistic, matching `common.py`'s
+  `l1_to_uniform` convention.
 
 ‖h‖_{L²} and L₁ are different norms of the same h. They satisfy
 L₁ ≤ ‖h‖_{L²} (Cauchy-Schwarz) but their rates of decay can

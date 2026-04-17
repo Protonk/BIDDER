@@ -2,13 +2,15 @@
 M0 — empirical null-floor calibration.
 
 Draws 5000 replicates of a multinomial(N, 1/B, ..., 1/B) vector and
-computes the L1-to-uniform statistic (1/B) Σ |freq_j/N − 1/B| for
-each replicate. Reports mean, std, 99% and 99.9% quantiles. The
-99.9% quantile is θ_N, the detection threshold used in D3 and the
+computes the L1-to-uniform statistic Σ |freq_j/N − 1/B| for each
+replicate. Reports mean, std, 99% and 99.9% quantiles. The 99.9%
+quantile is θ_N, the detection threshold used in D3 and the
 decision rule.
 
 Sanity check: expected mean(L1) under the multinomial null is
 approximately √(2B/(πN)). Empirical mean should match within 50%.
+
+Matches `common.py`'s l1_to_uniform convention (no 1/B prefactor).
 
 Run: sage -python run_m0.py
 """
@@ -24,10 +26,10 @@ SEED = 0xA11CAF10
 
 
 def l1_to_uniform(counts, N_total, B_bins):
-    """L1 statistic: (1/B) Σ |count_j/N − 1/B|."""
+    """L1 statistic: Σ |count_j/N − 1/B| (no 1/B prefactor)."""
     freq = counts.astype(np.float64) / float(N_total)
     uniform = 1.0 / float(B_bins)
-    return float(np.sum(np.abs(freq - uniform)) / float(B_bins))
+    return float(np.sum(np.abs(freq - uniform)))
 
 
 def main():
@@ -48,11 +50,11 @@ def main():
     q999 = float(np.quantile(l1_samples, 0.999))
 
     # Sanity vs analytic expectation
-    # For L1 = (1/B) sum |freq - 1/B|, with counts ~ multinomial,
+    # For L1 = Σ |freq_j - 1/B|, with counts ~ multinomial,
     # E[|freq_j - 1/B|] ≈ sqrt(Var(freq_j) * 2/π) for large N
     # where Var(freq_j) = (1/B)(1 - 1/B) / N ≈ 1/(BN) for large B.
-    # So E[L1] ≈ sqrt(2/(π B N)) = √(2/(π·B·N))
-    analytic_mean = math.sqrt(2.0 / (math.pi * B * N))
+    # Summed over B bins: E[L1] ≈ B * sqrt(2/(π·B·N)) = √(2B/(πN))
+    analytic_mean = math.sqrt(2.0 * B / (math.pi * N))
 
     print()
     print('=== M0 RESULTS ===')

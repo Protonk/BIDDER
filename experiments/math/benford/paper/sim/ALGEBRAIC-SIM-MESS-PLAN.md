@@ -33,7 +33,7 @@ adjudication rules for disagreements on *this plan's* data.
 **Notation.** The target statistic throughout is the empirical
 L₁ distance of the mantissa histogram to uniform on T = [0, 1):
 
-    L₁(n) := (1/B) Σⱼ |freqⱼ(n)/N − 1/B|
+    L₁(n) := Σⱼ |freqⱼ(n)/N − 1/B|
 
 over B bins, N walkers, at step n. The earlier sibling-style
 notation φ(n) is dropped in favor of L₁(n) for consistency with
@@ -116,7 +116,7 @@ Under H_A, L₁ stays above any threshold proportional to
 For the actual decision rule, do **not** use a bare 1/√N
 heuristic as the threshold. The plotted statistic is
 
-    L₁ = (1/B) Σ |freq_j/N − 1/B|
+    L₁ = Σ |freq_j/N − 1/B|
 
 with B = 1000 bins, so the null floor depends on N, B, and
 the absolute-value aggregation. The threshold must therefore
@@ -126,17 +126,23 @@ multinomial counts with equal bin probabilities 1/B. This is
 the detection floor used below. The 1/√N scaling remains a
 sanity check only.
 
-Heuristic scale only:
+Noise floor table (M0 empirical at N = 10⁸, B = 1000; other
+rows scaled as 1/√N from the measured anchor):
 
-| N      | 1/√N scale | H_S: signal dies at n ≈ | H_A: signal at n = 5000 |
-|--------|------------|-------------------------|-------------------------|
-| 10⁷    | 3 × 10⁻⁴   | 215                     | C/71 ≈ 0.005–0.01       |
-| 10⁸    | 10⁻⁴       | 280                     | C/71 ≈ 0.005–0.01       |
-| 10⁹    | 3 × 10⁻⁵   | 370                     | C/71 ≈ 0.005–0.01       |
+| N      | θ_N (null floor) | H_S: signal dies at n ≈ | H_A: signal at n = 5000 |
+|--------|-----------------|-------------------------|-------------------------|
+| 10⁷    | 8.6 × 10⁻³      | ~130                    | C/71 ≈ 0.005–0.01       |
+| 10⁸    | 2.7 × 10⁻³      | ~185                    | C/71 ≈ 0.005–0.01       |
+| 10⁹    | 8.6 × 10⁻⁴      | ~245                    | C/71 ≈ 0.005–0.01       |
 
-Under H_A, the signal at n = 5000 is 50–100× above the noise
-floor at N = 10⁸. Under H_S, the signal is zero to all
-measurable precision by n = 300.
+M0 measurement (N = 10⁸, 2026-04-17): mean(L₁) = 2.521×10⁻³,
+θ_N = 2.717×10⁻³, matches analytic √(2B/(πN)) = 2.523×10⁻³
+within 0.1%. Sanity check passes.
+
+Under H_A, the signal at n = 5000 is 2–4× above the noise
+floor at N = 10⁸ — detectable but not overwhelming; worth
+N = 10⁹ for a confident reading if M4 at N = 10⁸ is marginal.
+Under H_S, the signal is below θ_N by n ≈ 185 at N = 10⁸.
 
 D3's onset test is handled by M2 (n ∈ [0, 300], dense
 sampling). Its tail test — whether L₁ stays at floor or
@@ -240,7 +246,7 @@ discriminating window.
     Time range: n = 0 to 600
     Sampling: every step from n = 1 to 200,
               every 5 steps from n = 200 to 600
-    Output: L₁(n) = (1/B) Σ |freq_j/N − 1/B| where B = 1000
+    Output: L₁(n) = Σ |freq_j/N − 1/B| where B = 1000
             bins on T = [0, 1)
 
 Dense sampling in [1, 200] is the point. The slope ratio and
