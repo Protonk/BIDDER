@@ -13,153 +13,217 @@ structure loses force.
 
 ---
 
-## 1. Define the operator
+## 1. State space and operator notation
 
-**Status:** scope decided (σ-finite, on T × ℤ). Three technical items
-still open inside that scope; enumerated below.
+**Status:** minimal setup only. The substantive invariant-measure
+question has migrated into gap 2 (which invariant to use depends
+on the proof route chosen there).
 
-**Why T alone won't do.** The mantissa step under +1 depends on the
-exponent E, not just m:
+**State space.** X = T × ℤ, where T = ℝ/ℤ is the log-mantissa
+circle and ℤ is the exponent coordinate. σ-algebra
+B = B(T) ⊗ 2^ℤ (Borel on T, discrete on ℤ). The mantissa step
+under +1 depends on E, not just m:
 
-    m ↦ frac(log₁₀(10^m + 10^{−E})).
+    m ↦ frac(log₁₀(10^m + 10^{−E})),
 
-So the state space is T × ℤ (mantissa × exponent), not T. Insisting
-on a probability measure forces an averaging move — and for both
-symmetric μ (null-recurrent exponent walk) and biased μ (transient)
-no stationary probability measure exists on ℤ. The σ-finite register
-removes the forcing: invariance of a σ-finite measure, not
-normalization, is what the proof needs.
+so the full state (m, E) is the right object; collapsing to T
+alone loses information.
 
-**The commitment.** Following Tao (*Introduction to Measure Theory*,
-§1.4):
+**Kernel.** The walk induces a Markov kernel K : X × B → [0, 1]
+by averaging over the generator choice under μ. K(x, ·) is a
+probability measure for each x (a 4-atom mixture, one atom per
+generator); K(·, A) is B-measurable for each A. Iterates K^n are
+kernel composition, not repeated composition of a single
+measurable map.
 
-- **State space.** X = T × ℤ.
-- **σ-algebra.** B = B(T) ⊗ 2^ℤ — Borel on the mantissa circle (Def
-  1.4.16), discrete on the exponent (Def 1.4.12).
-- **Kernel.** The walk is a Markov kernel K : X × B → [0, 1],
-  averaging over the generator choice under μ. K(x, ·) is a
-  probability measure for each x ∈ X; K(·, A) is B-measurable for
-  each A ∈ B (Def 1.4.32). This is the object the proof acts on —
-  not the per-realization measurable morphism, which is only one
-  sample from K(x, ·).
-- **Reference measure.** μ_ref = Leb_T ⊗ counting_ℤ — σ-finite but
-  not finite (Def 1.4.27, Example 1.4.26, Remark 1.4.13). Provides
-  the L² scaffolding.
+**What the theorem targets.** The mantissa-marginal
+TV distance to Leb_T:
 
-**Three items to close before gap 2 can build on this.**
+    φ(ν, n) := ‖π_T(ν K^n) − Leb_T‖_{TV},   ν a probability on X.
 
-1. **Find the invariant σ-finite measure.** μ_ref K = μ_ref is *not
-   obvious* and probably not true. The a-step (mult by 2) is a
-   measure-preserving bijection of (T × ℤ, Leb ⊗ counting) — m ↦ m +
-   log₁₀ 2 mod 1, E ↦ E + carry(m), and carry is Lebesgue-Bernoulli
-   independent of E. The b-step (add 1) is not: for E ≪ 0 it
-   collapses all of T × {E} onto a thin slice near (m = 0, E = 0),
-   destroying counting-measure mass on negative-E strata. The
-   combined kernel inherits the obstruction. The honest fix is to
-   identify the invariant σ-finite measure by construction — most
-   likely the pushforward of left Haar measure on BS(1,2) through
-   the projection |x| ↦ (m, E). BS(1,2) is solvable, hence amenable,
-   hence has a well-defined left Haar; its pushforward is σ-finite
-   on T × ℤ and walk-invariant by construction. Whether it equals
-   Leb ⊗ counting is a separate computation; if not, the invariant
-   μ is a weighted version and the L² scaffolding shifts
-   accordingly.
+Theorem 1 asks for φ(ν, n) ≤ C · exp(−c√n) as n → ∞, uniform over
+ν with π_T ν ≪ Leb_T.
 
-2. **Call K a Markov kernel, not a morphism.** (Already corrected
-   above.) The iterate K^n is kernel composition, not self-
-   composition of a fixed map. Remark 1.4.33's ergodic-theory
-   framing is still the right register, but the object is the
-   kernel, not its realizations.
+**The invariance question, deferred.** A full-space σ-finite
+invariant measure on T × ℤ (most likely the pushforward of left
+Haar on BS(1,2)) exists but need not be exhibited to prove
+Theorem 1's decay rate. Under the current primary proof candidate
+(gap 2 Route 1', induced-return operator on R), the load-bearing
+invariant is a *probability* measure ν_R on a compact set R ⊂ X
+(R is compact, not finite — T-coordinate is continuous), not a
+σ-finite measure on all of X. The previous commitment to "Leb ⊗
+counting as the invariant σ-finite measure" was wrong — a-steps
+preserve it, b-steps don't (Jacobian 10^m/(10^m + 10^{−E}) ≠ 1).
 
-3. **Say what λ refers to.** In the σ-finite infinite-measure
-   setting, constants are not in L²(X, μ), so "gap from eigenvalue
-   1" has no direct meaning (1 is typically in the spectrum but not
-   the point spectrum of K). The theorems want convergence of the
-   *mantissa marginal* to the uniform (Benford) law on T, so define:
+**Caveat:** the global σ-finite invariant is deferred, not
+necessarily irrelevant. A natural way to prove gap 2's (R6)
+(identifying the mantissa marginal of ν_R as Leb_T) may go
+through a harmonic / invariant-measure object on T × ℤ. If (R6)
+takes that route, gap 1's deferred question re-enters the proof.
 
-       λ := the contraction rate of the mantissa marginal,
-       i.e. the largest λ > 0 such that
-       ‖π_T (ν K^n) − Leb_T‖_{TV} ≤ C_ν · e^{−λ n}
-       for every initial law ν on X with π_T ν ≪ Leb_T.
-
-   This is what Theorem 1 actually needs. Any spectral-radius or
-   L²-gap statement is a means to this end; it is not the λ the
-   paper claims.
-
-**What closure looks like.** Roughly one page in the draft: X, B,
-the Markov kernel K, the invariant σ-finite μ (by construction from
-Haar on BS(1,2)), and the definition of λ as a mantissa-marginal
-contraction rate. Gap 2 then bounds λ from below via a functional of
-ε.
+**What closure looks like.** A half-page setup in the draft:
+(X, B), the kernel K, the mantissa projection π_T, the TV
+distance φ(·, ·). Invariant-measure details and function-space
+choice are deferred to gap 2's proof section.
 
 ---
 
 ## 2. The contraction step
 
-**Status:** **open — no working route yet.** The Rosenthal small-
-set minorization direction drafted in
-[`GAP2-LEMMA.md`](./GAP2-LEMMA.md) is withdrawn; see the note at
-the top of that file for the diagnosis. The theorem target
-(stretched-exp rate, c ≈ 0.55) stands; the proof mechanism does
-not.
+**Status:** open, primary candidate identified. Not yet drafted.
+An earlier Rosenthal small-set minorization attempt is
+[withdrawn](./GAP2-LEMMA.md) for the reasons documented at the
+top of that file. The empirical target (stretched-exp rate,
+c ≈ 0.55) stands.
 
-**Why the withdrawn route fails.** Two structural problems, not
-bookkeeping gaps:
-- The kernel K(x, ·) for fixed x is a 4-atom mixture, so
-  K^{k₀}(x, ·) has no density with respect to Leb ⊗ counting.
-  Rosenthal Lemma 6(ii)'s β = ∫_X inf_{x∈R} k^{k₀}(x, y) dμ(y) is
-  inapplicable because there is no k^{k₀}(x, y) to take the inf of.
-- A proposed per-step TV contraction
-  φ(νK) ≤ (1 − β·ν(R))·φ(ν) is false: a MC check from
-  ν = Leb_T ⊗ δ_{E=0} (so φ(ν) = 0) gives φ(νK) ≈ 0.09. Corollary:
-  Leb ⊗ counting is not invariant for K — the b-step has Jacobian
-  10^m / (10^m + 10^{−E}) ≠ 1.
+**Why the earlier attempts failed.** TV-to-Leb_T on a single-walk
+step isn't monotone for this kernel — uniform mantissa at E=0
+becomes ≈0.09 away from uniform after one step (Monte Carlo
+check). This kills any per-step contraction claim of the form
+φ(νK) ≤ (1 − β·ν(R))·φ(ν). The underlying structural point is
+that K does not preserve Leb ⊗ counting; Leb_T is not an
+invariant marginal under a single step; and the kernel is atomic
+for each x, so density-based minorizations on X directly don't
+apply.
 
-Gap 1's claim "μ = Leb ⊗ counting is the natural invariant
-σ-finite measure" was also overstated — it holds for a-steps,
-fails for b-steps. The invariant σ-finite measure, if it exists,
-is most likely the pushforward of left Haar on BS(1,2), which
-isn't Leb ⊗ counting.
+**TV is not the villain.** TV between two laws under the *same*
+Markov kernel is always contractive. What failed was asking for
+TV-to-Leb_T when Leb_T isn't invariant. The fix is to change the
+*operator* (not the norm) to one that has a genuine invariant
+probability.
 
-**Live routes, in rough priority order:**
+### Route 1' (primary candidate): induced first-return operator on R
 
-- **Route 1' (primary candidate): transfer operator K\* on
-  absolutely continuous mantissa densities.** Work in the space
-  of probability measures ν with π_T ν ≪ Leb_T. The action of K
-  on such densities is AC-preserving (b-step is a diffeomorphism
-  of T for each fixed E). Pick a translation-invariant norm on T
-  (BV, Sobolev H^s, or weighted Fourier ℓ²) in which a-step
-  rotation is an isometry and b-step at low depth is a strict
-  contraction controlled by ε. The atomic-kernel obstruction goes
-  away at the density-action level. Four sub-problems: (R1)
-  choose the norm; (R2) prove per-visit contraction on densities
-  in that norm; (R3) verify a-step is isometric in that norm;
-  (R4) iterate using E[L_n] ~ c_R √n. **The whole route needs to
-  be worked out on paper before we write a lemma.**
-- **Route 2 (backup): wrapped-Cauchy comparison.** Dominate the
-  averaged +1 kernel by a wrapped Cauchy in an operator norm on
-  densities. Available if Route 1' doesn't yield a clean norm.
-- **Route 3 (unlikely): wrapped-Cauchy identity.** The averaged
-  +1 kernel *is* wrapped Cauchy. Noted for completeness.
-- **Route 4 (alternative): direct Fourier analysis on the
-  mantissa-marginal Fourier coefficients.** Show each Fourier
-  coefficient of the mantissa marginal decays at stretched-exp
-  rate. Closer to Schatte's machinery, bypasses kernel/density
-  structure entirely. The Fourier coefficients of ε from BINADE-
-  WHITECAPS §§7–8 plug in naturally if this works.
+**Object.** Let R = {(m, E) ∈ X : |E| ≤ E₀}. For any probability
+ν supported on R, define
 
-**What closure looks like.** A lemma that produces the stretched-
-exp mantissa-marginal TV bound via one of the routes above. Not
-yet drafted; we are specifically *not* drafting until the
-function-space / norm choice is settled on paper first (the
-withdrawn GAP2-LEMMA is a cautionary record of drafting on an
-unsettled framework).
+    T_R ν := Law(X_{τ_R})     where  τ_R = min{n ≥ 1 : X_n ∈ R}.
 
-**Next action:** work out Route 1' on paper. Pick a candidate
-norm (most likely H^{1/2}(T) or BV(T) — both translation-
-invariant, both give b-step's Jacobian natural room to appear),
-verify rotation-isometry, attempt the per-visit contraction. If
-no norm works cleanly, fall back to Route 4.
+T_R is a Markov operator on probability measures on R. Because
+R is finite in the E direction and the walk is recurrent
+(symmetric case), τ_R < ∞ almost surely, so T_R is well-defined.
+
+Why this works where per-step didn't: T_R acts on a compact
+state space R (T × finite E-range) and is expected to have a
+genuine invariant probability ν_R. TV contraction under T_R to
+ν_R is honest once ν_R exists.
+
+**Sub-problems (R1)–(R6).**
+
+- **(R1) Define T_R rigorously via excursion decomposition.** Two
+  regimes, both a.s. finite but not literally bounded:
+  - **Upward excursion** (walker leaves R via a-step to E > E₀).
+    Once outside, a/a⁻¹ do rotation on T (no mantissa change
+    otherwise) and diffuse E; b/b⁻¹ at large positive E are
+    near-identity. Upward excursions are a.s. finite in length
+    by null-recurrence of the symmetric exponent walk, but
+    can be arbitrarily long — their length distribution has a
+    heavy (√-scale) tail.
+  - **Downward excursion** (walker leaves R via b⁻¹ to E < −E₀,
+    more precisely: |x| becomes small). The next b or b⁻¹ step
+    snaps |x| to near 1, re-entering R near (m=0, E=0). In
+    practice short in duration; formally: bounded above by the
+    first b/b⁻¹ arrival time conditional on being outside R,
+    which is a.s. finite (a/a⁻¹ steps can intervene but each
+    step is b or b⁻¹ with probability 1/2, so the first b-event
+    is geometrically distributed).
+- **(R2) Show T_R has an invariant probability on R.** The
+  earlier "positive recurrence on finite state space" reasoning
+  was wrong: R = T × {−E₀, …, E₀} is *compact* but not finite
+  (continuous T-coordinate). The correct route is:
+  - Show T_R is a weak-Feller / Feller Markov operator on
+    compact R (continuity of the transition kernel on bounded
+    continuous test functions).
+  - Apply Krylov–Bogolyubov to get existence of at least one
+    invariant probability ν_R.
+  - **Defer uniqueness to (R4)** — uniqueness should fall out
+    of the contraction/spectral-gap argument, not be claimed
+    for free here.
+- **(R3) Choose a norm on densities on R.** Priority order from
+  GPT5's note:
+  - **Fourier-weighted L²** on the zero-mean part. Natural first
+    try: BINADE-WHITECAPS §§7–8 gives the Fourier coefficients of
+    ε, and the quantity that should control q is the Fourier
+    decay of T_R's kernel — it should wire in directly.
+  - **BV** fallback. If carry/wrap discontinuities make Fourier
+    bookkeeping ugly, BV handles jumps more gracefully.
+  - **H^s** least attractive. Branch/carry discontinuities are
+    bad for Sobolev norms.
+- **(R4) Prove T_R contracts zero-mean part in the chosen norm.**
+  Target: spectral gap q < 1, i.e., ‖T_R f − ν_R(f)·𝟙‖ ≤ q·‖f −
+  ν_R(f)·𝟙‖ for f in the chosen function space. The q should be
+  a computable functional of ε; per-excursion contraction.
+  Uniqueness of ν_R is an output of this step (irreducibility
+  + gap ⇒ unique invariant).
+- **(R5) Stochastic estimate on the return count.** This is a
+  separate proof-grade step, not a trivial application of
+  E[N_n] ∼ c_R√n. The law-level bound we need is something
+  like E[q^{N_n}] ≤ C · exp(−c · √n), or equivalently a
+  Laplace-transform / lower-tail estimate
+     P(N_n ≤ a√n) ≤ exp(−some rate in a)
+  strong enough to convert (R4)'s per-return contraction into
+  the claimed decay. N_n is *random* with √n scaling but a
+  nondegenerate Mittag-Leffler / arcsine-type limit
+  distribution; the mean alone is not sufficient. The proof
+  requires classical local-time Laplace-transform machinery
+  (Feller *An Introduction to Probability Theory*, Vol. II, or
+  Chung-Erdős on return times of simple random walk).
+- **(R6) Connect ν_R to Leb_T.** Spectral gap for T_R gives
+  convergence to ν_R, *not* convergence to Leb_T. The mantissa
+  marginal of ν_R — marginalized over E ∈ [−E₀, E₀] — must be
+  shown to equal Leb_T for the Theorem 1 conclusion. This is
+  where "the limit is Benford" gets identified, and it does
+  not fall out of (R1)–(R5) automatically. The argument may
+  use a global harmonic / invariant-measure object on T × ℤ
+  (i.e., the σ-finite question deferred from gap 1 may
+  re-enter here).
+
+### Previous alternatives (historical, unlikely under new framing)
+
+The earlier alternative routes were designed against the old
+"per-step contraction on TV of mantissa marginal" setup. Under
+the return-operator reformulation they mostly lose relevance:
+
+- **Wrapped-Cauchy comparison.** Could be re-examined at the
+  T_R level if none of (R3)'s norms yield clean contraction —
+  dominate T_R's density kernel by a wrapped Cauchy. Lower
+  priority than finishing (R3)–(R4) first.
+- **Wrapped-Cauchy identity.** Implausible at both levels.
+- **Direct Fourier on single-walker mantissa Fourier
+  coefficients.** Subsumed into (R3) if Fourier-weighted L² is
+  the norm that works — it's the same object, just approached
+  as norm choice rather than a separate route.
+
+### What closure looks like
+
+A lemma combining three independent ingredients:
+- (R4): T_R has spectral gap q < 1 on the chosen function space.
+- (R5): N_n's Laplace transform satisfies E[q^{N_n}] ≤ C exp(−c√n).
+- (R6): the mantissa marginal of ν_R equals Leb_T.
+Conclusion: φ(ν, n) ≤ C' exp(−c√n) with c effectively determined
+by q and the Laplace-transform-level rate constant from (R5). The
+sim gives c ≈ 0.55; theoretical c should be in that neighborhood.
+
+### Next action
+
+Three-stage paper-first work:
+1. **(R1)–(R2):** make T_R rigorous via the excursion
+   decomposition (upward a-diffusion + return; downward b-snap +
+   re-entry), prove T_R is weak-Feller on compact R, apply
+   Krylov–Bogolyubov for an invariant probability ν_R (existence
+   only; uniqueness later).
+2. **(R3)–(R4):** pick a norm (Fourier-weighted L² first, BV
+   fallback), prove spectral gap q < 1 on the zero-mean part,
+   with q as a computable functional of ε. Uniqueness of ν_R
+   follows.
+3. **(R5) + (R6):** Laplace-transform analysis of the return
+   count N_n to convert q-per-return into exp(−c√n) at the law
+   level; and Benford identification of ν_R's mantissa marginal.
+
+Do not write lemma text until (R4) and (R5) are both settled on
+paper — the earlier GAP2-LEMMA withdrawal was caused by drafting
+ahead of the framework; (R5) in particular is not a cosmetic step
+and can derail the rate if handled carelessly.
 
 ---
 
@@ -190,17 +254,18 @@ numerically close to what exp would give.
 
 **Consequences.**
 
-- **Gap 2 route.** Rosenthal coupling (§2 Route 1) is the right
-  route. The coupling framework's stretched-exp prediction (from
-  null-recurrent joint visits ∼1/k forcing j ∼ √k in Theorem 1's
-  TV bound) matches reality; no fall-back to direct Fourier is
-  needed.
+- **Shape fits the return-operator framework.** Gap 2 Route 1'
+  (induced first-return operator on R) predicts exactly this
+  shape: if T_R has spectral gap q < 1 and N_n ∼ c_R√n returns
+  occur by step n, then q^{N_n} ≈ exp(−(−log q)·c_R·√n). Per-
+  step contraction was the wrong object; per-return contraction
+  lands the √n naturally.
 - **Theorem 1 wording.** "Exponential convergence" in the plan's
   Theorem 1 must change to "stretched-exponential convergence" at
   rate exp(−c√n). See `PNAS-PLAN.md` (updated).
 - **Phase 2 / phase 3 remaining.** Phase 2 (N = 10⁸, extend clean
   decay to t ≈ 200) is confirmatory, not decisive; optional. Phase
-  3 (biased walk) still needed for gap 4 scope.
+  3 (biased walk) done — see gap 4.
 
 ---
 
@@ -244,7 +309,7 @@ t = 500 → 0.002 at t = 2000), consistent with 1/n.
   so we cannot resolve a specific power-law exponent α from this
   run. A confirmatory N = 10⁸ run with focused t ∈ [500, 10⁴]
   sampling would pin α down if needed for publication.
-- **Snap-asymmetry note (SIM-PLAN phase 3).** Positive multiplicative
+- **Snap-asymmetry note (sim/SIM-REPORT phase 3).** Positive multiplicative
   drift sends walkers to the frozen zone; negative drift would
   recycle them through origin and plausibly preserve stretched-exp
   convergence. The current Theorem 1 corollary is for positive drift;
@@ -357,21 +422,34 @@ separate conjecture.
 
 | Gap | Status | Cost to close | Blocks draft? |
 |-----|--------|---------------|---------------|
-| 1. Operator definition | Open — invariant σ-finite measure not yet identified (Leb ⊗ counting is not it) | Research | Yes |
-| 2. Contraction step | **Open — no working route.** Rosenthal small-set minorization withdrawn; transfer operator on AC densities is current candidate (Route 1') | Research | Yes |
+| 1. State space + notation | Minimal setup only; σ-finite invariant deferred (may re-enter via gap 2 (R6)) | ~half page | No |
+| 2. Contraction step | **Open, primary candidate identified.** Induced first-return operator T_R on compact R; six sub-problems (R1)–(R6), with (R5) Laplace-transform analysis of return count on critical path | Research, paper-first | Yes |
 | 3. Visit-rate vs. rate shape | **Resolved** — stretched exp, c ≈ 0.55 | — | — |
 | 4. Biased-walk mechanism | **Resolved** — 2-regime convergence | — | — |
 | 5. Group relation's role | Proof design | 1 proof step or rhetoric edit | No — can soften rhetoric |
-| 6. Schatte bridge | Derivation or rewrite | 1–2 pages or cut the slogan | No — can cut |
+| 6. Schatte bridge | Diagnostic only (§6 movement A), not mechanism | Already resolved by kicker edit | No |
 
-**Minimum viable path to draft:** gaps 1 and 2 are both open and
-interlinked — identifying the invariant σ-finite measure (gap 1)
-is likely part of choosing the right function space for the
-transfer operator (gap 2 Route 1'). No point dialing 5 or 6
-until gap 2's framework is settled.
+**Minimum viable path to draft:** gap 2 is the sole load-bearing
+open problem. Three independent proof-grade steps must close:
+(R4) spectral gap for T_R, (R5) Laplace-transform lower-tail
+estimate for the return count, and (R6) Benford identification of
+ν_R's mantissa marginal. Any one of these failing breaks the
+theorem.
 
-**Next concrete action:** work out Route 1' on paper. Choose a
-function space / norm; check rotation-isometry; attempt per-visit
-contraction. Do not draft more lemma text until this is settled
-on paper. Drafting on an unsettled framework is how we got
-GAP2-LEMMA withdrawn.
+**Next concrete action:** work in this order on paper:
+
+1. (R1)–(R2): define T_R rigorously; prove weak-Feller on
+   compact R; apply Krylov–Bogolyubov for invariant-probability
+   existence.
+2. (R3)–(R4): pick norm, prove spectral gap q < 1 on zero-mean
+   part. Uniqueness of ν_R follows from this.
+3. (R5): Laplace transform of N_n. This is a classical
+   random-walk calculation (Feller Vol. II style) but it is
+   non-trivial and on the critical path — the √n scaling of
+   E[N_n] is not sufficient.
+4. (R6): show π_T ν_R = Leb_T. May require the deferred
+   σ-finite invariant from gap 1.
+
+Do not draft lemma text until (R4) and (R5) are both settled.
+The earlier GAP2-LEMMA withdrawal was caused by drafting ahead of
+the framework.

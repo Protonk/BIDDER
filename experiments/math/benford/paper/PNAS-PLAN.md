@@ -579,7 +579,7 @@ boundary?
   rotation by log₁₀ 2 equidistributes at algebraic Weyl rate.
   Theorem 1 is stated for the symmetric measure; the biased
   case is a two-regime corollary with different rate structure.
-  See FIRST-PROOF §4 / SIM-PLAN phase 3.
+  See FIRST-PROOF §4 / sim/SIM-REPORT phase 3.
 - **Base change:** L1-to-Benford is flat across b in [2, 40]
   (simulation). The irrationality of log_b 2 for all integer
   b > 1 guarantees this.
