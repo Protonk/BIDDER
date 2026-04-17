@@ -413,7 +413,10 @@ C < infinity and c(epsilon, mu) > 0 such that
     ||pi_T(nu K^n) - Leb_T||_{TV} <= C * exp(-c(epsilon, mu) * sqrt(n))
 
 for all n >= n_0, uniformly over initial laws nu with pi_T nu
-absolutely continuous w.r.t. Leb_T.
+absolutely continuous w.r.t. Leb_T. Here ||·||_{TV} is the total-
+variation distance on probability measures on T, i.e.
+||μ − ν||_{TV} = sup_A |μ(A) − ν(A)| = ½ ||p − q||_{L¹(Leb_T)}
+when μ, ν have densities p, q against Leb_T.
 
 **Theorem 2 (rate, empirical).** For the symmetric measure, the
 measured constant is c = 0.55 +/- [error] (gap 3 phase-1
@@ -425,6 +428,50 @@ statistics of the exponent walk on ℤ; the precise form depends on
 the proof route chosen for Theorem 1. We do not commit to a
 decomposition of c in the paper beyond the lower-bound
 c(epsilon, mu) > 0 claim above.
+
+### Theorem 1 variants — pre-committed wording
+
+The simulation program (see `sim/README.md`) can land in one of
+three outcomes depending on the three-plan adjudication. Theorem
+1 wording is pre-committed for each:
+
+**(T1a) Single-regime stretched-exp.** Used if TUKEYS confirms
+pure H_S shape, ALGEBRAIC fits c with tight CI and B̂ consistent
+with 0, and BENTHIC reports balanced regime (ρ(M) ≈ γ₁^{c'})
+with predicted n* effectively infinite. Wording is the Theorem 1
+above, unchanged.
+
+**(T1b) Two-regime, observable + asymptotic.** Used if BENTHIC
+reports rotation-dominated regime with predicted crossover n*
+beyond the simulation horizon but within theoretical relevance.
+Wording:
+
+> **Theorem 1' (two-regime).** For the symmetric probability
+> measure μ and n ≤ n_0(ε, μ), the mantissa marginal satisfies
+> ‖π_T(νK^n) − Leb_T‖_{TV} ≤ C exp(−c(ε, μ) √n). For n >> n*,
+> the asymptotic rate is exp(−α(ε, μ) · n) with α > 0. The
+> crossover n* = n*(ε, μ) is determined by the mode-coupling
+> spectral radius of the return operator relative to the per-
+> step rotation multiplier during excursions.
+
+Paper reports both rates with the n* boundary.
+
+**(T1c) Mixture (MESSES-consistent).** Used if ALGEBRAIC A5
+finds B̂ > 10⁻² with CI excluding 0 and α̂ ∈ [0.4, 0.6], and
+BENTHIC reports injection-dominated regime. Wording:
+
+> **Theorem 1'' (mixture).** For the symmetric probability
+> measure μ, the mantissa marginal satisfies
+> ‖π_T(νK^n) − Leb_T‖_{TV} ≤ C₁ exp(−c(ε, μ) √n) + C₂ · n^(−1/2)
+> for all n ≥ n_0, with both coefficients C₁, C₂ positive.
+
+Paper reports both terms and discusses the crossover.
+
+The three variants exist so that end-of-program wording is
+chosen by the decision rule, not improvised. Which variant
+applies depends on the sim outcome; the paper's body text
+adapts accordingly (significance statement, §4 mechanism, §6
+kicker, conclusion).
 
 
 ### 3. Group and Cayley-graph setup (250 words)
@@ -557,11 +604,14 @@ step) and ε-perturbation (additive step at bounded depth) at
 each increment, with no external re-weighting. Both routes
 terminate at the logarithmic distribution because both pass
 through the coordinate map ψ(m) = log₂(1+m) = m + ε; the
-coincidence is the positivity of ε, not any algebraic identity
-of BS(1,2). What BS(1,2) contributes is the minimal setting in
-which the two operations mix stochastically, so the re-weighting
-is internal and the asymmetry Hamming named resolves without an
-ex post facto analytic step.
+coincidence is the positivity of ε on the open interval. BS(1,2)
+is the minimal algebraic setting in which both operations appear
+— the relation bab⁻¹ = a² identifies the group, not the
+mechanism. The convergence comes from the generator *actions*
+(ε-perturbation at low depth + irrational rotation by log₁₀ 2)
+and the null-recurrent return statistics of the exponent walk.
+The asymmetry Hamming named resolves without an ex post facto
+analytic step.
 
 ### 7. Robustness and sensitivity (150 words)
 
@@ -647,40 +697,53 @@ in the text. No "see also" padding. A human must verify these.
 
 **Must cite** (the load-bearing walls):
 1. Schatte (1986) — Cesàro/Riesz convergence for mantissa sums.
-   Our direct ancestor. Provides the Fourier-coefficient
-   asymptotics and the Cesàro non-convergence that the proof
-   extends. The single most important citation.
-2. Cuno & Sava-Huss (2015) — random walks on BS(p,q). Provides
-   the group-theoretic decomposition (vertical/horizontal),
-   the convergence-to-boundary results, and the sublinear-speed
-   estimate for the driftless case. Cited in the group setup.
-3. Hill (1995) — the scale-invariance characterization. Named
+   Diagnostic of the iid pure-addition regime; cited in §6
+   movement A and engaged in §6 kicker as a competing
+   explanation. Not a proof ancestor of Route 1'.
+2. Feller, *An Introduction to Probability Theory and Its
+   Applications*, Vol. II — Laplace-transform machinery and
+   return-time theory for null-recurrent random walks.
+   Load-bearing for FIRST-PROOF §2 (R5): the stochastic estimate
+   E[q^{N_n}] ≤ C exp(−c√n) for the return count N_n.
+3. Cuno & Sava-Huss (2015) — random walks on BS(p,q). Provides
+   the group-theoretic decomposition (vertical/horizontal) for
+   §3's Cayley-graph setup. Not load-bearing in the proof
+   itself under Route 1'.
+4. Hill (1995) — the scale-invariance characterization. Named
    in the Hamming diagnosis.
-4. Benford (1938) — the law.
-5. Berger & Hill (2015) — the modern survey.
-6. Bowen (2002) — binary tiling geometry. Cited in the group
+5. Benford (1938) — the law.
+6. Berger & Hill (2015) — the modern survey.
+7. Bowen (2002) — binary tiling geometry. Cited in the group
    setup.
 
 **Should cite** (context and credit):
-7. Hamming (1970) — named the addition/multiplication
+8. Hamming (1970) — named the addition/multiplication
    asymmetry. Cited in the diagnostic paragraph alongside
    Schatte.
-8. Marasa & Matula (1973) — simulative study of error
+9. Marasa & Matula (1973) — simulative study of error
    propagation in mixed arithmetic. Independent empirical
    confirmation (from 1973) that the operator mix is the
    determining factor. Cited in the robustness section.
-9. Newcomb (1881) — priority over Benford.
-10. Diaconis (1977) — "sufficiently many significant digits."
+10. Newcomb (1881) — priority over Benford.
+11. Diaconis (1977) — "sufficiently many significant digits."
     Named in the Hamming diagnosis.
-11. Nigrini (1996 or 2012) — Benford in fraud detection.
-12. Miller (2015) — the second major survey.
+12. Nigrini (1996 or 2012) — Benford in fraud detection.
+13. Miller (2015) — the second major survey.
 
-**Proof infrastructure / reserve** (at most three of these earn
+**Proof infrastructure / reserve** (at most two of these earn
 space in the final 15, and only if they do work in the main text):
-- Élie (1982) — the ladder-time lemma used in Cuno &
-  Sava-Huss's horizontal-displacement estimate.
-- Kaimanovich & Vershik (1983) — boundary theory; spectral
-  gap context.
+- Krylov–Bogolyubov (1937) — existence of invariant probability
+  for weak-Feller Markov operators on compact spaces. Named in
+  FIRST-PROOF §2 (R2) for ν_R's existence on compact R. May be
+  cited through a textbook (Walters, *Ergodic Theory*, or
+  Hairer's notes) rather than the original.
+- Revuz / Meyn & Tweedie — if the (R2) Feller-property argument
+  for the induced return operator T_R uses their framework
+  explicitly. Optional depending on how (R2) is written.
+- Katznelson, *An Introduction to Harmonic Analysis* — if (R3)'s
+  norm is Fourier-weighted L² and (R4)'s contraction proof uses
+  Fourier-coefficient decay directly. Needed if that norm wins
+  over BV.
 - Kontorovich & Miller — asymptotic Benford behavior in
   special analytic settings via Gaussian limit laws for
   logarithms, Poisson summation, and equidistribution.
@@ -692,9 +755,17 @@ space in the final 15, and only if they do work in the main text):
   asymptotic, and does not identify the mixed-arithmetic
   mechanism or furnish the stretched-exponential rate proved
   here.
-- Tsao (1974) — leading-digit proportions via iterated
-  averaging. Parallel result to Schatte via different route.
-  Cited in FOURIER'S STAR.
+
+**Dropped** (not used by Route 1'):
+- Élie (1982) — ladder-time lemma was Cuno & Sava-Huss
+  infrastructure; Route 1' does not use their horizontal-
+  displacement decomposition.
+- Kaimanovich & Vershik (1983) — boundary theory / spectral-
+  gap context; σ-finite setting has no spectral gap in the
+  usual sense, and Route 1' uses spectral gap for the induced
+  return operator on compact R, not boundary theory.
+- Tsao (1974) — parallel route to Schatte; redundant once
+  Schatte is the diagnostic citation.
 
 
 ## The significance statement
@@ -725,6 +796,15 @@ That's ~121 words. The four failures are compressed to three
 (spread-across-scales folds into the power-law line). Epsilon
 is introduced as a mathematical object, not as a CS artifact.
 The last sentence names the terminus.
+
+**Contingency note.** The significance statement above is a
+proof-complete draft for the eventual submission. The "We prove
+that..." phrasing is current overclaim: FIRST-PROOF §2 (R4),
+(R5), (R6) are all open as of the present working state. Do not
+submit this statement until those three sub-problems close. If
+(R6) fails independently of (R4)+(R5), the statement must be
+rewritten to drop the Benford-identification clause (see claim
+gate's contingency note below).
 
 
 ## The claim gate
@@ -760,6 +840,17 @@ use only language from the first bin.
 - Exact constant identification.
 - Any statement broader than the stated BS(1,2) theorem unless
   explicitly marked as conjecture or remark.
+
+**Contingency.** The four "goes in" bullets presume all of
+FIRST-PROOF §2's (R4), (R5), (R6) close. If (R4)+(R5) close but
+(R6) does not, the theorem degrades to "mantissa marginal
+converges to an unidentified probability ν* on T at stretched-
+exponential rate" — still a convergence theorem, but *not a
+Benford theorem*. In that case the significance statement and
+the §4 mechanism presentation must be rewritten to drop the
+Benford-identification claim, and the title changes. This is the
+one failure mode where a partial-proof paper is conceivable;
+the others kill the paper.
 
 **Promotion test.** A claim moves from "stays out" to "goes in"
 only if the paper can answer immediately and precisely: which

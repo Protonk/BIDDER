@@ -152,7 +152,7 @@ def main():
         bbox=dict(facecolor='#111', edgecolor=SPINE, alpha=0.85),
     )
 
-    fig.suptitle('BS(1,2) walk: exponential convergence to Benford',
+    fig.suptitle('BS(1,2) walk: convergence to Benford',
                  color=FG, fontsize=13)
     plt.tight_layout()
     save_figure(fig, experiment_path('bs12_rate.png'))

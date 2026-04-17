@@ -36,8 +36,22 @@ generator); K(·, A) is B-measurable for each A. Iterates K^n are
 kernel composition, not repeated composition of a single
 measurable map.
 
-**What the theorem targets.** The mantissa-marginal
-TV distance to Leb_T:
+**Total variation distance.** For probability measures μ, ν on a
+common measurable space (Y, G),
+
+    ‖μ − ν‖_{TV} := sup_{A ∈ G} |μ(A) − ν(A)|
+                  = ½ · ∫ |dμ − dν|,
+
+and equivalently, when μ, ν are both absolutely continuous with
+respect to a dominating measure λ with densities p, q, then
+‖μ − ν‖_{TV} = ½ ‖p − q‖_{L¹(λ)}. In our setting: measures live
+on (X, B) or on T; the dominating measure for T-marginals is
+Leb_T. When we write "TV on measures," we mean this norm; when
+we write "TV on densities," we mean the equivalent L¹(Leb_T)/2
+reading of the same quantity.
+
+**What the theorem targets.** The mantissa-marginal TV distance
+to Leb_T:
 
     φ(ν, n) := ‖π_T(ν K^n) − Leb_T‖_{TV},   ν a probability on X.
 
@@ -108,7 +122,8 @@ state space R (T × finite E-range) and is expected to have a
 genuine invariant probability ν_R. TV contraction under T_R to
 ν_R is honest once ν_R exists.
 
-**Sub-problems (R1)–(R6).**
+**Sub-problems (R1)–(R6), plus a bookkeeping step (R1.5) and a
+structural observation.**
 
 - **(R1) Define T_R rigorously via excursion decomposition.** Two
   regimes, both a.s. finite but not literally bounded:
@@ -127,20 +142,44 @@ genuine invariant probability ν_R. TV contraction under T_R to
     which is a.s. finite (a/a⁻¹ steps can intervene but each
     step is b or b⁻¹ with probability 1/2, so the first b-event
     is geometrically distributed).
-- **(R2) Show T_R has an invariant probability on R.** The
-  earlier "positive recurrence on finite state space" reasoning
-  was wrong: R = T × {−E₀, …, E₀} is *compact* but not finite
-  (continuous T-coordinate). The correct route is:
+- **(R1.5) Mid-excursion bookkeeping.** At a generic time n, the
+  walker is usually *not* at a return time — it is partway
+  through an excursion. The law-level bound on φ(ν, n) is the
+  mixture of (walkers who have made k returns and are currently
+  in R, handled by (R4)+(R5)) plus (walkers mid-excursion, not
+  handled by any other item). Two contributions to bound:
+  - **Upward mid-excursion.** The mantissa sees only a/a⁻¹
+    rotations plus b/b⁻¹ perturbations of size O(10^{−E₀}) in
+    TV. Rotation is TV-isometric against Leb_T, so the mantissa
+    marginal is within O(10^{−E₀}) of whatever it was at the
+    last return. Negligible for E₀ large.
+  - **Downward mid-excursion.** Bounded by the geometric b-snap
+    return time times the per-step TV perturbation. Absorbable
+    into an O(1) adjustment to T_R's effective contraction
+    constant.
+
+  Not a research problem; needs to be stated and bounded
+  explicitly so the final TV bound is complete.
+- **(R2) Show T_R has an invariant probability on R.** R =
+  T × {−E₀, …, E₀} is *compact* but not finite (continuous
+  T-coordinate). The route is:
   - Show T_R is a weak-Feller / Feller Markov operator on
-    compact R (continuity of the transition kernel on bounded
-    continuous test functions).
+    compact R. The b-step map m ↦ frac(log₁₀(10^m + 10^{−E}))
+    is continuous on T (carry/wrap discontinuity is resolved by
+    working on the circle). For T_R's Feller property specifically,
+    null-recurrence of τ_R's law means standard
+    positive-recurrence inheritance doesn't apply off-the-shelf;
+    a half-page argument suffices: truncated return operators
+    are finite compositions of K and hence continuous, and
+    uniform geometric tail bound on τ_R from any x ∈ R gives
+    uniform convergence to T_R. Uniform limit of continuous is
+    continuous.
   - Apply Krylov–Bogolyubov to get existence of at least one
     invariant probability ν_R.
   - **Defer uniqueness to (R4)** — uniqueness should fall out
     of the contraction/spectral-gap argument, not be claimed
     for free here.
-- **(R3) Choose a norm on densities on R.** Priority order from
-  GPT5's note:
+- **(R3) Choose a norm on densities on R.** Priority order:
   - **Fourier-weighted L²** on the zero-mean part. Natural first
     try: BINADE-WHITECAPS §§7–8 gives the Fourier coefficients of
     ε, and the quantity that should control q is the Fourier
@@ -155,28 +194,71 @@ genuine invariant probability ν_R. TV contraction under T_R to
   a computable functional of ε; per-excursion contraction.
   Uniqueness of ν_R is an output of this step (irreducibility
   + gap ⇒ unique invariant).
-- **(R5) Stochastic estimate on the return count.** This is a
-  separate proof-grade step, not a trivial application of
-  E[N_n] ∼ c_R√n. The law-level bound we need is something
-  like E[q^{N_n}] ≤ C · exp(−c · √n), or equivalently a
-  Laplace-transform / lower-tail estimate
-     P(N_n ≤ a√n) ≤ exp(−some rate in a)
-  strong enough to convert (R4)'s per-return contraction into
-  the claimed decay. N_n is *random* with √n scaling but a
-  nondegenerate Mittag-Leffler / arcsine-type limit
-  distribution; the mean alone is not sufficient. The proof
-  requires classical local-time Laplace-transform machinery
-  (Feller *An Introduction to Probability Theory*, Vol. II, or
-  Chung-Erdős on return times of simple random walk).
-- **(R6) Connect ν_R to Leb_T.** Spectral gap for T_R gives
-  convergence to ν_R, *not* convergence to Leb_T. The mantissa
-  marginal of ν_R — marginalized over E ∈ [−E₀, E₀] — must be
-  shown to equal Leb_T for the Theorem 1 conclusion. This is
-  where "the limit is Benford" gets identified, and it does
-  not fall out of (R1)–(R5) automatically. The argument may
-  use a global harmonic / invariant-measure object on T × ℤ
-  (i.e., the σ-finite question deferred from gap 1 may
-  re-enter here).
+
+  **Empirical cross-check.** `sim/BENTHIC-MINKOWSKI-SIM.md` B3
+  measures the spectral radius ρ(M) of T_R's mode-coupling
+  matrix empirically via excursion-resolved Fourier transfer.
+  If B3 returns ρ(M) < 1 with tight CI, that is empirical
+  support for (R4)'s gap claim even without a rigorous proof —
+  and supplies a numerical target for the theoretical q. If
+  B3 returns ρ(M) ≈ 1, proof of (R4) is unlikely to succeed.
+  Run B3 before committing substantial effort to (R4)
+  analytically.
+- **(R5) Stochastic estimate on the return count.** Separate
+  proof-grade step, not a trivial application of E[N_n] ∼ c_R√n.
+  The law-level bound we need is
+
+     E[q^{N_n}] ≤ C · exp(−c · √n),
+
+  or equivalently a lower-tail estimate P(N_n ≤ a√n) ≤ exp(−rate
+  in a), strong enough to convert (R4)'s per-return contraction
+  into the claimed decay. N_n is random, with √n scaling but a
+  nondegenerate Mittag-Leffler / arcsine-type limit; mean alone
+  is insufficient.
+
+  **Non-trivial subtlety:** the E-process is *not* autonomous.
+  b/b⁻¹ steps produce E-increments that depend on m (and on E
+  itself for large E-jumps — adding 1 to a number near a power
+  of 10 can change the exponent by several levels). So N_n is a
+  functional of the coupled (m, E) process, not of a simple
+  ±1 walk. However, the E-process is a zero-drift martingale
+  with bounded increments uniformly in m (under the symmetric
+  measure). The Laplace-transform estimate follows by applying
+  the classical exponential-martingale + optional-stopping
+  argument to this generalized-increment walk, with constants
+  adjusted by the comparison. Estimated length: 2–3 pages, not
+  one. References: Feller *Probability*, Vol. II (Chung–Erdős
+  return-time theory on simple walks, adapted).
+- **(R6) Connect ν_R to Leb_T via irrational-rotation / Weyl
+  equidistribution.** Spectral gap for T_R gives convergence to
+  ν_R, *not* convergence to Leb_T. We need π_T ν_R = Leb_T.
+
+  **Recommended route (self-contained, decoupled from (R3)/(R4)
+  norm choice).** During upward excursions, the mantissa is
+  rotated by a random multiple of log₁₀ 2 (irrational). Excursion
+  length has positive probability on every n ∈ ℤ₊, and
+  n · log₁₀ 2 mod 1 is equidistributed on T by Weyl. Therefore
+  the excursion-averaged rotation distribution spans T densely,
+  and the T-marginal of ν_R must be invariant under irrational
+  rotation — forcing π_T ν_R = Leb_T. Under one page to write
+  out.
+
+  **Alternative route (norm-dependent).** If the (R4) norm
+  controls T-Fourier modes uniformly across E-levels, then
+  T_R's spectral gap forces each conditional density ρ_E(m) to
+  be constant, making π_T ν_R uniform directly. Cleaner if the
+  norm cooperates, but depends on (R3)/(R4) details.
+
+  The deferred σ-finite invariant from gap 1 is *not* needed for
+  the recommended route.
+
+- **(Structural observation, stated once in the iteration step.)**
+  Excursion-level rotation is independent of contraction-level
+  dynamics because rotation on T is TV-isometric against Leb_T.
+  This means the per-return contraction in (R4) and the return-
+  count statistics in (R5) can be applied as independent factors.
+  Immediate fact, but it's what makes the architecture
+  (R4) × (R5) product bound legitimate.
 
 ### Previous alternatives (historical, unlikely under new framing)
 
@@ -300,10 +382,11 @@ t = 500 → 0.002 at t = 2000), consistent with 1/n.
 
 **Consequences.**
 
-- **Theorem 1 scope.** Can cover all nondegenerate μ. Biased case is
-  a corollary with a two-regime rate statement, not a quantitative
-  floor. PNAS-PLAN §7's biased-walk bullet is empirically
-  confirmed.
+- **Theorem 1 scope.** Remains the symmetric measure. Phase 3
+  supports a **positive-drift biased corollary** with a two-regime
+  rate statement, not a theorem broadened to all nondegenerate μ.
+  PNAS-PLAN §7's biased-walk bullet is empirically confirmed in
+  that narrower form.
 - **Precise post-escape rate not measured.** The transition from
   stretched-exp to algebraic happens below the N = 10⁶ noise floor,
   so we cannot resolve a specific power-law exponent α from this
@@ -319,42 +402,24 @@ t = 500 → 0.002 at t = 2000), consistent with 1/n.
 
 ## 5. Group-relation's role in the proof
 
-**Status:** rhetorical/proof misalignment.
-
-**The problem.** The proof as sketched uses:
+**Status:** **resolved by option (B).** Route 1' proof uses only
+generator *actions*:
 - (i) rotation of mantissa by log₁₀ 2 under a-steps,
-- (ii) ε-perturbation of mantissa under b-steps,
-- (iii) visit rate of the exponent walk to the active zone.
+- (ii) ε-perturbation of mantissa under b-steps at bounded depth,
+- (iii) null-recurrent return statistics of the exponent walk.
 
-None of these uses the relation **bab⁻¹ = a²**. A free group on
-{a, b} with the same generator actions would give the same proof.
+None uses the relation **bab⁻¹ = a²**. Web-agent review
+(2026-04-17) confirmed the proof-rhetoric mismatch: a free group
+on {a, b} with the same generator actions would give the same
+proof.
 
-But `PNAS-PLAN.md` §6 (lines 536–542) pivots on:
-
-> "the asymmetry Hamming named disappears because the group relation
-> bab⁻¹ = a² contains the interaction rather than leaving it to be
-> reconstructed."
-
-This is the rhetorical kicker of the paper. If the proof doesn't
-use the relation, the kicker is overclaim.
-
-**What closure looks like.** Two options.
-
-- **(A) Make the relation load-bearing.** Identify a proof step that
-  uses bab⁻¹ = a² — most likely in the visit-rate argument (the
-  relation constrains the word length / geodesic depth of typical
-  walk paths, giving a tighter ρ). Cuno & Sava-Huss's ladder-time
-  machinery might be the vehicle.
-- **(B) Soften the rhetoric.** Replace "group relation contains the
-  interaction" with "BS(1,2) is the minimal algebraic model with
-  both operations present, and the ε mechanism applies to any
-  finitely-generated group whose action on the mantissa circle
-  decomposes into rotation + ε-perturbation." Less dramatic, but
-  honest.
-
-**Recommendation.** Try (A) first via the visit-rate channel. If it
-doesn't work within a week, fall back to (B) and rewrite the §6
-kicker.
+**Resolution.** The §6 kicker has been narrowed to say "BS(1,2)
+is the minimal algebraic setting in which both operations
+appear — the relation bab⁻¹ = a² identifies the group, not the
+mechanism." Option (A) (making the relation load-bearing via a
+Cuno & Sava-Huss ladder-time argument) was considered but not
+pursued — it would require adding proof machinery that the
+symmetric-case Theorem 1 doesn't need.
 
 ---
 
@@ -399,17 +464,20 @@ diagnostic, not the mechanism.
 
 ---
 
-## Pre-draft decision: Theorem 1's scope — resolved
+## Pre-draft decision: Theorem 1's scope — symmetric theorem,
+biased positive-drift corollary
 
 Phase 3 biased-walk sim confirms L₁ → 0 for weights
 (0.2, 0.2, 0.4, 0.2): no floor at 0.091, walkers reach the N = 10⁶
-sampling-noise floor by t ≈ 2000 and stay there. **Theorem 1 can
-cover all nondegenerate μ.**
+sampling-noise floor by t ≈ 2000 and stay there. **This is enough
+to support a positive-drift biased corollary, not to broaden
+Theorem 1 to all nondegenerate μ.**
 
-The biased case is a corollary with a two-regime rate — fast
+The main theorem remains the symmetric-measure statement. The
+biased case is a corollary with a two-regime rate — fast
 (ε-minorization) while walkers are in the active zone, algebraic
-(Weyl rotation) after they escape. The symmetric case is a single-
-regime stretched-exponential. Both convergences are to Leb_T.
+(Weyl rotation) after they escape — for the positively drifting
+regime actually simulated. Both convergences are to Leb_T.
 
 Caveat: positive multiplicative drift is what phase 3 tested.
 Negative drift (walkers recycle through origin, maintaining active-
@@ -426,8 +494,8 @@ separate conjecture.
 | 2. Contraction step | **Open, primary candidate identified.** Induced first-return operator T_R on compact R; six sub-problems (R1)–(R6), with (R5) Laplace-transform analysis of return count on critical path | Research, paper-first | Yes |
 | 3. Visit-rate vs. rate shape | **Resolved** — stretched exp, c ≈ 0.55 | — | — |
 | 4. Biased-walk mechanism | **Resolved** — 2-regime convergence | — | — |
-| 5. Group relation's role | Proof design | 1 proof step or rhetoric edit | No — can soften rhetoric |
-| 6. Schatte bridge | Diagnostic only (§6 movement A), not mechanism | Already resolved by kicker edit | No |
+| 5. Group relation's role | **Resolved** — §6 kicker narrowed; proof uses generator actions only, not the relation | — | — |
+| 6. Schatte bridge | **Resolved** — diagnostic only (§6 movement A), not mechanism | — | — |
 
 **Minimum viable path to draft:** gap 2 is the sole load-bearing
 open problem. Three independent proof-grade steps must close:
