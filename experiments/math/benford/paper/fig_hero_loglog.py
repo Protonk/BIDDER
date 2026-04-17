@@ -4,7 +4,8 @@ Hero figure (log-log): L1 distance to Benford for three regimes.
 Log-log axes make the rate distinction visible as shape:
   - addition only: flat (no convergence)
   - alternating add/mult: straight line (algebraic decay)
-  - mixed BS(1,2): concave down (exponential convergence)
+  - mixed BS(1,2): concave down (stretched-exponential convergence,
+    exp(-c sqrt(n)); see FIRST-PROOF.md gap 3)
 
 Run: sage -python fig_hero_loglog.py
 """

@@ -96,174 +96,159 @@ contraction rate. Gap 2 then bounds λ from below via a functional of
 
 ## 2. The contraction step
 
-**Status:** open. The load-bearing proof move. Route choice gated by
-gap 3.
+**Status:** **open — no working route yet.** The Rosenthal small-
+set minorization direction drafted in
+[`GAP2-LEMMA.md`](./GAP2-LEMMA.md) is withdrawn; see the note at
+the top of that file for the diagnosis. The theorem target
+(stretched-exp rate, c ≈ 0.55) stands; the proof mechanism does
+not.
 
-**The problem.** Produce a quantitative contraction bound on the
-transfer operator (defined in gap 1) with the rate controlled by ε.
-The claim gate has already retreated to λ ≥ f(ε, μ) > 0, so we need
-ε > 0 on the interior to produce a contraction in some usable norm —
-not exact identification. BINADE-WHITECAPS §§7–8 gives ‖ε‖²_{L²} via
-Parseval, but that's the static defect under a coordinate change,
-not a transfer-operator bound. The bridge from the static identity
-to a dynamical contraction is what this gap asks for.
+**Why the withdrawn route fails.** Two structural problems, not
+bookkeeping gaps:
+- The kernel K(x, ·) for fixed x is a 4-atom mixture, so
+  K^{k₀}(x, ·) has no density with respect to Leb ⊗ counting.
+  Rosenthal Lemma 6(ii)'s β = ∫_X inf_{x∈R} k^{k₀}(x, y) dμ(y) is
+  inapplicable because there is no k^{k₀}(x, y) to take the inf of.
+- A proposed per-step TV contraction
+  φ(νK) ≤ (1 − β·ν(R))·φ(ν) is false: a MC check from
+  ν = Leb_T ⊗ δ_{E=0} (so φ(ν) = 0) gives φ(νK) ≈ 0.09. Corollary:
+  Leb ⊗ counting is not invariant for K — the b-step has Jacobian
+  10^m / (10^m + 10^{−E}) ≠ 1.
 
-**What gap 1 supplies, and what remains external.** The operator
-lives on L²(T × ℤ, μ) with μ = Leb ⊗ counting (σ-finite). The Markov
-kernel K(x, A) is measurable (Tao Def 1.4.32) and acts by
-(Kf)(x) = ∫ f(y) K(x, dy). Total-variation distance, minorization
-inequalities, and Fourier decay on T are all well-typed in this
-framework. The contraction *bound* is not — for that we go external
-(Rosenthal, Meyn-Tweedie, or direct Fourier estimates on T).
+Gap 1's claim "μ = Leb ⊗ counting is the natural invariant
+σ-finite measure" was also overstated — it holds for a-steps,
+fails for b-steps. The invariant σ-finite measure, if it exists,
+is most likely the pushforward of left Haar on BS(1,2), which
+isn't Leb ⊗ counting.
 
-**Route 1 (primary): Doeblin / minorization.** After k₀ steps, the
-kernel satisfies a minorization on a small set R ⊂ X. This route
-targets exactly the lower bound we need and admits a constructive
-minorization constant from BINADE-WHITECAPS. Specifics from
-Rosenthal, *Minorization Conditions and Convergence Rates for Markov
-Chain Monte Carlo*, JASA 90 (1995), 558–566
-(`sources/minor-markov.pdf`). (Rosenthal writes the minorization
-constant as ε; we rename it **β** to avoid clash with the function
-ε(m).)
+**Live routes, in rough priority order:**
 
-- **Small-set minorization** (cond. (∗), §2, p. 4):
-  K^{k₀}(x, ·) ≥ β · Q(·) for x ∈ R = {(m, E) : |E| ≤ E₀}. Whole-
-  space Doeblin (Prop. 2, p. 5) would require uniform ergodicity,
-  almost certainly false on T × ℤ.
-- **TV bound** (Theorem 1, p. 4–5):
-  ‖L(X^{(k)}) − L(Y^{(k)})‖_var ≤ (1−β)^{[j/k₀]} + P(N_{k−k₀+1} < j),
-  with N_k counting joint returns of a coupled pair to R × R. Two
-  terms: coupling probability once inside R, and the tail bound on
-  how often the pair sits there jointly.
-- **Constructive β** (Lemma 6(ii), p. 9): letting k^{k₀}(x, y) be
-  the density of K^{k₀}(x, ·) with respect to the reference measure
-  μ = Leb ⊗ counting (available once the b-step's smoothing on T
-  gives absolute continuity), β = ∫_X (inf_{x∈R} k^{k₀}(x, y)) dμ(y).
-  Directly computable from BINADE-WHITECAPS §§7–8.
-- **No drift shortcut.** Theorem 12 (p. 15) uses
-  E[V(X^{(1)})|x] ≤ λV(x) + b with λ < 1 to control return times;
-  our exponent walk has no such drift (symmetric null-recurrent,
-  biased transient-away). Return-time control must come from direct
-  bounds — gap 3's simulation, or Cuno-Sava-Huss statistics.
-- **σ-finite adaptation.** Rosenthal assumes a stationary
-  probability π; we have σ-finite μ. The projection to the mantissa
-  marginal is load-bearing here: because the b-step is E-dependent,
-  the marginal kernel on T is time-dependent, obtained by averaging
-  K against the coupled pair's current E-distribution. The small-set
-  minorization survives this averaging — if K^{k₀}(x, ·) ≥ β · Q(·)
-  holds for *all* x in R = {|E| ≤ E₀}, the E-averaged marginal bound
-  inherits β regardless of how E-weight is distributed within R. The
-  coupling's coin-flip cares about β, not full-space normalization.
+- **Route 1' (primary candidate): transfer operator K\* on
+  absolutely continuous mantissa densities.** Work in the space
+  of probability measures ν with π_T ν ≪ Leb_T. The action of K
+  on such densities is AC-preserving (b-step is a diffeomorphism
+  of T for each fixed E). Pick a translation-invariant norm on T
+  (BV, Sobolev H^s, or weighted Fourier ℓ²) in which a-step
+  rotation is an isometry and b-step at low depth is a strict
+  contraction controlled by ε. The atomic-kernel obstruction goes
+  away at the density-action level. Four sub-problems: (R1)
+  choose the norm; (R2) prove per-visit contraction on densities
+  in that norm; (R3) verify a-step is isometric in that norm;
+  (R4) iterate using E[L_n] ~ c_R √n. **The whole route needs to
+  be worked out on paper before we write a lemma.**
+- **Route 2 (backup): wrapped-Cauchy comparison.** Dominate the
+  averaged +1 kernel by a wrapped Cauchy in an operator norm on
+  densities. Available if Route 1' doesn't yield a clean norm.
+- **Route 3 (unlikely): wrapped-Cauchy identity.** The averaged
+  +1 kernel *is* wrapped Cauchy. Noted for completeness.
+- **Route 4 (alternative): direct Fourier analysis on the
+  mantissa-marginal Fourier coefficients.** Show each Fourier
+  coefficient of the mantissa marginal decays at stretched-exp
+  rate. Closer to Schatte's machinery, bypasses kernel/density
+  structure entirely. The Fourier coefficients of ε from BINADE-
+  WHITECAPS §§7–8 plug in naturally if this works.
 
-**Route 2 (backup): Wrapped-Cauchy comparison.** Dominate the
-averaged +1 kernel by a wrapped Cauchy of parameter γ = γ(ε) in some
-operator norm. Convolution stability gives exp(−2πγn). Harder than
-minorization — commits to choosing both the norm and the domination
-inequality — but available if the minorization return-time bound
-fails.
+**What closure looks like.** A lemma that produces the stretched-
+exp mantissa-marginal TV bound via one of the routes above. Not
+yet drafted; we are specifically *not* drafting until the
+function-space / norm choice is settled on paper first (the
+withdrawn GAP2-LEMMA is a cautionary record of drafting on an
+unsettled framework).
 
-**Route 3 (unlikely): Wrapped-Cauchy identity.** The averaged +1
-kernel actually *is* wrapped Cauchy with parameter γ = γ(ε). Noted
-for completeness; wrapped Cauchy is too rigid a family for this to
-hold generically.
-
-**What closure looks like.** A lemma stating the contraction bound,
-rate as a computable functional of ε (Doeblin constant, Fourier
-tail, or Parseval). **Try route 1 first.** Gap 3's sim decides
-whether to stay there: stretched exponential ⇒ Rosenthal-via-
-coupling is the route; exponential ⇒ coupling can't reach the rate
-and we fall back to route 2 or to direct Fourier decay on the
-mantissa marginal. Either outcome keeps ε in control of the rate.
+**Next action:** work out Route 1' on paper. Pick a candidate
+norm (most likely H^{1/2}(T) or BV(T) — both translation-
+invariant, both give b-step's Jacobian natural room to appear),
+verify rotation-isometry, attempt the per-visit contraction. If
+no norm works cleanly, fall back to Route 4.
 
 ---
 
-## 3. Visit-rate consistency with observed exponential rate
+## 3. Visit-rate consistency with observed rate
 
-**Status:** open. The quietest crisis, and the one that decides what
-gap 2 has to close.
+**Status:** **resolved.** Phase 1 sim (N = 10⁷, t ∈ [0, 600], see
+`paper/sim/` and `gap3_phase1.py`) shows the true shape is
+**stretched exponential exp(−c√t) with c ≈ 0.55**, not exponential.
 
-**The problem.** Two predictions, same data, can't both be right.
+**The finding.** Both models fit to a common pre-floor window:
 
-- **Theory predicts stretched exponential.** The symmetric exponent
-  walk is driftless ±1 on ℤ; its local time at zero grows as √n
-  (P(S_n = 0) ∼ √(2/πn)). If contraction factors through visits to
-  the low-depth zone {|E| ≤ E₀}, t steps give ∼√t contractions and
-  TV mixing goes as exp(−c√t). Rosenthal 1995
-  (`sources/minor-markov.pdf`), Theorem 1 (p. 4–5), makes this
-  mechanical: the coupling bound (1−β)^{[j/k₀]} + P(N_{k−k₀+1} < j)
-  with N_k counting joint returns of two independent copies to
-  R × R (β the Rosenthal minorization constant, see gap 2) forces
-  j ∼ √k and yields TV ≲ exp(−c√k). Every coupling-with-independent-
-  partner argument in this framework gives stretched exponential.
-- **Simulation shows exponential.** `bs12_rate.png` is a clean
-  straight line on lin-log over t ∈ [20, 100] with R² = 0.99 and
-  λ ≈ 0.035. No visible curvature.
+| Window | exp fit (R², resid σ) | stretched fit (R², resid σ) |
+|---|---|---|
+| [20, 100] | 0.9963, 0.061 | **0.9983, 0.042** |
+| [20, 120] | 0.9929, 0.094 | **0.9985, 0.043** |
 
-Both functions are locally linear on short intervals, so a fit over
-[20, 100] can't distinguish them.
+The exp residuals are 2.2× larger than stretched on the extended
+window, and they carry systematic curvature. The local slope of
+log(L₁) vs. t drops from −0.048 at t = 25 to −0.020 at t = 130 —
+a factor of 2.4× change — which tracks stretched's −c/(2√t)
+prediction closely and is incompatible with constant-slope
+exponential.
 
-**The action.** Extend the simulation to t ∈ [10³, 10⁵] with enough
-walkers to resolve L₁ below 10⁻³ (≈10⁷ walkers for K = 9 digit bins,
-whose empirical floor is √(K/N)). Produce two panels:
+The previously reported λ ≈ 0.035 on `bs12_rate.png` (fit window
+[20, 100]) was a local-linear artifact: on a short window, both
+models look straight, and the average slope of stretched is
+numerically close to what exp would give.
 
-- log(L₁) vs. t — straight iff exp(−λt).
-- log(L₁) vs. √t — straight iff exp(−c√t).
+**Consequences.**
 
-Whichever stays linear out to 10⁵ is the true asymptotic rate.
-
-**What the answer decides.**
-
-- **If log(L₁) vs. √t is straight.** Theorem 1's rate becomes
-  stretched exponential. Gap 2 closes via Rosenthal (§2's
-  minorization specifics).
-- **If log(L₁) vs. t is straight.** Rosenthal-via-coupling cannot
-  reproduce the rate. Gap 2 closes via a route that bypasses
-  coupling with a partner chain — most likely direct Fourier decay
-  on the single chain's mantissa marginal, using the BINADE-
-  WHITECAPS §8 coefficients of ε.
-
-Either outcome is actionable and unblocks drafting.
-
-**Why this is first.** One night of simulation, and it tells us which
-rate the theorem states and which route gap 2 takes.
+- **Gap 2 route.** Rosenthal coupling (§2 Route 1) is the right
+  route. The coupling framework's stretched-exp prediction (from
+  null-recurrent joint visits ∼1/k forcing j ∼ √k in Theorem 1's
+  TV bound) matches reality; no fall-back to direct Fourier is
+  needed.
+- **Theorem 1 wording.** "Exponential convergence" in the plan's
+  Theorem 1 must change to "stretched-exponential convergence" at
+  rate exp(−c√n). See `PNAS-PLAN.md` (updated).
+- **Phase 2 / phase 3 remaining.** Phase 2 (N = 10⁸, extend clean
+  decay to t ≈ 200) is confirmatory, not decisive; optional. Phase
+  3 (biased walk) still needed for gap 4 scope.
 
 ---
 
 ## 4. Biased-walk convergence mechanism
 
-**Status:** open. `PNAS-PLAN.md` lines 322–328 acknowledges but does
-not settle.
+**Status:** **resolved.** Phase 3 simulation (N = 10⁶, t up to
+50,000, weights (0.2, 0.2, 0.4, 0.2); see `gap3_phase3.py` and
+`paper/sim/`) confirms biased walks converge to Benford via a
+two-regime mechanism.
 
-**The problem.** For asymmetric measures (δ ≠ 0), the exponent walk
-is transient. Cuno & Sava-Huss give sublinear speed but eventual
-escape to the boundary. The walker visits any finite active zone
-only finitely often — say N_active total visits almost surely.
+**The finding.** L₁ decays to the N = 10⁶ noise floor (0.0128) by
+t ≈ 2000 and fluctuates there through t = 50,000. There is **no
+floor at 0.091** — the previously reported value was either a
+digit-level (9-bin) L₁ snapshot or an earlier-run artifact.
 
-If the contraction per visit is bounded below by some c_ε > 0 (via
-gap 2), then after N_active visits the distribution is within
-(1 − c_ε)^{N_active} of the contractive limit — a **finite** amount
-of mixing, not exponential-to-uniform forever.
+**Two-regime mechanism, observed.**
 
-But the biased-walk simulation (weights 0.2/0.2/0.4/0.2, walkers at
-10^1200) shows final L₁ = 0.091. Is that the floor, or still
-decaying?
+| phase | t range | active fraction | L₁ at end |
+|---|---|---|---|
+| 1. Active (ε-minorization) | 0 → ~500 | 100% → 3% | 0.017 |
+| 2. Transition | ~500 → ~1000 | 3% → 0% | 0.015 |
+| 3. Post-escape (Weyl rotation) | > 1000 | 0% | floor |
 
-**What closure looks like.**
+In phase 1, walkers sit near the origin in E and the b-step produces
+ε-controlled minorization — same mechanism as the symmetric case,
+but with the exponent walk drifting through the active zone rather
+than recurring to it. In phase 3, walkers are frozen in |E| > 20,
+so b-steps are identity on mantissa and only a/a⁻¹ act. Irrational
+rotation by ±log₁₀ 2 is ergodic on T at algebraic Weyl rate ~1/n;
+residual deviation from uniform halves per doubling in t (0.017 at
+t = 500 → 0.002 at t = 2000), consistent with 1/n.
 
-- Either: prove L₁ → 0 for any nondegenerate μ (even when exponent
-  transient) via a mechanism that doesn't require infinite active-zone
-  visits. E.g., the rotation by log₁₀ 2 under a-steps continues
-  forever and is ergodic; the finite mixing from b-steps at low depth
-  gets us close to uniform, and the ergodic rotation maintains it.
-- Or: accept that biased walks converge only to a Benford-close
-  distribution, and state Theorem 1 for symmetric measures, with
-  robustness to bias as a quantitative corollary (L₁ ≤ ε_bias) rather
-  than full convergence.
+**Consequences.**
 
-**Note.** The simulation at L₁ = 0.091 after 10^1200 steps is
-suggestive of a floor, not continued decay. Confirm with a
-longer-horizon or more-walkers run before committing Theorem 1
-to cover biased μ.
+- **Theorem 1 scope.** Can cover all nondegenerate μ. Biased case is
+  a corollary with a two-regime rate statement, not a quantitative
+  floor. PNAS-PLAN §7's biased-walk bullet is empirically
+  confirmed.
+- **Precise post-escape rate not measured.** The transition from
+  stretched-exp to algebraic happens below the N = 10⁶ noise floor,
+  so we cannot resolve a specific power-law exponent α from this
+  run. A confirmatory N = 10⁸ run with focused t ∈ [500, 10⁴]
+  sampling would pin α down if needed for publication.
+- **Snap-asymmetry note (SIM-PLAN phase 3).** Positive multiplicative
+  drift sends walkers to the frozen zone; negative drift would
+  recycle them through origin and plausibly preserve stretched-exp
+  convergence. The current Theorem 1 corollary is for positive drift;
+  negative drift is a separate conjecture.
 
 ---
 
@@ -349,44 +334,44 @@ diagnostic, not the mechanism.
 
 ---
 
-## Pre-draft decision: Theorem 1's scope
+## Pre-draft decision: Theorem 1's scope — resolved
 
-Not a gap — a decision. The plan's Theorem 1 is stated "for any
-nondegenerate probability measure μ." Gap 4 suggests biased walks may
-converge to a Benford-*close* distribution with a positive L¹ floor
-rather than to Benford exactly. The biased-walk sim at L₁ = 0.091
-after 10^1200 steps is consistent with a floor.
+Phase 3 biased-walk sim confirms L₁ → 0 for weights
+(0.2, 0.2, 0.4, 0.2): no floor at 0.091, walkers reach the N = 10⁶
+sampling-noise floor by t ≈ 2000 and stay there. **Theorem 1 can
+cover all nondegenerate μ.**
 
-Before drafting, we commit to one of:
+The biased case is a corollary with a two-regime rate — fast
+(ε-minorization) while walkers are in the active zone, algebraic
+(Weyl rotation) after they escape. The symmetric case is a single-
+regime stretched-exponential. Both convergences are to Leb_T.
 
-- **Full scope.** Theorem 1 covers all nondegenerate μ. Requires
-  proving L¹ → 0 in the biased case, which is what gap 4 asks for.
-- **Symmetric scope.** Theorem 1 states convergence only for symmetric
-  (driftless) μ. Biased case becomes a quantitative corollary
-  (L¹ ≤ ε_bias). Cleaner, more honest, costs us the generality the
-  plan currently claims.
-
-This is independent of whether gaps 1–3 close. Resolve it after the
-gap-3 simulation — the extended-horizon biased run will tell us
-whether the floor is real.
+Caveat: positive multiplicative drift is what phase 3 tested.
+Negative drift (walkers recycle through origin, maintaining active-
+zone contact) is not covered by the corollary and remains a
+separate conjecture.
 
 ---
 
 ## Triage
 
-| Gap | Type | Cost to close | Blocks draft? |
-|-----|------|---------------|---------------|
-| 1. Operator definition | Bookkeeping | ~1 page | Yes |
-| 2. Contraction step | Analytical | Varies by route | Yes |
-| 3. Visit-rate vs. exponential | Simulation + analysis | 1 night sim + reconcile | Yes |
-| 4. Biased-walk mechanism | Analytical + sim | ~1 page, or narrow theorem | Depends on scope decision above |
+| Gap | Status | Cost to close | Blocks draft? |
+|-----|--------|---------------|---------------|
+| 1. Operator definition | Open — invariant σ-finite measure not yet identified (Leb ⊗ counting is not it) | Research | Yes |
+| 2. Contraction step | **Open — no working route.** Rosenthal small-set minorization withdrawn; transfer operator on AC densities is current candidate (Route 1') | Research | Yes |
+| 3. Visit-rate vs. rate shape | **Resolved** — stretched exp, c ≈ 0.55 | — | — |
+| 4. Biased-walk mechanism | **Resolved** — 2-regime convergence | — | — |
 | 5. Group relation's role | Proof design | 1 proof step or rhetoric edit | No — can soften rhetoric |
 | 6. Schatte bridge | Derivation or rewrite | 1–2 pages or cut the slogan | No — can cut |
 
-**Minimum viable path to draft:** close 1, 2, 3. Make the scope
-decision on Theorem 1. Dial 5 and 6 to match whatever route 2 takes.
+**Minimum viable path to draft:** gaps 1 and 2 are both open and
+interlinked — identifying the invariant σ-finite measure (gap 1)
+is likely part of choosing the right function space for the
+transfer operator (gap 2 Route 1'). No point dialing 5 or 6
+until gap 2's framework is settled.
 
-**First concrete action:** run the extended-horizon simulation for
-gap 3. Cheapest, most informative, and tells us whether gaps 1–2 are
-targeting the right theorem statement — and, with a biased run
-alongside, feeds directly into the Theorem 1 scope decision.
+**Next concrete action:** work out Route 1' on paper. Choose a
+function space / norm; check rotation-isometry; attempt per-visit
+contraction. Do not draft more lemma text until this is settled
+on paper. Drafting on an unsettled framework is how we got
+GAP2-LEMMA withdrawn.

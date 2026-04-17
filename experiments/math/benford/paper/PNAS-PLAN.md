@@ -24,7 +24,7 @@ but doesn't select Benford over other mantissa shapes.
 Power-law mixing converges algebraically, too slowly to explain
 strong Benford conformity in modest datasets. The question is
 genuinely open: no existing account provides a mechanism with
-minimal conditions and an exponential rate.
+minimal conditions and a quantitative super-algebraic rate.
 
 The paper provides the mechanism. Define
 
@@ -34,13 +34,14 @@ This is the nonlinear part of the coordinate map between
 linear and logarithmic representations of the mantissa. It is
 strictly positive on the interior, zero at both endpoints,
 with a unique maximum at m* = 1/ln 2 - 1, determined entirely
-by ln 2. The paper's claim: **epsilon is the spectral gap of
-the Markov operator induced by mixed arithmetic in the
-BS(1,2) model on the mantissa circle.** Because epsilon > 0
-on (0,1), the operator is a contraction, and the unique fixed
-point is the Benford distribution. Convergence is exponential
-with a rate controlled by the L^2 norm of epsilon. The
-mechanism doesn't regress: it terminates at the concavity of
+by ln 2. The paper's claim: **epsilon controls the departure of
+the linear-to-logarithmic intra-binade coordinate map from the
+identity, and the mixed BS(1,2) walk's mantissa marginal converges
+to Benford at stretched-exponential rate exp(-c sqrt(n))**. The
+stretched-exp rate is empirically established (c ≈ 0.55, symmetric
+measure, N = 10^7 walkers; gap 3 phase 1); the proof mechanism is
+under active work — see FIRST-PROOF §2 for current route candidates.
+The mechanism doesn't regress: it terminates at the concavity of
 the binary logarithm, which is a fact about ln 2.
 
 
@@ -52,8 +53,9 @@ the binary logarithm, which is a fact about ln 2.
 2. **Not a Benford survey.** There are good surveys (Berger and
    Hill 2015, Miller 2015). We cite them and move on. The paper's
    job is not to review what is known about Benford — it is to add
-   one thing: the identification of epsilon as the spectral gap,
-   with a rate.
+   one thing: the identification of epsilon as the per-step
+   contraction constant of the mixed-arithmetic kernel, with a
+   stretched-exponential rate for the mantissa marginal.
 
 3. **Not a cross-disciplinary connection paper.** Epsilon has a
    life in computer arithmetic (IEEE 754, the fast inverse square
@@ -97,15 +99,18 @@ PNAS readers who care about Benford's law:
 - **Statisticians.** Know Benford from fraud detection (Nigrini)
   and from the digit-testing literature. Interested in convergence
   rates — how many operations before the distribution is close
-  enough to test against? The exponential rate with a computable
-  bound is directly useful to them.
+  enough to test against? The stretched-exponential rate
+  exp(-c sqrt(n)) with a computable constant c is directly useful
+  to them; super-algebraic in n, still slower than pure
+  multiplication alone.
 
 - **Number theorists / dynamicists.** Know about equidistribution
   mod 1, Weyl sums, Fourier coefficients on the circle. Will
   check whether the Schatte-style Fourier asymptotics and the
   BS(1,2) mechanism actually meet in the main text, and whether
-  the spectral gap identification is stated at the strongest
-  level we can prove. These are the referees.
+  the stretched-exponential rate is stated at the strongest
+  level we can prove (functional of ε and return statistics,
+  lower bound vs. identification). These are the referees.
 
 The main text must serve the first two groups. To do that, it
 has to satisfy the third: the referees.
@@ -190,71 +195,63 @@ needed.
 
 We have three sources that triangulate on a cleaner proof story, and the mechanism section of the paper should reflect this. That isn't a problem. The problem is we need to get there in ~700 words, accessible to a mathematics undergrad. 
 
-### The Schatte–FOURIER'S STAR backbone
+### Schatte's pure-addition diagnosis
 
 Schatte (1986) proves the key dichotomy for iid sums Z_n with
-nonzero mean:
+nonzero mean — this is diagnostic of the *pure-addition* regime,
+used in §6 movement A, and is not the mixed-walk proof mechanism:
 
-- The mantissa distribution's Fourier coefficients h_n(r) have
-  a leading term (|a|n)^{2πir} that rotates with unbounded
-  argument and O(1/n) error (Lemma 1).
-- k-fold Cesàro averaging damps the modulus by |2πir+1|^{-k}
-  but does not stop the rotation (Lemma 6).
-- Riesz logarithmic means (weight 1/j at step j) converge to
-  the logarithmic (Benford) distribution at rate
-  O(1/∛(log n)) (Theorem 5).
+- The mantissa distribution's Fourier coefficients h_n(r) have a
+  leading term (|a|n)^{2πir} that rotates with unbounded argument
+  and O(1/n) error (Lemma 1).
+- k-fold Cesàro averaging damps the modulus by |2πir+1|^{-k} but
+  does not stop the rotation (Lemma 6).
+- Riesz logarithmic means (weight 1/j at step j) converge to the
+  logarithmic distribution at rate O(1/∛(log n)) (Theorem 5).
 
-FOURIER'S STAR extracts the structural consequence:
+The FOURIER'S STAR observation — "the obstruction is a change of
+basis, not a change of degree" — is a structural consequence of
+Schatte that belongs in §6 as diagnosis, not in the mechanism
+section. See §6 for how it engages as a competing explanation.
 
-- No finite Hölder order damps the rotating leading term. The
-  residual at order k is bounded below by c · |2πi+1|^{-k}.
-  The hierarchy never closes.
-- The passage from Cesàro non-convergence to Riesz convergence
-  is the coordinate change ψ(m) = log_2(1+m). Its deviation
-  from the identity is ε.
-- **The obstruction is a change of basis, not a change of
-  degree.** Iterating uniform averaging (Cesàro) to higher
-  order indexes the wrong family. Convergence requires the
-  qualitative change to 1/j weighting — the coordinate change
-  ε.
+### BINADE-WHITECAPS coordinate identity
 
-BINADE-WHITECAPS §7 sharpens the backbone to an identity:
-the accumulated density defect E(t) = φ(t) − t equals −ε(m)
-after the coordinate change. The departure from Benford *is*
-ε, not merely controlled by it. The Fourier coefficients of
-ε are exactly computable (§8), so the lift to L^2 is Parseval,
-not an estimate.
+BINADE-WHITECAPS §7 gives the identity E(t) = φ(t) − t = −ε(m)
+after the coordinate change. The departure from Benford *is* ε,
+not merely controlled by it. The Fourier coefficients of ε are
+exactly computable (§8), so the L² norm of ε is available in
+closed form. This provides **static** information about ε; how
+it becomes a rate bound for the walk's mantissa-marginal
+convergence depends on which proof route closes — see below.
 
-This gives us the proof's conceptual backbone: pure addition
-performs Cesàro averaging on the mantissa Fourier coefficients
-and does not converge. Multiplication performs the coordinate
-change ψ = id + ε, converting Cesàro toward Riesz weighting.
-Because ε > 0 on (0,1), each multiplicative step contributes
-nonzero Riesz-type cancellation. The spectral gap opens.
+### The mixed-walk mechanism (status: under investigation)
 
-### The Cuno & Sava-Huss machinery
+The proof mechanism is open. Simulation shows exp(−c√n)
+convergence with c ≈ 0.55, so the rate shape is not in doubt.
+The candidate routes are listed in FIRST-PROOF §2; at time of
+writing the primary candidate is a transfer-operator analysis on
+absolutely continuous mantissa densities in a translation-
+invariant norm, with per-visit contraction at bounded exponent
+and isometric a-step rotation. An earlier Rosenthal small-set
+minorization draft is [withdrawn](./GAP2-LEMMA.md) (the kernel is
+atomic on Leb ⊗ counting; TV-on-measures isn't monotone
+step-to-step). Whatever proof closes should deliver a rate
+controlled by ε and by the symmetric exponent walk's local-time
+statistics. The mechanism is **not** the Cesàro-to-Riesz story,
+which is a separate (ex post facto analytic) route to Benford for
+iid sums and is treated in §6 as diagnosis / competing
+explanation.
 
-Cuno & Sava-Huss (2015) provides the group-theoretic frame:
+### Cuno & Sava-Huss
 
-- The random walk Z_n on BS(1,2) decomposes into a vertical
-  (level/geodesic) component λ(Z_n) and a horizontal
-  (horocyclic) component B_{Z_n}.
-- The vertical component is a random walk on ℤ with drift
-  δ = E(λ(X_1)). The three cases (δ > 0, δ < 0, δ = 0)
-  determine convergence to the boundary.
-- For the symmetric measure on BS(1,2), δ = 0 (driftless).
-  Lemma 2.3: the projections π_H(Z_n) have sublinear speed,
-  d_H(π_H(Z_0), π_H(Z_n))/n → 0. Lemma 2.7: the projections
-  converge a.s. to a random end in ∂T.
-- The horizontal displacement B_{Z_n} = Σ C_k where
-  C_k = A_{X_1} · ... · A_{X_{k-1}} · B_{X_k}. This is the
-  mantissa accumulation.
-
-This tells us that the "visit rate" ingredient from the
-original outline already exists in the literature: the vertical
-walk's recurrence (symmetric case) or transience with
-computable return statistics (biased case) governs how often
-the walker is at low depth where ε has maximal effect.
+Cuno & Sava-Huss (2015) provides the group-theoretic frame for
+§3's Cayley-graph setup — geodesic/horocyclic decomposition of
+the BS(1,2) walk, vertical/horizontal projections, sublinear-
+speed estimates for the driftless case. Whether any of this
+becomes load-bearing in the proof depends on which route in
+FIRST-PROOF §2 closes. The √n local-time fact is classical
+(Spitzer), independent of Cuno & Sava-Huss. At minimum, cite in
+§3 as the Cayley-graph / horocyclic reference.
 
 ### The Marasa & Matula confirmation
 
@@ -279,17 +276,22 @@ details, only to whether multiplication is present.
 
 These are in priority order.
 
-1. **The proof must close.** Specifically: the wrapped-Cauchy
-   comparison (or identity) in step (b), and the biased-walk
-   treatment in step (c). If either is shaky, the theorem
-   statement has to change, and the rhetoric changes with it.
-   Do not draft around the gap. 
+1. **The proof must close.** Gap 2 is open — no working route yet
+   (see FIRST-PROOF §2). Pick a function space / norm on mantissa
+   densities, prove per-visit contraction at bounded exponent,
+   iterate using the classical √n local-time estimate. Do not
+   draft around the gap; an earlier attempt (withdrawn
+   GAP2-LEMMA.md) shows the cost of writing lemma text on an
+   unsettled framework.
 
 2. **The rate prediction must be quantitative.** The simulation
-   gives lambda ~ 0.035. The theorem gives lambda = 2*pi*gamma*rho.
-   We need gamma and rho as explicit numbers for the symmetric
-   walk, and the predicted lambda needs to be in the same
-   neighborhood as 0.035. 
+   gives stretched-exponential c ≈ 0.55 (gap 3 phase 1,
+   N = 10⁷). The theoretical c depends on the proof route we
+   end up taking — don't prejudge its decomposition. The rate
+   is almost certainly controlled by ε (via BINADE-WHITECAPS
+   §§7–8) and by the symmetric exponent walk's √n local-time
+   statistics, but the exact form is an output of the proof,
+   not an input.
 
 ## Specific risks
 
@@ -317,37 +319,34 @@ These are in priority order.
   ρ_max (Radon–Nikodym). The bound carries over with exactly
   a constant change. This is bookkeeping, not a gap.
 
-- **The visit rate ρ.** For the symmetric walk (δ = 0),
-  recurrence of the vertical component is standard (Cuno &
-  Sava-Huss cite Pólya). For biased walks (δ ≠ 0), the
-  vertical walk is transient — the total number of visits
-  to the active zone is finite. The biased-walk simulation
-  still shows convergence, so the theorem for the biased
-  case must say: the finite total of Riesz-cancellation
-  visits suffices. This is a weaker statement than the
-  symmetric case but still gives convergence.
+- **The local time.** For the symmetric walk (δ = 0), the
+  exponent is a null-recurrent ±1 walk on ℤ; local time at the
+  low-depth zone {|E| ≤ E₀} satisfies E[L_n] ~ c_R √n by
+  classical LCLT (Pólya, Spitzer *Principles of Random Walk*).
+  This is expected to provide the √n factor in the rate, whichever
+  proof route closes. Phase 3 confirmed the biased case converges
+  with a two-regime structure (active fast contraction →
+  post-escape Weyl rotation at algebraic rate); symmetric
+  theorem is the main claim, biased is a corollary. See
+  `FIRST-PROOF.md` §4 and phase-3 sim.
 
 - **The quantitative rate.** Schatte's Riesz convergence is
-  O(1/∛(log n)) — very slow. Our simulations show
-  exponential convergence (λ ≈ 0.035/step). Schatte studies
-  iid sums (pure addition), not mixed arithmetic. The mixed
-  walk's multiplicative steps apply the coordinate change
-  stochastically at every step, not as a summation weight.
-  The exponential rate is the spectral gap of the transfer
-  operator, not the Riesz rate. BINADE-WHITECAPS §§7–8 now
-  give exact Fourier coefficients of ε, so the L^2 norm
-  controlling the rate is computable — the gap between
-  Schatte's rate and ours should be quantitatively
-  accountable, not just conceptually explained.
+  O(1/∛(log n)) — very slow. Our sims show stretched-
+  exponential exp(-c√n) with c ≈ 0.55 (gap 3 phase 1, N = 10^7).
+  Different object: Schatte is iid pure-addition sums with ex
+  post facto analytic re-weighting; our walk is a Markov chain
+  with intrinsic mixing dynamics. The two rates are not directly
+  comparable. The √n factor is classical from local-time theory;
+  the prefactor controlling the L² or density-level contraction
+  per visit is an output of whichever proof route we settle on.
 
-- **The gap identification.** Is the spectral gap "a functional
-  of ε" or "bounded below by a functional of ε"? Both are
-  publishable. BINADE-WHITECAPS §8 strengthens the lower-bound
-  path: ε controls the entire Fourier tail of the defect,
-  giving λ ≥ f(ε, μ) > 0 rigorously without needing the exact
-  gap. The stronger identification (exact) may follow if the
-  Cesàro-to-Riesz conversion rate is directly computable from
-  ε, but the lower bound is now available without it.
+- **The rate identification.** The aim is a lower bound of the
+  form c ≥ c(ε, μ) > 0, not exact identification of c. Whatever
+  form c(ε, μ) takes (e.g., involving ‖ε‖_{L²} or an ess-inf of
+  the kernel's density action on bounded low-depth test functions)
+  depends on the proof route. BINADE-WHITECAPS §§7–8 give the
+  Fourier-side data that should feed in; how it feeds in is the
+  open question.
 
 - **Operator-language precision.** See the claim gate below.
 
@@ -357,10 +356,11 @@ These are in priority order.
 What kills the paper:
 
 - **"This is known."** A referee who works on random walks on
-  solvable groups may feel that exponential mixing on BS(1,2) is
-  folklore. Defense: the four-failure diagnosis in Section 6 is
-  the evidence. If the result were known, one of those four
-  attempts would have settled the question. None has. The
+  solvable groups may feel that stretched-exponential mixing on
+  BS(1,2) is folklore. Defense: the four-failure diagnosis in
+  Section 6 is the evidence. If the result were known, one of
+  those four attempts would have settled the question. None has.
+  The
   contribution is the rate identification plus the unification
   of four failure modes under one function.
 
@@ -391,28 +391,40 @@ one sentence — the existing explanations each fail at a
 specific point. Then the claim: the mechanism is the function
 epsilon(m) = log_2(1+m) - m, the nonlinear part of the
 coordinate map between linear and logarithmic mantissa. It is
-the spectral gap of the BS(1,2)-induced mixed-arithmetic
-Markov operator on the mantissa circle. Convergence is
-exponential. The rate is a functional of
-epsilon. The mechanism terminates at the concavity of the
-binary logarithm.
+the contraction constant of the BS(1,2)-induced mixed-
+arithmetic Markov kernel on the mantissa circle. The mantissa
+marginal converges to Benford at stretched-exponential rate
+exp(-c sqrt(n)); c is a functional of epsilon and of the
+symmetric exponent walk's return statistics. The mechanism
+terminates at the concavity of the binary logarithm.
 
 ### 2. Theorems, compactly stated (150 words)
 
 Two theorems, formally stated, with no orphaned display
 equations and no deferred justification.
 
-**Theorem 1 (spectral gap).** For any nondegenerate probability
-measure mu on the generators of BS(1,2), the induced random
-walk projected to T = R/Z via m(x) = log_10 |x| mod 1
-converges exponentially to the uniform (Benford) distribution.
-The rate is bounded below by lambda >= f(epsilon, mu) > 0.
+**Theorem 1 (stretched-exponential mixing).** For the symmetric
+probability measure mu on the generators of BS(1,2), the induced
+random walk projected to T = R/Z via m(x) = log_10 |x| mod 1
+has mantissa marginal converging to the uniform (Benford)
+distribution at stretched-exponential rate: there exist constants
+C < infinity and c(epsilon, mu) > 0 such that
 
-**Theorem 2 (rate identification).** The constant f(epsilon, mu)
-depends on the L^2 norm of epsilon on [0,1) and on the
-active-zone visit rate of the exponent process. For the
-symmetric measure, the predicted rate is [value]; the measured
-rate is lambda = 0.035 +/- [error].
+    ||pi_T(nu K^n) - Leb_T||_{TV} <= C * exp(-c(epsilon, mu) * sqrt(n))
+
+for all n >= n_0, uniformly over initial laws nu with pi_T nu
+absolutely continuous w.r.t. Leb_T.
+
+**Theorem 2 (rate, empirical).** For the symmetric measure, the
+measured constant is c = 0.55 +/- [error] (gap 3 phase-1
+simulation, N = 10^7 walkers, fit on t in [20, 120], R² = 0.9985
+on the stretched fit). The theoretical c(epsilon, mu) is expected
+to be controlled by ε (via the coordinate-map identity in BINADE-
+WHITECAPS §§7–8) and by the null-recurrent √n local-time
+statistics of the exponent walk on ℤ; the precise form depends on
+the proof route chosen for Theorem 1. We do not commit to a
+decomposition of c in the paper beyond the lower-bound
+c(epsilon, mu) > 0 claim above.
 
 
 ### 3. Group and Cayley-graph setup (250 words)
@@ -441,33 +453,36 @@ makes this departure accumulate coherently rather than canceling.
 
 ### 4. Mechanism / proof (300 words)
 
-This section must carry the actual mechanism: pure addition gives the Cesàro obstruction,
-multiplication inserts the coordinate change ψ = id + ε, the
-BS(1,2) relation forces that reweighting into the walk, and
-positivity of ε opens the spectral gap. The main text presents
-the *substrate* and the argument in one motion.
+**Status: not yet drafted.** Gap 2 (see FIRST-PROOF §2) is open —
+there is no working proof route yet. An earlier Rosenthal small-
+set minorization draft (GAP2-LEMMA) has been withdrawn; the
+kernel is atomic on Leb ⊗ counting and the TV-on-measures
+formulation isn't monotone step-to-step. The current primary
+candidate is a transfer-operator analysis on absolutely continuous
+mantissa densities in a translation-invariant norm.
 
-**The substrate.** A random walk on BS(1,2) with any
-nondegenerate measure μ, projected to the mantissa circle
-T = ℝ/ℤ via m(x) = log₁₀|x| mod 1, converges exponentially
-to the uniform (Benford) distribution. The group relation
-bab⁻¹ = a² encodes the interaction of addition and
-multiplication algebraically: it is not reconstructed by
-summation methods applied after the fact, it is *present in
-the generating relations* of the group. The Riesz weighting
-that Schatte had to impose analytically is produced
-automatically by the group's own structure — each
-multiplicative step reweights the additive history through
-the coordinate map ψ(m) = log₂(1+m), and this reweighting
-is what drives convergence.
+**What this section needs to carry when drafted (sketch target).**
+Two facts that should survive any proof route:
 
-**The rate.** Convergence is exponential, controlled by the
-concavity of ε(m) = log₂(1+m) − m itself. The rate depends on ε
-and on the visit frequency of the walk's vertical
-(exponent) component to the low-depth zone where the
-coordinate map has its maximal nonlinearity. For the
-symmetric measure, λ ≈ 0.035/step (simulation, 10⁶ walkers,
-R² = 0.99 on the exponential fit).
+- **The coordinate identity.** At any walk step with bounded
+  exponent |E| ≤ E₀, the +1 step perturbs the mantissa through the
+  coordinate map ψ(m) = log₂(1+m); ε = ψ − id is strictly
+  positive on the interior. This is the static input that
+  produces the per-visit contraction, whatever the norm.
+- **The visit rate.** The symmetric exponent walk on ℤ has
+  local time at the low-depth zone satisfying E[L_n] ~ c_R√n
+  (classical LCLT). This is the √n factor.
+
+The proof target: iterating a per-visit contraction at rate
+(1 − β_*) over ~c_R√n visits by step n gives stretched-exp. The
+missing piece is a clean per-visit contraction in a norm for
+which a-step rotation is isometric and b-step at low depth
+strictly contracts. Candidate norms: BV(T), H^s(T), weighted
+Fourier ℓ². See FIRST-PROOF §2 Route 1'.
+
+**Measured rate for calibration.** c ≈ 0.55 (simulation,
+N = 10⁷, fit on t ∈ [20, 120], R² = 0.9985 on the stretched
+fit). Any proof-derived c should land near this.
 
 ### 5. Figures with captions (150 words total)
 
@@ -478,14 +493,14 @@ otherwise spend words describing.
 "Convergence to Benford requires mixing." Single panel,
 log-log axes, three curves: addition only (flat — no
 convergence), alternating add/mult (straight line —
-algebraic decay), mixed BS(1,2) (concave down — exponential
-convergence). Direct curve labels, no legend box. A dotted
-line marks the finite-sample L₁ floor. The log-log format
-is the argument: the three regimes have three qualitatively
-different *shapes*, not just three speeds. A reader who
-sees the figure already holds the theorem's content — mixing
-is the condition, and the rate is exponential. Caption
-defines L₁ distance to Benford, names the three regimes
+algebraic decay), mixed BS(1,2) (concave down — stretched-
+exponential convergence). Direct curve labels, no legend box.
+A dotted line marks the finite-sample L₁ floor. The log-log
+format is the argument: the three regimes have three
+qualitatively different *shapes*, not just three speeds. A
+reader who sees the figure already holds the theorem's content
+— mixing is the condition, and the rate is super-algebraic.
+Caption defines L₁ distance to Benford, names the three regimes
 operationally (±1, sequenced add-then-mult, simultaneous
 ¼-probability each), and states N = 50,000 walkers.
 
@@ -532,14 +547,21 @@ substrate the paper has just presented:
   convergence theorem.
 - Power-law mixing: genuine convergence, but algebraic.
 
-Then the kicker, which is now the pivot sentence restated
-as diagnosis: Schatte's Riesz weighting was a coordinate
-change imposed on the analysis after the fact. BS(1,2)
-is the algebraic substrate that produces the same
-coordinate change from the operations generating the data.
-The asymmetry Hamming named disappears because the group
-relation bab⁻¹ = a² contains the interaction rather than
-leaving it to be reconstructed.
+Then the kicker, which engages Schatte-Riesz as a competing
+explanation: Schatte's Riesz logarithmic weighting recovers
+Benford from iid pure-addition sums by re-weighting the partial
+sums 1/j ex post facto — an analytic device applied after the
+sum is formed. This is a separate phenomenon from ours. Our walk
+is a Markov chain: the mantissa sees rotation (multiplicative
+step) and ε-perturbation (additive step at bounded depth) at
+each increment, with no external re-weighting. Both routes
+terminate at the logarithmic distribution because both pass
+through the coordinate map ψ(m) = log₂(1+m) = m + ε; the
+coincidence is the positivity of ε, not any algebraic identity
+of BS(1,2). What BS(1,2) contributes is the minimal setting in
+which the two operations mix stochastically, so the re-weighting
+is internal and the asymmetry Hamming named resolves without an
+ex post facto analytic step.
 
 ### 7. Robustness and sensitivity (150 words)
 
@@ -550,10 +572,14 @@ multiplication, and that's stated in the setup. The question
 is: what survives perturbation inside the model and at its
 boundary?
 
-- **Biased generators:** convergence survives asymmetric
-  weights (simulation: weights 0.2/0.2/0.4/0.2, walkers at
-  10^1200, final L1 = 0.091). The theorem predicts this: any
-  nondegenerate mu.
+- **Biased generators:** converge to Benford (phase 3: L₁ → 0;
+  the previously reported "floor at 0.091" was a measurement
+  artifact). The exponent walk is transient, so active-zone
+  ε-minorization is finite in total; after escape, irrational
+  rotation by log₁₀ 2 equidistributes at algebraic Weyl rate.
+  Theorem 1 is stated for the symmetric measure; the biased
+  case is a two-regime corollary with different rate structure.
+  See FIRST-PROOF §4 / SIM-PLAN phase 3.
 - **Base change:** L1-to-Benford is flat across b in [2, 40]
   (simulation). The irrationality of log_b 2 for all integer
   b > 1 guarantees this.
@@ -566,11 +592,12 @@ boundary?
 
 Short. Restate the result without the scaffolding:
 Hamming's asymmetry — that multiplication converges to
-Benford and addition does not — disappears when the
-interaction of the two operations is present as a group
-relation rather than reconstructed by summation methods.
-The random walk on BS(1,2) converges exponentially to the
-Benford distribution. The rate is controlled by ε. The
+Benford and addition does not — disappears when addition
+and multiplication are interleaved stochastically at bounded
+exponent levels. The symmetric random walk on BS(1,2) has
+mantissa marginal converging to Benford at stretched-
+exponential rate exp(−c√n), with c controlled by ε and the
+null-recurrent return statistics of the exponent walk. The
 only escape is pure addition.
 
 100 words. No future work, no hedging. End on the
@@ -663,7 +690,8 @@ space in the final 15, and only if they do work in the main text):
   with the CLT/Fourier line of the Hamming diagnosis, not the
   power-law line: their method is system-specific and
   asymptotic, and does not identify the mixed-arithmetic
-  mechanism or furnish the exponential rate proved here.
+  mechanism or furnish the stretched-exponential rate proved
+  here.
 - Tsao (1974) — leading-digit proportions via iterated
   averaging. Parallel result to Schatte via different route.
   Cited in FOURIER'S STAR.
@@ -685,14 +713,15 @@ one is a forcing function for clarity. Draft:
 > single mechanism that resolves all three failures: the function
 > epsilon(m) = log_2(1+m) - m, the nonlinear part of the
 > coordinate map between linear and logarithmic mantissa. We
-> prove that any nondegenerate random walk on BS(1,2), the
-> algebraic model of mixed addition and multiplication,
-> converges exponentially to the Benford distribution at a rate
-> controlled by the concavity of epsilon, and confirm the
-> predicted rate in simulation. The mechanism terminates at
-> the irrationality of ln 2.
+> prove that the symmetric random walk on BS(1,2), the algebraic
+> model of mixed addition and multiplication, has mantissa
+> marginal converging to the Benford distribution at stretched-
+> exponential rate exp(-c sqrt(n)), with c controlled by the
+> concavity of epsilon and the null-recurrent return statistics
+> of the exponent walk. Simulation confirms the predicted rate.
+> The mechanism terminates at the irrationality of ln 2.
 
-That's 121 words. The four failures are compressed to three
+That's ~121 words. The four failures are compressed to three
 (spread-across-scales folds into the power-law line). Epsilon
 is introduced as a mathematical object, not as a CS artifact.
 The last sentence names the terminus.
@@ -705,25 +734,37 @@ significance statement, conclusion, and figure captions may
 use only language from the first bin.
 
 **Goes in the paper**
-- The BS(1,2) mixed-arithmetic walk converges exponentially to
-  Benford.
-- The rate satisfies lambda >= f(epsilon, mu) > 0.
-- Epsilon is the nonlinear coordinate term that controls the
-  rate.
-- The theorem is for BS(1,2), not for "mixed arithmetic in
-  general."
+- The symmetric BS(1,2) mixed-arithmetic walk has mantissa
+  marginal converging to Benford at stretched-exponential rate
+  exp(-c sqrt(n)).
+- There exists c(ε, μ) > 0 such that the rate satisfies
+  c ≥ c(ε, μ). The constant is positive because ε > 0 on (0,1),
+  and the √n is from the symmetric exponent walk's local-time
+  statistics.
+- Epsilon is the nonlinear coordinate term — the departure of
+  the linear-to-log intra-binade map from the identity.
+- The theorem is for the symmetric measure on BS(1,2),
+  not for "mixed arithmetic in general." Biased measures are
+  treated as a separate case (see gap 4).
 
 **Stays out of the paper**
-- Epsilon is the spectral gap.
-- The operator is a contraction.
-- Exact gap identification.
-- Any statement broader than the BS(1,2) theorem unless it is
+- Epsilon is the spectral gap. (σ-finite state space; no spectral
+  gap in the usual sense.)
+- The Markov operator on measures is a contraction in TV. (It is
+  not; simulation shows TV can rise step-to-step from
+  near-uniform low-depth initial conditions.)
+- Any specific decomposition of c (e.g., "c = β_* · c_R" with
+  β_* from Rosenthal-style kernel density bounds) unless the
+  proof route we end up taking actually delivers that form.
+- Exponential rate for the mixed walk. (It's stretched.)
+- Exact constant identification.
+- Any statement broader than the stated BS(1,2) theorem unless
   explicitly marked as conjecture or remark.
 
 **Promotion test.** A claim moves from "stays out" to "goes in"
 only if the paper can answer immediately and precisely: which
-operator, on what function space, in what norm, and whether the
-statement is exact or only a lower bound.
+kernel, on what state space, in what norm, and whether the
+statement is an identity or a lower bound.
 
 
 ## The title
