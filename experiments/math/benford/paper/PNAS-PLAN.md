@@ -206,9 +206,9 @@ nonzero mean:
 
 FOURIER'S STAR extracts the structural consequence:
 
-- No finite Hölder order makes the Cesàro-averaged mantissa
-  distributions Cauchy. The separation at order k is at least
-  c · |2πi+1|^{-k}. The hierarchy never closes.
+- No finite Hölder order damps the rotating leading term. The
+  residual at order k is bounded below by c · |2πi+1|^{-k}.
+  The hierarchy never closes.
 - The passage from Cesàro non-convergence to Riesz convergence
   is the coordinate change ψ(m) = log_2(1+m). Its deviation
   from the identity is ε.
@@ -217,6 +217,13 @@ FOURIER'S STAR extracts the structural consequence:
   order indexes the wrong family. Convergence requires the
   qualitative change to 1/j weighting — the coordinate change
   ε.
+
+BINADE-WHITECAPS §7 sharpens the backbone to an identity:
+the accumulated density defect E(t) = φ(t) − t equals −ε(m)
+after the coordinate change. The departure from Benford *is*
+ε, not merely controlled by it. The Fourier coefficients of
+ε are exactly computable (§8), so the lift to L^2 is Parseval,
+not an estimate.
 
 This gives us the proof's conceptual backbone: pure addition
 performs Cesàro averaging on the mantissa Fourier coefficients
@@ -286,14 +293,29 @@ These are in priority order.
 
 ## Specific risks
 
-- **The Fourier-coefficient route must connect to the L^2
-  rate.** The Schatte asymptotics give pointwise (per-r)
-  control. We need to lift this to an L^1 or sup-norm rate
-  on the distribution. The integration-by-parts bridge in
-  FOURIER'S STAR §4 is the tool, but it needs to be
-  sharpened for the mixed-arithmetic case where the
-  "rotating leading term" is replaced by the BS(1,2)
-  walk's horizontal displacement.
+- **~~The Fourier-coefficient route must connect to the L^2
+  rate.~~** Resolved. BINADE-WHITECAPS §7 gives the identity
+  E(t) = φ(t) − t = −ε(m): the accumulated density defect
+  *is* ε (up to sign and coordinate change). The lift from
+  per-frequency to L^2 is this identity plus Parseval — no
+  integration-by-parts bridge to sharpen. The Fourier
+  coefficients of δ(t) = 2^t ln 2 − 1 are exactly computable,
+  so the L^2 norm of ε is available in closed form. This
+  justifies Theorem 2's "f(ε, μ) depends on the L^2 norm of
+  ε" — the L^2 norm is, via Parseval, the ℓ^2 norm of the
+  Fourier coefficients of the density defect. Not arbitrary;
+  forced by the coordinate change.
+  **Measure change (resolved in principle).** §§7–8 are
+  formulated against Lebesgue measure on the circle. The PNAS
+  setting uses the walk's stationary measure μ with density ρ
+  against dt. The identity E = −ε∘φ is coordinate-theoretic
+  and survives. The Parseval-based norm changes: ‖E‖²_{L²(μ)}
+  = ∫|E(t)|² ρ(t) dt instead of ‖E‖²_{L²(dt)}. But ρ is
+  bounded above and below — the stationary distribution is
+  Benford, which is bounded on the log-mantissa circle — so
+  the two L² norms are equivalent with constants ρ_min and
+  ρ_max (Radon–Nikodym). The bound carries over with exactly
+  a constant change. This is bookkeeping, not a gap.
 
 - **The visit rate ρ.** For the symmetric walk (δ = 0),
   recurrence of the vertical component is standard (Cuno &
@@ -307,24 +329,25 @@ These are in priority order.
 
 - **The quantitative rate.** Schatte's Riesz convergence is
   O(1/∛(log n)) — very slow. Our simulations show
-  exponential convergence (λ ≈ 0.035/step). The gap between
-  Schatte's rate and ours must be explained: Schatte studies
-  iid sums (pure addition with growing mean), not mixed
-  arithmetic. The mixed walk's multiplicative steps produce
-  faster-than-Riesz convergence because the coordinate
-  change is applied stochastically at every multiplicative
-  step, not merely as a summation weight. The exponential
-  rate is the spectral gap of the transfer operator on the
-  circle, not the Riesz rate. The Riesz connection is
-  conceptual (naming the obstruction), not quantitative
-  (predicting the rate).
+  exponential convergence (λ ≈ 0.035/step). Schatte studies
+  iid sums (pure addition), not mixed arithmetic. The mixed
+  walk's multiplicative steps apply the coordinate change
+  stochastically at every step, not as a summation weight.
+  The exponential rate is the spectral gap of the transfer
+  operator, not the Riesz rate. BINADE-WHITECAPS §§7–8 now
+  give exact Fourier coefficients of ε, so the L^2 norm
+  controlling the rate is computable — the gap between
+  Schatte's rate and ours should be quantitatively
+  accountable, not just conceptually explained.
 
 - **The gap identification.** Is the spectral gap "a functional
   of ε" or "bounded below by a functional of ε"? Both are
-  publishable. The Fourier-coefficient route may give a
-  cleaner path to the strong version: if the Cesàro-to-Riesz
-  conversion rate is directly computable from ε, the
-  identification is exact.
+  publishable. BINADE-WHITECAPS §8 strengthens the lower-bound
+  path: ε controls the entire Fourier tail of the defect,
+  giving λ ≥ f(ε, μ) > 0 rigorously without needing the exact
+  gap. The stronger identification (exact) may follow if the
+  Cesàro-to-Riesz conversion rate is directly computable from
+  ε, but the lower bound is now available without it.
 
 - **Operator-language precision.** See the claim gate below.
 
@@ -487,10 +510,10 @@ paragraph, not a walkthrough. Hamming (1970) identified the
 asymmetry — multiplication of independent random variables
 produces mantissa distributions that converge to the
 logarithmic distribution, while addition does not. Schatte
-(1986) proved it: no finite-order Hölder summation makes
-the mantissa distributions of sums Cauchy, and convergence
-requires the Riesz logarithmic mean rather than any
-finite-degree arithmetic averaging. Two sentences, both
+(1986) proved it: finite-order Hölder summation damps the mantissa Fourier
+coefficients' modulus but leaves the rotating leading term
+intact, and convergence requires the Riesz logarithmic mean
+rather than any finite-degree arithmetic averaging. Two sentences, both
 names cited, Schatte's result stated in his terms. A reader
 who wants the Fourier-coefficient proof goes to Math. Nachr.
 127. A reader who doesn't sees that the problem was real,
