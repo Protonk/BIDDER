@@ -205,8 +205,13 @@ only on b⁻¹, which has probability 1/4).
    and is a genuine dynamical feature, not an artifact.
 4. **T1b's surviving framing holds:**
 
-   > For every ν with a logarithmic moment and ν(Q) = 0, L₁(P_n)
+   > For every ν with a logarithmic moment and ν(Z[1/2]) = 0, L₁(P_n)
    > ∼ B(ν) · n^{−1/2} with α = 1/2 universal, B IC-dependent.
+   >
+   > (Exceptional-set correction, 2026-04-18: originally written as
+   > `ν(Q) = 0`. The orbit-reaches-0 condition is dyadic, not
+   > general-rational; non-dyadic rationals avoid 0 just like
+   > irrationals. See `t1b_unit_ball_SUMMARY.md`.)
 
    The rational case can be handled as a corollary: either via the
    absorbing-boundary process (R3), which is a well-defined
@@ -243,7 +248,7 @@ only on b⁻¹, which has probability 1/4).
 
 The decision matrix in `ROOT-TWO-CHECKS-SIM.md` anticipated a
 "matches / doesn't match / matches" outcome that would support the
-"generic ν (ν(Q) = 0)" framing. The actual outcome on this horizon
+"generic ν (ν(Z[1/2]) = 0)" framing. The actual outcome on this horizon
 is "ambiguous / matches each other / matches each other":
 
 - R1 matches √2's transient, not IC (b)'s algebraic — because R1

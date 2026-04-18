@@ -434,6 +434,27 @@ An M3 IC *disagrees* if any of these three fails. Decision-rule
 criterion 4 (either rejection direction) requires ≥ 1 of the
 three M3 ICs to agree in this operational sense.
 
+**2026-04-18 addendum (IC robustness expanded beyond M3).** The
+three M3 ICs have been supplemented by:
+
+- 4 irrational / non-dyadic ICs (φ, 7/5, 17/12, 99/70) from
+  `T1B-UNIT-BALL-SIM.md` Run 1,
+- 3 dyadic ICs (1, 3/2, 9/8) from the same Run 1,
+- 2 rational-with-conventions (R2 restart / R3 absorb) from
+  `ROOT-TWO-CHECKS-SIM.md`,
+- 2 smooth-m Gaussian ICs (S1, S2) from Run 3 of T1B-UNIT-BALL.
+
+The operational IC-universality statement these expanded runs
+support is narrower than originally written here: **the asymptotic
+exponent α = 1/2 is IC-universal** (confirmed via S0 + B3 + M3
+IC (b) + M4); the stretched-exp transient c is IC-dependent and
+should not be expected to match across ICs. The original M3
+decision rule's "c within 2σ" check is therefore discarded — what
+matters for T1b is convergence to Benford (all ICs satisfy) and
+asymptotic-exponent agreement (pinned down by IC (b), corroborated
+by M4). See `t1b_unit_ball_SUMMARY.md` and `m3_SUMMARY.md` for
+details.
+
 ---
 
 ## Default execution schedule

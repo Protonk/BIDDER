@@ -38,8 +38,17 @@ This plan tests the empirical equivalence classes:
 If all three hold, T1b's revised IC clause is at least empirically
 supported:
 
-> For every ν with a logarithmic moment and ν(Q) = 0, L₁(P_n)
+> For every ν with a logarithmic moment and ν(Z[1/2]) = 0, L₁(P_n)
 > ∼ B(ν) · n^{−1/2} with α = 1/2 universal, B IC-dependent.
+>
+> (Exceptional-set correction, 2026-04-18: earlier drafts of this doc
+> wrote `ν(Q) = 0`. The actual orbit-reaches-0 condition under
+> x ↦ 2^k·x + q with q ∈ Z[1/2] requires x₀ dyadic, not just
+> rational. Non-dyadic rationals like 7/5 and 17/12 have orbits that
+> avoid 0 just like irrationals. See `T1B-UNIT-BALL-SIM.md` for the
+> full correction and `t1b_unit_ball_SUMMARY.md` Run 1 for the
+> empirical check — non-dyadic rationals produce 0 exact-zero events
+> in the float64 sim, same as irrationals.)
 
 The rational case would still need separate wording. These runs can
 only tell us whether the rational pathology looks like a removable
@@ -150,7 +159,8 @@ to R2:
 
 - Conditional L₁(R3, n) matches L₁(√2, n) at late n ⇒ the restart
   convention is not needed to recover the generic-irrational behavior.
-  This supports stating T1b for `ν(Q) = 0` and, if desired, discussing
+  This supports stating T1b for `ν(Z[1/2]) = 0` (corrected from
+  `ν(Q) = 0`; see note above) and, if desired, discussing
   rational starts separately via a conditional-on-survival process.
 - Conditional L₁(R3, n) matches R2's L₁ at late n but not √2 ⇒
   the walk-minus-artifact itself differs from the generic-IC
@@ -185,7 +195,7 @@ run.
 |:-------------------|:------------------|:-------------------|:------------|
 | matches            | matches           | matches            | generic-irrational clause looks good; this restart rule also looks benign |
 | matches            | matches           | doesn't match      | do not generalize rational starts; restart rule may be masking distinct rational behavior |
-| matches            | doesn't match     | matches            | "for generic ν (`ν(Q) = 0`)" remains the clean statement; restart rule is an artifact |
+| matches            | doesn't match     | matches            | "for generic ν (`ν(Z[1/2]) = 0`)" remains the clean statement; restart rule is an artifact |
 | doesn't match      | —                 | —                  | no generic-irrational universality claim; stop and rethink |
 
 The central case — "matches, doesn't match, matches" — is still the

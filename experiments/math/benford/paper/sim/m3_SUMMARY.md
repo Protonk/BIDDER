@@ -168,6 +168,16 @@ The paper's working picture is now:
   IC (b) shows the form directly at B ≈ 3; M4 at n = 3000 on the
   √2 IC shows a persistent but much smaller signal (B ≈ 0.01, see
   m4_SUMMARY.md).
+- **Post-2026-04-18 addendum (from T1B-UNIT-BALL Run 3):** IC (b)'s
+  specific structure — delta in m at log₁₀√2, uniform in E over
+  {−5, …, 5} — is load-bearing for the clean α̂ ≈ 0.5 signal on
+  [100, 600]. Replacing delta-m with a narrow Gaussian (σ = 0.05)
+  while keeping uniform-E (Run 3's S2 IC) gives α̂ = 1.11 on
+  [100, 600], not 0.5. Smooth-m ICs behave structurally like M3
+  IC (c), not IC (b). The m-coordinate concentration matters: when
+  m is smooth the initial L₁ is lower, and the tail becomes buried
+  in noise floor at our horizon. IC (b) remains the primary
+  empirical anchor for α, with M4 √2's late excess as corroboration.
 
 **What does not survive as written:**
 
