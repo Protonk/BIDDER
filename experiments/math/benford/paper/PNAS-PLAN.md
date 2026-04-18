@@ -210,10 +210,7 @@ makes this departure accumulate coherently rather than canceling.
 ### 4. Mechanism / proof (300 words)
 
 **Status: not yet drafted.** Gap 2 (see FIRST-PROOF §2) is open —
-there is no working proof route yet. An earlier Rosenthal small-
-set minorization draft (GAP2-LEMMA) has been withdrawn; the
-kernel is atomic on Leb ⊗ counting and the TV-on-measures
-formulation isn't monotone step-to-step. The current primary
+there is no working proof route yet. The current primary
 candidate is a transfer-operator analysis on absolutely continuous
 mantissa densities in a translation-invariant norm.
 
@@ -341,16 +338,12 @@ analytic step.
 
 ### 7. Robustness and sensitivity (150 words)
 
-This section replaces what was previously "Why BS(1,2)
-specifically." The question isn't "why this group" — BS(1,2)
-is the minimal algebraic model of mixed addition and
-multiplication, and that's stated in the setup. The question
-is: what survives perturbation inside the model and at its
-boundary?
+BS(1,2) is the minimal algebraic model of mixed addition and
+multiplication — that's fixed in the setup. This section asks
+what survives perturbation inside the model and at its boundary.
 
-- **Biased generators:** converge to Benford (phase 3: L₁ → 0;
-  the previously reported "floor at 0.091" was a measurement
-  artifact). The exponent walk is transient, so active-zone
+- **Biased generators:** converge to Benford (phase 3: L₁ → 0).
+  The exponent walk is transient, so active-zone
   ε-minorization is finite in total; after escape, irrational
   rotation by log₁₀ 2 equidistributes at algebraic Weyl rate.
   Theorem 1 is stated for the symmetric measure; the biased
@@ -423,12 +416,9 @@ The candidate routes are listed in FIRST-PROOF §2; at time of
 writing the primary candidate is a transfer-operator analysis on
 absolutely continuous mantissa densities in a translation-
 invariant norm, with per-visit contraction at bounded exponent
-and isometric a-step rotation. An earlier Rosenthal small-set
-minorization draft is [withdrawn](./GAP2-LEMMA.md) (the kernel is
-atomic on Leb ⊗ counting; TV-on-measures isn't monotone
-step-to-step). Whatever proof closes should deliver a rate
-controlled by ε and by the symmetric exponent walk's local-time
-statistics. The mechanism is **not** the Cesàro-to-Riesz story,
+and isometric a-step rotation. Whatever proof closes should
+deliver a rate controlled by ε and by the symmetric exponent
+walk's local-time statistics. The mechanism is **not** the Cesàro-to-Riesz story,
 which is a separate (ex post facto analytic) route to Benford for
 iid sums and is treated in §6 as diagnosis / competing
 explanation.
@@ -471,9 +461,7 @@ These are in priority order.
    (see FIRST-PROOF §2). Pick a function space / norm on mantissa
    densities, prove per-visit contraction at bounded exponent,
    iterate using the classical √n local-time estimate. Do not
-   draft around the gap; an earlier attempt (withdrawn
-   GAP2-LEMMA.md) shows the cost of writing lemma text on an
-   unsettled framework.
+   draft around the gap.
 
 2. **The rate prediction must be quantitative.** The simulation
    gives stretched-exponential c ≈ 0.55 (gap 3 phase 1,
