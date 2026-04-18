@@ -227,28 +227,32 @@ structural observation.**
   adjusted by the comparison. Estimated length: 2–3 pages, not
   one. References: Feller *Probability*, Vol. II (Chung–Erdős
   return-time theory on simple walks, adapted).
-- **(R6) Connect ν_R to Leb_T via irrational-rotation / Weyl
-  equidistribution.** Spectral gap for T_R gives convergence to
-  ν_R, *not* convergence to Leb_T. We need π_T ν_R = Leb_T.
+- **(R6) Connect ν_R to Leb_T.** Spectral gap for T_R gives
+  convergence to ν_R, *not* convergence to Leb_T. We need
+  π_T ν_R = Leb_T. Two candidate routes.
 
-  **Recommended route (self-contained, decoupled from (R3)/(R4)
-  norm choice).** During upward excursions, the mantissa is
-  rotated by a random multiple of log₁₀ 2 (irrational). Excursion
-  length has positive probability on every n ∈ ℤ₊, and
-  n · log₁₀ 2 mod 1 is equidistributed on T by Weyl. Therefore
-  the excursion-averaged rotation distribution spans T densely,
-  and the T-marginal of ν_R must be invariant under irrational
-  rotation — forcing π_T ν_R = Leb_T. Under one page to write
-  out.
+  **Primary route (Fourier via R4).** If (R4)'s norm controls
+  T-Fourier modes uniformly across E-levels, T_R's spectral gap
+  forces each conditional density ρ_E(m) to be constant, making
+  π_T ν_R uniform. The rotation-on-excursions fact enters here
+  as the reason nonzero Fourier modes are damped by T_R's
+  excursion part. Depends on (R3)/(R4) details; closing step is
+  2–4 pages once R4 is in hand.
 
-  **Alternative route (norm-dependent).** If the (R4) norm
-  controls T-Fourier modes uniformly across E-levels, then
-  T_R's spectral gap forces each conditional density ρ_E(m) to
-  be constant, making π_T ν_R uniform directly. Cleaner if the
-  norm cooperates, but depends on (R3)/(R4) details.
+  **Secondary route (rotation-invariance, standalone).** During
+  upward excursions, a-steps rotate the mantissa by ±log₁₀ 2 and
+  b-steps are near-identity at depth E₀. The sketch: excursion
+  length has positive probability on every n ∈ ℤ₊, n · log₁₀ 2
+  mod 1 is dense in T by Weyl, so π_T ν_R must be rotation-
+  invariant, hence Leb_T. This route is *not* self-contained: K
+  does not commute with T-rotation inside R, dense support of
+  the excursion-rotation distribution is weaker than σ-invariance
+  under a specific irrational rotation, and the b-step
+  perturbation at finite E₀ needs absorbing. See MESSES #2 for
+  the mechanical specifics.
 
   The deferred σ-finite invariant from gap 1 is *not* needed for
-  the recommended route.
+  either route.
 
 - **(Structural observation, stated once in the iteration step.)**
   Excursion-level rotation is independent of contraction-level

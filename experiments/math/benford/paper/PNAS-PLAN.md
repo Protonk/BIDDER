@@ -83,12 +83,12 @@ Rough allocation, 1600 words:
 |---------|------:|-----|
 | Intro and statement of claim | 200 | Problem, function, punchline |
 | Theorems, compactly stated | 150 | Formal statements, immediately usable |
-| Group and Cayley-graph setup | 250 | BS(1,2), binary tiling, two generators |
-| Mechanism / proof | 300 | Cesàro obstruction, ε coordinate change, visit rate |
+| Group and Cayley-graph setup | 190 | BS(1,2), binary tiling, two generators |
+| Mechanism / proof | 440 | Cesàro obstruction, ε coordinate change, visit rate |
 | Figures with captions | 150 | Two figures, captions carry definitions |
-| Hamming-framed diagnosis of prior attempts | 300 | What each explanation gets wrong, in bits |
-| Robustness and sensitivity | 150 | What survives bias, base change, etc. |
-| Conclusion | 100 | The substrate resolves the asymmetry |
+| Hamming-framed diagnosis of prior attempts | 250 | What each explanation gets wrong, in bits |
+| Robustness and sensitivity | 140 | What survives bias, base change, etc. |
+| Conclusion | 80 | The substrate resolves the asymmetry |
 
 
 ### 1. Intro and statement of claim (200 words)
@@ -183,7 +183,7 @@ adapts accordingly (significance statement, §4 mechanism, §6
 kicker, conclusion).
 
 
-### 3. Group and Cayley-graph setup (250 words)
+### 3. Group and Cayley-graph setup (190 words)
 
 BS(1,2) = <a, b | bab^{-1} = a^2>. Generator a is
 multiplication by 2: a geodesic step on the binary tiling of
@@ -207,7 +207,7 @@ the answer passes through log_2(1+m), and the departure from
 linearity is literally epsilon. The group structure of BS(1,2)
 makes this departure accumulate coherently rather than canceling.
 
-### 4. Mechanism / proof (300 words)
+### 4. Mechanism / proof (440 words)
 
 **Status: not yet drafted.** Gap 2 (see FIRST-PROOF §2) is open —
 there is no working proof route yet. The current primary
@@ -285,10 +285,10 @@ which is how the word budget absorbs two figures without
 expanding.
 
 
-### 6. Hamming-framed diagnosis of prior attempts (300 words)
+### 6. Hamming-framed diagnosis of prior attempts (250 words)
 
 Now — *after* the result — turn back and diagnose the field.
-Two movements inside the 300 words.
+Two movements inside the 250 words.
 
 **Movement A: The addition problem (~120 words).** One clean
 paragraph, not a walkthrough. Hamming (1970) identified the
@@ -305,7 +305,7 @@ who wants the Fourier-coefficient proof goes to Math. Nachr.
 had resisted the natural hierarchy of summation methods,
 and was settled analytically forty years ago.
 
-**Movement B: The field's four attempts (~180 words).**
+**Movement B: The field's four attempts (~130 words).**
 Hamming-score the four prior explanations against the
 substrate the paper has just presented:
 
@@ -336,7 +336,7 @@ and the null-recurrent return statistics of the exponent walk.
 The asymmetry Hamming named resolves without an ex post facto
 analytic step.
 
-### 7. Robustness and sensitivity (150 words)
+### 7. Robustness and sensitivity (140 words)
 
 BS(1,2) is the minimal algebraic model of mixed addition and
 multiplication — that's fixed in the setup. This section asks
@@ -357,7 +357,7 @@ what survives perturbation inside the model and at its boundary.
   remove multiplication entirely.
 
 
-### 8. Conclusion (100 words)
+### 8. Conclusion (80 words)
 
 Short. Restate the result without the scaffolding:
 Hamming's asymmetry — that multiplication converges to
@@ -369,7 +369,7 @@ exponential rate exp(−c√n), with c controlled by ε and the
 null-recurrent return statistics of the exponent walk. The
 only escape is pure addition.
 
-100 words. No future work, no hedging. End on the
+80 words. No future work, no hedging. End on the
 substrate.
 
 

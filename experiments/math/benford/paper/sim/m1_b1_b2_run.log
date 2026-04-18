@@ -15,3 +15,4 @@ init: 0.10s, memory ~1.30 GB state
   n= 151  L₁=0.01519  |ĥ(1)|=0.0032  n_R=88_478_308  (0.0 steps/s, ETA 18875s)
     checkpoint n=200: 16 bins ≥ 1000 walkers (max N_n=23, max time=200)
   n= 205  L₁=0.00624  |ĥ(1)|=0.0027  n_R=82_445_251  (0.0 steps/s, ETA 16360s)
+    checkpoint n=300: 21 bins ≥ 1000 walkers (max N_n=28, max time=300)

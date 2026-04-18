@@ -263,6 +263,51 @@ and the title, theorem statement, significance statement, and
 mechanism section all have to drop the Benford-identification
 claim.
 
+### Mechanical obstructions in the rotation-only sketch
+
+FIRST-PROOF §2 (R6)'s rotation-invariance sketch — excursions
+rotate the mantissa by n · log₁₀ 2, Weyl gives density, so
+π_T ν_R is rotation-invariant — papers over five specific
+issues:
+
+1. **Rotation-equivariance fails inside R.** The walk kernel K
+   does not commute with T-rotation for |E| ≤ E₀: the b-step map
+   f(m, E) = frac(log₁₀(10^m + 10^{−E})) depends on m nonlinearly
+   when |E| is small. Rotation-equivariance is only approximately
+   recovered during excursions (|E| > E₀, where b-steps are
+   near-identity). T_R as a whole is not rotation-equivariant.
+
+2. **Dense support ≠ invariance under a specific rotation.**
+   Weyl gives that {n · log₁₀ 2 mod 1 : n ∈ ℤ} is dense in T.
+   That is a fact about the *support* of the excursion-rotation
+   random variable θ. Concluding σ := π_T ν_R equals Leb_T needs
+   either σ invariant under a specific irrational rotation or a
+   Fourier/spectral argument that θ's distribution damps every
+   nonzero mode of σ — neither follows from "dense support"
+   alone.
+
+3. **The real closing move is probably Fourier.** If σ has Fourier
+   coefficient σ̂(r) ≠ 0 for r ≠ 0, T_R's excursion part damps
+   σ̂(r) by E[e^{2πi r θ}] (modulus < 1 when θ has nontrivial
+   spread). Invariance then forces σ̂(r) = 0 for r ≠ 0, giving
+   σ = Leb_T. Clean, but overlaps with R4's norm choice — so R6
+   is not really standalone.
+
+4. **The b-step ε at finite E₀.** For any finite E₀, b-steps during
+   excursions add O(10^{−E₀}) to the mantissa. The "rotation by
+   n · log₁₀ 2" is really "rotation by n · log₁₀ 2 + O(10^{−E₀})."
+   Either E₀ becomes a free parameter of the main theorem or the
+   argument absorbs the O(10^{−E₀}) as a perturbation bound.
+
+5. **Net-a-count distribution, not excursion length.** The
+   rotation per excursion is (net a-count during excursion) ·
+   log₁₀ 2, where net a-count is a bridge of a ±1 walk
+   conditioned to start at E₀+1 and return to E₀. That bridge
+   distribution is the Weyl input, not τ_R's law directly.
+
+Any one is tractable; all five in one page is aspirational.
+Expect R6 to be 2–4 pages via the Fourier route, not standalone.
+
 ### Status
 
 Open. This is a theorem-identity problem, not a rate problem.
