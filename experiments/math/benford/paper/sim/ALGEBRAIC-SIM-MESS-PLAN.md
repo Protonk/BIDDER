@@ -199,34 +199,105 @@ produces these as part of the consolidated M1 + B1 + B2 run).
 S0 is a post-processing analysis on M1 output; no new sim
 required.
 
-**Analysis.** At each of n ∈ {100, 200, 500}:
+**Analysis.** At each of n ∈ {100, 200, 500} (with n ∈ {150, 300}
+as cross-checks from the consolidated M1 run):
 
-1. Compute empirical distribution of N_n / √n across the 10⁸
-   walkers.
-2. Estimate tail exponent β from P(N_n ≥ k) ~ k^{−β} for k in
-   the body of the distribution (say, k ∈ [√n/4, 2√n]). Use
-   rank-based regression on log-log axes.
-3. Equivalently, compute E[exp(−λ N_n / √n)] for λ ∈
-   {0.1, 0.5, 1, 2, 5} and compare to the ML(1/2) Laplace
-   transform's explicit form (Mittag-Leffler function
-   E_{1/2}(−λ) up to normalization).
+1. Partition walkers by N_n = 0 (stuck-at-origin, transient
+   mixture component) versus N_n ≥ 1 (excursion subpopulation).
+   Record P(N = 0) at each n; it should decrease with n and
+   approach 0 asymptotically.
+2. **Primary test — Laplace match on the N_n ≥ 1 subpopulation.**
+   Compute L̂(λ) = E[exp(−λ N_n / √n) | N_n ≥ 1] for λ ∈ {0.1,
+   0.5, 1, 2, 5}. Fit the scale c by least squares of log L̂ vs
+   log ML(1/2)(λ · c) where ML(1/2)(x) = exp(x²) erfc(x). Record
+   c_fit and max |residual(log L̂)|.
+3. **Secondary test — body-shape sanity via local log-log slope.**
+   Compute β̂ by OLS on (log k, log P(N_n ≥ k)) over k ∈ [⌈√n/4⌉,
+   ⌊2√n⌋]. β̂ is a body descriptor, not a tail index (see decision
+   rule). Also compute the unconditional version for reference.
 
-**Bootstrap β̂.** Resample walkers, refit β, produce 95% CI.
+**Bootstrap.** Poisson parametric bootstrap on bin counts of
+hist_return_counts (2000 reps) gives 95% CI for β̂. Laplace
+residuals need no bootstrap at N ≥ 10⁷ per checkpoint.
 
 **Decision rule.**
 
-- β̂ ∈ [0.45, 0.55] (within 10% of the theoretical 1/2) with
-  tight CI ⇒ ML assumption holds empirically; ALGEBRAIC's
-  α = 1/2 target and BENTHIC's √n-scaling prediction are
-  well-grounded. **Proceed with the default schedule.**
-- β̂ outside [0.45, 0.55] with tight CI ⇒ the walk's return
-  count is not in the ML(1/2) basin. **Halt.** Reformulate:
-  ALGEBRAIC's mixture becomes A·exp(−c·n^{1−β̂}) +
-  B·n^{−β̂}; BENTHIC's balanced-regime rate becomes
-  exp(−c·n^{1−β̂}). Downstream decision rules must be
-  re-derived at the measured exponent.
-- β̂ with loose CI (≥ 0.05 width) ⇒ insufficient data.
-  Extend M1 or rerun at higher N until the CI tightens.
+The original version of this rule (pre-2026-04-17) tested β̂ ∈
+[0.45, 0.55] on a power-law regression of P(N_n ≥ k) ~ k^{−β}
+and treated β̂ as the tail index of ML(1/2). That test is
+**mis-specified against the Laplace specification** also written
+into this run: ML(1/2) in the classical (Mittag-Leffler function)
+convention has Laplace transform E_{1/2}(−λ) = exp(λ²) erfc(λ),
+which is the half-normal distribution (σ = √2). The half-normal
+has a Gaussian body, not a power-law tail. A log-log regression
+of its reverse-CDF in the body [√n/4, 2√n] gives a window-
+dependent local slope of order 8–12, not 0.5. The β̂ ∈ [0.45,
+0.55] criterion therefore belongs to the geometric-stable /
+Linnik family with index 1/2, not the Mittag-Leffler function
+family we are actually checking. The S0 run on 2026-04-17
+(`s0_SUMMARY.md`) showed the old rule would falsely halt the
+pipeline; the rule below replaces it.
+
+**Primary rule — Laplace match on the N_n ≥ 1 subpopulation.**
+
+The unconditional ensemble is a mixture of "stuck-at-origin"
+walkers (N_n = 0, probability dropping from 0.93 at n=100 to
+0.33 at n=500 in the consolidated M1 run) and walkers that have
+excursed at least once. The ML(1/2) limit applies to the second
+population; the first is a pre-asymptotic transient. S0's primary
+test conditions on N_n ≥ 1.
+
+Fit the scale c by least-squares of log L̂(λ) vs log ML(1/2)(λc)
+for λ ∈ {0.1, 0.5, 1, 2, 5}, using the full conditional
+subpopulation (no bootstrap needed for c itself; the subpopulation
+size ≥ 10⁷ makes L̂ essentially noiseless at this λ grid).
+
+- max |resid(log L̂)| < 0.02 across the λ grid **and** c_fit
+  stable within 10% across n ∈ {100, 200, 500} ⇒ ML(1/2) holds.
+  **Proceed with the default schedule.**
+- max |resid(log L̂)| > 0.05 across the λ grid, **or** c_fit
+  drifts > 30% across the three checkpoints ⇒ ML(1/2) rejected.
+  **Halt and reformulate** (see "rejection reformulation" below).
+- max |resid(log L̂)| ∈ [0.02, 0.05] ⇒ borderline. Extend to M4
+  checkpoints (n ∈ {2000, 5000, 20000}) or raise N before
+  committing.
+
+**Secondary rule — β̂ as body-shape sanity, not tail index.**
+
+The β̂ from the log-log regression on [√n/4, 2√n] measures the
+local slope of the body, not a tail exponent. Interpretation:
+
+- β̂ in [5, 15] ⇒ Gaussian-like body, *consistent* with ML(1/2).
+  This is not a separate confirmation (a half-normal always
+  gives this range in the specified window), but it is a
+  negative guard: rejects heavy-tailed alternatives.
+- β̂ < 2 ⇒ genuine power-law body. This would contradict
+  ML(1/2). If seen, **investigate** before trusting the
+  Laplace match — the combination would suggest a distribution
+  that happens to match ML(1/2)'s Laplace transform in the
+  body but differs elsewhere.
+- β̂ > 20 ⇒ body decays faster than Gaussian. Also worth
+  investigation; would suggest a thin-tailed alternative like
+  sub-Gaussian or compact-support.
+
+**Rejection reformulation (if primary rule fails).** ALGEBRAIC's
+mixture target and BENTHIC's √n-scaling are both derivable from
+the ML(1/2) Laplace form, not from a power-law tail. If the
+Laplace test rejects, MESSES's per-return framework is still
+applicable but with a non-ML(1/2) return-count distribution. The
+reformulation is: determine empirically the observed L̂(λ)
+shape, identify the stable-law family it belongs to (if any),
+and rederive MESSES's n^{−α} exponent and BENTHIC's exp(−c n^α)
+from that family's subordinator. This is a genuine theoretical
+task, not a parameter refit; do not attempt it inside the sim
+pipeline without coordinating with the analytic arm.
+
+**2026-04-17 S0 result.** Conditional Laplace residuals max
+|resid| = 0.018 at n = 100, shrinking to 0.006 at n = 500.
+c_fit = 0.179, 0.179, 0.183, 0.195 across n ∈ {100, 200, 300, 500}
+(drift 9% across 5× time range). β̂ sanity: 8.7–9.5 across all
+unconditional checkpoints. **ML(1/2) holds; default schedule
+authorized.**
 
 **Why this belongs in the prerequisites.** MESSES's algebraic
 prediction and BENTHIC's balanced-regime derivation both have

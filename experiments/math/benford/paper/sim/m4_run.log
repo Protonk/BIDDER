@@ -1,0 +1,37 @@
+M4 — algebraic-tail run on √2 IC
+  N = 100_000_000, n_max = 3000, B = 1000, modes = [1, 2, 3, 4, 5]
+  sampling every 10 steps: 300 samples from n = 10 to 3000
+
+  init: 0.09s, state ~1.30 GB
+  n=   10  L₁=1.22878e+00  |ĥ(1)|=2.0035e-02  (0.26 steps/s, ETA 195 min)
+  n=  210  L₁=5.88056e-03  |ĥ(1)|=2.6720e-03  (0.26 steps/s, ETA 176 min)
+  n=  410  L₁=3.70538e-03  |ĥ(1)|=1.9028e-03  (0.27 steps/s, ETA 162 min)
+  n=  610  L₁=3.44954e-03  |ĥ(1)|=1.5465e-03  (0.27 steps/s, ETA 150 min)
+  n=  810  L₁=3.28186e-03  |ĥ(1)|=1.4889e-03  (0.27 steps/s, ETA 137 min)
+  n= 1010  L₁=3.10340e-03  |ĥ(1)|=1.2035e-03  (0.26 steps/s, ETA 125 min)
+  n= 1210  L₁=2.92966e-03  |ĥ(1)|=1.1838e-03  (0.26 steps/s, ETA 113 min)
+  n= 1410  L₁=2.81810e-03  |ĥ(1)|=8.7618e-04  (0.12 steps/s, ETA 216 min)
+  n= 1610  L₁=2.96396e-03  |ĥ(1)|=1.0689e-03  (0.10 steps/s, ETA 223 min)
+  n= 1810  L₁=2.76266e-03  |ĥ(1)|=9.6512e-04  (0.09 steps/s, ETA 210 min)
+  n= 2010  L₁=2.82394e-03  |ĥ(1)|=7.4862e-04  (0.10 steps/s, ETA 163 min)
+  n= 2210  L₁=2.70964e-03  |ĥ(1)|=8.5527e-04  (0.10 steps/s, ETA 129 min)
+  n= 2410  L₁=2.68796e-03  |ĥ(1)|=7.0913e-04  (0.10 steps/s, ETA 97 min)
+  n= 2610  L₁=2.58432e-03  |ĥ(1)|=7.1947e-04  (0.09 steps/s, ETA 72 min)
+  n= 2810  L₁=2.69946e-03  |ĥ(1)|=6.8342e-04  (0.09 steps/s, ETA 33 min)
+  n= 3000  L₁=2.72338e-03  |ĥ(1)|=6.8349e-04  (0.10 steps/s, ETA 0 min)
+
+Total walk time: 30743.1s = 8.54 hrs
+Rate: 0.10 steps/s
+Throughput: 9.76e+06 walker-steps/s
+
+=== L₁ at key times ===
+  n=   10  L₁=1.2288e+00
+  n=   50  L₁=2.2511e-01
+  n=  100  L₁=5.2914e-02
+  n=  200  L₁=6.4310e-03
+  n=  500  L₁=3.5775e-03
+  n= 1000  L₁=2.9401e-03
+  n= 2000  L₁=2.7591e-03
+  n= 3000  L₁=2.7234e-03
+
+-> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/m4_results.npz

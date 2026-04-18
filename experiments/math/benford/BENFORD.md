@@ -10,8 +10,8 @@ Four ensemble demos plus several views of the same checkpoint data.
 - `base_fingerprint.png` — L1-to-uniform of `log_b` mantissa on the
   final step, scanned continuously for `b` in `[2, 40]`, including
   the biased walk.
-- `bs12_rate.png` — dedicated 1M-walker short run showing exponential
-  L1 decay with half-life ~20 steps.
+- `bs12_rate.png` — dedicated 1M-walker short run showing stretched-
+  exponential L1 decay (c ≈ 0.55 on the exp(−c√n) fit).
 - `tracers_v2.png` — three-panel exact-state tracer (log10|x|,
   mantissa convergence, group-element complexity growing as t^0.50).
 - `bidder_shutter.png` — BIDDER cipher vs numpy PRNG, 2x2 comparison.
@@ -76,15 +76,14 @@ alternating baseline.
 Three properties of the symmetric BS(1,2) random walk now have
 empirical numbers:
 
-**Convergence rate: exponential, not polynomial.** A dedicated 1M-walker
-run (`bs12_rate.py`) gives an approximately exponential L1 decay on a
-lin-log plot, with a fitted half-life of about 20 steps and a decay
-constant lambda of about 0.035 per step. The fit has R^2 ~ 0.99 on the
-canonical window (steps 20..100) and the rate shifts ~10% with window
-width, suggesting some multi-mode structure beneath the single
-exponential, but the dominant decay is clearly exponential, not the
-t^(-1/2) expected from naive irrational-rotation equidistribution. This
-is a spectral-gap signature.
+**Convergence rate: stretched-exponential.** A dedicated 1M-walker run
+(`bs12_rate.py`) and a subsequent N = 10⁷ run (gap 3 phase 1) show L1
+decay of the form exp(−c√n) with c ≈ 0.55, R² = 0.9985 on the fit
+window [20, 120]. Lin-log fits on short windows give an apparent
+exponential with λ ≈ 0.035/step, but that is the stretched curve's
+tangent on that window, not the true rate. The √n exponent scale is
+consistent with null-recurrent return-time statistics of the symmetric
+exponent walk on ℤ.
 
 **State complexity: diffusive (sqrt(t)).** Tracking the exact group
 element (N, num/2^q) for 64 walkers over 20_000 steps
@@ -92,14 +91,16 @@ element (N, num/2^q) for 64 walkers over 20_000 steps
 t^0.501 — essentially exact sqrt(t). The walker "folds back on itself"
 at a rate that keeps each component (|N|, bit_length(num), q) diffusive.
 
-**Biased weights: still Benford.** A biased walk
-(`bs12_biased.py`, weights +1:-1:*2:/2 = 0.20:0.20:0.40:0.20) with
+**Biased weights: still Benford, via a two-regime mechanism.** A biased
+walk (`bs12_biased.py`, weights +1:-1:*2:/2 = 0.20:0.20:0.40:0.20) with
 a net +0.20 mult drift per step sends walkers to ~10^1200 within 20k
-steps. Despite this, the final L1 is 0.091 (at the finite-sample noise
-floor) and the leading-digit-1 fraction is 0.308 (Benford: 0.301).
-The base-fingerprint curve for the biased walk is flat across [2, 40],
-matching the symmetric walk. Equidistribution is robust to generator
-bias.
+steps. Phase-3 sim (N = 10⁶, t up to 50,000) shows L1 decays to the
+sampling noise floor (0.0128) by t ≈ 2000 and fluctuates there. The
+mechanism is two-regime: active-zone ε-minorization while walkers
+drift through the low-depth region, then post-escape irrational
+rotation by log₁₀ 2 at algebraic Weyl rate once walkers are frozen
+in |E| > 20. The base-fingerprint curve for the biased walk is flat
+across [2, 40], matching the symmetric walk.
 
 All three findings are empirical at specific parameter settings (20k
 walkers, 20k steps, fixed seeds). They are not proven theorems.

@@ -1,0 +1,51 @@
+T1B-UNIT-BALL sim
+  N = 10_000_000, n_max = 600, B = 1000
+  modes = [1, 2, 3, 4, 5], E_THRESH = 20
+  sample count = 280
+
+########## RUN 1 — DYADIC-LADDER ##########
+
+=== Run1 D1: x=1.0: N = 10_000_000, n = 600 ===
+  n=   1  L₁=1.9940e+00  |ĥ(1)|=2.3736e-01  zh_cum=2_499_826  (1.06 s/s)
+  n=  61  L₁=6.1336e-01  |ĥ(1)|=5.0618e-03  zh_cum=7_878_354  (0.77 s/s)
+  n= 121  L₁=1.8454e-01  |ĥ(1)|=3.2756e-03  zh_cum=7_907_015  (0.77 s/s)
+  n= 181  L₁=6.6621e-02  |ĥ(1)|=3.0737e-03  zh_cum=7_910_750  (0.77 s/s)
+  n= 405  L₁=9.5796e-03  |ĥ(1)|=1.9008e-03  zh_cum=7_911_937  (1.14 s/s)
+  n= 600  L₁=8.3292e-03  |ĥ(1)|=1.5701e-03  zh_cum=7_911_970  (1.34 s/s)
+  wall time: 446.5s = 7.44 min, total zero-hits = 7_911_970
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/run1_dyadic_ladder/D1_results.npz
+
+=== Run1 D2: x=1.5: N = 10_000_000, n = 600 ===
+  n=   1  L₁=1.9920e+00  |ĥ(1)|=4.1762e-01  zh_cum=0  (0.89 s/s)
+  n=  61  L₁=5.6006e-01  |ĥ(1)|=4.9906e-03  zh_cum=1_696_158  (0.71 s/s)
+  n= 121  L₁=1.7089e-01  |ĥ(1)|=3.8931e-03  zh_cum=1_720_134  (0.69 s/s)
+  n= 181  L₁=6.2902e-02  |ĥ(1)|=3.0116e-03  zh_cum=1_723_408  (0.71 s/s)
+  n= 405  L₁=9.2712e-03  |ĥ(1)|=1.9381e-03  zh_cum=1_724_467  (1.08 s/s)
+  n= 600  L₁=8.1394e-03  |ĥ(1)|=1.6599e-03  zh_cum=1_724_486  (1.28 s/s)
+  wall time: 468.8s = 7.81 min, total zero-hits = 1_724_486
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/run1_dyadic_ladder/D2_results.npz
+
+=== Run1 D3: x=1.125: N = 10_000_000, n = 600 ===
+  n=   1  L₁=1.9920e+00  |ĥ(1)|=3.2014e-01  zh_cum=0  (0.89 s/s)
+  n=  61  L₁=4.0835e-01  |ĥ(1)|=5.6340e-03  zh_cum=175_432  (0.73 s/s)
+  n= 121  L₁=1.3139e-01  |ĥ(1)|=3.7524e-03  zh_cum=187_392  (0.74 s/s)
+  n= 181  L₁=5.0405e-02  |ĥ(1)|=3.1215e-03  zh_cum=189_482  (0.74 s/s)
+  n= 405  L₁=9.0696e-03  |ĥ(1)|=1.9226e-03  zh_cum=190_215  (1.10 s/s)
+  n= 600  L₁=8.2700e-03  |ĥ(1)|=1.7581e-03  zh_cum=190_246  (1.28 s/s)
+  wall time: 467.9s = 7.80 min, total zero-hits = 190_246
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/run1_dyadic_ladder/D3_results.npz
+
+=== Run1 N1: x=1.4: N = 10_000_000, n = 600 ===
+  n=   1  L₁=1.9920e+00  |ĥ(1)|=4.8955e-01  zh_cum=0  (0.71 s/s)
+  n=  61  L₁=1.8507e-01  |ĥ(1)|=5.2391e-03  zh_cum=0  (0.65 s/s)
+  n= 121  L₁=2.9533e-02  |ĥ(1)|=3.6022e-03  zh_cum=0  (0.69 s/s)
+  n= 181  L₁=1.1721e-02  |ĥ(1)|=2.5650e-03  zh_cum=0  (0.71 s/s)
+  n= 405  L₁=8.7526e-03  |ĥ(1)|=1.9838e-03  zh_cum=0  (1.06 s/s)
+  n= 600  L₁=8.3730e-03  |ĥ(1)|=1.2170e-03  zh_cum=0  (1.14 s/s)
+  wall time: 526.5s = 8.77 min, total zero-hits = 0
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/run1_dyadic_ladder/N1_results.npz
+
+=== Run1 N2: x=1.4166666666666667: N = 10_000_000, n = 600 ===
+  n=   1  L₁=1.9920e+00  |ĥ(1)|=4.7822e-01  zh_cum=0  (0.58 s/s)
+  n=  61  L₁=3.6845e-01  |ĥ(1)|=5.4210e-03  zh_cum=0  (0.50 s/s)
+  n= 121  L₁=1.0398e-01  |ĥ(1)|=3.6456e-03  zh_cum=0  (0.49 s/s)

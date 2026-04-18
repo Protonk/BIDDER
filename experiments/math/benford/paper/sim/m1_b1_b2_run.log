@@ -16,3 +16,12 @@ init: 0.10s, memory ~1.30 GB state
     checkpoint n=200: 16 bins ≥ 1000 walkers (max N_n=23, max time=200)
   n= 205  L₁=0.00624  |ĥ(1)|=0.0027  n_R=82_445_251  (0.0 steps/s, ETA 16360s)
     checkpoint n=300: 21 bins ≥ 1000 walkers (max N_n=28, max time=300)
+  n= 455  L₁=0.00369  |ĥ(1)|=0.0019  n_R=63_837_571  (0.0 steps/s, ETA 3571s)
+    checkpoint n=500: 29 bins ≥ 1000 walkers (max N_n=42, max time=500)
+  n= 600  L₁=0.00344  |ĥ(1)|=0.0016  n_R=57_333_352  (0.0 steps/s, ETA 0s)
+
+Total walk time: 12636.4s = 210.61 min
+Rate: 0.0 steps/s
+Total walker-steps: 60,000,000,000
+Throughput: 4.75e+06 walker-steps/s
+-> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/m1_b1_b2_results.npz
