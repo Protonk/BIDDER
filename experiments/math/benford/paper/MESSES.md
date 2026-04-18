@@ -380,3 +380,39 @@ identity problem. The current Route 1' sketch treats `T_R` as if
 its return-time regularity were exponentially tame; the walk
 described in the same document is not. Until that mismatch is
 resolved, the return operator is still partly aspirational.
+
+---
+
+## Mess #5: Relation vs. actions under Route 1'
+
+**Status:** Resolved for Route 1' (2026-04-17). **Reopen trigger:**
+any future proof route that tries to make `bab⁻¹ = a²` load-bearing
+(e.g., ladder-time, horocyclic/geodesic, or Cuno–Sava-Huss style).
+Canonical wording lives in PNAS-PLAN §6 kicker and
+FIRST-PROOF §5; this entry is the archival record.
+
+### Original claim
+
+The paper wanted BS(1,2) to matter as an algebraic object, with the
+relation `bab⁻¹ = a²` doing explanatory work — not decoration.
+
+### Why Route 1' didn't deliver
+
+Route 1' uses only generator *actions*: irrational rotation under
+a-steps, low-depth ε-perturbation under b-steps, and null-recurrent
+return statistics of the exponent walk. None invokes the relation.
+A free group on {a, b} with the same generator actions would give
+the same proof skeleton. That threatens theorem-story match, not
+theorem truth.
+
+### Resolution
+
+Narrow the claim. BS(1,2) is the *minimal algebraic setting* in
+which the two operations (double, add-one) appear together; the
+relation identifies the group, not the mechanism. The convergence
+comes from the generator actions plus null-recurrent returns. The
+§6 kicker in PNAS-PLAN and §5 of FIRST-PROOF now carry this
+wording. Option (A) — making the relation load-bearing via a
+Cuno–Sava-Huss ladder-time argument — was considered and not
+pursued, on the grounds that Theorem 1 doesn't need the extra
+machinery.

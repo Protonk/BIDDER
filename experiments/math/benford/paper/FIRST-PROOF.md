@@ -65,9 +65,7 @@ Theorem 1's decay rate. Under the current primary proof candidate
 (gap 2 Route 1', induced-return operator on R), the load-bearing
 invariant is a *probability* measure ν_R on a compact set R ⊂ X
 (R is compact, not finite — T-coordinate is continuous), not a
-σ-finite measure on all of X. The previous commitment to "Leb ⊗
-counting as the invariant σ-finite measure" was wrong — a-steps
-preserve it, b-steps don't (Jacobian 10^m/(10^m + 10^{−E}) ≠ 1).
+σ-finite measure on all of X.
 
 **Caveat:** the global σ-finite invariant is deferred, not
 necessarily irrelevant. A natural way to prove gap 2's (R6)
@@ -260,22 +258,6 @@ structural observation.**
   Immediate fact, but it's what makes the architecture
   (R4) × (R5) product bound legitimate.
 
-### Previous alternatives (historical, unlikely under new framing)
-
-The earlier alternative routes were designed against the old
-"per-step contraction on TV of mantissa marginal" setup. Under
-the return-operator reformulation they mostly lose relevance:
-
-- **Wrapped-Cauchy comparison.** Could be re-examined at the
-  T_R level if none of (R3)'s norms yield clean contraction —
-  dominate T_R's density kernel by a wrapped Cauchy. Lower
-  priority than finishing (R3)–(R4) first.
-- **Wrapped-Cauchy identity.** Implausible at both levels.
-- **Direct Fourier on single-walker mantissa Fourier
-  coefficients.** Subsumed into (R3) if Fourier-weighted L² is
-  the norm that works — it's the same object, just approached
-  as norm choice rather than a separate route.
-
 ### What closure looks like
 
 A lemma combining three independent ingredients:
@@ -329,11 +311,6 @@ a factor of 2.4× change — which tracks stretched's −c/(2√t)
 prediction closely and is incompatible with constant-slope
 exponential.
 
-The previously reported λ ≈ 0.035 on `bs12_rate.png` (fit window
-[20, 100]) was a local-linear artifact: on a short window, both
-models look straight, and the average slope of stretched is
-numerically close to what exp would give.
-
 **Consequences.**
 
 - **Shape fits the return-operator framework.** Gap 2 Route 1'
@@ -359,9 +336,7 @@ numerically close to what exp would give.
 two-regime mechanism.
 
 **The finding.** L₁ decays to the N = 10⁶ noise floor (0.0128) by
-t ≈ 2000 and fluctuates there through t = 50,000. There is **no
-floor at 0.091** — the previously reported value was either a
-digit-level (9-bin) L₁ snapshot or an earlier-run artifact.
+t ≈ 2000 and fluctuates there through t = 50,000.
 
 **Two-regime mechanism, observed.**
 
@@ -425,64 +400,13 @@ symmetric-case Theorem 1 doesn't need.
 
 ## 6. Schatte → mixed-walk bridge
 
-**Status:** rhetorical pivot, unsupported.
-
-**The problem.** `PNAS-PLAN.md` §4 (lines 444–462) claims:
-
-> "pure addition performs Cesàro averaging on the mantissa Fourier
-> coefficients and does not converge. Multiplication performs the
-> coordinate change ψ = id + ε, converting Cesàro toward Riesz
-> weighting. The Riesz weighting that Schatte had to impose
-> analytically is produced automatically by the group's own
-> structure."
-
-This is a slogan. Schatte's weighting is an **index on summation
-methods**: the j-th partial sum weighted by 1/j. The BS(1,2) walk
-doesn't explicitly weight past contributions — it just applies
-generators stochastically. Claiming the walk "performs" Riesz
-weighting requires:
-
-1. Writing the mantissa distribution after n steps as a weighted
-   sum over histories.
-2. Identifying the induced weights on the *additive* sub-histories
-   as 1/j (or as something with the same damping on rotating Fourier
-   modes).
-3. Connecting this to the ε coordinate change.
-
-**What closure looks like.** Either (a) a derivation executing steps
-1–3 above, giving a clean operational statement of the pivot; or
-(b) a rewrite of §4/§6 that proves exponential mixing by a different
-route (e.g., the wrapped-Cauchy route of gap 2) and cites Schatte
-only as diagnostic context — "pure addition fails for the Fourier
-reasons Schatte identified; mixing fixes it for a different reason."
-
-**Recommendation.** Route (b) is more honest if the proof actually
-closes via wrapped Cauchy. The Schatte-as-Riesz rhetoric is elegant
-but only worth carrying if the derivation works. If the wrapped-
-Cauchy proof is what closes, say so and cite Schatte as the
-diagnostic, not the mechanism.
-
----
-
-## Pre-draft decision: Theorem 1's scope — symmetric theorem,
-biased positive-drift corollary
-
-Phase 3 biased-walk sim confirms L₁ → 0 for weights
-(0.2, 0.2, 0.4, 0.2): no floor at 0.091, walkers reach the N = 10⁶
-sampling-noise floor by t ≈ 2000 and stay there. **This is enough
-to support a positive-drift biased corollary, not to broaden
-Theorem 1 to all nondegenerate μ.**
-
-The main theorem remains the symmetric-measure statement. The
-biased case is a corollary with a two-regime rate — fast
-(ε-minorization) while walkers are in the active zone, algebraic
-(Weyl rotation) after they escape — for the positively drifting
-regime actually simulated. Both convergences are to Leb_T.
-
-Caveat: positive multiplicative drift is what phase 3 tested.
-Negative drift (walkers recycle through origin, maintaining active-
-zone contact) is not covered by the corollary and remains a
-separate conjecture.
+**Status: resolved.** Schatte is cited in PNAS-PLAN §6 movement A
+as diagnostic of the pure-addition regime and engaged in the §6
+kicker as a competing explanation for the mixed walk. The earlier
+"Schatte's Riesz weighting is produced automatically by the
+group's own structure" slogan was dropped; the mixed walk is a
+Markov chain with intrinsic mixing, not an ex post facto
+re-weighting.
 
 ---
 

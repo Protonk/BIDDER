@@ -53,9 +53,10 @@ the binary logarithm, which is a fact about ln 2.
 2. **Not a Benford survey.** There are good surveys (Berger and
    Hill 2015, Miller 2015). We cite them and move on. The paper's
    job is not to review what is known about Benford — it is to add
-   one thing: the identification of epsilon as the per-step
-   contraction constant of the mixed-arithmetic kernel, with a
-   stretched-exponential rate for the mantissa marginal.
+   one thing: the identification of epsilon as the canonical
+   nonlinear coordinate defect of the mixed-arithmetic kernel,
+   together with a stretched-exponential rate for the mantissa
+   marginal whose eventual proof should depend on that defect.
 
 3. **Not a cross-disciplinary connection paper.** Epsilon has a
    life in computer arithmetic (IEEE 754, the fast inverse square
@@ -67,129 +68,319 @@ the binary logarithm, which is a fact about ln 2.
    framing. Every word serves the Benford result.
 
 
-## Why the paper exists
+---
 
-Benford's law has been "explained" many times. Every existing
-explanation fails in a specific, nameable way, and the failures
-are different enough that no two accounts cover each other's
-gaps. This is our leverage. The paper doesn't enter a crowded
-field — it enters a field where everyone agrees the question is
-open and each prior attempt demonstrates *which part* is hard.
+## The rhetorical arc
 
-The four failures (Hill, CLT-for-logs, spread-across-scales,
-power-law mixing) are diagnosed in detail in Section 6 of
-the rhetorical arc. In the Columbo structure, they come
-*after* the result: the reader arrives at the diagnosis
-already holding the answer and checks each prior attempt
-against it.
+Eight sections, Columbo structure: show the answer first,
+then show why no one else found it.
+
+### Word budget
+
+Rough allocation, 1600 words:
+
+| Section | Words | Job |
+|---------|------:|-----|
+| Intro and statement of claim | 200 | Problem, function, punchline |
+| Theorems, compactly stated | 150 | Formal statements, immediately usable |
+| Group and Cayley-graph setup | 250 | BS(1,2), binary tiling, two generators |
+| Mechanism / proof | 300 | Cesàro obstruction, ε coordinate change, visit rate |
+| Figures with captions | 150 | Two figures, captions carry definitions |
+| Hamming-framed diagnosis of prior attempts | 300 | What each explanation gets wrong, in bits |
+| Robustness and sensitivity | 150 | What survives bias, base change, etc. |
+| Conclusion | 100 | The substrate resolves the asymmetry |
 
 
-## The audience problem
+### 1. Intro and statement of claim (200 words)
 
-PNAS readers who care about Benford's law:
+Open cold. Benford's law, one sentence. The question "why,"
+one sentence — the existing explanations each fail at a
+specific point. Then the claim: the mechanism is the function
+epsilon(m) = log_2(1+m) - m, the nonlinear part of the
+coordinate map between linear and logarithmic mantissa. It is
+the static nonlinear input to the BS(1,2)-induced mixed-
+arithmetic Markov kernel's contraction problem, not itself the
+contraction constant. The mantissa
+marginal converges to Benford at stretched-exponential rate
+exp(-c sqrt(n)); c is a functional of epsilon and of the
+symmetric exponent walk's return statistics. The mechanism
+terminates at the concavity of the binary logarithm.
 
-- **Physicists.** Know it from first-digit tests on physical
-  constants. Want a mechanism, not a characterization theorem.
-  Hill's 1995 result tells them the stationary distribution; they
-  want to know why the dynamics converge to it. Epsilon gives them
-  the dynamics. The group-theoretic framing (geodesic =
-  multiplicative, horocyclic = additive) maps onto how physicists
-  already think about scale separation.
+### 2. Theorems, compactly stated (150 words)
 
-- **Statisticians.** Know Benford from fraud detection (Nigrini)
-  and from the digit-testing literature. Interested in convergence
-  rates — how many operations before the distribution is close
-  enough to test against? The stretched-exponential rate
-  exp(-c sqrt(n)) with a computable constant c is directly useful
-  to them; super-algebraic in n, still slower than pure
-  multiplication alone.
+Two theorems, formally stated, with no orphaned display
+equations and no deferred justification.
 
-- **Number theorists / dynamicists.** Know about equidistribution
-  mod 1, Weyl sums, Fourier coefficients on the circle. Will
-  check whether the Schatte-style Fourier asymptotics and the
-  BS(1,2) mechanism actually meet in the main text, and whether
-  the stretched-exponential rate is stated at the strongest
-  level we can prove (functional of ε and return statistics,
-  lower bound vs. identification). These are the referees.
+**Theorem 1 (stretched-exponential mixing).** For the symmetric
+probability measure mu on the generators of BS(1,2), the induced
+random walk projected to T = R/Z via m(x) = log_10 |x| mod 1
+has mantissa marginal converging to the uniform (Benford)
+distribution at stretched-exponential rate: there exist constants
+C < infinity and c(epsilon, mu) > 0 such that
 
-The main text must serve the first two groups. To do that, it
-has to satisfy the third: the referees.
+    ||pi_T(nu K^n) - Leb_T||_{TV} <= C * exp(-c(epsilon, mu) * sqrt(n))
 
-## The register: undergraduate-accessible, cite-precise
+for all n >= n_0, uniformly over initial laws nu with pi_T nu
+absolutely continuous w.r.t. Leb_T. Here ||·||_{TV} is the total-
+variation distance on probability measures on T, i.e.
+||μ − ν||_{TV} = sup_A |μ(A) − ν(A)| = ½ ||p − q||_{L¹(Leb_T)}
+when μ, ν have densities p, q against Leb_T.
 
-The paper should be readable by a strong undergraduate math
-major — an upperclassman who has seen first-semester abstract
-algebra and first-year calculus. This is not a concession to
-a popular audience. It is the correct register for this
-specific result, because the result's content is that the
-mystery was never hiding behind advanced mathematics. It was
-hiding behind the absence of one group-theoretic observation.
+**Theorem 2 (rate, empirical).** For the symmetric measure, the
+measured constant is c = 0.55 +/- [error] (gap 3 phase-1
+simulation, N = 10^7 walkers, fit on t in [20, 120], R² = 0.9985
+on the stretched fit). The theoretical c(epsilon, mu) is expected
+to depend on ε via the eventual operator estimate (grounded in the
+coordinate-map identity of BINADE-WHITECAPS §§7–8) and on the
+null-recurrent √n local-time statistics of the exponent walk on ℤ;
+the precise form depends on the proof route chosen for Theorem 1.
+We do not commit to a
+decomposition of c in the paper beyond the lower-bound
+c(epsilon, mu) > 0 claim above.
 
-The material decomposes into pieces that are each
-undergraduate-accessible:
+### Theorem 1 variants — pre-committed wording
 
-- What a mantissa is, what the log-mantissa circle is.
-  First-year calculus.
-- What Benford's law says in the circle formulation. One
-  line.
-- Hamming's observation: multiplication gets you there,
-  addition doesn't. Intuitive.
-- Schatte's result, stated in words: no finite-order
-  averaging rescues addition; a different kind of averaging
-  does. No Fourier coefficients required to *understand*
-  the claim.
-- What a group is, generators and relations. First-semester
-  abstract algebra.
-- BS(1,2) as two generators a (double) and b (add one),
-  with the relation bab⁻¹ = a². Concrete.
-- Cayley graph as a picture of what the machine can do.
-  Visual.
-- Random walk on the Cayley graph, projected down to the
-  mantissa circle. Picture plus one sentence.
-- The Benford distribution as the stationary measure.
-  Statement, not proof.
-- Convergence rate. Named, not derived.
+The simulation program (see `sim/README.md`) can land in one of
+three outcomes depending on the three-plan adjudication. Theorem
+1 wording is pre-committed for each:
 
-Each of those is a paragraph or less. None requires machinery
-a good undergraduate hasn't seen. The paper that explains all
-of them in sequence, with two figures carrying the setup, is
-structurally identical to a Miller undergraduate chapter —
-compressed and aimed at a peer audience rather than a student
-audience.
+**(T1a) Single-regime stretched-exp.** Used if TUKEYS confirms
+pure H_S shape, ALGEBRAIC fits c with tight CI and B̂ consistent
+with 0, and BENTHIC reports balanced regime (ρ(M) ≈ γ₁^{c'})
+with predicted n* effectively infinite. Wording is the Theorem 1
+above, unchanged.
 
-**Three sentence-level disciplines:**
+**(T1b) Two-regime, observable + asymptotic.** Used if BENTHIC
+reports rotation-dominated regime with predicted crossover n*
+beyond the simulation horizon but within theoretical relevance.
+Wording:
 
-*Trust the picture to carry the setup.* The figures show what
-equilibrium looks like and what the Cayley graph looks like.
-Captions can define op-index and BS(1,2) operationally. Do
-not spend an 80-word paragraph re-describing what the reader
-is already looking at. If the figure is doing its job, the
-prose points at it and moves on.
+> **Theorem 1' (two-regime).** For the symmetric probability
+> measure μ and n ≤ n_0(ε, μ), the mantissa marginal satisfies
+> ‖π_T(νK^n) − Leb_T‖_{TV} ≤ C exp(−c(ε, μ) √n). For n >> n*,
+> the asymptotic rate is exp(−α(ε, μ) · n) with α > 0. The
+> crossover n* = n*(ε, μ) is determined by the mode-coupling
+> spectral radius of the return operator relative to the per-
+> step rotation multiplier during excursions.
 
-*Let single sentences carry the load, then stop.* "The
-relation bab⁻¹ = a² is the interaction of addition and
-multiplication as a group relation" is the paper's central
-claim; it does not need a supporting paragraph beneath it.
-Resist the academic reflex of restating the key sentence in
-three successively more formal registers. One sentence, one
-commit, move to the next thing.
+Paper reports both rates with the n* boundary.
 
-*Name and move.* "Schatte (1986) proved no finite-order
-Hölder summation suffices; the Riesz logarithmic mean does."
-Two clauses, one citation, diagnostic closed — never return
-to it. This avoids the trap where prior work keeps
-reappearing because you didn't commit to one clean handoff
-the first time. Each prior result gets one appearance, does
-its job, and is done.
+**(T1c) Mixture (MESSES-consistent).** Used if ALGEBRAIC A5
+finds B̂ > 10⁻² with CI excluding 0 and α̂ ∈ [0.4, 0.6], and
+BENTHIC reports injection-dominated regime. Wording:
 
-Every citation must do a specific job — naming what a prior
-result did, what it didn't do, or what machinery the proof
-rests on. No citation is there to signal familiarity. A
-skeptical reader sees literature command not from density but
-from precision: each name appears because the paper needs it,
-and what the paper needs from it is stated. Much may be
-needed. 
+> **Theorem 1'' (mixture).** For the symmetric probability
+> measure μ, the mantissa marginal satisfies
+> ‖π_T(νK^n) − Leb_T‖_{TV} ≤ C₁ exp(−c(ε, μ) √n) + C₂ · n^(−1/2)
+> for all n ≥ n_0, with both coefficients C₁, C₂ positive.
 
+Paper reports both terms and discusses the crossover.
+
+The three variants exist so that end-of-program wording is
+chosen by the decision rule, not improvised. Which variant
+applies depends on the sim outcome; the paper's body text
+adapts accordingly (significance statement, §4 mechanism, §6
+kicker, conclusion).
+
+
+### 3. Group and Cayley-graph setup (250 words)
+
+BS(1,2) = <a, b | bab^{-1} = a^2>. Generator a is
+multiplication by 2: a geodesic step on the binary tiling of
+the Poincare half-plane, a rigid rotation of log-mantissa by
+log_10 2 (irrational). Generator b is addition of 1: a
+horocyclic step, a state-dependent perturbation of
+log-mantissa whose nonlinear part is epsilon.
+
+The Cayley graph is the binary tiling (Bowen 2002):
+horocyclic width 1, geodesic height ln 2, every cell congruent,
+non-crystallographic. The mantissa lives on the horocyclic
+coordinate. Multiplication translates geodesically — no
+mantissa effect. Addition translates horocyclically — and the
+mantissa perturbation factors through epsilon because the
+coordinate map from linear to log scale is psi(m) = log_2(1+m)
+= m + epsilon(m).
+
+This is where the reader sees *why* epsilon enters. It's the coordinate Jacobian. When
+you add 1 to a number and ask what happened to its mantissa,
+the answer passes through log_2(1+m), and the departure from
+linearity is literally epsilon. The group structure of BS(1,2)
+makes this departure accumulate coherently rather than canceling.
+
+### 4. Mechanism / proof (300 words)
+
+**Status: not yet drafted.** Gap 2 (see FIRST-PROOF §2) is open —
+there is no working proof route yet. An earlier Rosenthal small-
+set minorization draft (GAP2-LEMMA) has been withdrawn; the
+kernel is atomic on Leb ⊗ counting and the TV-on-measures
+formulation isn't monotone step-to-step. The current primary
+candidate is a transfer-operator analysis on absolutely continuous
+mantissa densities in a translation-invariant norm.
+
+**What this section needs to carry when drafted (sketch target).**
+Two facts that should survive any proof route:
+
+- **The coordinate identity.** At any walk step with bounded
+  exponent |E| ≤ E₀, the +1 step perturbs the mantissa through the
+  coordinate map ψ(m) = log₂(1+m); ε = ψ − id is strictly
+  positive on the interior. This is the static input the
+  per-visit contraction estimate must exploit, whatever the norm;
+  it does not by itself prove contraction.
+- **The visit rate.** The symmetric exponent walk on ℤ has
+  local time at the low-depth zone satisfying E[L_n] ~ c_R√n
+  (classical LCLT). This is the √n factor.
+
+The proof target: iterating a per-visit contraction at rate
+(1 − β_*) over ~c_R√n visits by step n gives stretched-exp. The
+missing piece is a clean per-visit contraction in a norm for
+which a-step rotation is isometric and b-step at low depth
+strictly contracts. Candidate norms: BV(T), H^s(T), weighted
+Fourier ℓ². See FIRST-PROOF §2 Route 1'.
+
+**Measured rate for calibration.** c ≈ 0.55 (simulation,
+N = 10⁷, fit on t ∈ [20, 120], R² = 0.9985 on the stretched
+fit). Any proof-derived c should land near this.
+
+### 5. Figures with captions (150 words total)
+
+Two figures, each carrying setup that the prose would
+otherwise spend words describing.
+
+**Figure 1** (convergence rates, log-log): titled
+"Convergence to Benford requires mixing." Single panel,
+log-log axes, three curves: addition only (flat — no
+convergence), alternating add/mult (straight line —
+algebraic decay), mixed BS(1,2) (concave down — stretched-
+exponential convergence). Direct curve labels, no legend box.
+A dotted line marks the finite-sample L₁ floor. The log-log
+format is the argument: the three regimes have three
+qualitatively different *shapes*, not just three speeds. A
+reader who sees the figure already holds the theorem's content
+— mixing is the condition, and the rate is super-algebraic.
+Caption defines L₁ distance to Benford, names the three regimes
+operationally (±1, sequenced add-then-mult, simultaneous
+¼-probability each), and states N = 50,000 walkers.
+
+**Figure 2** (the Cayley graph): shows the binary tiling with
+generators labeled. Caption names the group relation
+bab⁻¹ = a² and maps a/b to double/add-one. The reader
+*sees* the geometry before the prose invokes it.
+
+Trust the pictures. If a sentence is describing what a
+figure shows, cut the sentence. The 150-word caption budget
+is split across both figures — roughly 75 words each, enough
+for operational definitions and one interpretive sentence.
+
+**Design rationale.** The figures' job is to carry definitions 
+and claims that would otherwise cost prose words. The convergence 
+figure (log-log, three curves) carries the theorem's content 
+visually: three regimes, three qualitatively different curve 
+shapes, the title itself stating the claim. The alternating-add/mult
+curve does double duty — it appears in both the figure 
+and the robustness section, showing that having both operations 
+is necessary but not sufficient, and that the figure already 
+demonstrates the sensitivity boundary. 
+
+The Cayley graph defines the generators
+and shows the geometry. Between them, they replace ~160 words
+of descriptive prose in the group-setup and mechanism sections,
+which is how the word budget absorbs two figures without
+expanding.
+
+
+### 6. Hamming-framed diagnosis of prior attempts (300 words)
+
+Now — *after* the result — turn back and diagnose the field.
+Two movements inside the 300 words.
+
+**Movement A: The addition problem (~120 words).** One clean
+paragraph, not a walkthrough. Hamming (1970) identified the
+asymmetry — multiplication of independent random variables
+produces mantissa distributions that converge to the
+logarithmic distribution, while addition does not. Schatte
+(1986) proved it: finite-order Hölder summation damps the mantissa Fourier
+coefficients' modulus but leaves the rotating leading term
+intact, and convergence requires the Riesz logarithmic mean
+rather than any finite-degree arithmetic averaging. Two sentences, both
+names cited, Schatte's result stated in his terms. A reader
+who wants the Fourier-coefficient proof goes to Math. Nachr.
+127. A reader who doesn't sees that the problem was real,
+had resisted the natural hierarchy of summation methods,
+and was settled analytically forty years ago.
+
+**Movement B: The field's four attempts (~180 words).**
+Hamming-score the four prior explanations against the
+substrate the paper has just presented:
+
+- Hill: identifies the fixed point, not the dynamics.
+  Regresses the explanation.
+- CLT-for-logs: provides a mechanism but requires iid
+  conditions and gives no rate.
+- Spread-across-scales: necessary condition, not a
+  convergence theorem.
+- Power-law mixing: genuine convergence, but algebraic.
+
+Then the kicker, which engages Schatte-Riesz as a competing
+explanation: Schatte's Riesz logarithmic weighting recovers
+Benford from iid pure-addition sums by re-weighting the partial
+sums 1/j ex post facto — an analytic device applied after the
+sum is formed. This is a separate phenomenon from ours. Our walk
+is a Markov chain: the mantissa sees rotation (multiplicative
+step) and ε-perturbation (additive step at bounded depth) at
+each increment, with no external re-weighting. Both routes
+terminate at the logarithmic distribution because both pass
+through the coordinate map ψ(m) = log₂(1+m) = m + ε; the
+coincidence is the positivity of ε on the open interval. BS(1,2)
+is the minimal algebraic setting in which both operations appear
+— the relation bab⁻¹ = a² identifies the group, not the
+mechanism. The convergence comes from the generator *actions*
+(ε-perturbation at low depth + irrational rotation by log₁₀ 2)
+and the null-recurrent return statistics of the exponent walk.
+The asymmetry Hamming named resolves without an ex post facto
+analytic step.
+
+### 7. Robustness and sensitivity (150 words)
+
+This section replaces what was previously "Why BS(1,2)
+specifically." The question isn't "why this group" — BS(1,2)
+is the minimal algebraic model of mixed addition and
+multiplication, and that's stated in the setup. The question
+is: what survives perturbation inside the model and at its
+boundary?
+
+- **Biased generators:** converge to Benford (phase 3: L₁ → 0;
+  the previously reported "floor at 0.091" was a measurement
+  artifact). The exponent walk is transient, so active-zone
+  ε-minorization is finite in total; after escape, irrational
+  rotation by log₁₀ 2 equidistributes at algebraic Weyl rate.
+  Theorem 1 is stated for the symmetric measure; the biased
+  case is a two-regime corollary with different rate structure.
+  See FIRST-PROOF §4 / sim/SIM-REPORT phase 3.
+- **Base change:** L1-to-Benford is flat across b in [2, 40]
+  (simulation). The irrationality of log_b 2 for all integer
+  b > 1 guarantees this.
+- **Pure addition (the boundary):** non-convergence (Schatte
+  1986, confirmed by simulation). This is the *only* escape:
+  remove multiplication entirely.
+
+
+### 8. Conclusion (100 words)
+
+Short. Restate the result without the scaffolding:
+Hamming's asymmetry — that multiplication converges to
+Benford and addition does not — disappears when addition
+and multiplication are interleaved stochastically at bounded
+exponent levels. The symmetric random walk on BS(1,2) has
+mantissa marginal converging to Benford at stretched-
+exponential rate exp(−c√n), with c controlled by ε and the
+null-recurrent return statistics of the exponent walk. The
+only escape is pure addition.
+
+100 words. No future work, no hedging. End on the
+substrate.
+
+
+---
 
 ## The proof problem
 
@@ -293,63 +484,132 @@ These are in priority order.
    statistics, but the exact form is an output of the proof,
    not an input.
 
-## Specific risks
 
-- **~~The Fourier-coefficient route must connect to the L^2
-  rate.~~** Resolved. BINADE-WHITECAPS §7 gives the identity
-  E(t) = φ(t) − t = −ε(m): the accumulated density defect
-  *is* ε (up to sign and coordinate change). The lift from
-  per-frequency to L^2 is this identity plus Parseval — no
-  integration-by-parts bridge to sharpen. The Fourier
-  coefficients of δ(t) = 2^t ln 2 − 1 are exactly computable,
-  so the L^2 norm of ε is available in closed form. This
-  justifies Theorem 2's "f(ε, μ) depends on the L^2 norm of
-  ε" — the L^2 norm is, via Parseval, the ℓ^2 norm of the
-  Fourier coefficients of the density defect. Not arbitrary;
-  forced by the coordinate change.
-  **Measure change (resolved in principle).** §§7–8 are
-  formulated against Lebesgue measure on the circle. The PNAS
-  setting uses the walk's stationary measure μ with density ρ
-  against dt. The identity E = −ε∘φ is coordinate-theoretic
-  and survives. The Parseval-based norm changes: ‖E‖²_{L²(μ)}
-  = ∫|E(t)|² ρ(t) dt instead of ‖E‖²_{L²(dt)}. But ρ is
-  bounded above and below — the stationary distribution is
-  Benford, which is bounded on the log-mantissa circle — so
-  the two L² norms are equivalent with constants ρ_min and
-  ρ_max (Radon–Nikodym). The bound carries over with exactly
-  a constant change. This is bookkeeping, not a gap.
+---
 
-- **The local time.** For the symmetric walk (δ = 0), the
-  exponent is a null-recurrent ±1 walk on ℤ; local time at the
-  low-depth zone {|E| ≤ E₀} satisfies E[L_n] ~ c_R √n by
-  classical LCLT (Pólya, Spitzer *Principles of Random Walk*).
-  This is expected to provide the √n factor in the rate, whichever
-  proof route closes. Phase 3 confirmed the biased case converges
-  with a two-regime structure (active fast contraction →
-  post-escape Weyl rotation at algebraic rate); symmetric
-  theorem is the main claim, biased is a corollary. See
-  `FIRST-PROOF.md` §4 and phase-3 sim.
+## Why the paper exists
 
-- **The quantitative rate.** Schatte's Riesz convergence is
-  O(1/∛(log n)) — very slow. Our sims show stretched-
-  exponential exp(-c√n) with c ≈ 0.55 (gap 3 phase 1, N = 10^7).
-  Different object: Schatte is iid pure-addition sums with ex
-  post facto analytic re-weighting; our walk is a Markov chain
-  with intrinsic mixing dynamics. The two rates are not directly
-  comparable. The √n factor is classical from local-time theory;
-  the prefactor controlling the L² or density-level contraction
-  per visit is an output of whichever proof route we settle on.
+Benford's law has been "explained" many times. Every existing
+explanation fails in a specific, nameable way, and the failures
+are different enough that no two accounts cover each other's
+gaps. This is our leverage. The paper doesn't enter a crowded
+field — it enters a field where everyone agrees the question is
+open and each prior attempt demonstrates *which part* is hard.
 
-- **The rate identification.** The aim is a lower bound of the
-  form c ≥ c(ε, μ) > 0, not exact identification of c. Whatever
-  form c(ε, μ) takes (e.g., involving ‖ε‖_{L²} or an ess-inf of
-  the kernel's density action on bounded low-depth test functions)
-  depends on the proof route. BINADE-WHITECAPS §§7–8 give the
-  Fourier-side data that should feed in; how it feeds in is the
-  open question.
+The four failures (Hill, CLT-for-logs, spread-across-scales,
+power-law mixing) are diagnosed in detail in Section 6 of
+the rhetorical arc. In the Columbo structure, they come
+*after* the result: the reader arrives at the diagnosis
+already holding the answer and checks each prior attempt
+against it.
 
-- **Operator-language precision.** See the claim gate below.
 
+## The audience problem
+
+PNAS readers who care about Benford's law:
+
+- **Physicists.** Know it from first-digit tests on physical
+  constants. Want a mechanism, not a characterization theorem.
+  Hill's 1995 result tells them the stationary distribution; they
+  want to know why the dynamics converge to it. Epsilon gives them
+  the dynamics. The group-theoretic framing (geodesic =
+  multiplicative, horocyclic = additive) maps onto how physicists
+  already think about scale separation.
+
+- **Statisticians.** Know Benford from fraud detection (Nigrini)
+  and from the digit-testing literature. Interested in convergence
+  rates — how many operations before the distribution is close
+  enough to test against? The stretched-exponential rate
+  exp(-c sqrt(n)) with a computable constant c is directly useful
+  to them; super-algebraic in n, still slower than pure
+  multiplication alone.
+
+- **Number theorists / dynamicists.** Know about equidistribution
+  mod 1, Weyl sums, Fourier coefficients on the circle. Will
+  check whether the Schatte-style Fourier asymptotics and the
+  BS(1,2) mechanism actually meet in the main text, and whether
+  the stretched-exponential rate is stated at the strongest
+  level we can prove (functional of ε and return statistics,
+  lower bound vs. identification). These are the referees.
+
+The main text must serve the first two groups. To do that, it
+has to satisfy the third: the referees.
+
+## The register: undergraduate-accessible, cite-precise
+
+The paper should be readable by a strong undergraduate math
+major — an upperclassman who has seen first-semester abstract
+algebra and first-year calculus. This is not a concession to
+a popular audience. It is the correct register for this
+specific result, because the result's content is that the
+mystery was never hiding behind advanced mathematics. It was
+hiding behind the absence of one group-theoretic observation.
+
+The material decomposes into pieces that are each
+undergraduate-accessible:
+
+- What a mantissa is, what the log-mantissa circle is.
+  First-year calculus.
+- What Benford's law says in the circle formulation. One
+  line.
+- Hamming's observation: multiplication gets you there,
+  addition doesn't. Intuitive.
+- Schatte's result, stated in words: no finite-order
+  averaging rescues addition; a different kind of averaging
+  does. No Fourier coefficients required to *understand*
+  the claim.
+- What a group is, generators and relations. First-semester
+  abstract algebra.
+- BS(1,2) as two generators a (double) and b (add one),
+  with the relation bab⁻¹ = a². Concrete.
+- Cayley graph as a picture of what the machine can do.
+  Visual.
+- Random walk on the Cayley graph, projected down to the
+  mantissa circle. Picture plus one sentence.
+- The Benford distribution as the stationary measure.
+  Statement, not proof.
+- Convergence rate. Named, not derived.
+
+Each of those is a paragraph or less. None requires machinery
+a good undergraduate hasn't seen. The paper that explains all
+of them in sequence, with two figures carrying the setup, is
+structurally identical to a Miller undergraduate chapter —
+compressed and aimed at a peer audience rather than a student
+audience.
+
+**Three sentence-level disciplines:**
+
+*Trust the picture to carry the setup.* The figures show what
+equilibrium looks like and what the Cayley graph looks like.
+Captions can define op-index and BS(1,2) operationally. Do
+not spend an 80-word paragraph re-describing what the reader
+is already looking at. If the figure is doing its job, the
+prose points at it and moves on.
+
+*Let single sentences carry the load, then stop.* "On BS(1,2) —
+the minimal algebraic setting where both addition and
+multiplication appear — the symmetric random walk's mantissa
+marginal converges to Benford" is the paper's central claim; it
+does not need a supporting paragraph beneath it. Resist the
+academic reflex of restating the key sentence in three
+successively more formal registers. One sentence, one commit,
+move to the next thing.
+
+*Name and move.* "Schatte (1986) proved no finite-order
+Hölder summation suffices; the Riesz logarithmic mean does."
+Two clauses, one citation, diagnostic closed — never return
+to it. This avoids the trap where prior work keeps
+reappearing because you didn't commit to one clean handoff
+the first time. Each prior result gets one appearance, does
+its job, and is done.
+
+Every citation must do a specific job — naming what a prior
+result did, what it didn't do, or what machinery the proof
+rests on. No citation is there to signal familiarity. A
+skeptical reader sees literature command not from density but
+from precision: each name appears because the paper needs it,
+and what the paper needs from it is stated. Much may be
+needed. 
 
 ## The failure modes
 
@@ -378,317 +638,7 @@ What kills the paper:
   careful referee will stop there.
 
 
-## The rhetorical arc
-
-Eight sections, Columbo structure: show the answer first,
-then show why no one else found it.
-
-
-### 1. Intro and statement of claim (200 words)
-
-Open cold. Benford's law, one sentence. The question "why,"
-one sentence — the existing explanations each fail at a
-specific point. Then the claim: the mechanism is the function
-epsilon(m) = log_2(1+m) - m, the nonlinear part of the
-coordinate map between linear and logarithmic mantissa. It is
-the contraction constant of the BS(1,2)-induced mixed-
-arithmetic Markov kernel on the mantissa circle. The mantissa
-marginal converges to Benford at stretched-exponential rate
-exp(-c sqrt(n)); c is a functional of epsilon and of the
-symmetric exponent walk's return statistics. The mechanism
-terminates at the concavity of the binary logarithm.
-
-### 2. Theorems, compactly stated (150 words)
-
-Two theorems, formally stated, with no orphaned display
-equations and no deferred justification.
-
-**Theorem 1 (stretched-exponential mixing).** For the symmetric
-probability measure mu on the generators of BS(1,2), the induced
-random walk projected to T = R/Z via m(x) = log_10 |x| mod 1
-has mantissa marginal converging to the uniform (Benford)
-distribution at stretched-exponential rate: there exist constants
-C < infinity and c(epsilon, mu) > 0 such that
-
-    ||pi_T(nu K^n) - Leb_T||_{TV} <= C * exp(-c(epsilon, mu) * sqrt(n))
-
-for all n >= n_0, uniformly over initial laws nu with pi_T nu
-absolutely continuous w.r.t. Leb_T. Here ||·||_{TV} is the total-
-variation distance on probability measures on T, i.e.
-||μ − ν||_{TV} = sup_A |μ(A) − ν(A)| = ½ ||p − q||_{L¹(Leb_T)}
-when μ, ν have densities p, q against Leb_T.
-
-**Theorem 2 (rate, empirical).** For the symmetric measure, the
-measured constant is c = 0.55 +/- [error] (gap 3 phase-1
-simulation, N = 10^7 walkers, fit on t in [20, 120], R² = 0.9985
-on the stretched fit). The theoretical c(epsilon, mu) is expected
-to be controlled by ε (via the coordinate-map identity in BINADE-
-WHITECAPS §§7–8) and by the null-recurrent √n local-time
-statistics of the exponent walk on ℤ; the precise form depends on
-the proof route chosen for Theorem 1. We do not commit to a
-decomposition of c in the paper beyond the lower-bound
-c(epsilon, mu) > 0 claim above.
-
-### Theorem 1 variants — pre-committed wording
-
-The simulation program (see `sim/README.md`) can land in one of
-three outcomes depending on the three-plan adjudication. Theorem
-1 wording is pre-committed for each:
-
-**(T1a) Single-regime stretched-exp.** Used if TUKEYS confirms
-pure H_S shape, ALGEBRAIC fits c with tight CI and B̂ consistent
-with 0, and BENTHIC reports balanced regime (ρ(M) ≈ γ₁^{c'})
-with predicted n* effectively infinite. Wording is the Theorem 1
-above, unchanged.
-
-**(T1b) Two-regime, observable + asymptotic.** Used if BENTHIC
-reports rotation-dominated regime with predicted crossover n*
-beyond the simulation horizon but within theoretical relevance.
-Wording:
-
-> **Theorem 1' (two-regime).** For the symmetric probability
-> measure μ and n ≤ n_0(ε, μ), the mantissa marginal satisfies
-> ‖π_T(νK^n) − Leb_T‖_{TV} ≤ C exp(−c(ε, μ) √n). For n >> n*,
-> the asymptotic rate is exp(−α(ε, μ) · n) with α > 0. The
-> crossover n* = n*(ε, μ) is determined by the mode-coupling
-> spectral radius of the return operator relative to the per-
-> step rotation multiplier during excursions.
-
-Paper reports both rates with the n* boundary.
-
-**(T1c) Mixture (MESSES-consistent).** Used if ALGEBRAIC A5
-finds B̂ > 10⁻² with CI excluding 0 and α̂ ∈ [0.4, 0.6], and
-BENTHIC reports injection-dominated regime. Wording:
-
-> **Theorem 1'' (mixture).** For the symmetric probability
-> measure μ, the mantissa marginal satisfies
-> ‖π_T(νK^n) − Leb_T‖_{TV} ≤ C₁ exp(−c(ε, μ) √n) + C₂ · n^(−1/2)
-> for all n ≥ n_0, with both coefficients C₁, C₂ positive.
-
-Paper reports both terms and discusses the crossover.
-
-The three variants exist so that end-of-program wording is
-chosen by the decision rule, not improvised. Which variant
-applies depends on the sim outcome; the paper's body text
-adapts accordingly (significance statement, §4 mechanism, §6
-kicker, conclusion).
-
-
-### 3. Group and Cayley-graph setup (250 words)
-
-BS(1,2) = <a, b | bab^{-1} = a^2>. Generator a is
-multiplication by 2: a geodesic step on the binary tiling of
-the Poincare half-plane, a rigid rotation of log-mantissa by
-log_10 2 (irrational). Generator b is addition of 1: a
-horocyclic step, a state-dependent perturbation of
-log-mantissa whose nonlinear part is epsilon.
-
-The Cayley graph is the binary tiling (Bowen 2002):
-horocyclic width 1, geodesic height ln 2, every cell congruent,
-non-crystallographic. The mantissa lives on the horocyclic
-coordinate. Multiplication translates geodesically — no
-mantissa effect. Addition translates horocyclically — and the
-mantissa perturbation factors through epsilon because the
-coordinate map from linear to log scale is psi(m) = log_2(1+m)
-= m + epsilon(m).
-
-This is where the reader sees *why* epsilon enters. It's the coordinate Jacobian. When
-you add 1 to a number and ask what happened to its mantissa,
-the answer passes through log_2(1+m), and the departure from
-linearity is literally epsilon. The group structure of BS(1,2)
-makes this departure accumulate coherently rather than canceling.
-
-### 4. Mechanism / proof (300 words)
-
-**Status: not yet drafted.** Gap 2 (see FIRST-PROOF §2) is open —
-there is no working proof route yet. An earlier Rosenthal small-
-set minorization draft (GAP2-LEMMA) has been withdrawn; the
-kernel is atomic on Leb ⊗ counting and the TV-on-measures
-formulation isn't monotone step-to-step. The current primary
-candidate is a transfer-operator analysis on absolutely continuous
-mantissa densities in a translation-invariant norm.
-
-**What this section needs to carry when drafted (sketch target).**
-Two facts that should survive any proof route:
-
-- **The coordinate identity.** At any walk step with bounded
-  exponent |E| ≤ E₀, the +1 step perturbs the mantissa through the
-  coordinate map ψ(m) = log₂(1+m); ε = ψ − id is strictly
-  positive on the interior. This is the static input that
-  produces the per-visit contraction, whatever the norm.
-- **The visit rate.** The symmetric exponent walk on ℤ has
-  local time at the low-depth zone satisfying E[L_n] ~ c_R√n
-  (classical LCLT). This is the √n factor.
-
-The proof target: iterating a per-visit contraction at rate
-(1 − β_*) over ~c_R√n visits by step n gives stretched-exp. The
-missing piece is a clean per-visit contraction in a norm for
-which a-step rotation is isometric and b-step at low depth
-strictly contracts. Candidate norms: BV(T), H^s(T), weighted
-Fourier ℓ². See FIRST-PROOF §2 Route 1'.
-
-**Measured rate for calibration.** c ≈ 0.55 (simulation,
-N = 10⁷, fit on t ∈ [20, 120], R² = 0.9985 on the stretched
-fit). Any proof-derived c should land near this.
-
-### 5. Figures with captions (150 words total)
-
-Two figures, each carrying setup that the prose would
-otherwise spend words describing.
-
-**Figure 1** (convergence rates, log-log): titled
-"Convergence to Benford requires mixing." Single panel,
-log-log axes, three curves: addition only (flat — no
-convergence), alternating add/mult (straight line —
-algebraic decay), mixed BS(1,2) (concave down — stretched-
-exponential convergence). Direct curve labels, no legend box.
-A dotted line marks the finite-sample L₁ floor. The log-log
-format is the argument: the three regimes have three
-qualitatively different *shapes*, not just three speeds. A
-reader who sees the figure already holds the theorem's content
-— mixing is the condition, and the rate is super-algebraic.
-Caption defines L₁ distance to Benford, names the three regimes
-operationally (±1, sequenced add-then-mult, simultaneous
-¼-probability each), and states N = 50,000 walkers.
-
-**Figure 2** (the Cayley graph): shows the binary tiling with
-generators labeled. Caption names the group relation
-bab⁻¹ = a² and maps a/b to double/add-one. The reader
-*sees* the geometry before the prose invokes it.
-
-Trust the pictures. If a sentence is describing what a
-figure shows, cut the sentence. The 150-word caption budget
-is split across both figures — roughly 75 words each, enough
-for operational definitions and one interpretive sentence.
-
-
-### 6. Hamming-framed diagnosis of prior attempts (300 words)
-
-Now — *after* the result — turn back and diagnose the field.
-Two movements inside the 300 words.
-
-**Movement A: The addition problem (~120 words).** One clean
-paragraph, not a walkthrough. Hamming (1970) identified the
-asymmetry — multiplication of independent random variables
-produces mantissa distributions that converge to the
-logarithmic distribution, while addition does not. Schatte
-(1986) proved it: finite-order Hölder summation damps the mantissa Fourier
-coefficients' modulus but leaves the rotating leading term
-intact, and convergence requires the Riesz logarithmic mean
-rather than any finite-degree arithmetic averaging. Two sentences, both
-names cited, Schatte's result stated in his terms. A reader
-who wants the Fourier-coefficient proof goes to Math. Nachr.
-127. A reader who doesn't sees that the problem was real,
-had resisted the natural hierarchy of summation methods,
-and was settled analytically forty years ago.
-
-**Movement B: The field's four attempts (~180 words).**
-Hamming-score the four prior explanations against the
-substrate the paper has just presented:
-
-- Hill: identifies the fixed point, not the dynamics.
-  Regresses the explanation.
-- CLT-for-logs: provides a mechanism but requires iid
-  conditions and gives no rate.
-- Spread-across-scales: necessary condition, not a
-  convergence theorem.
-- Power-law mixing: genuine convergence, but algebraic.
-
-Then the kicker, which engages Schatte-Riesz as a competing
-explanation: Schatte's Riesz logarithmic weighting recovers
-Benford from iid pure-addition sums by re-weighting the partial
-sums 1/j ex post facto — an analytic device applied after the
-sum is formed. This is a separate phenomenon from ours. Our walk
-is a Markov chain: the mantissa sees rotation (multiplicative
-step) and ε-perturbation (additive step at bounded depth) at
-each increment, with no external re-weighting. Both routes
-terminate at the logarithmic distribution because both pass
-through the coordinate map ψ(m) = log₂(1+m) = m + ε; the
-coincidence is the positivity of ε on the open interval. BS(1,2)
-is the minimal algebraic setting in which both operations appear
-— the relation bab⁻¹ = a² identifies the group, not the
-mechanism. The convergence comes from the generator *actions*
-(ε-perturbation at low depth + irrational rotation by log₁₀ 2)
-and the null-recurrent return statistics of the exponent walk.
-The asymmetry Hamming named resolves without an ex post facto
-analytic step.
-
-### 7. Robustness and sensitivity (150 words)
-
-This section replaces what was previously "Why BS(1,2)
-specifically." The question isn't "why this group" — BS(1,2)
-is the minimal algebraic model of mixed addition and
-multiplication, and that's stated in the setup. The question
-is: what survives perturbation inside the model and at its
-boundary?
-
-- **Biased generators:** converge to Benford (phase 3: L₁ → 0;
-  the previously reported "floor at 0.091" was a measurement
-  artifact). The exponent walk is transient, so active-zone
-  ε-minorization is finite in total; after escape, irrational
-  rotation by log₁₀ 2 equidistributes at algebraic Weyl rate.
-  Theorem 1 is stated for the symmetric measure; the biased
-  case is a two-regime corollary with different rate structure.
-  See FIRST-PROOF §4 / sim/SIM-REPORT phase 3.
-- **Base change:** L1-to-Benford is flat across b in [2, 40]
-  (simulation). The irrationality of log_b 2 for all integer
-  b > 1 guarantees this.
-- **Pure addition (the boundary):** non-convergence (Schatte
-  1986, confirmed by simulation). This is the *only* escape:
-  remove multiplication entirely.
-
-
-### 8. Conclusion (100 words)
-
-Short. Restate the result without the scaffolding:
-Hamming's asymmetry — that multiplication converges to
-Benford and addition does not — disappears when addition
-and multiplication are interleaved stochastically at bounded
-exponent levels. The symmetric random walk on BS(1,2) has
-mantissa marginal converging to Benford at stretched-
-exponential rate exp(−c√n), with c controlled by ε and the
-null-recurrent return statistics of the exponent walk. The
-only escape is pure addition.
-
-100 words. No future work, no hedging. End on the
-substrate.
-
-
-## The word budget
-
-Rough allocation, 1600 words:
-
-| Section | Words | Job |
-|---------|------:|-----|
-| Intro and statement of claim | 200 | Problem, function, punchline |
-| Theorems, compactly stated | 150 | Formal statements, immediately usable |
-| Group and Cayley-graph setup | 250 | BS(1,2), binary tiling, two generators |
-| Mechanism / proof | 300 | Cesàro obstruction, ε coordinate change, visit rate |
-| Figures with captions | 150 | Two figures, captions carry definitions |
-| Hamming-framed diagnosis of prior attempts | 300 | What each explanation gets wrong, in bits |
-| Robustness and sensitivity | 150 | What survives bias, base change, etc. |
-| Conclusion | 100 | The substrate resolves the asymmetry |
-
-
-### Design rationale: two figures, each carrying setup
-
-Two separate figures: the L₁ convergence plot and the
-Cayley graph of BS(1,2).
-
-Why: the figures' job is no longer to show evidence — it's
-to carry definitions and claims that would otherwise cost
-prose words. The convergence figure (log-log, three curves)
-carries the theorem's content visually: three regimes, three
-qualitatively different curve shapes, the title itself
-stating the claim. The alternating-add/mult curve does
-double duty — it appears in both the figure and the
-robustness section, showing that having both operations is
-necessary but not sufficient, and that the figure already
-demonstrates the sensitivity boundary. The Cayley graph
-defines the generators and shows the geometry. Between them,
-they replace ~160 words of descriptive prose in the
-group-setup and mechanism sections, which is how the word
-budget absorbs two figures without expanding.
+---
 
 ## The references
 
@@ -787,9 +737,10 @@ one is a forcing function for clarity. Draft:
 > prove that the symmetric random walk on BS(1,2), the algebraic
 > model of mixed addition and multiplication, has mantissa
 > marginal converging to the Benford distribution at stretched-
-> exponential rate exp(-c sqrt(n)), with c controlled by the
-> concavity of epsilon and the null-recurrent return statistics
-> of the exponent walk. Simulation confirms the predicted rate.
+> exponential rate exp(-c sqrt(n)), with c expected to depend on
+> epsilon through the eventual operator estimate and on the
+> null-recurrent return statistics of the exponent walk.
+> Simulation confirms the predicted rate.
 > The mechanism terminates at the irrationality of ln 2.
 
 That's ~121 words. The four failures are compressed to three
@@ -861,5 +812,8 @@ statement is an identity or a lower bound.
 ## The title
 
 The title should be bald, mechanism-first, and free of coyness.
-Working direction: "Benford's law from mixed arithmetic" or
-"Why mixed arithmetic is Benford."
+Working directions:
+
+- "Benford's law from mixed arithmetic"
+- "Why mixed arithmetic is Benford"
+- "Mixed arithmetic distributes digits into Benford"

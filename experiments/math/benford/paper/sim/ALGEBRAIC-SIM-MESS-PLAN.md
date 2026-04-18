@@ -242,7 +242,12 @@ discriminating window.
 
     N = 10⁸ walkers
     Symmetric measure: P(a) = P(a⁻¹) = P(b) = P(b⁻¹) = 1/4
-    Initial condition: (m, E) = (0, 0) for all walkers
+    Initial condition: x = +√2 for all walkers
+        (m = log₁₀√2, E = 0, sign = +1)
+        Chosen so that 0 ∉ orbit: since the orbit lies in
+        {2^k·√2 + j : k, j ∈ ℤ} and √2 is irrational, x = 0
+        is algebraically impossible under the generator action,
+        and no numerical zero-guard is needed in the b-step.
     Time range: n = 0 to 600
     Sampling: every step from n = 1 to 200,
               every 5 steps from n = 200 to 600
@@ -322,9 +327,9 @@ digits; accumulated b-step error through n = 300 is negligible
 ### Run M3: initial-condition robustness
 
 **Purpose:** check that the rate classification is not an
-artifact of the (0, 0) initial condition. This is mandatory:
-the plan is testing an asymptotic rate law, not a single-IC
-transient.
+artifact of the (log₁₀√2, 0) initial condition used in M1. This
+is mandatory: the plan is testing an asymptotic rate law, not a
+single-IC transient.
 
     N = 10⁸ walkers
     Same measure
@@ -572,7 +577,7 @@ form fits, and a different mechanism is indicated.
 
     N = 10⁸ walkers (baseline) or 10⁹ (properly resourced)
     Symmetric measure: P(a) = P(a⁻¹) = P(b) = P(b⁻¹) = 1/4
-    Initial condition: (m, E) = (0, 0)
+    Initial condition: x = +√2 (m = log₁₀√2, E = 0) — same as M1
     Time range: n = 0 to 20 000
     Sampling:
       every step from n = 1 to 300
@@ -610,7 +615,7 @@ the result is inconclusive (3-param fit CI for B straddles
 zero with sizeable |B̂|), escalate to N = 10⁹.
 
 **IC-independence of the algebraic tail — assumed.** M4 is
-single-IC at (m, E) = (0, 0). The algebraic-tail coefficient B
+single-IC at (log₁₀√2, 0). The algebraic-tail coefficient B
 and exponent α are assumed IC-independent on theoretical
 grounds: they come from the lower tail of the return-time
 distribution for a null-recurrent walk on ℤ, which depends on

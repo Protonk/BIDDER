@@ -1,0 +1,17 @@
+M1+B1+B2 consolidated run
+  N = 100_000_000, steps = 600, B = 1000
+  modes = [1, 2, 3, 4, 5], E_R = 3, E_THRESH = 20
+  sample times: 280
+  checkpoints: [25, 50, 100, 150, 200, 300, 500]
+
+init: 0.10s, memory ~1.30 GB state
+  n=   1  L₁=1.99200  |ĥ(1)|=0.4799  n_R=100_000_000  (0.0 steps/s, ETA 23478s)
+    checkpoint n=25: 3 bins ≥ 1000 walkers (max N_n=6, max time=25)
+    checkpoint n=50: 6 bins ≥ 1000 walkers (max N_n=9, max time=50)
+  n=  51  L₁=0.21793  |ĥ(1)|=0.0059  n_R=99_264_938  (0.0 steps/s, ETA 21270s)
+    checkpoint n=100: 10 bins ≥ 1000 walkers (max N_n=15, max time=100)
+  n= 101  L₁=0.05134  |ĥ(1)|=0.0040  n_R=94_510_245  (0.0 steps/s, ETA 20724s)
+    checkpoint n=150: 13 bins ≥ 1000 walkers (max N_n=18, max time=150)
+  n= 151  L₁=0.01519  |ĥ(1)|=0.0032  n_R=88_478_308  (0.0 steps/s, ETA 18875s)
+    checkpoint n=200: 16 bins ≥ 1000 walkers (max N_n=23, max time=200)
+  n= 205  L₁=0.00624  |ĥ(1)|=0.0027  n_R=82_445_251  (0.0 steps/s, ETA 16360s)
