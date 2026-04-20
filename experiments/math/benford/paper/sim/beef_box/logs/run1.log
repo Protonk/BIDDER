@@ -1,0 +1,35 @@
+Run 1 — FULL-M4 (long-horizon √2 IC)
+  N = 100_000_000, n_max = 20000, B = 1000, modes = [1, 2, 3, 4, 5]
+  sample count = 305  (dense [10, 3000] + tail [5000, 7000, 10000, 14000, 20000])
+  seed = 0xcaca0de4  (matches M4 for [1, 3000] cross-check)
+
+  init: 0.10s, state ~1.30 GB
+  n=    10  L₁=1.22878e+00  |ĥ(1)|=2.0035e-02  (0.22 steps/s, ETA 1537 min)
+  n=   310  L₁=4.28588e-03  |ĥ(1)|=2.3428e-03  (0.22 steps/s, ETA 1469 min)
+  n=   610  L₁=3.44954e-03  |ĥ(1)|=1.5465e-03  (0.22 steps/s, ETA 1447 min)
+  n=   910  L₁=3.12300e-03  |ĥ(1)|=1.2808e-03  (0.22 steps/s, ETA 1423 min)
+  n=  1210  L₁=2.92966e-03  |ĥ(1)|=1.1838e-03  (0.22 steps/s, ETA 1399 min)
+  n=  1510  L₁=2.77222e-03  |ĥ(1)|=8.8136e-04  (0.22 steps/s, ETA 1377 min)
+  n=  1810  L₁=2.76266e-03  |ĥ(1)|=9.6512e-04  (0.22 steps/s, ETA 1354 min)
+  n=  2110  L₁=2.85810e-03  |ĥ(1)|=9.1962e-04  (0.22 steps/s, ETA 1329 min)
+  n=  2410  L₁=2.68796e-03  |ĥ(1)|=7.0913e-04  (0.22 steps/s, ETA 1306 min)
+  n=  2710  L₁=2.77548e-03  |ĥ(1)|=7.9112e-04  (0.22 steps/s, ETA 1282 min)
+  n=  5000  L₁=2.65730e-03  |ĥ(1)|=5.5096e-04  (0.25 steps/s, ETA 983 min)
+  n= 20000  L₁=2.55268e-03  |ĥ(1)|=2.2730e-04  (0.32 steps/s, ETA 0 min)
+
+Total walk time: 62568.3s = 17.38 hrs
+Throughput: 3.20e+07 walker-steps/s
+
+=== L₁ at key times ===
+  n=    10  L₁=1.2288e+00
+  n=   100  L₁=5.2914e-02
+  n=   500  L₁=3.5775e-03
+  n=  1000  L₁=2.9401e-03
+  n=  3000  L₁=2.7234e-03
+  n=  5000  L₁=2.6573e-03
+  n=  7000  L₁=2.6886e-03
+  n= 10000  L₁=2.6369e-03
+  n= 14000  L₁=2.6023e-03
+  n= 20000  L₁=2.5527e-03
+
+-> /home/adam/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/beef_box/run1_full_m4_results.npz
