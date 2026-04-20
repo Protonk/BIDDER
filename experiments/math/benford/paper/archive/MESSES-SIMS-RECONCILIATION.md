@@ -19,6 +19,39 @@ FIRST-PROOF.md; PNAS-PLAN.md.
 
 ---
 
+## Status (2026-04-20): largely executed
+
+Most prescriptive items in this document have landed; it now
+functions as the audit trail for why the T1a → T1b shift and
+the Route 1' → polynomial-tail-framework shift happened. The
+current live docs are:
+
+- `paper/SECOND-PROOF.md` — T1b gap list under the polynomial-
+  tail induced-operator framework. Supersedes FIRST-PROOF §2 as
+  the live proof target; FIRST-PROOF carries a "Superseded by"
+  pointer at its top and is archival.
+- `paper/F1-HYPO-PLAN.md` — live working doc narrowing the
+  framework choice at β = 1/2. Reading of Melbourne–Terhesiu
+  2012, Gouëzel 2004, and Young 1999 since this reconciliation
+  was written has settled on **M–T 2012 as the only applicable
+  primary**; Gouëzel 2004 requires β > 1 and Young 1999
+  requires ∫R dm < ∞, both of which fail at β = 1/2. This
+  doc's "Melbourne-Terhesiu / Gouëzel / Sarig / Young-tower"
+  language throughout should be read as the menu of candidates
+  *as of 2026-04-19*, not the current menu.
+- `paper/MESSES.md` — now carries Mess #6 (the Gibbs–Markov
+  instantiation question under M–T §11.2), added after this
+  reconciliation was written. Mess #6 is about (GM-1) —
+  whether the natural excursion-type partition on the skew
+  product is Markov under F. The sim corpus does not speak to
+  (GM-1); it is a paper-side structural question with a
+  falsification protocol in Mess #6.
+
+Status tags for the §"Concrete next moves" items are inline at
+the bottom of this doc.
+
+---
+
 ## Headline
 
 1. **The MESSES are empirically supported in aggregate, but the
@@ -526,19 +559,25 @@ order of priority:
 
 From the reconciliation, not from triage of beef-box runs.
 
-1. **Retarget FIRST-PROOF §2.** Rewrite from "prove stretched-
+1. **Retarget FIRST-PROOF §2.** *[Executed, 2026-04-19, via
+   `paper/SECOND-PROOF.md`.]* Rewrite from "prove stretched-
    exp via (R4)×(R5)" to "prove 1/√n via polynomial-tail induced-
    operator framework." (R2) becomes a citation. (R5) is
    absorbed. (R6) stays, and the sketch should use walker-level
    π_T ν_n → Leb_T rather than ν_R identification if possible.
 
-2. **Update the PNAS-PLAN claim gate.** "Goes in" should read
+2. **Update the PNAS-PLAN claim gate.** *[Executed; see
+   `paper/PNAS-PLAN.md` for the T1b-synced claim gate and
+   significance-statement wording.]* "Goes in" should read
    T1b (1/√n asymptotic, IC-dependent coefficient, IC-specific
    stretched-exp transient for sharp ICs). The significance
    statement's "stretched-exponential rate exp(−c√n)" becomes
    "algebraic rate n^{−1/2} with IC-dependent coefficient."
 
-3. **Fold MESSES updates into FIRST-PROOF §2.** MESSES.md's
+3. **Fold MESSES updates into FIRST-PROOF §2.** *[Moot.
+   FIRST-PROOF is archival with a "Superseded by SECOND-PROOF"
+   pointer; SECOND-PROOF is the live doc and its §3 + §4
+   already reflect the MESSES pressure.]* MESSES.md's
    2026-04-19 updates on Mess #2 and Mess #3 reference the sims
    directly but the FIRST-PROOF sketch hasn't been synced. Either
    FIRST-PROOF §2 references MESSES as the status-of-Route-1'
@@ -546,24 +585,37 @@ From the reconciliation, not from triage of beef-box runs.
    Right now the two documents are drifting.
 
 4. **Decide whether to finish the Route 1' rescue attempts or
-   commit to Route 2.** The reconciliation above doesn't force
-   the choice, but it does show that three of Route 1's six
-   sub-problems are empirically contested. A Route 2 sketch
-   doesn't yet exist. Writing one is the highest-leverage piece
-   of mathematical work.
+   commit to Route 2.** *[Committed: SECOND-PROOF is written
+   against polynomial-tail induced-operator theory (M–T 2012
+   primary). Route 1' is retired to FIRST-PROOF.]* The
+   reconciliation above doesn't force the choice, but it does
+   show that three of Route 1's six sub-problems are empirically
+   contested. A Route 2 sketch doesn't yet exist. Writing one
+   is the highest-leverage piece of mathematical work.
 
 5. **Instrument one pre-return-state sim for return_marginal.**
-   The m_pre equidistribution assumption (mechanism sketch for
-   σ̃'s arc concentration) is the cleanest prediction that would
-   upgrade "σ̃ ≈ σ with arithmetic arc" to "ν_R is derivable in
-   closed form at E₀ = 10." Small sim, big rigor payoff on Mess #2.
+   *[Open.]* The m_pre equidistribution assumption (mechanism
+   sketch for σ̃'s arc concentration) is the cleanest prediction
+   that would upgrade "σ̃ ≈ σ with arithmetic arc" to "ν_R is
+   derivable in closed form at E₀ = 10." Small sim, big rigor
+   payoff on Mess #2.
 
 6. **(If the paper commits to Route 2 being walker-level.)**
-   Prove π_T ν_n → Leb_T without T_R. The sim evidence for this
-   is strong (every IC tested reaches floor; M1/M4 on √2 pass
-   θ_N; M3 ICs (a) and (c) reach the N = 10⁷ floor by n ≈ 150
-   and n ≈ 330 respectively). A walker-level argument is what
-   all of this empirically licenses.
+   *[Open; tracked in SECOND-PROOF §4 as the main identification
+   route.]* Prove π_T ν_n → Leb_T without T_R. The sim evidence
+   for this is strong (every IC tested reaches floor; M1/M4 on
+   √2 pass θ_N; M3 ICs (a) and (c) reach the N = 10⁷ floor by
+   n ≈ 150 and n ≈ 330 respectively). A walker-level argument
+   is what all of this empirically licenses.
+
+Not covered above (post-2026-04-19):
+
+7. **Falsify or confirm (GM-1) on the minimal two-step
+   excursion.** *[Open; tracked in MESSES.md Mess #6 and
+   referenced from SECOND-PROOF §3 (F1) and F1-HYPO-PLAN §§4–5.]*
+   Paper-side calculation, not a sim. Decides whether the M–T
+   §11.2 Gibbs–Markov route survives or the F1-HYPO-PLAN Option B
+   (Meyn–Tweedie polynomial ergodicity) takes over.
 
 ---
 

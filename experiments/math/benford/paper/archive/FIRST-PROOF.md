@@ -1,5 +1,11 @@
 # FIRST-PROOF
 
+**Superseded by `paper/SECOND-PROOF.md`** as of 2026-04-19.
+FIRST-PROOF was written against T1a (stretched-exp asymptotic)
+and Route 1'; SECOND-PROOF is the current gap list under T1b and
+the polynomial-tail induced-operator framework. This doc stays
+as the archival T1a-era record.
+
 What must close before we draft the PNAS Brief Report. Each gap is a
 load-bearing wall; the rhetoric in `PNAS-PLAN.md` assumes all six are
 settled. BINADE-WHITECAPS §§7–8 contributes Parseval on ε but does not

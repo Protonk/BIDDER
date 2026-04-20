@@ -170,5 +170,5 @@ audit:
 - `paper/MESSES.md` — open proof-architecture problems;
   Mess #1/#2/#3 updates (2026-04-19) carry the Mess-era sim
   findings.
-- `paper/FIRST-PROOF.md` — proof gaps, including the
-  identification step that Mess #2 pressures.
+- `paper/SECOND-PROOF.md` — live gap list under T1b, including
+  the §4 identification step that Mess #2 pressures.

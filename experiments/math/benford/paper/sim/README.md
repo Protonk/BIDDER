@@ -227,9 +227,9 @@ must deliver a tight bound to produce useful constants. See
   discrimination program.
 - `../PNAS-PLAN.md` — paper plan with Theorem 1 variants
   (T1a/T1b/T1c). As of 2026-04-18, T1b is the surviving variant.
-- `../FIRST-PROOF.md` — proof draft. Gap 2 (R4) was the
-  spectral-gap lemma triaged by B3.
-- `../GAP2-LEMMA.md` — withdrawn first attempt at gap 2.
+- `../SECOND-PROOF.md` — live proof gap list. §3 (F3) is the
+  spectral-gap sub-item triaged by B3.
+- `../archive/FIRST-PROOF.md` — archived T1a-era proof draft.
 
 ---
 

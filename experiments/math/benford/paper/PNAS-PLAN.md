@@ -6,9 +6,7 @@ references. This paper either closes in that space or not at all.
 ## Core drafting discipline
 
 Columbo. Show the answer first, then show why no one else
-found it. 
-
-![meirl.jpg](./meirl.jpg)
+found it.
 
 
 ## What the paper is
@@ -24,7 +22,8 @@ but doesn't select Benford over other mantissa shapes.
 Power-law mixing converges algebraically, too slowly to explain
 strong Benford conformity in modest datasets. The question is
 genuinely open: no existing account provides a mechanism with
-minimal conditions and a quantitative super-algebraic rate.
+minimal conditions and a quantitative rate controlled by the
+walk's structure rather than ex-post-facto re-weighting.
 
 The paper provides the mechanism. Define
 
@@ -37,11 +36,15 @@ with a unique maximum at m* = 1/ln 2 - 1, determined entirely
 by ln 2. The paper's claim: **epsilon controls the departure of
 the linear-to-logarithmic intra-binade coordinate map from the
 identity, and the mixed BS(1,2) walk's mantissa marginal converges
-to Benford at stretched-exponential rate exp(-c sqrt(n))**. The
-stretched-exp rate is empirically established (c ≈ 0.55, symmetric
-measure, N = 10^7 walkers; gap 3 phase 1); the proof mechanism is
-under active work — see FIRST-PROOF §2 for current route candidates.
-The mechanism doesn't regress: it terminates at the concavity of
+to Benford asymptotically at rate n^{−1/2}, with an IC-dependent
+stretched-exponential transient dominating the observable
+horizon for sharp ICs**. Both regimes are empirically established:
+asymptotic α̂ = 0.525 on a skip-the-transient IC (N = 10⁷,
+R²(log n) = 0.9986); transient c ≈ 0.498 on the √2 IC at
+N = 10⁸ (R² = 0.999 on [20, 150]). See `paper/T1B-EVIDENCE.md`
+for the full evidence map. The proof mechanism is under active
+work — see SECOND-PROOF §3 for current route candidates. The
+mechanism doesn't regress: it terminates at the concavity of
 the binary logarithm, which is a fact about ln 2.
 
 
@@ -55,8 +58,10 @@ the binary logarithm, which is a fact about ln 2.
    job is not to review what is known about Benford — it is to add
    one thing: the identification of epsilon as the canonical
    nonlinear coordinate defect of the mixed-arithmetic kernel,
-   together with a stretched-exponential rate for the mantissa
-   marginal whose eventual proof should depend on that defect.
+   together with a two-regime convergence rate (IC-specific
+   stretched-exp transient, asymptotic n^{−1/2}) for the
+   mantissa marginal whose eventual proof should depend on that
+   defect.
 
 3. **Not a cross-disciplinary connection paper.** Epsilon has a
    life in computer arithmetic (IEEE 754, the fast inverse square
@@ -100,87 +105,50 @@ epsilon(m) = log_2(1+m) - m, the nonlinear part of the
 coordinate map between linear and logarithmic mantissa. It is
 the static nonlinear input to the BS(1,2)-induced mixed-
 arithmetic Markov kernel's contraction problem, not itself the
-contraction constant. The mantissa
-marginal converges to Benford at stretched-exponential rate
-exp(-c sqrt(n)); c is a functional of epsilon and of the
-symmetric exponent walk's return statistics. The mechanism
-terminates at the concavity of the binary logarithm.
+contraction constant. The mantissa marginal converges to Benford
+asymptotically as n^{−1/2} with an IC-dependent
+stretched-exponential transient; α = 1/2 is universal, and the
+IC-dependent constants and the transient rate c are functionals
+of epsilon and of the exponent walk's return statistics. The
+mechanism terminates at the concavity of the binary logarithm.
 
 ### 2. Theorems, compactly stated (150 words)
 
 Two theorems, formally stated, with no orphaned display
 equations and no deferred justification.
 
-**Theorem 1 (stretched-exponential mixing).** For the symmetric
-probability measure mu on the generators of BS(1,2), the induced
-random walk projected to T = R/Z via m(x) = log_10 |x| mod 1
-has mantissa marginal converging to the uniform (Benford)
-distribution at stretched-exponential rate: there exist constants
-C < infinity and c(epsilon, mu) > 0 such that
+**Theorem 1 (mantissa convergence).** For the symmetric
+probability measure μ on the generators {a, a⁻¹, b, b⁻¹} of
+BS(1,2), and any probability ν on ℝ \ {0} with a logarithmic
+moment and ν(ℤ[1/2]) = 0, the induced random walk projected to
+T = ℝ/ℤ via m(x) = log₁₀ |x| mod 1 has mantissa marginal
+P_n := π_T(ν K^n) converging to the uniform (Benford)
+distribution in total variation at algebraic rate:
 
-    ||pi_T(nu K^n) - Leb_T||_{TV} <= C * exp(-c(epsilon, mu) * sqrt(n))
+    ‖P_n − Leb_T‖_{TV} ∼ B(ν) · n^{−1/2}   as n → ∞,
 
-for all n >= n_0, uniformly over initial laws nu with pi_T nu
-absolutely continuous w.r.t. Leb_T. Here ||·||_{TV} is the total-
-variation distance on probability measures on T, i.e.
-||μ − ν||_{TV} = sup_A |μ(A) − ν(A)| = ½ ||p − q||_{L¹(Leb_T)}
-when μ, ν have densities p, q against Leb_T.
+with exponent α = 1/2 universal over ν and B(ν) depending on ν
+through its spectral weight on the slow modes of the induced
+return operator. For ν concentrated (sharp ICs), a
+stretched-exponential transient A(ν)·exp(−c(ν)√n) dominates
+the decay on n ≲ n*(ν) before crossover to the asymptotic
+tail. Here ‖μ − ν‖_{TV} := sup_A |μ(A) − ν(A)| =
+½ ‖p − q‖_{L¹(Leb_T)} when μ, ν have densities p, q against Leb_T.
 
-**Theorem 2 (rate, empirical).** For the symmetric measure, the
-measured constant is c = 0.55 +/- [error] (gap 3 phase-1
-simulation, N = 10^7 walkers, fit on t in [20, 120], R² = 0.9985
-on the stretched fit). The theoretical c(epsilon, mu) is expected
-to depend on ε via the eventual operator estimate (grounded in the
-coordinate-map identity of BINADE-WHITECAPS §§7–8) and on the
-null-recurrent √n local-time statistics of the exponent walk on ℤ;
-the precise form depends on the proof route chosen for Theorem 1.
-We do not commit to a
-decomposition of c in the paper beyond the lower-bound
-c(epsilon, mu) > 0 claim above.
-
-### Theorem 1 variants — pre-committed wording
-
-The simulation program (see `sim/README.md`) can land in one of
-three outcomes depending on the three-plan adjudication. Theorem
-1 wording is pre-committed for each:
-
-**(T1a) Single-regime stretched-exp.** Used if TUKEYS confirms
-pure H_S shape, ALGEBRAIC fits c with tight CI and B̂ consistent
-with 0, and BENTHIC reports balanced regime (ρ(M) ≈ γ₁^{c'})
-with predicted n* effectively infinite. Wording is the Theorem 1
-above, unchanged.
-
-**(T1b) Two-regime, observable + asymptotic.** Used if BENTHIC
-reports rotation-dominated regime with predicted crossover n*
-beyond the simulation horizon but within theoretical relevance.
-Wording:
-
-> **Theorem 1' (two-regime).** For the symmetric probability
-> measure μ and n ≤ n_0(ε, μ), the mantissa marginal satisfies
-> ‖π_T(νK^n) − Leb_T‖_{TV} ≤ C exp(−c(ε, μ) √n). For n >> n*,
-> the asymptotic rate is exp(−α(ε, μ) · n) with α > 0. The
-> crossover n* = n*(ε, μ) is determined by the mode-coupling
-> spectral radius of the return operator relative to the per-
-> step rotation multiplier during excursions.
-
-Paper reports both rates with the n* boundary.
-
-**(T1c) Mixture (MESSES-consistent).** Used if ALGEBRAIC A5
-finds B̂ > 10⁻² with CI excluding 0 and α̂ ∈ [0.4, 0.6], and
-BENTHIC reports injection-dominated regime. Wording:
-
-> **Theorem 1'' (mixture).** For the symmetric probability
-> measure μ, the mantissa marginal satisfies
-> ‖π_T(νK^n) − Leb_T‖_{TV} ≤ C₁ exp(−c(ε, μ) √n) + C₂ · n^(−1/2)
-> for all n ≥ n_0, with both coefficients C₁, C₂ positive.
-
-Paper reports both terms and discusses the crossover.
-
-The three variants exist so that end-of-program wording is
-chosen by the decision rule, not improvised. Which variant
-applies depends on the sim outcome; the paper's body text
-adapts accordingly (significance statement, §4 mechanism, §6
-kicker, conclusion).
+**Theorem 2 (rate, empirical).** The asymptotic exponent α = 1/2
+is directly measured on an initial condition that skips the
+sharp-IC transient (m = log₁₀ √2 delta, E ~ Uniform{−5..5},
+N = 10⁷): a free log-log fit of L₁(n) on n ∈ [100, 600] gives
+α̂ = 0.525 with R²(log n) = 0.9986. The coefficient B(ν) is
+IC-dependent and not tabulated in closed form. For illustration,
+the M1 √2 IC at N = 10⁸ exhibits a stretched-exp transient fit
+by c ≈ 0.498 on n ∈ [20, 150] with R² = 0.999 — a transient
+descriptor specific to that IC, not a universal theorem
+constant. The theoretical forms of α, B, and c depend on the
+proof route chosen for Theorem 1; the paper does not commit to
+closed-form decompositions beyond the universality of α = 1/2
+and the IC-dependence of B(ν). See `paper/T1B-EVIDENCE.md` for
+the full empirical thread.
 
 
 ### 3. Group and Cayley-graph setup (190 words)
@@ -209,10 +177,11 @@ makes this departure accumulate coherently rather than canceling.
 
 ### 4. Mechanism / proof (440 words)
 
-**Status: not yet drafted.** Gap 2 (see FIRST-PROOF §2) is open —
-there is no working proof route yet. The current primary
-candidate is a transfer-operator analysis on absolutely continuous
-mantissa densities in a translation-invariant norm.
+**Status: not yet drafted.** The proof gap is open (see
+SECOND-PROOF §3 + §4 for the current gap list). The primary
+route is polynomial-tail induced-operator theory
+(Melbourne–Terhesiu 2012) on compact R, with a walker-level
+identification step to close the Benford limit.
 
 **What this section needs to carry when drafted (sketch target).**
 Two facts that should survive any proof route:
@@ -232,11 +201,14 @@ The proof target: iterating a per-visit contraction at rate
 missing piece is a clean per-visit contraction in a norm for
 which a-step rotation is isometric and b-step at low depth
 strictly contracts. Candidate norms: BV(T), H^s(T), weighted
-Fourier ℓ². See FIRST-PROOF §2 Route 1'.
+Fourier ℓ². See SECOND-PROOF §3 (F1, F3).
 
-**Measured rate for calibration.** c ≈ 0.55 (simulation,
-N = 10⁷, fit on t ∈ [20, 120], R² = 0.9985 on the stretched
-fit). Any proof-derived c should land near this.
+**Measured rates for calibration.** Asymptotic α̂ = 0.525 on
+n ∈ [100, 600] at N = 10⁷ on a skip-the-transient IC
+(R²(log n) = 0.9986; `sim/m3_SUMMARY.md`). Sharp-IC transient
+c ≈ 0.498 on n ∈ [20, 150] at N = 10⁸ for the √2 IC
+(R² = 0.999; `sim/m1_b1_b2_SUMMARY.md`). Any proof-derived α,
+B, c should land near these. See `paper/T1B-EVIDENCE.md`.
 
 ### 5. Figures with captions (150 words total)
 
@@ -253,7 +225,9 @@ A dotted line marks the finite-sample L₁ floor. The log-log
 format is the argument: the three regimes have three
 qualitatively different *shapes*, not just three speeds. A
 reader who sees the figure already holds the theorem's content
-— mixing is the condition, and the rate is super-algebraic.
+— mixing is the condition, and the observable-horizon behavior
+is the sharp-IC stretched-exp transient while the asymptotic
+tail is algebraic n^{−1/2}.
 Caption defines L₁ distance to Benford, names the three regimes
 operationally (±1, sequenced add-then-mult, simultaneous
 ¼-probability each), and states N = 50,000 walkers.
@@ -348,7 +322,8 @@ what survives perturbation inside the model and at its boundary.
   rotation by log₁₀ 2 equidistributes at algebraic Weyl rate.
   Theorem 1 is stated for the symmetric measure; the biased
   case is a two-regime corollary with different rate structure.
-  See FIRST-PROOF §4 / sim/SIM-REPORT phase 3.
+  See `paper/ROBUSTNESS-ATLAS.md` and `sim/SIM-REPORT.md`
+  phase 3.
 - **Base change:** L1-to-Benford is flat across b in [2, 40]
   (simulation). The irrationality of log_b 2 for all integer
   b > 1 guarantees this.
@@ -364,10 +339,11 @@ Hamming's asymmetry — that multiplication converges to
 Benford and addition does not — disappears when addition
 and multiplication are interleaved stochastically at bounded
 exponent levels. The symmetric random walk on BS(1,2) has
-mantissa marginal converging to Benford at stretched-
-exponential rate exp(−c√n), with c controlled by ε and the
-null-recurrent return statistics of the exponent walk. The
-only escape is pure addition.
+mantissa marginal converging to Benford asymptotically as
+n^{−1/2}, with an IC-dependent stretched-exponential transient
+governing the observable horizon; both regimes are controlled
+by ε and by the exponent walk's return statistics. The only
+escape is pure addition.
 
 80 words. No future work, no hedging. End on the
 substrate.
@@ -410,15 +386,19 @@ convergence depends on which proof route closes — see below.
 
 ### The mixed-walk mechanism (status: under investigation)
 
-The proof mechanism is open. Simulation shows exp(−c√n)
-convergence with c ≈ 0.55, so the rate shape is not in doubt.
-The candidate routes are listed in FIRST-PROOF §2; at time of
-writing the primary candidate is a transfer-operator analysis on
-absolutely continuous mantissa densities in a translation-
-invariant norm, with per-visit contraction at bounded exponent
-and isometric a-step rotation. Whatever proof closes should
-deliver a rate controlled by ε and by the symmetric exponent
-walk's local-time statistics. The mechanism is **not** the Cesàro-to-Riesz story,
+The proof mechanism is open. Simulation shows two-regime
+convergence: a sharp-IC stretched-exp transient (c ≈ 0.498 on
+the M1 √2 IC, R² = 0.999 on [20, 150]) and an asymptotic
+algebraic tail (α̂ = 0.525 directly measured on a
+skip-the-transient IC with R²(log n) = 0.9986). See
+`paper/T1B-EVIDENCE.md`. The candidate routes are listed in
+SECOND-PROOF §3 + §4; at time of writing the primary candidate
+is polynomial-tail induced-operator theory on compact R with a
+walker-level identification step, under Melbourne–Terhesiu 2012.
+Whatever proof closes should deliver an asymptotic α = 1/2
+with IC-dependent B(ν), and an IC-specific stretched-exp
+transient rate, both controlled by ε and by the exponent
+walk's return-time statistics. The mechanism is **not** the Cesàro-to-Riesz story,
 which is a separate (ex post facto analytic) route to Benford for
 iid sums and is treated in §6 as diagnosis / competing
 explanation.
@@ -430,7 +410,7 @@ Cuno & Sava-Huss (2015) provides the group-theoretic frame for
 the BS(1,2) walk, vertical/horizontal projections, sublinear-
 speed estimates for the driftless case. Whether any of this
 becomes load-bearing in the proof depends on which route in
-FIRST-PROOF §2 closes. The √n local-time fact is classical
+SECOND-PROOF §3 + §4 closes. The √n local-time fact is classical
 (Spitzer), independent of Cuno & Sava-Huss. At minimum, cite in
 §3 as the Cayley-graph / horocyclic reference.
 
@@ -457,20 +437,22 @@ details, only to whether multiplication is present.
 
 These are in priority order.
 
-1. **The proof must close.** Gap 2 is open — no working route yet
-   (see FIRST-PROOF §2). Pick a function space / norm on mantissa
-   densities, prove per-visit contraction at bounded exponent,
-   iterate using the classical √n local-time estimate. Do not
-   draft around the gap.
+1. **The proof must close.** The proof gap is open — no working
+   route yet (see SECOND-PROOF §3 + §4). Pick a function space /
+   norm on mantissa densities, prove per-visit contraction at
+   bounded exponent, close the polynomial-tail induced-operator
+   route and the walker-level identification step. Do not draft
+   around the gap.
 
 2. **The rate prediction must be quantitative.** The simulation
-   gives stretched-exponential c ≈ 0.55 (gap 3 phase 1,
-   N = 10⁷). The theoretical c depends on the proof route we
-   end up taking — don't prejudge its decomposition. The rate
-   is almost certainly controlled by ε (via BINADE-WHITECAPS
-   §§7–8) and by the symmetric exponent walk's √n local-time
-   statistics, but the exact form is an output of the proof,
-   not an input.
+   gives asymptotic α̂ = 0.525 on a skip-the-transient IC at
+   N = 10⁷ (R²(log n) = 0.9986) plus stretched-exp transient
+   c ≈ 0.498 on the M1 √2 IC at N = 10⁸ (R² = 0.999 on [20, 150]).
+   The theoretical α, B, c depend on the proof route we end up
+   taking — don't prejudge their decomposition. Rates are
+   controlled by ε (via BINADE-WHITECAPS §§7–8) and by the
+   exponent walk's return-time statistics, but the exact form is
+   an output of the proof, not an input. See `paper/T1B-EVIDENCE.md`.
 
 
 ---
@@ -507,18 +489,20 @@ PNAS readers who care about Benford's law:
 - **Statisticians.** Know Benford from fraud detection (Nigrini)
   and from the digit-testing literature. Interested in convergence
   rates — how many operations before the distribution is close
-  enough to test against? The stretched-exponential rate
-  exp(-c sqrt(n)) with a computable constant c is directly useful
-  to them; super-algebraic in n, still slower than pure
-  multiplication alone.
+  enough to test against? The two-regime picture — a sharp-IC
+  stretched-exp transient on the observable horizon and an
+  asymptotic n^{−1/2} tail — is directly useful: at a typical
+  sharp IC the observable-horizon decay is fast (c ≈ 0.5 on the
+  √2 IC), and the algebraic asymptote sets the floor beyond that.
 
 - **Number theorists / dynamicists.** Know about equidistribution
   mod 1, Weyl sums, Fourier coefficients on the circle. Will
   check whether the Schatte-style Fourier asymptotics and the
   BS(1,2) mechanism actually meet in the main text, and whether
-  the stretched-exponential rate is stated at the strongest
-  level we can prove (functional of ε and return statistics,
-  lower bound vs. identification). These are the referees.
+  the two-regime rate (transient and asymptotic) is stated at
+  the strongest level we can prove (functionals of ε and return
+  statistics, lower bound vs. identification). These are the
+  referees.
 
 The main text must serve the first two groups. To do that, it
 has to satisfy the third: the referees.
@@ -639,10 +623,9 @@ in the text. No "see also" padding. A human must verify these.
    movement A and engaged in §6 kicker as a competing
    explanation. Not a proof ancestor of Route 1'.
 2. Feller, *An Introduction to Probability Theory and Its
-   Applications*, Vol. II — Laplace-transform machinery and
-   return-time theory for null-recurrent random walks.
-   Load-bearing for FIRST-PROOF §2 (R5): the stochastic estimate
-   E[q^{N_n}] ≤ C exp(−c√n) for the return count N_n.
+   Applications*, Vol. II — return-time theory for null-recurrent
+   random walks. Underlies the classical 1/√n tail for the
+   E-process that SECOND-PROOF §3 (F2) invokes.
 3. Cuno & Sava-Huss (2015) — random walks on BS(p,q). Provides
    the group-theoretic decomposition (vertical/horizontal) for
    §3's Cayley-graph setup. Not load-bearing in the proof
@@ -671,17 +654,17 @@ in the text. No "see also" padding. A human must verify these.
 **Proof infrastructure / reserve** (at most two of these earn
 space in the final 15, and only if they do work in the main text):
 - Krylov–Bogolyubov (1937) — existence of invariant probability
-  for weak-Feller Markov operators on compact spaces. Named in
-  FIRST-PROOF §2 (R2) for ν_R's existence on compact R. May be
+  for weak-Feller Markov operators on compact spaces. Used in
+  SECOND-PROOF §3 (F3) for ν_R's existence on compact R. May be
   cited through a textbook (Walters, *Ergodic Theory*, or
   Hairer's notes) rather than the original.
-- Revuz / Meyn & Tweedie — if the (R2) Feller-property argument
-  for the induced return operator T_R uses their framework
-  explicitly. Optional depending on how (R2) is written.
-- Katznelson, *An Introduction to Harmonic Analysis* — if (R3)'s
-  norm is Fourier-weighted L² and (R4)'s contraction proof uses
-  Fourier-coefficient decay directly. Needed if that norm wins
-  over BV.
+- Revuz / Meyn & Tweedie — if F1's fallback Option B (polynomial
+  ergodicity for Markov chains) becomes primary under Mess #6.
+  Optional.
+- Katznelson, *An Introduction to Harmonic Analysis* — if the
+  F3 spectral-gap proof uses Fourier-weighted L² with Fourier-
+  coefficient decay directly. Needed if that norm wins over BV
+  / Lip(Y, d_τ).
 - Kontorovich & Miller — asymptotic Benford behavior in
   special analytic settings via Gaussian limit laws for
   logarithms, Poisson summation, and equidistribution.
@@ -691,8 +674,8 @@ space in the final 15, and only if they do work in the main text):
   with the CLT/Fourier line of the Hamming diagnosis, not the
   power-law line: their method is system-specific and
   asymptotic, and does not identify the mixed-arithmetic
-  mechanism or furnish the stretched-exponential rate proved
-  here.
+  mechanism or furnish the two-regime (transient stretched-exp
+  + asymptotic n^{−1/2}) rate claimed here.
 
 **Dropped** (not used by Route 1'):
 - Élie (1982) — ladder-time lemma was Cuno & Sava-Huss
@@ -738,12 +721,12 @@ The last sentence names the terminus.
 
 **Contingency note.** The significance statement above is a
 proof-complete draft for the eventual submission. The "We prove
-that..." phrasing is current overclaim: FIRST-PROOF §2 (R4),
-(R5), (R6) are all open as of the present working state. Do not
-submit this statement until those three sub-problems close. If
-(R6) fails independently of (R4)+(R5), the statement must be
-rewritten to drop the Benford-identification clause (see claim
-gate's contingency note below).
+that..." phrasing is current overclaim: SECOND-PROOF §3 (F1,
+F2, F3) and §4 identification are all open as of the present
+working state. Do not submit this statement until those close.
+If §4 identification fails independently of the §3 framework
+pieces, the statement must be rewritten to drop the Benford-
+identification clause (see claim gate's contingency note below).
 
 
 ## The claim gate
@@ -754,12 +737,15 @@ use only language from the first bin.
 
 **Goes in the paper**
 - The symmetric BS(1,2) mixed-arithmetic walk has mantissa
-  marginal converging to Benford at stretched-exponential rate
-  exp(-c sqrt(n)).
-- There exists c(ε, μ) > 0 such that the rate satisfies
-  c ≥ c(ε, μ). The constant is positive because ε > 0 on (0,1),
-  and the √n is from the symmetric exponent walk's local-time
-  statistics.
+  marginal converging to Benford asymptotically as n^{−1/2}
+  with exponent α = 1/2 universal over admissible ν, and with
+  an IC-dependent stretched-exponential transient dominating
+  the observable horizon for sharp ICs.
+- The coefficient B(ν) in the asymptotic n^{−1/2} tail is
+  IC-dependent; the transient rate c(ν) is IC-specific. Both
+  are positive and functionals of ε and of the exponent walk's
+  return statistics. We do not commit to closed-form
+  decompositions beyond the universality of α = 1/2.
 - Epsilon is the nonlinear coordinate term — the departure of
   the linear-to-log intra-binade map from the identity.
 - The theorem is for the symmetric measure on BS(1,2),
@@ -780,16 +766,16 @@ use only language from the first bin.
 - Any statement broader than the stated BS(1,2) theorem unless
   explicitly marked as conjecture or remark.
 
-**Contingency.** The four "goes in" bullets presume all of
-FIRST-PROOF §2's (R4), (R5), (R6) close. If (R4)+(R5) close but
-(R6) does not, the theorem degrades to "mantissa marginal
-converges to an unidentified probability ν* on T at stretched-
-exponential rate" — still a convergence theorem, but *not a
-Benford theorem*. In that case the significance statement and
-the §4 mechanism presentation must be rewritten to drop the
-Benford-identification claim, and the title changes. This is the
-one failure mode where a partial-proof paper is conceivable;
-the others kill the paper.
+**Contingency.** The four "goes in" bullets presume
+SECOND-PROOF §3 (F1, F2, F3) and §4 identification all close.
+If the §3 framework closes but §4 identification does not, the
+theorem degrades to "mantissa marginal converges to an
+unidentified probability ν* on T at rate n^{−1/2}" — still a
+convergence theorem, but *not a Benford theorem*. In that case
+the significance statement and the §4 mechanism presentation
+must be rewritten to drop the Benford-identification claim, and
+the title changes. This is the one failure mode where a
+partial-proof paper is conceivable; the others kill the paper.
 
 **Promotion test.** A claim moves from "stays out" to "goes in"
 only if the paper can answer immediately and precisely: which

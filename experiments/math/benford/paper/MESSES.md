@@ -1,6 +1,11 @@
 # MESSES
 
-Problems that threaten the proof architecture in FIRST-PROOF §2.
+Problems that threaten the proof architecture. Current live
+target is SECOND-PROOF §3 + §4 under T1b; the historical framing
+below originates against the archived FIRST-PROOF §2 Route 1'
+sub-problems (R1)–(R6), with per-mess "T1b reconciliation"
+updates absorbing the shift where relevant.
+
 Not repair proposals — damage assessments.
 
 ---
@@ -703,3 +708,180 @@ wording. Option (A) — making the relation load-bearing via a
 Cuno–Sava-Huss ladder-time argument — was considered and not
 pursued, on the grounds that Theorem 1 doesn't need the extra
 machinery.
+
+---
+
+## Mess #6: Is the induced map Gibbs–Markov?
+
+### The claim
+
+SECOND-PROOF §3 (F1) currently leans on Melbourne–Terhesiu 2012
+as the primary framework citation, with the verification
+template of M–T §11.2 (Gibbs–Markov first-return map). On our
+current reading, that template requires, on the
+Bernoulli-shift skew product Ω × (T × ℤ), that the induced
+first-return map F on Y = Ω × R satisfies:
+
+- **(GM-1) Countable Markov partition.** A partition α of Y
+  such that F maps each partition element bijectively onto a
+  union of partition elements.
+- **(GM-2) Big images.** inf_{a ∈ α} μ(Fa) > 0.
+- **(GM-3) Uniformly piecewise Lipschitz distortion.**
+  log(dμ/dμ ∘ F) Lipschitz on each a ∈ α with uniform constant,
+  under the dynamical metric d_τ.
+
+These hypotheses are the standard route to M–T's (H1)(H2) via
+Hennion's theorem. If they really hold, they give the
+renewal-operator input to T1b's n^{−1/2} scale (with a log
+correction at β = 1/2; see `paper/F1-HYPO-PLAN.md`). They do
+not by themselves finish the theorem: the return-to-full-walk
+and mantissa-identification steps still have to close.
+
+### The problem
+
+(GM-1) is the load-bearing hypothesis at risk. The natural
+first guess for a partition is by *excursion type*: two points
+(ω, x) and (ω', x') are in the same cell if their generator
+sequences from first exit to first return are identical. That
+partition is countable and adapted to the dynamics.
+
+But F maps each excursion-type cell to a set of return states
+that depends *continuously* on the entry mantissa. Two walkers
+in the same cell (identical generator sequence) arrive at
+different return mantissas because the a-step rotates by
+log₁₀ 2 and the b-step action on T is continuous in m. So
+F(cell) is a continuous range of return states, not a union of
+excursion-type cells.
+
+On our current reading, that means the naive excursion-type
+partition is not Markov under F: F does not map its cells onto
+unions of cells, but smears them across a continuum. What has
+not been shown is that no finer partition could repair this.
+
+### What this breaks
+
+If this reading is right and no refinement exists, M–T §11.2
+does not apply directly. F1's current verification falls
+through at the (H1) step. The paper's theorem statement
+("BS(1,2) mantissa converges at rate n^{−1/2}") then loses its
+clean M–T backing.
+
+The skew-product translation (Option A in F1-HYPO-PLAN) is not
+itself the issue. The issue is that the natural partition on
+the skew product isn't Markov under the induced map.
+
+### What this does not break
+
+The sim evidence is unaffected. T1b's empirical content
+(α̂ = 0.525 on M3 IC (b), c(ν) transient values on the IC
+panel, etc.) stands regardless of whether M–T applies at the
+proof level.
+
+(GM-2) is not the present obstruction, and Mess #2 may help its
+eventual verification heuristically: return mass concentrates on
+a specific arc. But that is not the same thing as proving
+inf_{a ∈ α} μ(Fa) > 0 for partition-element images, so the
+big-images hypothesis should not be counted as closed here.
+
+(GM-3) depends on b-step regularity parametrized by ε
+(`sources/BINADE-WHITECAPS.md`). If (GM-1) fails, (GM-3)
+doesn't matter; if (GM-1) holds, (GM-3) is probably the
+easier check.
+
+### The structural point
+
+Messes #1 and #3 asked whether per-return contraction × return
+count gives the right asymptotic shape. Mess #2 asks whether
+ν_R's T-marginal is Leb_T. Mess #6 is more upstream: does the
+framework that would give us (H1)(H2) actually apply to the
+object we built, or are we still using the wrong symbolic model
+for the induced map?
+
+If the naive partition really fails and no refinement repairs
+it, the next lines of defense are:
+
+- **(a) Different framework.** Option B in F1-HYPO-PLAN:
+  direct Markov-chain polynomial ergodicity (Tuominen–Tweedie
+  1994, Jarner–Roberts, Meyn–Tweedie-adjacent). Different
+  function spaces, different citations. Currently tagged
+  fallback.
+- **(b) Different partition.** Some partition of Ω × R that is
+  genuinely Markov under F even if the excursion-type partition
+  isn't. Unclear what that would be.
+- **(c) Different M–T example class.** AFN template
+  (M–T §11.3, BV norm), which is more forgiving of branch
+  discontinuities but needs a different structural match —
+  an AFN-style non-Markovian interval map with indifferent
+  fixed points, which BS(1,2) isn't directly.
+
+None of these is free. Each is real technical work.
+
+### Why this is different from "just run more sims"
+
+The paper's value-add is the *theorem*: BS(1,2) mantissa
+converges to Benford with identified rate, proved via an
+identified mechanism. Empirical Benford-ish behavior on
+various processes is common in the literature; a proved-rate
+theorem for this walk isn't. If this reading is right and none
+of (a)(b)(c) nor a softer M–T interpretation works, the paper
+has no theorem — at which point
+the work is a numerical study, not a theorem paper.
+
+So Mess #6 is the mess that tests whether the current proof
+plan has a path to theorem at all.
+
+### Status
+
+Open. Transitional form. The older objection was "M–T may not
+apply at all." The current, narrower objection is: on our
+present reading, the naive §11.2 verification route looks wrong
+because the excursion-word partition is probably not Markov.
+That may still collapse to a partition-refinement issue or a
+looser reading of M–T, but it is not resolved yet. The
+investigation that produced this Mess is in
+`paper/F1-HYPO-PLAN.md`.
+
+### Falsification protocol
+
+**Claim to falsify.** On our present reading, F with the natural
+excursion-type partition is not Markov, so the M–T §11.2 route
+doesn't apply. What would falsify it: exhibit a partition (the
+naive one or a natural refinement) under which F maps cells to
+unions of cells, confirmed on a small concrete example.
+
+**First test.** The minimal two-step excursion type: one a-step
+exits R (at some boundary E = E₀), one a⁻¹ with borrow at
+E = E₀ + 1 returns to R. For this excursion type, compute by
+hand:
+
+1. The subset of entry mantissas m ∈ T *compatible* with this
+   generator word — i.e., the entry m for which the return step
+   a⁻¹ at E = E₀ + 1 is admissible (its pre-mantissa < log₁₀ 2).
+2. F restricted to the compatible subset: the entry-to-return
+   mantissa map. Is it piecewise monotone and smooth, or does
+   it smear continuously?
+3. F(compatible subset): is the image a union of intervals that
+   matches the compatible subsets of *other* excursion-word
+   cells in R, or is it an arbitrary continuous range that
+   doesn't align with any natural partition?
+4. If F is monotone on the compatible subset, check whether
+   log(dμ/dμ ∘ F) is Lipschitz under d_τ.
+
+**Outcomes.**
+
+- **Mess #6 falsified on this example.** F(compatible subset)
+  matches a union of partition-element images cleanly. Next
+  check: does this behavior generalize to longer excursion
+  words, or is it a lucky short case? If it generalizes,
+  Mess #6 downgrades and F1-HYPO-PLAN Option A proceeds;
+  (GM-3) becomes the next check and F1-HYPO-PLAN can dissolve
+  as planned.
+- **Mess #6 confirmed on this example.** F(compatible subset)
+  smears across a continuum not aligned with any natural
+  partition. M–T §11.2 route stays blocked; promote
+  F1-HYPO-PLAN Option B (Meyn–Tweedie polynomial ergodicity)
+  to primary and reopen the framework question.
+
+This is paper-side calculation, not a sim. 1–2 pages of work.
+See `paper/F1-HYPO-PLAN.md` §4–§5 for the broader verification
+context that this protocol feeds.
