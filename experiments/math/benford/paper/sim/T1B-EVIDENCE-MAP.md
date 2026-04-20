@@ -47,8 +47,10 @@ R2 and R3 hit the N = 10⁷ floor before α would be measurable.
 
 ### (i) Equidistribution — **consistent; two caveats**
 
-Every IC we ran shows monotonically decreasing L₁ across the
-observable horizon and reaches the vicinity of the null floor.
+Every IC we ran shows overall decreasing L₁ across the
+observable horizon (with small null-band jitter once L₁
+approaches θ_N; not literally monotone, but the decay is
+unambiguous) and reaches the vicinity of the null floor.
 Two caveats: M1 and M4 on the √2 IC hover 1.27× above θ_N
 without crossing; M3 IC (b) is still clearly decaying at n = 600
 at 15× the N = 10⁷ floor. Neither contradicts clause (i) but
@@ -60,7 +62,7 @@ neither "at floor" is literally true.
 | M3 (a)          | m~U, E=0, N=10⁷         | 8.0×10⁻³ at n=600   | at N=10⁷ floor by n≈150 |
 | M3 (b)          | m=log₁₀√2, E~U, N=10⁷    | 0.129 at n=600      | 15× above floor; still decaying |
 | M3 (c)          | m~U, E~U, N=10⁷          | 8.0×10⁻³ at n=600   | at floor by n≈330 |
-| M4              | √2, N=10⁸, n=3000       | 2.72×10⁻³ at n=3000 | 1.0× θ_N; persistent ≈200σ excess in late window above μ_null |
+| M4              | √2, N=10⁸, n=3000       | 2.72×10⁻³ at n=3000 | 1.0× θ_N; 141/151 late-window samples above null q99 (≤ 1.5 expected under null), overwhelming significance |
 | R1 (φ)          | φ, N=10⁷                | 8.1×10⁻³ at n=600   | at N=10⁷ floor    |
 | R2 (restart)    | 1, restart, N=10⁷       | 8.4×10⁻³ at n=600   | at floor          |
 | R3 (absorb)     | 1, absorb, N=10⁷        | 1.1×10⁻² at n=600   | within ~1.3× floor |
@@ -82,11 +84,14 @@ independent consistency checks. No single observable establishes
 
 1. **M3 IC (b) — primary direct sighting.** With
    m = log₁₀√2 (delta) and E ~ Uniform{−5..5} (spread), at
-   N = 10⁷: L₁(n) ≈ 3.16 · n^{−0.525} on [100, 600] with
-   R²(log n) = 0.9986. 500-step log-log fit, essentially zero
-   curvature. α̂ consistent with 1/2 to within a few percent; α
-   is actually resolvable here because IC (b)'s structure skips
-   the sharp-IC transient.
+   N = 10⁷: free log-log fit gives L₁(n) ≈ 3.81 · n^{−0.525}
+   on [100, 600] with R²(log n) = 0.9986. Under imposed
+   α = 1/2 the prefactor reads off as L₁(600) · √600 = 3.16, so
+   "L₁ ∼ 3 · n^{−1/2}" is the natural compressed statement.
+   500-step log-log fit, essentially zero curvature. α̂
+   consistent with 1/2 to within a few percent; α is actually
+   resolvable here because IC (b)'s structure skips the
+   sharp-IC transient.
 
 2. **S0 — Laplace-match consistency check.** Two sub-tests on
    M1's hist_return_counts:
@@ -136,15 +141,18 @@ record have a B value with any empirical grounding:
 
 | IC              | inferred B | anchor                               |
 |:----------------|-----------:|:-------------------------------------|
-| M3 IC (b)       | ≈ 3        | direct power-law fit on [100, 600], R²(log n) = 0.9986 |
+| M3 IC (b)       | ≈ 3        | inferred B under α = 1/2 from L₁(600)·√600 = 3.16; the free log-log fit on [100, 600] gives A = 3.807 at α̂ = 0.525, R²(log n) = 0.9986 |
 | M1/M4 (√2)      | ≈ 0.01     | order-of-magnitude from late-window excess above μ_null at n ≈ 2000–3000 (M4 summary explicitly flags this as not precisely pinned; α̂ has not stabilized at 0.5 yet) |
 
-The M3 IC (b) number is a direct fit. The √2 number is a loose
-inference only meaningful if we assume α = 0.5 and the late excess
-is the tail. Other ICs (IC (a), IC (c), all Run 1 entries, the S1/S2
-ICs) reach near-floor too quickly for any B to be extracted; an
-earlier draft of this doc reported B values for IC (c) and the Run 1
-N-series that were not actually measured, and has been corrected.
+The M3 IC (b) number is a loose "inferred B" under the α = 1/2
+reading; the clean direct-sighting content is the free-α log-log
+fit itself (α̂ = 0.525, R² = 0.9986). The √2 number is a looser
+inference only meaningful if we assume α = 0.5 and the late
+excess is the tail. Other ICs (IC (a), IC (c), all Run 1 entries,
+the S1/S2 ICs) reach near-floor too quickly for any B to be
+extracted; an earlier draft of this doc reported B values for IC
+(c) and the Run 1 N-series that were not actually measured, and
+has been corrected.
 
 The initial draft of the m3 summary claimed B-universality; this
 has been corrected. Theoretically expected: B depends on how ν
@@ -155,7 +163,9 @@ dependence; it is a two-point comparison, not a panel.
 ### (iii) Pre-asymptotic stretched-exp transient — **IC-specific, not universal**
 
 The stretched-exp shape we measured on M1 (c ≈ 0.5, R² = 0.999
-on [20, 200] for the √2 IC) is not a property of the walk; it's
+on [20, 200] for the √2 IC; fit documented in the Run 2
+cross-IC comparison table of `m3_SUMMARY.md`, data from
+`m1_b1_b2_results.npz`) is not a property of the walk; it's
 a property of the √2 IC's particular sharp initial structure.
 
 Transient c_hat values observed across 13 ICs, all on [20, 150]:
@@ -235,11 +245,21 @@ From T1B-UNIT-BALL Run 2:
 This is a check-passes, not a theorem-level certification. Strong
 asymmetry (d ≳ 0.05) would push walkers out of the computational
 envelope and requires either a modified kernel or a longer-
-horizon run with explicit envelope analysis. The analytic
-statement "symmetric ⇒ null-recurrent E ⇒ ML(1/2) returns ⇒
-α = 1/2" is load-bearing and does depend on symmetry in principle;
-Run 2 just confirms weak symmetry-breaking doesn't break the
-observable-window behavior.
+horizon run with explicit envelope analysis. Regarding the
+analytic chain that would tie symmetry to the α = 1/2 rate via
+null-recurrent returns and ML(1/2): the walker's empirical
+return-time structure is consistent with ML(1/2) on the M1 IC
+(S0's conditional Laplace-match, clause ii; τ_R first-excursion
+survival slope ≈ −0.495 per `sim/tau_R_tail_SUMMARY.md`). The
+stronger chain "symmetric ⇒ null-recurrent E ⇒ ML(1/2) ⇒
+α = 1/2" is map-level analytic framing rather than a claim any
+single sim verifies end-to-end; the Laplace-diagnostic sim
+(`sim/laplace_diagnostic_SUMMARY.md`) also shows that the
+E-process on M1 has positive mean drift and L_n growing
+linearly, so the "null-recurrent E" bridge should not be stated
+as strictly literal. Run 2 is a check that weak symmetry-
+breaking (d = 0.01) doesn't break the observable-window
+behavior; it is not a certification of the analytic chain.
 
 ## Sim inventory — what runs produced what
 

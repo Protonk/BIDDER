@@ -163,6 +163,96 @@ working framework. The six sub-problems (R1)–(R6) were designed
 under the assumption that (R5) would deliver the rate, and that
 assumption is false.
 
+### Update (2026-04-19): empirical evidence + T1b reconciliation
+
+Three relevant sims; the last two significantly soften this
+Mess's diagnosis once T1b is the target.
+
+**SRW baseline validation** (`sim/laplace_diagnostic_SUMMARY.md`).
+Measured E[q^{L_n}] on simple ±1 walk on ℤ matches the
+closed-form prediction q√2 / ((1 − q)√(πn)) to within 0.2% at
+n = 10⁴, for q ∈ {0.3, 0.5, 0.7}. Slope of log E[q^{L_n}] vs
+log n is −0.500 ± 0.005. The Laplace-transform obstruction —
+that null-recurrent Laplace averages decay as 1/√n — is
+quantitatively verified on the textbook case. The computation
+in this Mess is correct for SRW.
+
+**BS(1,2) does not match the same universality class**
+(`sim/laplace_diagnostic_SUMMARY.md`). The E-process has mean
+growing as ~0.16 · √n (positive drift, _not_ zero-drift
+martingale). The local time L_n grows as ~n, not √n — walkers
+spend a macroscopic fraction of calendar time in R. E[q^{L_n}]
+on BS(1,2) does not follow 1/√n: for small q it decays fast
+initially then plateaus. The claim "the 1/√n rate is structural
+and survives the coupling" from this Mess's original text is
+not empirically supported for BS(1,2).
+
+**Transient stretched-exp is not a-step-alone Diophantine**
+(`sim/conditional_decay_SUMMARY.md`). A direct analytic test of
+the "pure a-walk irrational-rotation" hypothesis for the
+measured transient gave best-fit γ = 0.15 (not 0.5) and, at
+fixed γ = 0.5, c = 0.009 vs the paper's measured c ≈ 0.498
+(current M1 value; the "0.55" in the original text of this
+Mess is stale). The transient mechanism involves b-step's
+active contribution to m-mixing at small |x|, not a-step
+rotation structure alone. The transient mechanism remains
+unidentified at the analytic level — but see the T1b point
+below for why this doesn't block the paper.
+
+### T1b reconciliation
+
+This Mess was framed assuming the theorem target is stretched-exp
+(T1a). The paper has since moved to **T1b: asymptotic 1/√n with
+IC-specific stretched-exp transient** (see `sim/README.md`,
+`sim/T1B-EVIDENCE-MAP.md`). Under T1b, the per-return Laplace
+route's 1/√n prediction is no longer an obstruction; **it is the
+correct rate**.
+
+Combining T1b with Mess #3's empirical finding (τ_R tail ~ 1/√n),
+the correct proof route is polynomial-tail induced-operator
+theory — Melbourne & Terhesiu 2012, Gouëzel 2004, Sarig 2002,
+Young's towers. That framework takes tail exponent α = 1/2 and
+delivers correlation decay O(n^{−(1−α)}) = O(1/√n) natively,
+matching T1b's asymptotic.
+
+So Mess #1's original negative diagnosis — "the per-return
+framework gives 1/√n, which is the wrong rate" — inverts under
+T1b into a positive diagnosis: the per-return framework gives
+1/√n, which **is** the right rate. The framework was aimed at
+the wrong target (stretched-exp) rather than being wrong.
+
+### Revised status
+
+Under T1a: open, framing-level obstruction. Under T1b:
+**substantially softened**. The per-return framework is
+structurally correct for T1b's 1/√n asymptotic. The remaining
+tasks are technical:
+
+1. **Rigorous polynomial-tail induced-operator writeup for
+   BS(1,2).** The machinery exists in the Melbourne-Terhesiu
+   literature; instantiating it for the specific BS(1,2) walk
+   is technical work but not a framing question.
+2. **Uniformity of τ_R's 1/√n tail in x ∈ R.** The sim tested
+   one IC; Feller-continuity-like arguments in the induced-
+   operator theorems need uniform bounds. Not established here.
+3. **Identification of the transient mechanism.** Not
+   load-bearing for T1b but of independent interest.
+4. **Mess #2's WHERE issue remains untouched by any of this.**
+   The identification π_T ν_R = Leb_T is a separate problem
+   (see Mess #2 update for the WHERE vs WHEN framing). Solving
+   Mess #1's rate question does not solve Mess #2's target
+   question.
+
+The "Option (a) vs Option (b)" dichotomy in the original Mess
+text ("transient that has not relaxed to algebraic" vs
+"different mechanism not captured by the framework") is
+superseded by T1b: the observed behavior is a 1/√n asymptotic
+with a stretched-exp transient, both of which fit the
+polynomial-tail framework's predictions (asymptotic
+O(1/n^{1−α}) = O(1/√n)) plus finite-n corrections (the
+stretched-exp transient has some specific mechanism, not
+resolved here).
+
 ---
 
 ## Mess #2: Convergence to what?
@@ -315,6 +405,88 @@ Until (R6) is genuinely closed, the current route proves at most
 "convergence to the invariant marginal of T_R" in aspiration,
 not "convergence to Benford."
 
+### Update (2026-04-19): empirical evidence — WHERE
+
+The `sim/return_marginal_SUMMARY.md` sim measured the pooled
+post-burn distribution σ̃ of walker states at return events.
+Setup: BS(1,2) paper kernel, N = 10⁶ walkers, n_max = 10⁴,
+R = {|E| ≤ 10}, K_burn = 5, IC x = √2.
+
+Findings:
+
+- σ̃ is supported on the arc [1 − log₁₀ 2, 1) × {E = 10}, i.e.
+  m ∈ [0.699, 1.000), E = +10. Every return event is on that arc.
+- On the arc, σ̃ is uniform at density 1/log₁₀ 2 ≈ 3.32.
+- L₁(σ̃, Leb_T) = 1.40, 260× above multinomial noise floor.
+- Low-r Fourier coefficients of σ̃ are order unity:
+  |σ̂(1)| ≈ 0.86, |σ̂(2)| ≈ 0.50, |σ̂(5)| ≈ 0.21.
+
+Proposed mechanism (not directly measured): the only channel
+returning a walker from E = 11 to E = 10 is a⁻¹ with borrow,
+which requires m_pre < log₁₀ 2 and deterministically maps
+m_pre → m_pre + (1 − log₁₀ 2). The arc support is therefore
+arithmetic, not Diophantine.
+
+**Pressure on the identification step.** If σ̃ is a reasonable
+proxy for π_T ν_R (plausible, not certified — the sim pools
+post-burn returns without verifying stationarity), the
+identification π_T ν_R = Leb_T fails at the obvious R by a
+specific and explicable mechanism. See `return_marginal_SUMMARY.md`
+for the caveat list: stationarity check not performed,
+E₀-sweep not done, pre-return-state not instrumented.
+
+### WHERE vs WHEN: Mess #2 and Mess #3 are independent problems
+
+Mess #2 and Mess #3 are sometimes grouped because both concern
+the return operator T_R. In fact they probe **orthogonal
+marginals** of the same return event.
+
+Each return event has two components:
+
+- **WHERE** — the walker's state at the return moment. Its
+  distribution is the T-marginal of ν_R. **This is Mess #2.**
+- **WHEN** — the duration τ_R of the excursion from exit to
+  return. Its distribution is P(τ_R > n). **This is Mess #3.**
+
+The two marginals are set by different mechanisms:
+
+- **WHERE is set by single-step carry arithmetic.** The return
+  step must be a⁻¹ with borrow at E = 11; that step deterministically
+  sends m_pre → m_pre + (1 − log₁₀ 2), placing m_return in
+  [1 − log₁₀ 2, 1) regardless of how long the excursion was.
+- **WHEN is set by walker-level dynamics above R.** The E-process
+  does an approximately symmetric random walk above R, and τ_R is
+  its first re-entry time. That gives P(τ_R > n) ~ 1/√n (see
+  Mess #3 update below). This tail depends on the b-step's effect
+  on E and on the E-generator structure, not on the m-arithmetic.
+
+Varying one does not force the other:
+
+- Swap log₁₀ 2 for log₁₀ 3 (or any other irrational rotation
+  amount): the arc for σ̃ becomes [1 − log₁₀ 3, 1) but τ_R's tail
+  still ≈ 1/√n (still SRW-like in E).
+- Swap b's action on E from ±1 to ±2: τ_R's tail constant
+  changes but the arc doesn't.
+
+**Consequence for the proof architecture.** Route 1' as sketched
+treats Mess #2 and Mess #3 as if both were part of one operator-
+legitimacy story that a single rewrite might resolve. They aren't.
+Each needs its own fix:
+
+- A fix for Mess #2 (different R, different framework for
+  identifying the invariant T-marginal, or a walker-level
+  argument for π_T ν_n → Leb_T that bypasses ν_R) says nothing
+  about τ_R's tail.
+- A fix for Mess #3 (polynomial-tail induced-operator theory,
+  Young's towers, or a Markov-chain framework that tolerates
+  heavy tails) says nothing about whether the invariant
+  T-marginal is Leb_T.
+
+A single fix that addresses both simultaneously is possible —
+for instance, a walker-level argument that bypasses T_R entirely
+would sidestep both — but it is not forced, and treating them
+as "one coupled problem" has hidden their independence.
+
 ---
 
 ## Mess #3: The geometric tail that isn't
@@ -425,6 +597,76 @@ identity problem. The current Route 1' sketch treats `T_R` as if
 its return-time regularity were exponentially tame; the walk
 described in the same document is not. Until that mismatch is
 resolved, the return operator is still partly aspirational.
+
+### Update (2026-04-19): empirical evidence — WHEN
+
+The `sim/tau_R_tail_SUMMARY.md` sim measured the first-excursion
+τ_R survival function directly. Setup: BS(1,2) paper kernel,
+N = 10⁶ walkers, n_max = 3 × 10⁴, R = {|E| ≤ 10}, IC x = √2.
+
+Findings:
+
+- P(τ_R > n | had first exit) ~ C · n^{-0.495} on n ∈ [50, 10⁴],
+  R² = 1.0000 across 15 log-spaced grid points.
+- Slope matches the textbook SRW null-recurrent return exponent
+  −1/2 to two decimals.
+- S(3 × 10⁴) = 7.0 × 10⁻³, still declining as 1/√n; no plateau
+  visible at the horizon.
+- 99.30% of walkers had at least one return; 0.70% had not
+  returned by n = 3 × 10⁴.
+
+**This empirically confirms the qualitative concern in Mess #3.**
+The tail is polynomial, not geometric. More specifically, it is
+1/√n — the best-behaved case of polynomial tails.
+
+**Implication for the proof architecture.** FIRST-PROOF §2 R2's
+appeal to uniform geometric convergence of truncated-return
+operators is framework-incompatible with a walk whose return
+tail is 1/√n. The correct framework for this regime is the
+literature on induced operators with polynomial return tail:
+
+- Melbourne & Terhesiu 2012 (operator-renewal theory for
+  infinite-measure dynamical systems).
+- Gouëzel 2004 (sharp polynomial bounds for mixing under
+  polynomial return-time tail).
+- Sarig 2002 (subexponential decay of correlations).
+- Young's tower construction (Ann. Math. 1998).
+
+These theorems take tail exponent α ∈ (0, 1) for P(τ > n) ~
+C/n^α and give correlation decay O(n^{-(1-α)}). With α = 1/2
+(our empirical finding), the delivered decay is O(1/√n) —
+natively the 1/√n shape claimed in T1b.
+
+**Encouraging alignment with T1b.** The polynomial-tail
+framework gives T1b's asymptotic natively. The measured tail
+exponent and the claimed theorem asymptotic match. A proof of
+T1b through this framework would not need a separate mechanism
+for the rate; the tail exponent and the asymptotic are the
+same object.
+
+**Caveats.** IC-conditional (the 1/√n slope is for first
+excursions from x = √2; subsequent excursions pool differently).
+Finite horizon (n_max = 3 × 10⁴). Single R shape (E₀ = 10).
+The uniform-in-x ∈ R claim that Feller-continuity would need is
+not tested. See `tau_R_tail_SUMMARY.md` for the full caveat list.
+
+### Independence from Mess #2
+
+Mess #3's empirical content (polynomial tail on τ_R) is
+orthogonal to Mess #2's empirical content (arc-concentrated σ̃
+on m_return). Each marginal of the return event has its own
+mechanism. For the full independence argument and its
+consequences for proof strategy, see the "WHERE vs WHEN"
+subsection under Mess #2's update above.
+
+The short version: a rewrite of Route 1' that uses polynomial-
+tail induced-operator theory would address Mess #3 but leave
+Mess #2's identification step untouched. A rewrite that fixes
+the identification (via a different R, or by bypassing ν_R)
+would address Mess #2 but leave Mess #3's polynomial-tail
+framework question untouched. The two fixes are logically
+independent, even if a single restructuring of the proof
+architecture might end up addressing both.
 
 ---
 
