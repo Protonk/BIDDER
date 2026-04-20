@@ -1,0 +1,176 @@
+FP16-MINI-SIM: precision ladder
+  N = 10_000_000, n_max = 100, E_THRESH = 3
+  ICs: ['D1', 'N1', 'I1', 'I2'] + B-like
+
+########## Run 1 — fp16 ##########
+
+=== fp16 D1 (x=1.0): N = 10_000_000, n = 100, dtype = float16 ===
+  n=  10  L₁=1.6208e+00  |ĥ(1)|=1.4897e-02  zh=6_189_192 (pristine=3_958_369)  active=4_988_951  (1.08 s/s)
+  n=  60  L₁=2.7908e-01  |ĥ(1)|=5.2719e-03  zh=7_430_028 (pristine=4_196_287)  active=4_933_203  (1.10 s/s)
+  n= 100  L₁=2.5901e-01  |ĥ(1)|=3.7173e-03  zh=7_482_330 (pristine=4_203_041)  active=4_733_619  (1.12 s/s)
+  wall time: 89.1s = 1.49 min
+  total zero-hits: 7,482,330   (pristine only: 4,203,041)
+  total active b-step operations: 492,398,025
+  pristine rate per active op: 8.536e-03
+  pristine rate per total walker-step: 4.203e-03
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run1_fp16/D1_fp16_results.npz
+
+=== fp16 N1 (x=1.4): N = 10_000_000, n = 100, dtype = float16 ===
+  n=  10  L₁=1.0605e+00  |ĥ(1)|=2.0915e-02  zh=0 (pristine=0)  active=5_001_138  (1.15 s/s)
+  n=  60  L₁=1.9665e-01  |ĥ(1)|=5.3635e-03  zh=9_649 (pristine=2_217)  active=4_933_491  (1.13 s/s)
+  n= 100  L₁=2.5688e-01  |ĥ(1)|=3.7273e-03  zh=27_394 (pristine=6_827)  active=4_732_064  (1.14 s/s)
+  wall time: 88.1s = 1.47 min
+  total zero-hits: 27,394   (pristine only: 6,827)
+  total active b-step operations: 492,683,340
+  pristine rate per active op: 1.386e-05
+  pristine rate per total walker-step: 6.827e-06
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run1_fp16/N1_fp16_results.npz
+
+=== fp16 I1 (x=1.4142135623730951): N = 10_000_000, n = 100, dtype = float16 ===
+  n=  10  L₁=1.0335e+00  |ĥ(1)|=1.9933e-02  zh=0 (pristine=0)  active=4_999_561  (1.16 s/s)
+  n=  60  L₁=1.9700e-01  |ĥ(1)|=5.6889e-03  zh=9_818 (pristine=2_341)  active=4_932_935  (1.13 s/s)
+  n= 100  L₁=2.5609e-01  |ĥ(1)|=4.4121e-03  zh=27_153 (pristine=6_932)  active=4_735_362  (1.14 s/s)
+  wall time: 87.9s = 1.47 min
+  total zero-hits: 27,153   (pristine only: 6,932)
+  total active b-step operations: 492,676,079
+  pristine rate per active op: 1.407e-05
+  pristine rate per total walker-step: 6.932e-06
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run1_fp16/I1_fp16_results.npz
+
+=== fp16 I2 (x=1.618033988749895): N = 10_000_000, n = 100, dtype = float16 ===
+  n=  10  L₁=1.0117e+00  |ĥ(1)|=2.3687e-02  zh=0 (pristine=0)  active=4_999_791  (1.16 s/s)
+  n=  60  L₁=1.9743e-01  |ĥ(1)|=5.0878e-03  zh=15_571 (pristine=4_086)  active=4_931_826  (1.13 s/s)
+  n= 100  L₁=2.5745e-01  |ĥ(1)|=4.1412e-03  zh=37_028 (pristine=9_754)  active=4_728_899  (1.14 s/s)
+  wall time: 88.0s = 1.47 min
+  total zero-hits: 37,028   (pristine only: 9,754)
+  total active b-step operations: 492,468,965
+  pristine rate per active op: 1.981e-05
+  pristine rate per total walker-step: 9.754e-06
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run1_fp16/I2_fp16_results.npz
+
+=== fp16 B-like (m=log₁₀√2 δ, E~U{−3..3}): N = 10_000_000, n = 100, dtype = float16 ===
+  n=  10  L₁=7.2899e-01  |ĥ(1)|=1.0664e-02  zh=358_339 (pristine=64_306)  active=4_906_866  (1.12 s/s)
+  n=  60  L₁=3.1314e-01  |ĥ(1)|=3.7186e-03  zh=591_350 (pristine=98_147)  active=4_623_033  (1.15 s/s)
+  n= 100  L₁=3.1499e-01  |ĥ(1)|=2.8321e-03  zh=614_657 (pristine=103_283)  active=4_398_988  (1.17 s/s)
+  wall time: 85.4s = 1.42 min
+  total zero-hits: 614,657   (pristine only: 103,283)
+  total active b-step operations: 467,213,450
+  pristine rate per active op: 2.211e-04
+  pristine rate per total walker-step: 1.033e-04
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run1_fp16/B-like_fp16_results.npz
+
+########## Run 2 — fp32 control (E_THRESH=3) ##########
+
+=== fp32_ctrl D1 (x=1.0): N = 10_000_000, n = 100, dtype = float32 ===
+  n=  10  L₁=1.7635e+00  |ĥ(1)|=1.3787e-02  zh=6_268_687 (pristine=3_982_187)  active=4_965_959  (1.98 s/s)
+  n=  60  L₁=6.2577e-01  |ĥ(1)|=5.2648e-03  zh=8_216_197 (pristine=4_269_721)  active=4_928_268  (2.02 s/s)
+  n= 100  L₁=2.7438e-01  |ĥ(1)|=3.4321e-03  zh=8_384_051 (pristine=4_275_123)  active=4_731_657  (2.04 s/s)
+  wall time: 49.1s = 0.82 min
+  total zero-hits: 8,384,051   (pristine only: 4,275,123)
+  total active b-step operations: 491,466,439
+  pristine rate per active op: 8.699e-03
+  pristine rate per total walker-step: 4.275e-03
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run2_fp32_control/D1_fp32_ctrl_results.npz
+
+=== fp32_ctrl N1 (x=1.4): N = 10_000_000, n = 100, dtype = float32 ===
+  n=  10  L₁=1.4148e+00  |ĥ(1)|=2.1448e-02  zh=0 (pristine=0)  active=5_000_965  (2.09 s/s)
+  n=  60  L₁=1.9178e-01  |ĥ(1)|=5.0778e-03  zh=5_022 (pristine=0)  active=4_937_617  (2.07 s/s)
+  n= 100  L₁=5.2204e-02  |ĥ(1)|=3.7766e-03  zh=13_873 (pristine=0)  active=4_731_444  (2.07 s/s)
+  wall time: 48.3s = 0.81 min
+  total zero-hits: 13,873   (pristine only: 0)
+  total active b-step operations: 492,667,781
+  pristine rate per active op: 0.000e+00
+  pristine rate per total walker-step: 0.000e+00
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run2_fp32_control/N1_fp32_ctrl_results.npz
+
+=== fp32_ctrl I1 (x=1.4142135623730951): N = 10_000_000, n = 100, dtype = float32 ===
+  n=  10  L₁=1.2286e+00  |ĥ(1)|=2.0294e-02  zh=0 (pristine=0)  active=4_999_848  (2.12 s/s)
+  n=  60  L₁=1.6422e-01  |ĥ(1)|=4.5327e-03  zh=5_060 (pristine=0)  active=4_932_418  (2.08 s/s)
+  n= 100  L₁=5.3167e-02  |ĥ(1)|=4.0296e-03  zh=14_312 (pristine=0)  active=4_732_419  (2.08 s/s)
+  wall time: 48.2s = 0.80 min
+  total zero-hits: 14,312   (pristine only: 0)
+  total active b-step operations: 492,641,662
+  pristine rate per active op: 0.000e+00
+  pristine rate per total walker-step: 0.000e+00
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run2_fp32_control/I1_fp32_ctrl_results.npz
+
+=== fp32_ctrl I2 (x=1.618033988749895): N = 10_000_000, n = 100, dtype = float32 ===
+  n=  10  L₁=1.2476e+00  |ĥ(1)|=2.3821e-02  zh=0 (pristine=0)  active=4_997_727  (2.11 s/s)
+  n=  60  L₁=1.4227e-01  |ĥ(1)|=5.3263e-03  zh=8_623 (pristine=0)  active=4_932_171  (2.08 s/s)
+  n= 100  L₁=5.0120e-02  |ĥ(1)|=4.1691e-03  zh=21_079 (pristine=0)  active=4_724_325  (2.08 s/s)
+  wall time: 48.2s = 0.80 min
+  total zero-hits: 21,079   (pristine only: 0)
+  total active b-step operations: 492,452,693
+  pristine rate per active op: 0.000e+00
+  pristine rate per total walker-step: 0.000e+00
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run2_fp32_control/I2_fp32_ctrl_results.npz
+
+=== fp32_ctrl B-like (m=log₁₀√2 δ, E~U{−3..3}): N = 10_000_000, n = 100, dtype = float32 ===
+  n=  10  L₁=8.7321e-01  |ĥ(1)|=1.1389e-02  zh=208_024 (pristine=0)  active=4_906_163  (2.06 s/s)
+  n=  60  L₁=2.2257e-01  |ĥ(1)|=3.9623e-03  zh=409_338 (pristine=0)  active=4_621_267  (2.08 s/s)
+  n= 100  L₁=1.5779e-01  |ĥ(1)|=3.2218e-03  zh=435_357 (pristine=0)  active=4_400_575  (2.08 s/s)
+  wall time: 48.0s = 0.80 min
+  total zero-hits: 435,357   (pristine only: 0)
+  total active b-step operations: 467,222,016
+  pristine rate per active op: 0.000e+00
+  pristine rate per total walker-step: 0.000e+00
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run2_fp32_control/B-like_fp32_ctrl_results.npz
+
+########## Run 3 — fp64 control (E_THRESH=3, snap baseline) ##########
+
+=== fp64_ctrl D1 (x=1.0): N = 10_000_000, n = 100, dtype = float64 ===
+  n=  10  L₁=1.7687e+00  |ĥ(1)|=1.1435e-02  zh=6_487_760 (pristine=4_118_589)  active=4_987_052  (1.72 s/s)
+  n=  60  L₁=6.2700e-01  |ĥ(1)|=4.8737e-03  zh=8_445_527 (pristine=4_386_729)  active=4_926_398  (1.76 s/s)
+  n= 100  L₁=2.7471e-01  |ĥ(1)|=3.7067e-03  zh=8_610_930 (pristine=4_389_140)  active=4_729_029  (1.77 s/s)
+  wall time: 56.4s = 0.94 min
+  total zero-hits: 8,610,930   (pristine only: 4,389,140)
+  total active b-step operations: 491,663,945
+  pristine rate per active op: 8.927e-03
+  pristine rate per total walker-step: 4.389e-03
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run3_fp64_control/D1_fp64_ctrl_results.npz
+
+=== fp64_ctrl N1 (x=1.4): N = 10_000_000, n = 100, dtype = float64 ===
+  n=  10  L₁=1.4150e+00  |ĥ(1)|=2.1299e-02  zh=0 (pristine=0)  active=4_998_743  (1.77 s/s)
+  n=  60  L₁=1.9188e-01  |ĥ(1)|=5.2676e-03  zh=5_118 (pristine=0)  active=4_933_525  (1.79 s/s)
+  n= 100  L₁=5.2518e-02  |ĥ(1)|=3.8577e-03  zh=13_857 (pristine=0)  active=4_733_391  (1.80 s/s)
+  wall time: 55.6s = 0.93 min
+  total zero-hits: 13,857   (pristine only: 0)
+  total active b-step operations: 492,665,767
+  pristine rate per active op: 0.000e+00
+  pristine rate per total walker-step: 0.000e+00
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run3_fp64_control/N1_fp64_ctrl_results.npz
+
+=== fp64_ctrl I1 (x=1.4142135623730951): N = 10_000_000, n = 100, dtype = float64 ===
+  n=  10  L₁=1.2286e+00  |ĥ(1)|=2.0085e-02  zh=0 (pristine=0)  active=5_000_863  (1.78 s/s)
+  n=  60  L₁=1.6450e-01  |ĥ(1)|=5.5089e-03  zh=5_063 (pristine=0)  active=4_933_568  (1.80 s/s)
+  n= 100  L₁=5.3437e-02  |ĥ(1)|=3.5622e-03  zh=15_090 (pristine=0)  active=4_729_353  (1.81 s/s)
+  wall time: 55.2s = 0.92 min
+  total zero-hits: 15,090   (pristine only: 0)
+  total active b-step operations: 492,632,808
+  pristine rate per active op: 0.000e+00
+  pristine rate per total walker-step: 0.000e+00
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run3_fp64_control/I1_fp64_ctrl_results.npz
+
+=== fp64_ctrl I2 (x=1.618033988749895): N = 10_000_000, n = 100, dtype = float64 ===
+  n=  10  L₁=1.2470e+00  |ĥ(1)|=2.4354e-02  zh=0 (pristine=0)  active=5_001_406  (1.78 s/s)
+  n=  60  L₁=1.4259e-01  |ĥ(1)|=5.4679e-03  zh=8_866 (pristine=0)  active=4_931_078  (1.80 s/s)
+  n= 100  L₁=4.9140e-02  |ĥ(1)|=3.9277e-03  zh=21_709 (pristine=0)  active=4_728_484  (1.81 s/s)
+  wall time: 55.3s = 0.92 min
+  total zero-hits: 21,709   (pristine only: 0)
+  total active b-step operations: 492,464,133
+  pristine rate per active op: 0.000e+00
+  pristine rate per total walker-step: 0.000e+00
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run3_fp64_control/I2_fp64_ctrl_results.npz
+
+=== fp64_ctrl B-like (m=log₁₀√2 δ, E~U{−3..3}): N = 10_000_000, n = 100, dtype = float64 ===
+  n=  10  L₁=8.7275e-01  |ĥ(1)|=1.1113e-02  zh=213_191 (pristine=0)  active=4_903_516  (1.76 s/s)
+  n=  60  L₁=2.2272e-01  |ĥ(1)|=4.2569e-03  zh=422_344 (pristine=0)  active=4_625_238  (1.81 s/s)
+  n= 100  L₁=1.5827e-01  |ĥ(1)|=3.0965e-03  zh=448_701 (pristine=0)  active=4_399_290  (1.83 s/s)
+  wall time: 54.7s = 0.91 min
+  total zero-hits: 448,701   (pristine only: 0)
+  total active b-step operations: 467,276,183
+  pristine rate per active op: 0.000e+00
+  pristine rate per total walker-step: 0.000e+00
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp16_results/run3_fp64_control/B-like_fp64_ctrl_results.npz
+
+########## FP16-MINI-SIM complete ##########

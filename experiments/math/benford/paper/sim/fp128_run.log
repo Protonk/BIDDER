@@ -1,0 +1,29 @@
+FP128-CEILING: precision ceiling check
+  N = 100_000, n = 600
+  gmpy2 precision (bits): 128
+  LOG10_2 at 128-bit: 0.30102999566398119521373889472449302676...
+  LOG10_SQRT2 at 128-bit: 0.15051499783199059760686944736224651338...
+
+=== fp64 matched control: N = 100_000, n = 600 ===
+  init: 0.00s, m dtype: float64
+  n=   1  L₁=1.9700e+00  |ĥ(1)|=2.3765e-01  (78.19 s/s, ETA 0.1 min)
+  n=  61  L₁=4.5894e-01  |ĥ(1)|=3.6291e-03  (85.29 s/s, ETA 0.1 min)
+  n= 121  L₁=3.1670e-01  |ĥ(1)|=5.3881e-03  (85.50 s/s, ETA 0.1 min)
+  n= 181  L₁=2.6232e-01  |ĥ(1)|=2.3146e-03  (85.24 s/s, ETA 0.1 min)
+  n= 405  L₁=1.8710e-01  |ĥ(1)|=1.2706e-03  (126.29 s/s, ETA 0.0 min)
+  n= 600  L₁=1.6090e-01  |ĥ(1)|=2.2588e-03  (150.02 s/s, ETA 0.0 min)
+  wall time: 4.0s = 0.07 min
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp128_results/ic_b_fp64_matched_results.npz
+
+=== fp128 (gmpy2 128-bit): N = 100_000, n = 600 ===
+  init: 0.03s, m dtype: object
+  n=   1  L₁=1.9700e+00  |ĥ(1)|=2.3765e-01  (0.93 s/s, ETA 10.7 min)
+  n=  61  L₁=4.5894e-01  |ĥ(1)|=3.6291e-03  (0.89 s/s, ETA 10.1 min)
+  n= 121  L₁=3.1670e-01  |ĥ(1)|=5.3881e-03  (0.90 s/s, ETA 8.9 min)
+  n= 181  L₁=2.6232e-01  |ĥ(1)|=2.3146e-03  (0.90 s/s, ETA 7.7 min)
+  n= 405  L₁=1.8710e-01  |ĥ(1)|=1.2706e-03  (0.91 s/s, ETA 3.6 min)
+  n= 600  L₁=1.6090e-01  |ĥ(1)|=2.2588e-03  (0.91 s/s, ETA 0.0 min)
+  wall time: 662.7s = 11.05 min
+  -> /Users/achyland/Desktop/Math/BIDDER/experiments/math/benford/paper/sim/fp128_results/ic_b_fp128_results.npz
+
+=== FP128-CEILING complete ===
