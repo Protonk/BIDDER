@@ -46,12 +46,12 @@ from mpmath import log10 as mp_log10  # noqa: E402
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 BASE = 10
-NEW_NS = [7, 11, 13]
+NEW_NS = [7, 11, 13, 17, 19, 23, 29, 31]
 KS = [2, 3, 4]
 SPIKE_THRESHOLD = 10**4
 PREC_BITS = 80000
-MAX_PQ = 400
-K_PRIMES = 30000
+MAX_PQ = 600
+K_PRIMES = 40000
 
 
 # ---- substrate quantities ----
@@ -110,18 +110,33 @@ def safe_log10_int(v):
 def select_d234_spikes(cf):
     """Select the d=2, 3, 4 mega-spikes from the CF expansion.
 
-    Strategy: take the three largest a_i values above SPIKE_THRESHOLD and
-    sort by index ascending (so smallest-index → d=2, etc.). Robust to
-    the digit-tier classifier failing for unusual n.
+    Strategy: peel from above. d=4 is the largest spike overall.
+    d=3 is the largest spike with smaller index than d=4. d=2 is
+    the largest spike with smaller index than d=3.
+
+    For large n, d=2 (and sometimes d=3) may not exist as a mega-
+    spike (formula predicts negative size). In that case the
+    returned dict is missing those keys.
 
     Returns dict k → (i_zero_indexed, a, q_im1_log10)."""
     spikes = [(i, a, q_log) for i, (a, q_log) in enumerate(cf)
               if a > SPIKE_THRESHOLD]
-    if len(spikes) < 3:
+    if not spikes:
         return {}
-    spikes_by_size = sorted(spikes, key=lambda s: -s[1])
-    top3 = sorted(spikes_by_size[:3], key=lambda s: s[0])
-    return {k: top3[k - 2] for k in (2, 3, 4)}
+    out = {}
+    d4 = max(spikes, key=lambda s: s[1])
+    out[4] = d4
+    earlier = [s for s in spikes if s[0] < d4[0]]
+    if not earlier:
+        return out
+    d3 = max(earlier, key=lambda s: s[1])
+    out[3] = d3
+    earliest = [s for s in earlier if s[0] < d3[0]]
+    if not earliest:
+        return out
+    d2 = max(earliest, key=lambda s: s[1])
+    out[2] = d2
+    return out
 
 
 # ---- assemble panel ----
@@ -139,12 +154,16 @@ def compute_new_panel():
         print(f'  CF PQs computed: {len(cf)}', flush=True)
 
         spikes = select_d234_spikes(cf)
-        if len(spikes) < len(KS):
-            print(f'  WARNING: fewer than {len(KS)} top spikes found for n={n}',
+        if 4 not in spikes:
+            print(f'  WARNING: no d=4 mega-spike found in {len(cf)} PQs for n={n}',
                   flush=True)
             continue
 
         for k in KS:
+            if k not in spikes:
+                print(f'  k={k}: not present (formula predicts no mega-spike)',
+                      flush=True)
+                continue
             i, a, q_log = spikes[k]
             log_a = safe_log10_int(a)
             C = C_km1_actual(n, k)
@@ -185,18 +204,18 @@ def candidate_offsets(n, base=BASE):
     cands = []
     cands.append(('0', 0.0))
     cands.append(('log_b(b/n)', log10(base / n)))
+    cands.append(('log_b(b/n²)', log10(base / (n * n))))
+    cands.append(('log_b(b/n³)', log10(base / (n ** 3))))
     cands.append(('log_b(b/(b-1))', log10(base / (base - 1))))
+    cands.append(('log_b(1/(b-1))', log10(1 / (base - 1))))
+    cands.append(('log_b(b²/n²)', log10((base ** 2) / (n * n))))
+    cands.append(('log_b(1/n)', log10(1 / n)))
     cands.append(('log_b(b/(n-1))', log10(base / (n - 1)) if n > 1 else 0.0))
-    cands.append(('log_b((b-1)/(n-1))',
-                  log10((base - 1) / (n - 1)) if n > 1 else 0.0))
-    cands.append(('log_b(n/(n-1))', log10(n / (n - 1)) if n > 1 else 0.0))
-    cands.append(('log_b(b·(n-1)/n²)',
-                  log10(base * (n - 1) / (n * n)) if n > 1 else 0.0))
+    cands.append(('log_b((b-1)/n)', log10((base - 1) / n)))
+    cands.append(('log_b((b-1)/n²)', log10((base - 1) / (n * n))))
+    cands.append(('log_b(n/(b-1))', log10(n / (base - 1))))
     cands.append(('log_b(n²/(b·(n-1)))',
                   log10(n * n / (base * (n - 1))) if n > 1 else 0.0))
-    cands.append(('-1 + log_b(b/(b-1))', -1 + log10(base / (base - 1))))
-    cands.append(('1 - log_b(n/(n-1))',
-                  1 - log10(n / (n - 1)) if n > 1 else 0.0))
     return cands
 
 
