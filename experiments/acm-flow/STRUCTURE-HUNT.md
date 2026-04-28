@@ -1,230 +1,331 @@
-# STRUCTURE-HUNT — what we go looking for after Phase 1
+# STRUCTURE-HUNT — after Phase 1
 
-**Phase 1 ran. The four-coordinate decomposition in `ACM-MANGOLDT.md`
-collapsed to two and changed observable.** This document is the
-post-Phase-1 plan. The pre-Phase-1 version (with cutoff × payload
-matrices, ρ-prediction, etc.) is preserved in git history and was
-written against a model the destroyers refuted.
+Phase 1 changed the object. The four-coordinate tomography model in
+`ACM-MANGOLDT.md` collapsed under destroyers: the truncated-flow
+residual `ρ` is mostly cutoff/saturation, while the local arithmetic
+signal lives in
 
+    Q_n(m) = Λ_n(m) / log(m)
 
-## Phase 1 outcomes
-
-See `PHASE1-RESULTS.md` and `MEMO-PHASE1.md`. In short:
-
-| pre-Phase-1 claim | post-destroyer status |
-|---|---|
-| ρ is the spectroscopic observable | refuted; ρ doesn't carry payload signal |
-| four-coordinate decomposition | collapsed to two (height + payload divisor data) |
-| cutoff coordinate (general) | falls at scale 0.1; tiny n=2 residue at scale 10⁻⁵ that is *secretly* a `v_2(Y)` distinction (dist=0 ↔ 4|Y, dist=2 ↔ 2 mod 4 for n=2) |
-| payload graduation on Λ_n | evidence; m-shuffle null z ≥ 5 every cell |
-| Λ_n is the local observable | replaced by `Q_n(m) = Λ_n(m)/log(m)` (`payload_q_scan.py`) — exact rational, removes log(m) scale, family-geometry residual cuts 4× |
-| prime/composite-n split at h=3 | evidence; family-geometry subtraction by `n_type` cancels almost all bucket variation |
-
-
-## The post-Phase-1 model
-
-**Local observable:** `Q_n(m) = Λ_n(m) / log(m)`, exact rational from
-the closed form
+with exact rational closed form
 
     Q_n(m) = Σ_{j ≥ 1, n^j | m} (-1)^(j-1) τ_j(m/n^j) / j.
 
-**Coordinates:**
+The hunt is now two-layered:
+
+    local algebra closes by finite rank;
+    global stream claims are checked by Hardy deep access.
+
+`core/Q-FORMULAS.md` and `core/FINITE-RANK-EXPANSION.md` are the local
+side. `experiments/math/hardy/DEEP-TROUBLE-No-4.md` is the global
+sampling side.
+
+
+## Phase 1 Outcomes
+
+See `PHASE1-RESULTS.md` and `MEMO-PHASE1.md`.
+
+| pre-Phase-1 claim | post-destroyer status |
+|---|---|
+| `ρ` is the spectroscopic observable | refuted; `ρ` does not carry payload signal |
+| four-coordinate decomposition | collapsed to finite-rank local algebra plus cutoff side effects |
+| cutoff coordinate | demoted; large effect is truncation, tiny residue is mainly n=2 `v_2(Y)` |
+| payload graduation on `Λ_n` | evidence; m-shuffle null z ≥ 5 every cell |
+| `Λ_n` is the local observable | replaced by exact rational `Q_n = Λ_n/log(m)` |
+| prime/composite split at h=3 | evidence; should become a corollary of Q-formulas |
+
+
+## Current Model
+
+The coordinates are not independent. They are the pieces of one closed
+form.
 
 | coordinate | role |
 |---|---|
-| height `h = ν_n(m)` | sets the regime; selects which `τ_j` enter the sum |
-| payload divisor data | multivariate `(τ_2(m/n²), τ_3(m/n³), …, τ_h(m/n^h))` — the closed form is exactly a linear combination of these |
-| n-factorisation type | `prime / prime_power / multi_prime`; predicts which coefficient pattern Q_n exhibits |
+| height `h = ν_n(m)` | finite rank; selects which `τ_j` enter |
+| payload divisor data | the values `τ_j(m/n^j)` through rank `h` |
+| factorisation of `n` | determines binomial coefficients after multiplicativity |
+| payload overlap with `n` | for composite `n`, exact height gives `n ∤ k`, not `gcd(n,k)=1` |
 
-The coordinates are *not* independent — they're connected through
-the closed form. The empirical question becomes: how cleanly do
-explicit divisor-function formulas describe each `(h, n_type, payload
-divisor data)` regime?
+The composite case must use the overlap vector from
+`core/Q-FORMULAS.md`: write
 
-**Side quest — cutoff coordinate.** Demoted but not eliminated. The
-n=2 dist_n² residue earned evidence (z ≈ ±4) at scale 10⁻⁵; for
-n ∈ {3, 4, 5} it's at sketch level (z ≈ ±1–2). Probably not a
-generic cutoff coordinate but a `v_2(Y)` shadow specific to n=2.
-Worth re-running at higher Y_max to see if other n's strengthen.
+    n = ∏ p_i^{a_i},        m = n^h k,
+    k = ∏ p_i^{t_i} k',     gcd(k', n) = 1,
 
-
-## Phase 2 — explicit closed forms (the lemma)
-
-The prime/composite split at h=3 should become a **lemma**, not a
-panel. The closed form already expresses Q_n as a divisor-sum
-combination; for each `(h, n_type)` we should derive the explicit
-predictor and verify against the data.
-
-### 2.1 — derive Q_n(m) for `(h, n_type)`, all small h
-
-For `n_type ∈ {prime, prime_power, multi_prime}` and `h ∈ {2, 3, 4, 5}`:
-
-- substitute `m = n^h · k`, `gcd(n, k) = 1`;
-- expand `τ_j(n^(h-j) · k)` using multiplicativity on coprime
-  factors and `τ_j(p^a) = C(a + j − 1, j − 1)` for `n = p` prime;
-- collect Q_n(m) as a polynomial in the divisor data of `k`.
-
-Concrete h=3 prime n (n∤k) hand calculation already done:
-`Q_n(n³ k) = 1 − d(k) + τ_3(k)/3`. Verifies the observed zeros at
-`d(k) = 2` (k prime) and `d(k) = 3` (k = p²). Same approach for the
-other (h, n_type) cells.
-
-The output: a small table of explicit formulas per `(h, n_type)`,
-plus a script that evaluates each formula on `m`-samples and asserts
-agreement with `payload_q_scan.csv` to within Fraction equality.
-
-If the formulas match exactly, the lemma is proven (modulo writing
-it cleanly).
-
-### 2.2 — within-prime residual
-
-`payload_q_summary.txt` reports mean |family-geometry residual| =
-0.31 on the prime category. With the closed forms in 2.1, this
-residual should drop to numerical zero (since formulas predict Q
-exactly given the divisor data). What remains tells us whether the
-n-specific signal within "prime n" is structural or sampling.
-
-### 2.3 — h ≥ 4 sample-size discipline
-
-At `M_MAX = 50000`, h=5 panels for n ∈ {5, 6} have ≤13 m-points
-and the destroyer crashes (z < 1). Either bump `M_MAX` to 10⁶
-(τ-table grows linearly; cheap) or accept that h=5 is below
-resolution at the current scale. Document the choice in the
-script.
+with at least one `t_i < a_i`. Prime `n` is the special clean case
+where exact height forces `gcd(n,k)=1`.
 
 
-## Phase 3 — cross-experiment validation
+## Phase 2 — Local Q Lemma
 
-Now that the local observable is Q_n with explicit formulas, the
-cross-checks become predictions, not analogies.
+Goal: turn the Phase 1 sign patterns into formula consequences.
 
-### 3.1 — Brief 2 (CF spikes)
+### 2.1 — Closed Forms
 
-`experiments/acm-champernowne/base10/cf/SPIKE-HUNT.md` reports the
-mega-spike magnitude scales as `(b−1)² · b^(k−2) · (n−1) · k / n²`.
-Derive that formula from Q_n's closed form on the n-Champernowne
-real and the Mahler-style boundary approximation. If the derivation
-goes through, Brief 2's empirical fit becomes a corollary of the
-Phase 2 lemma. If it doesn't, we learn what's different about the
-CF setting.
+Status: complete in `core/Q-FORMULAS.md`.
 
-### 3.2 — Brief 4 (BPPW MC on M_n)
+Use `core/Q-FORMULAS.md` as the working formula sheet. For the current
+panel `n ∈ {2,3,4,5,6,10}`:
 
-The brief is gated on the `Λ_n` (now Q_n) sign-table. The Phase 2
-formulas give the sign of Q_n in closed form for each
-`(h, n_type, payload data)` cell. The BPPW M_n(N)·Φ(N)/N prediction
-should follow from integrating Q_n's sign distribution against the
-multiplication-table count.
+- use the master expansion with overlap vector `(t_i)`;
+- keep prime, prime-power, and squarefree multi-prime rows separate;
+- tabulate the specialisations used most directly by the panel through
+  `h = 4`;
+- use the master expansion directly at `h = 5`;
+- avoid global sign claims where overlap/high-`t_i` cases can
+  transition.
 
-### 3.3 — Cross-base
+The h=3 prime calculation is the sanity check:
 
-Closed form is base-agnostic. h, payload τ_2 are base-agnostic. So
-Q_n itself is base-agnostic; only the *cutoff residue* coordinate
-might be base-dependent (since `dist_n²` interacts with the
-positional sieve). With the cutoff coordinate now demoted, cross-
-base doesn't add Phase 1 surprise; it's a routine sanity check.
+    Q_p(p³k) = 1 - d(k) + τ_3(k)/3,    gcd(p,k)=1,
+
+so the low-payload zero band is algebraic, not merely empirical.
+
+### 2.2 — Exact Verification
+
+Status: complete for the existing `payload_q_scan.csv`.
+
+`q_n_verify.py` asserts Fraction equality against `payload_q_scan.csv`.
+
+Checks:
+
+- master expansion on every row, including h=5;
+- displayed specialisations in their declared scope;
+- mismatch grouping by `(n_type, h, overlap case)`.
+
+Result:
+
+- input rows: 24203;
+- n values present: `{2,3,4,5,6,10}`;
+- master expansion mismatches: 0;
+- displayed-specialisation mismatches: 0;
+- structural errors: 0.
+
+### 2.3 — h=5 Resolution
+
+Status: decided — do not extend `M_MAX` for 2.3.
+
+At `M_MAX = 50000`, some h=5 cells are under-resolved. Two separate
+questions should stay separate:
+
+- distribution question: raise `M_MAX` to 10⁶ and rerun the payload
+  scan;
+- identity question: exact formula verification already covers h=5
+  if the row exists.
+
+Do not use a weak h=5 destroyer z-score as evidence against finite
+rank; it is mostly sample-size discipline.
+
+Decision. The identity question is settled by Phase 2.2 (zero
+mismatches over 24203 rows, including all present h=5 rows). Cells
+with row count below ~50 — `(3,5)`, `(5,5)`, `(6,5)`, `(10,4)` — are
+declared under-resolved-by-design; `(10,5)` is absent at this
+`M_MAX`. Their weak destroyer z-scores are not evidence against
+finite rank and are not to be cited that way. The distribution
+question is routed to Phase 5, where the held-out re-scan covers a
+different `m` range and naturally widens h=5. Compute that would have
+gone into a larger 2.3 scan goes to Phase 2.4 instead, since
+Hardy-deep witnesses dominate dense low-depth sampling as a finite-
+rank check.
+
+### 2.4 — Hardy Composite-Q Deep Witnesses
+
+Status: complete in `hardy_composite_q.py`.
+
+Outcome on the 27-row panel:
+
+- direct-vs-master mismatches: 0;
+- displayed-specialisation mismatches: 0;
+- height jumps `h > r` exercised for `n ∈ {4, 6, 10}` at jump = 1 and
+  jump = 2;
+- depth: largest atom from `K = 10^100` (m has 202 base-10 digits);
+  largest rank `r = 8` for `n = 2`.
+
+After 2.2 passes, use Hardy to test the same formulas at unreachable
+entry depths.
+
+Protocol:
+
+1. choose `n`, tuple length `r`, and deep indices `K_i`;
+2. compute atoms `a_i = p_{K_i}(n)` by Hardy;
+3. set `m = ∏ a_i`;
+4. compute `h = ν_n(m)`;
+5. evaluate Q by the master expansion and by the implementation path;
+6. assert exact agreement.
+
+For prime `n`, multiplying `r` atoms gives height `r`. For composite
+`n`, residual cofactors can add extra height, so always measure
+`ν_n(m)` after multiplication.
+
+This is not a new proof of the formula. It is a deep-access sanity
+loop showing the finite-rank implementation works where prefix methods
+cannot reach.
 
 
-## Phase 4 — predictive model
+## Phase 3 — Global Stream Checks By Hardy
 
-If Phase 2's formulas match the data exactly, the predictive model
-is *not* a fit — it's the closed form. Phase 4 becomes:
+Once local Q is pinned, cross-experiment claims become predictions
+about how finite-rank local arithmetic is read by concatenation.
+Hardy Echo is the validation layer.
 
-- evaluate Q_n on a held-out range of `m`;
-- compare prediction (formula) to observation (`payload_q_scan` re-run);
-- residual should be exactly zero, modulo Fraction arithmetic.
+### 3.1 — CF Spike Derivation
 
-A clean zero residual converts Phase 2 from "lemma" to "theorem."
+`experiments/acm-champernowne/base10/cf/SPIKE-HUNT.md` reports
 
-If Phase 2's formulas leave residual at certain `(h, n_type)`
-cells, Phase 4 fits a polynomial extension and we look at *that*
-residual's structure.
+    (b-1)^2 · b^(k-2) · (n-1) · k / n².
+
+Derive the factor from Q plus radix-block geometry. The target is to
+explain both the `(n-1)/n²` density and the block-length factor, not
+just fit six points.
+
+### 3.2 — Hardy Mode 3 Block Counts
+
+Use `hardy_echo.py` Mode 3 / `BlockK` to check block counts at large
+`d` without materializing the stream.
+
+First panel:
+
+| n | base | d |
+|---|---|---|
+| 2 | 10 | 20, 50, 100 |
+| 5 | 10 | 20, 50 |
+| 10 | 10 | 20, 50 |
+
+Smooth blocks should match the block-uniformity prediction exactly.
+Non-smooth blocks should be reported separately, not forced into the
+smooth formula.
+
+### 3.3 — Hardy Mode 2 Digit-Position Spike Neighborhoods
+
+Use the exact digit-position oracle to sample stream neighborhoods
+near predicted block joins and spike locations.
+
+This tests whether the CF spike is actually boundary geometry in the
+concatenated real, rather than only a count identity over entries.
+The oracle lets us work by digit depth, not prefix length.
+
+### 3.4 — Hardy Mode 4 Tail Destroyers
+
+Run prefix-era visual claims in matched deep windows. Each observable
+must declare its destroyer:
+
+| observable type | right destroyer |
+|---|---|
+| position-side order / gradients | entry shuffle |
+| per-entry algebraic invariants | bit-within-entry or digit-within-entry shuffle |
+| radix block claims | digit-class or block-class shuffle |
+
+Boundary stitch already showed why this matters: entry shuffle kills
+some right-side order structure but preserves the `v_2(n)` trailing
+zero barcode because parity is per entry.
+
+Candidate claims:
+
+- binary RLE ridges by `v_2(n)`;
+- boundary-stitch trailing-zero barcode and right-side gradient;
+- Walsh robust cells;
+- Morlet/RDS notches;
+- base-10 CF spike neighborhoods.
 
 
-## Phase 5 — missing lines (if any)
+## Phase 4 — Brief 4 / Multiplication-Table Prediction
 
-After Phase 2–4 land, the remaining residuals (if any) point to
-coordinates not in the model:
+The BPPW `M_n(N)·Φ(N)/N` prediction should now be written in terms of
+Q signs and finite-rank payload distributions, not raw `Λ_n`.
 
-- `ν_p(n)` for each prime `p | n` (within prime_power and
-  multi_prime)
-- ω(payload) — the number of distinct prime factors of the payload
-- the n=2 cutoff `v_2(Y)` shadow at scale 10⁻⁵, retested at
-  larger Y_max to see if it's a real spectral line or finite-size
-  artifact
-
-Each is a small probe with the same destroyer + subtraction
-discipline.
+Use Phase 2 formulas to integrate sign and magnitude over
+height/payload/factorisation cells. Then test against the existing
+Monte Carlo machinery. If the formula table is exact, any residual is
+in the multiplication-table distribution, not in Q.
 
 
-## Side quest — cutoff `v_2(Y)` residue
+## Phase 5 — Held-Out Prediction
 
-The n=2 dist_n² coherent line is *secretly* a `v_2(Y)` distinction
-(distance=0 means 4 | Y, distance=2 means 2 mod 4 ≡ Y is exactly
-2 mod 4). The "n²-distance" framing was the wrong scout name. The
-right scout is `v_2(Y)`, and the question is whether the residue
-appears at all `n` (with `v_n(Y)` analog) or only at n=2.
+If Phase 2 verifies, the predictive model is not a fit. It is the
+closed form.
 
-Test: at higher `Y_max` (5×10⁵ or 10⁶), rerun `cutoff_ray_scan` for
-a couple of cells and check whether `v_n(Y)` produces evidence-level
-z for n ∈ {3, 4, 5}, or whether the signal stays an n=2-only
-phenomenon.
+Checks:
 
-If it stays n=2-only, the cutoff coordinate is fully demoted to a
-Lambda-on-A_n positivity-locus question, which is a different
-research direction (`POSET-FACTOR.md`'s framing).
+- rerun `payload_q_scan.py` on a held-out `m` range;
+- evaluate Q by formula;
+- require exact Fraction equality;
+- report distribution summaries only after equality passes.
+
+If equality fails, stop and fix the algebra or implementation. Do not
+fit a residual until the exact formula path is exhausted.
+
+
+## Side Quest — Cutoff `v_n(Y)` Residue
+
+The n=2 dist_n² line is really a `v_2(Y)` distinction:
+distance 0 means `4 | Y`, distance 2 means `Y ≡ 2 mod 4`.
+
+Test at higher `Y_max` (`5×10⁵` or `10⁶`) with `v_n(Y)` scouts:
+
+- n=2 should reproduce the evidence-level line;
+- n ∈ {3,4,5} must strengthen to evidence level or be demoted.
+
+If it stays n=2-only, cutoff is no longer part of the main
+finite-rank hunt. It becomes a separate positivity-locus problem in
+the style of `POSET-FACTOR.md`.
 
 
 ## Sequencing
 
 ```
-Phase 2.1   derive Q_n closed forms per (h, n_type)         (analytic)
-Phase 2.2   verify against payload_q_scan.csv               (small script)
-Phase 2.3   bump M_MAX for h=5 if desired                   (parameter change)
-Phase 3.1   Brief 2 derivation                              (analytic)
-Phase 3.2   Brief 4 prediction                              (BPPW MC + analytic)
-Phase 3.3   cross-base sanity check                         (re-run scan)
-Phase 4     held-out predictive verification                (small script)
-Phase 5     missing-lines probes                            (per-candidate)
+Phase 2.1   Q formulas with payload-overlap vector              COMPLETE
+Phase 2.2   exact verification on payload_q_scan.csv            COMPLETE
+Phase 2.3   h=5 resolution: under-resolved-by-design, route to P5  DECIDED
+Phase 2.4   Hardy composite-Q deep witnesses                    COMPLETE
 
-Side quest  v_2(Y) at higher Y_max                          (re-run scan)
+Phase 3.1   CF spike derivation from Q + block geometry         (analytic)
+Phase 3.2   Hardy Mode 3 large-d block-count checks             (parameter run)
+Phase 3.3   Hardy Mode 2 digit-position spike neighborhoods     (small script)
+Phase 3.4   Hardy Mode 4 tail destroyers for visual claims      (per-claim)
+
+Phase 4     Brief 4 / multiplication-table prediction           (analytic + MC)
+Phase 5     held-out exact Q verification                       (small script)
+
+Side quest  cutoff v_n(Y) at higher Y_max                       (re-run scan)
 ```
 
-Phase 2.1 is the gate. With closed forms in hand, everything
-downstream becomes either derivation or verification. Without
-them, downstream is fitting and the spectroscopy claim stays
-empirical.
+Phase 2.2 is the gate. With exact Q verification in hand, downstream
+work is derivation or deep validation. Without it, downstream is only
+fitting.
 
 
-## Files (planned, beyond Phase 1)
+## Files
 
 | file | role | phase |
 |---|---|---|
-| `q_n_formulas.md` | closed forms per (h, n_type) | 2.1 |
-| `q_n_verify.py` | per-m formula vs Q_n(m) check | 2.2 |
-| `brief2_q_derivation.md` | CF spike formula from Q_n | 3.1 |
-| `brief4_q_prediction.py` | M_n(N)·Φ(N)/N from Q_n sign | 3.2 |
-| `cutoff_v2_y.py` | re-run cutoff at higher Y_max with `v_n(Y)` scout | side |
+| `core/Q-FORMULAS.md` | master expansion and specialisations | 2.1 |
+| `q_n_verify.py` | exact row-wise formula check | 2.2 |
+| `payload_q_scan.py` | Q scan and held-out scans | 2.2, 5 |
+| `hardy_composite_q.py` | deep product Q witnesses | 2.4 |
+| `brief2_q_derivation.md` | CF spike derivation from Q | 3.1 |
+| `hardy_block_spikes.py` | large-d block-count / spike neighborhood checks | 3.2, 3.3 |
+| `hardy_tail_destroyers.py` | matched deep-window visual destroyers | 3.4 |
+| `brief4_q_prediction.py` | `M_n(N)·Φ(N)/N` from Q sign distribution | 4 |
+| `cutoff_vn_y.py` | higher-Y cutoff side quest | side |
 
 
 ## Coupling
 
-- **`ACM-MANGOLDT.md`** — needs trim to two-coordinate model on Q_n.
-  Current version still names ρ as the working residual statistic.
-- **`PHASE1-RESULTS.md`** — destroyer outcomes; tighten h=3 wording
-  ("no negative mass; low payload mostly zero, higher buckets turn
-  positive" — not "all zero at τ_2 ≤ 4").
-- **`MEMO-PHASE1.md`** — already calibrated.
-- **`payload_q_scan.py` / `payload_q_*.png`** — new Phase-1.5
-  artifacts on Q_n.
+- `ACM-MANGOLDT.md` should point to Q and finite rank, not `ρ`, as the
+  local arithmetic object.
+- `PHASE1-RESULTS.md` is the destroyer record.
+- `core/FINITE-RANK-EXPANSION.md` gives the short conjectural spine.
+- `core/Q-FORMULAS.md` is the local formula sheet.
+- `experiments/math/hardy/DEEP-TROUBLE-No-4.md` and
+  `HARDY-ECHO-RESULTS.md` give the deep validation instrument.
 
 
-## What this is not
+## What This Is Not
 
-- Not a commitment to all five phases. Phase 2.1 is the gate;
-  everything after assumes formulas in hand.
-- Not a claim that Q_n is the *final* observable. If h=4, 5
-  formulas leave residual, more coordinates remain. The discipline
-  doc's caution applies: "an almost finite scout palette at this
-  scale" — Q_n's clean structure at h ≤ 4 is finite-spectrum
-  evidence at this M_MAX, not a theorem about all m.
+- Not a commitment to every downstream phase. Phase 2.2 is the gate.
+- Not a claim that cutoff residues are gone; they are demoted until
+  the `v_n(Y)` side quest says otherwise.
+- Not a claim that visuals prove the algebra. The algebra is exact;
+  visuals and Hardy windows test how it appears in concatenated
+  streams.

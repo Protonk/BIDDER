@@ -204,10 +204,11 @@ squarefree two-prime rows through `h = 4`. Height `h = 5` and mixed
 exponent multi-prime examples such as `n = 12` require no new formula,
 but they are not tabulated here.
 
-A useful implementation check is exact Fraction equality between the
-master expansion and `experiments/acm-flow/payload_q_scan.csv`, followed
-by table checks for the displayed specialisations. Any mismatch should
-be a coefficient transcription error or a missing overlap sub-case.
+`experiments/acm-flow/q_n_verify.py` verifies exact Fraction equality
+between the master expansion and `payload_q_scan.csv`, followed by
+table checks for the displayed specialisations. On the current CSV
+(`n ∈ {2,3,4,5,6,10}`), the master expansion and declared
+specialisations have zero mismatches.
 
 This document is not a sign-classification theorem and not a statement
 about normality. It is the local algebraic formula sheet for `Q_n`.

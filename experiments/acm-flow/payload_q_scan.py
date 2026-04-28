@@ -46,7 +46,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-PANEL_NS = [2, 3, 4, 5, 6]
+PANEL_NS = [2, 3, 4, 5, 6, 10]
 PANEL_HS = [2, 3, 4, 5]
 M_MAX = 50000
 

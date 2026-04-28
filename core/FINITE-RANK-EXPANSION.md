@@ -36,6 +36,39 @@ The upper limit is the point. The expansion stops at rank `h` because
 `n^j` no longer divides `m` above that height.
 
 
+## BQN Annotation
+
+This is exact-math annotation, not a third implementation. `Rank` is
+`ν_n(m)`, `Tau` is the ordered divisor count `τ_j`, and `Qn` is the
+finite stack above. The block mirrors the exact formula used in
+`experiments/acm-flow/payload_q_scan.py` and expanded in
+`core/Q-FORMULAS.md`; it is intentionally small and divisor-enumerating.
+
+```bqn
+Divs ← {(0=𝕩|·)⊸/ 1+↕𝕩}
+
+Tau ← {
+  j ← 𝕨
+  j=1 ? 1 ; +´ { (j-1) Tau 𝕩 }¨ ⌊𝕩÷Divs 𝕩
+}
+
+Rank ← {0=𝕨|𝕩 ? 1+𝕨 𝕊 ⌊𝕩÷𝕨 ; 0}
+
+Qn ← {
+  h ← 𝕨 Rank 𝕩
+  js ← 1+↕h
+  sign ← ¯1⋆js-1
+  terms ← js Tau¨ ⌊𝕩÷𝕨⋆js
+  +´ sign × terms ÷ js
+}
+```
+
+Read `Qn` from right to left: find the finite rank `h`; build
+`j = 1..h`; evaluate `τ_j(m/n^j)`; weight by
+`(-1)^(j-1)/j`; sum. The `n = 1` ordinary-prime branch is outside
+this monoid-rank formula.
+
+
 ## Rank Reading
 
 | rank | local form | interpretation |

@@ -44,6 +44,82 @@ reappear deep in the stream once the obvious local background is
 matched?
 
 
+## BQN Annotation
+
+This is exact-math annotation for the shared window object. It mirrors `experiments/math/hardy/hardy_echo.py`
+and the closed form in `core/HARDY-SIDESTEP.md`. The `n = 1` ordinary
+prime branch is out of scope.
+
+```bqn
+NthNPn2 ← {
+  k ← 𝕩-1
+  q ← ⌊ k ÷ (𝕨-1)
+  r ← (𝕨-1)|k
+  𝕨 × 1 + r + 𝕨 × q
+}
+
+HWindow ← {
+  k0‿w ← 𝕩
+  𝕨 NthNPn2¨ k0+↕w
+}
+```
+
+`NthNPn2` is the Hardy sidestep: left argument `𝕨` is `n >= 2`,
+right argument `𝕩` is the one-indexed entry `K`. `HWindow` is Mode 1:
+given `n` and `(K0,W)`, return the local run of n-primes without
+enumerating the prefix.
+
+Digit streams are a separate layer on the same window:
+
+```bqn
+DigitsB ← {𝕩<𝕨 ? ⟨𝕩⟩ ; (𝕨 𝕊 ⌊𝕩÷𝕨)∾⟨𝕨|𝕩⟩}
+DLenB   ← {≠ 𝕨 DigitsB 𝕩}
+DStream ← {⥊ 𝕨 DigitsB¨ 𝕩}
+V2      ← {0=2|𝕩 ? 1+𝕊⌊𝕩÷2 ; 0}
+```
+
+`DStream` gives the exact base-`b` digit stream of a Hardy window.
+`V2` names the binary trailing-zero invariant used by boundary stitch;
+entry-shuffling preserves it because it is per entry, not per position.
+
+Block and digit-position modes use the same inverse. For a lower value
+bound `L`, first compute the least multiplier `k >= ceil(L/n)` not
+divisible by `n`, then convert that multiplier to its one-indexed
+n-prime position.
+
+```bqn
+CeilDiv  ← {⌈𝕩÷𝕨}
+NextGood ← {0=𝕨|𝕩 ? 𝕩+1 ; 𝕩}
+
+KOfMult ← {
+  q ← ⌊𝕩÷𝕨
+  r ← 𝕨|𝕩
+  r + q × 𝕨-1
+}
+
+KFirstGE ← {
+  c ← 𝕨 CeilDiv 𝕩
+  k ← 𝕨 NextGood c
+  𝕨 KOfMult k
+}
+
+KLastLT ← {¯1 + 𝕨 KFirstGE 𝕩}
+
+BlockK ← {
+  b‿d ← 𝕩
+  lo ← b⋆d-1
+  hi ← b⋆d
+  (𝕨 KFirstGE lo)‿(𝕨 KLastLT hi)
+}
+```
+
+`BlockK` is Mode 3: it gives the inclusive K-range for entries in the
+radix block `[b^(d-1), b^d)`. Mode 2 subtracts whole digit-length
+blocks using `BlockK`, then divides the residual digit offset by `d`.
+Destroyer controls are not BQN objects here; they are experimental
+protocols applied to the same `HWindow` payload.
+
+
 ## Mode 1 — Deep Window
 
 Pick `(n, K0, W)` and build the local n-prime window directly.

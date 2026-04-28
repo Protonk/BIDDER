@@ -1,0 +1,52 @@
+q_n_verify.py -- Phase 2.2 exact verifier
+
+input rows: 24203
+n values present: [2, 3, 4, 5, 6, 10]
+
+=== Checks ===
+structural errors: 0
+master checked: 24203
+master mismatches: 0
+displayed-special checked: 24162
+displayed-special mismatches: 0
+
+=== Rows by (n, h, n_type) ===
+(2, 2, 'prime'): 6250
+(2, 3, 'prime'): 3125
+(2, 4, 'prime'): 1563
+(2, 5, 'prime'): 781
+(3, 2, 'prime'): 3704
+(3, 3, 'prime'): 1234
+(3, 4, 'prime'): 412
+(3, 5, 'prime'): 137
+(4, 2, 'prime_power'): 2344
+(4, 3, 'prime_power'): 586
+(4, 4, 'prime_power'): 147
+(4, 5, 'prime_power'): 36
+(5, 2, 'prime'): 1600
+(5, 3, 'prime'): 320
+(5, 4, 'prime'): 64
+(5, 5, 'prime'): 13
+(6, 2, 'multi_prime'): 1157
+(6, 3, 'multi_prime'): 193
+(6, 4, 'multi_prime'): 32
+(6, 5, 'multi_prime'): 5
+(10, 2, 'multi_prime'): 450
+(10, 3, 'multi_prime'): 45
+(10, 4, 'multi_prime'): 5
+
+=== Displayed-special rows skipped by declared scope ===
+('out_of_declared_scope', 4, 5): 36
+('out_of_declared_scope', 6, 5): 5
+
+=== Structural errors ===
+none
+
+=== Master mismatches ===
+none
+
+=== Displayed-special mismatches ===
+none
+
+=== Verdict ===
+PASS

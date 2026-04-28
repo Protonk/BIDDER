@@ -23,6 +23,9 @@ observable: Q_n(m) = Λ_n(m) / log(m)  (exact rational)
   ( 6,  3)    193    +0.4963     +0.1622     0.0231     +14.5
   ( 6,  4)     32    +0.6521     +0.0376     0.0584     +10.5
   ( 6,  5)      5    +0.0859     +0.0322     0.1420      +0.4
+  (10,  2)    450    +0.9634     +0.0426     0.0145     +63.4
+  (10,  3)     45    +0.2891     +0.1039     0.0619      +3.0
+  (10,  4)      5    +0.5000     +0.0603     0.1518      +2.9
 
 === Family-geometry residual on Q_n ===
                   cell           n_type    max |residual|
@@ -42,12 +45,15 @@ observable: Q_n(m) = Λ_n(m) / log(m)  (exact rational)
   n=5 h= 3                      prime            3.1173
   n=5 h= 4                      prime            1.0718
   n=5 h= 5                      prime            0.0260
-  n=6 h= 2                multi_prime            0.0000
-  n=6 h= 3                multi_prime            0.0000
-  n=6 h= 4                multi_prime            0.0000
+  n=6 h= 2                multi_prime            0.1111
+  n=6 h= 3                multi_prime            0.2024
+  n=6 h= 4                multi_prime            0.1667
   n=6 h= 5                multi_prime            0.0000
+  n=10 h= 2                multi_prime            0.2222
+  n=10 h= 3                multi_prime            1.2143
+  n=10 h= 4                multi_prime            0.5000
 
   Mean |residual| by n_type:
                    prime: 0.3096
              prime_power: 0.0000
-             multi_prime: 0.0000
+             multi_prime: 0.0866
