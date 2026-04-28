@@ -63,23 +63,37 @@ Four latches. Each structured the same way. I'm sticking to what's visible in th
 
 ---
 
-## Brief 4 — ACM-restricted multiplication table
+## Brief 4 (rewritten) — Multiplication table on M_n
 
-**Question.** When (a, b) range over atoms of an ACM rather than over ℤ_{>1}, does the deficit exponent in Ford's multiplication-table asymptotic shift? For A_n = n-primes of nℤ⁺, define M_n(N) = |{a·b : a, b ∈ A_n, a·b ≤ N}|. Does M_n(N) ≍ N / Φ(N) with the same constants, shifted constants, or different growth?
+**Reframe.** The original brief asked whether Ford's deficit exponent c shifts when (a, b) range over A_n. That's a question about the answer. The better question is about the structure: what is the right poset on M_n, and does the multiplication-table count factor through that poset? The Λ_n / antichain framing from the previous turn is upstream of this; this brief assumes you've done that diagnostic and want to know what the multiplication table looks like *given* whatever the Λ_n picture turned out to be.
 
-**Canonical refs.**
-- K. Ford, "The distribution of integers with a divisor in a given interval," Annals of Math. 168 (2008), 367–433. The Θ(N²/Φ(N)) result with c = 1 − (1+log log 2)/log 2.
-- P. Erdős's first multiplication-table paper (1955); look up the exact venue.
-- P. Meisner, "Erdős' multiplication table problem for function fields and symmetric groups," arXiv:1804.08483 (2018). Function-field analog.
-- R. Brent, C. Pomerance, D. Purdum, J. Webster, "Algorithms for the multiplication table problem," arXiv:1908.04251 (2019). Has efficient algorithms — exact to N = 2^30, Monte Carlo to 2^(10^8).
+**Question.** Define M_n(N) = |{a · b : a, b ∈ A_n, a · b ≤ N}|. Does M_n(N) follow Ford's Θ(N / Φ(N)) shape with the same constant c = 1 − (1+log log 2)/log 2, a shifted constant c(n), or a different growth law entirely? And — this is the new part — does the answer depend on whether Λ_n stays nonnegative on the relevant range, or is it independent of the flow story?
 
-**Latch.** A_n is given by `acm_n_primes`. Each a · b with a, b ∈ A_n equals n²·k₁·k₂ where k₁, k₂ are not divisible by n. So M_n(N) reduces to a count of distinct products k₁k₂ with k₁, k₂ ≤ √(N/n²) and n ∤ k₁, n ∤ k₂ — the Erdős multiplication-table problem on ℤ \ nℤ. The open question is whether this restriction shifts c.
+**Canonical refs.** Same as before. K. Ford, "The distribution of integers with a divisor in a given interval," Annals 168 (2008). Erdős's 1955 and 1960 papers. Meisner (arXiv:1804.08483) on the function-field analog. Brent-Pomerance-Purdum-Webster (arXiv:1908.04251) on algorithms — they have Monte Carlo code that scales to N ≈ 2^(10^8), and adapting it to count distinct products restricted to A_n is a small modification, not a reimplementation. Add: Koukoulopoulos (arXiv:1102.3236) on the generalized k-fold multiplication table, since the M_n version sits closer to a constrained k-fold table than to the bare 2-fold one.
 
-**First step.** Adapt the BPPW Monte Carlo algorithm — sample pairs and count distinct products in a hash set. Run for n ∈ {2, 3, 5, 6, 10} and N up to 10^9 or wherever M_n(N) · Φ(N) / N visibly stabilizes. Plot the ratio across n.
+**What changed.** Two things.
 
-**"Probably nothing" signal.** M_n(N) ~ (1 − 1/n)² · M(N) with the same Φ. Then residue-class restriction is uninteresting at the exponent level. Write the negative result up briefly and move on.
+First, products in A_n × A_n have a clean reduction. Every element of A_n is n · k with n ∤ k. So a · b = n²·k₁·k₂ where k₁, k₂ are not divisible by n. The distinct-product count on A_n is therefore the distinct-product count of the *coprime-to-n* multiplication table, scaled by n². That changes the question from "is the residue restriction Ford-flat?" to "what does Ford-style anatomy look like inside a residue class?" — which has a literature (Tenenbaum, Koukoulopoulos) but isn't directly the multiplication-table problem.
 
-**Reach goal.** Either an exponent shift (genuinely new) or a clean invariance proof: residue-class restriction does not move c. Either outcome is paper-shaped, and the function-field analog (Meisner 2018) is the likeliest first toehold.
+Second, the Λ_n diagnostic from the previous turn determines whether the *poset* M_n supports flow certificates at all. The multiplication-table count is a function on this poset (it counts the codomain of the multiplication map A_n × A_n → M_n, restricted to a sub-level set). If Λ_n ≥ 0 in the regime you're testing, the count has a clean probabilistic interpretation as the size of the image of a Markov-style map. If Λ_n goes negative, the image has structure that the standard anatomy machinery doesn't see. So the result of brief 4 is *conditioned* on what brief 3-equivalent (the Λ_n sign-table) returns.
+
+**Latch.** `acm_n_primes` gives you A_n directly. The BPPW Monte Carlo algorithm samples (i, j) pairs uniformly, computes ij, and counts distinct products via a hash set. Modification: sample (k₁, k₂) uniformly from {k ≤ √(N)/n : n ∤ k}, compute n²·k₁·k₂, hash. The reduction to the coprime-to-n table means you're really running BPPW on a sieved domain, which is a one-line change to their sampling step.
+
+**First step.** Run BPPW-modified Monte Carlo for n ∈ {2, 3, 5, 6, 10}, N ∈ {10^6, 10^7, 10^8, 10^9}. For each (n, N), compute M_n(N) · Φ(N) / N and plot vs N. Three diagnostic shapes:
+
+- *Flat across N at a constant that depends on n only.* Ford-flat with a residue-class prefactor; the deficit exponent c is invariant under residue restriction. Negative result, but a clean one — write it up briefly.
+
+- *Drifts logarithmically.* The Φ in the denominator has the wrong shape; the true deficit for M_n has a different power of log log N, and you've found it numerically.
+
+- *Drifts polynomially in log N.* The exponent c itself has shifted to some c(n). This would be a real result, and the function-field analog (Meisner) tells you where to look for the proof — Meisner's c shift in 𝔽_q[t] tracks q, and a shift in your case would track n similarly.
+
+**"Probably nothing" signal.** Flat-with-prefactor across all tested n. Then the multiplication table doesn't see the M_n structure at all and the Λ_n / antichain story is the only research direction worth pursuing. This is the most likely outcome and isn't a waste — it tells you the multiplication table is anatomy-flat under residue restriction, which is itself a fact worth recording.
+
+**Reach goal.** A theorem of the form M_n(N) ≍ N / Φ_n(N), with an explicit Φ_n that either matches Ford's Φ (the residue restriction is invisible) or differs in a way that's diagnostic of M_n's poset structure. The function-field analog gives the cleanest path to a proof if the numerics show a shift; the BPPW algorithm gives the cleanest path to the numerics regardless of which way it goes.
+
+**Coupling to brief on Λ_n.** Don't run brief 4 before the Λ_n sign-table. If Λ_n goes negative for some n at small m, that locus may be visible in M_n(N) as a non-monotonicity in the prefactor — small effect, but if you're not looking for it you'll miss it. Conversely, if Λ_n ≥ 0 everywhere for some n, M_n(N) for that n should behave most like the Ford case, and divergence between Ford's predicted Φ and your measured ratio at that specific n is the cleanest evidence that the residue restriction is doing something.
+
+**A note on tractability.** BPPW's Monte Carlo gives error scaling as 1/√(samples), and the deficit exponents you're trying to detect are small — c ≈ 0.086. To distinguish c = 0.086 from c = 0.10 in the prefactor, you need enough samples to resolve a factor of (log N)^0.014, which at N = 10^9 is about 1%. That's ~10^4 samples for 1% Monte Carlo error, which is cheap. So the experiment is genuinely feasible at the laptop scale; you don't need cluster time to see the answer if the answer exists.
 
 ---
 

@@ -96,31 +96,73 @@ The CSV in `cf_spikes.csv` records all spikes above `10⁴`; the d-class
 identification is read off from the digit-count ratios (~13× between
 successive tiers, matching `b^(d) / b^(d−1) · d / (d−1)`).
 
-**Empirical fit.** For the d=k spike,
+**Tier identification, confirmed.** For each spike `a_i`, the
+identity `2 log₁₀ q_{i−1} + log₁₀ a_i` lands on the cumulative
+digit count through the corresponding d-block boundary. For n=2:
+i=10 → 48, i=32 → 723, i=118 → 9 723 — exactly the cumulative
+ends of d=2, d=3, d=4 in C_10(2). The same check holds for the
+d=4 mega-spike across all sampled n. So d-tier identification is
+not ratio-matching; it is independently confirmed by the CF error
+scale.
 
-    spike_digits(n, k) ≈ (b−1)² · b^(k−2) · (n−1) · k / n²
-                       ≈ (b−1)/b · (digit count of d=k block of C_b(n)).
+**Empirical fit.** A natural boundary heuristic for the d=k spike:
 
-For (b, k) = (10, 4) this gives `32400 · (n−1)/n²`, matching the
-table to 99–102%. The `(b−1)/b` prefactor is the empirical "missing
-tenth" of the block — the part the rational convergent cannot
-reproduce. We do not yet have a clean derivation.
+    spike_digits(n, k) ≈ D_k(n) − C_{k−1}(n)
 
-**Diophantine consequence.** At the d=4 mega-spike, log₁₀ q at the
-preceding convergent is ≈ 720 (cumulative digit count up to the d=3
-boundary), and the spike contributes log₁₀ a ≈ 8 268 → 2 908
-depending on n. The ratio `log a / log q` is ~13.5 across all n,
-giving a lower bound `μ(C_10(n)) ≥ 13.5` for every n we sampled.
-This is well above the generic μ=2 and above Mahler's μ=10 for the
-integer Champernowne. Asymptotically (d → ∞ in the smooth regime)
-the ratio works out to 9·(1 + 1/(d−1)) → 9, suggesting
-`μ(C_10(n)) ≤ 11` independent of n. Neither bound is proven yet.
+where `D_k(n) = (b−1)·b^(k−1)·(n−1)/n²·k` is the digit count of
+the d=k block of `C_b(n)` under the smooth condition, and
+`C_{k−1}(n)` is the cumulative digit count through d=k−1. In
+base 10 this gives the closed form
 
-**Not Liouville.** The spike-digit growth is `b^(k−1)`, the
-log-q growth is the cumulative digit count which is also `b^(k−1)`
-to leading order, so their ratio stays bounded. C_10(n) is highly
-non-generic but lives just above the integer-Champernowne ceiling,
-not at the Liouville extreme.
+    spike_digits(n, k) ≈ (n−1)/n² · 10^(k−1) · (8k + 10/9).
+
+For (b, k) = (10, 4) the prediction is `33 111 · (n−1)/n²`, which
+matches the observed values to 97–100% — n=10 the outlier at 97.6%,
+the others within 0.5%. The prefactor on `D_k` tends to 8/9 ≈ 0.889
+asymptotically, not 9/10. Closed-form derivation is pending.
+
+The scaled column `obs × n²/(n−1)` is **not** constant — it drifts
+monotonically from 33 070 (n=2) to 32 311 (n=10), about 2.3%. The
+`(n−1)/n²` law is therefore approximate at finite k. Whether the
+drift is a finite-k correction, a smoothness-of-`n²|b^(d−1)`
+correction, an n=10-style trailing-zero artifact, or something
+else is open.
+
+**Diophantine consequence.** At the d=4 mega-spike, the preceding
+convergent's `log₁₀ q` varies substantially with n — smaller n
+gives larger upstream spikes contributing more to `log q`. Per n
+the finite convergent Diophantine exponent
+`2 + log a_{i+1} / log q_i` at the d=4 spike is:
+
+| n | log₁₀ q | log₁₀ a | 2 + log a / log q |
+|---|---:|---:|---:|
+| 2 | 727.7 | 8 267.6 | 13.36 |
+| 3 | 650.0 | 7 342.0 | 13.29 |
+| 4 | 553.4 | 6 187.0 | 13.18 |
+| 5 | 479.0 | 5 266.0 | 12.99 |
+| 6 | 421.0 | 4 560.0 | 12.83 |
+|10 | 296.7 | 2 908.0 | 11.80 |
+
+These are **finite convergent exponents**, not lower bounds on the
+irrationality measure `μ`. `μ` is a limsup over infinitely many
+convergents; one spike's exponent neither lower- nor upper-bounds
+it.
+
+Under the block-growth heuristic, the analogous ratio at the d=k
+boundary is `(72k + 10)/(9k − 10) → 8` as k → ∞, so the asymptotic
+boundary exponent is `2 + 8 = 10` — coincidentally Mahler's μ for
+integer Champernowne. *If* off-boundary PQs stay Khinchin-typical,
+the limsup is realised along the boundary-spike sequence and the
+heuristic gives `μ(C_10(n)) = 10`, independent of n. Neither
+boundary-spike growth nor off-boundary control is proven; both
+inputs are needed for any rigorous claim about μ.
+
+**Liouville.** Under the block-growth heuristic, boundary-spike
+exponents stay bounded — so heuristically C_10(n) is not Liouville.
+Establishing this rigorously requires a uniform bound on a_i across
+both boundary and off-boundary indices, which we do not have. The
+empirical observation is consistent with non-Liouville; it is not
+yet a proof.
 
 
 ## Pipeline shape

@@ -31,7 +31,8 @@ spike `a_4 = 149083`. See `smoke_test()`.
 
 ## Headline finding
 
-**Spike magnitudes scale with the n-sieve density `(n−1)/n²` to within ~2%.**
+**Spike magnitudes scale roughly as the n-sieve density `(n−1)/n²`,**
+with a ~2.3% monotone drift across the six n we sampled.
 
 Largest spike per n in the validated prefix:
 
@@ -44,44 +45,70 @@ Largest spike per n in the validated prefix:
 | 6 | 188 | 4560 | 32835 |
 | 10 | 212 | 2908 | 32311 |
 
-The same scaling holds for the secondary spikes (the d=3 boundary
-spike, ~5× smaller in digit count than the mega d=4 spike). Each n
-shows the same multi-tier signature: a small d=2 spike (5–40 digits),
-a medium d=3 spike (170–620 digits), a mega d=4 spike (2908–8268
-digits), and occasionally a tail spike — exactly the d-block
-structure of `core/BLOCK-UNIFORMITY.md` showing through.
+The drift in the scaled column is real, not rounding noise. Whether
+it's a finite-k correction, a smoothness-of-`n²|b^(d−1)` correction,
+or n=10's trailing-zero structure leaking in, is open.
 
-Empirical fit for the d=k spike magnitude in C_10(n):
+Each n shows the same tiered signature: a small d=2 spike (5–40
+digits), a medium d=3 spike (170–620 digits), a mega d=4 spike
+(2908–8268 digits), and sometimes a tail spike — the d-block
+structure of `core/BLOCK-UNIFORMITY.md` projecting into the CF
+spectrum. Identification of i=118 as the d=4 boundary (etc.) is
+**confirmed** by `2 log₁₀ q_{i−1} + log₁₀ a_i` landing exactly on
+the cumulative digit count through that boundary, not just by
+ratio-matching.
+
+Empirical fit for the d=k spike magnitude in C_10(n) (boundary
+heuristic, base 10):
 
 ```
-spike_digits(n, k)  ≈  (b−1)² · b^(k−2) · (n−1) · k / n²
-                    ≈  (b−1)/b · (digits in d=k block of C_b(n))
+spike_digits(n, k)  ≈  D_k(n) − C_{k−1}(n)
+                    =  (n−1)/n² · 10^(k−1) · (8k + 10/9)
 ```
 
-For (b, k) = (10, 4): `81 · 100 · 4 · (n−1)/n² = 32400 · (n−1)/n²`,
-matching the table to 99–102%.
+For (b, k) = (10, 4) this is `33 111 · (n−1)/n²`, matching observed
+values to 97–100% (n=10 the outlier at 97.6%). The asymptotic
+prefactor on `D_k` is **8/9**, not 9/10. Closed-form derivation
+pending.
 
-## Irrationality measure, lower bound
+## Diophantine consequence
 
-For the d=4 mega-spike in C_10(n): the convergent before the spike
-has `log_10 q ≈ 720` (cumulative digits up to the d=3 boundary), and
-the spike itself gives `log_10 a_{i+1} ≈ 0.9 · b^(k−1) · (n−1)/n² · k`.
-The Diophantine ratio `2 + log a / log q` evaluates to ~13.5 across
-all six n. This is a lower bound on the irrationality measure
-`μ(C_10(n))` and *vastly* exceeds the generic μ=2; it lives in the
-regime above Mahler's μ=10 for integer Champernowne.
+For the d=4 mega-spike, the preceding convergent's `log₁₀ q`
+varies with n (smaller n → larger upstream spikes → larger log q).
+Per-n finite convergent Diophantine exponents
+`2 + log a_{i+1} / log q_i`:
 
-The asymptotic d → ∞ ratio works out to `9 · (1 + 1/(d−1)) → 9`,
-giving `μ(C_10(n)) ≤ 11` in the smooth regime — pending proof.
+| n | log₁₀ q | log₁₀ a | exponent |
+|---|---:|---:|---:|
+| 2 | 727.7 | 8 267.6 | 13.36 |
+| 3 | 650.0 | 7 342.0 | 13.29 |
+| 4 | 553.4 | 6 187.0 | 13.18 |
+| 5 | 479.0 | 5 266.0 | 12.99 |
+| 6 | 421.0 | 4 560.0 | 12.83 |
+|10 | 296.7 | 2 908.0 | 11.80 |
+
+These are **finite convergent exponents**, not lower bounds on the
+irrationality measure `μ` (which is a limsup over infinitely many
+convergents; one spike doesn't bound it from below).
+
+Under the block-growth heuristic the analogous ratio at the d=k
+boundary is `(72k + 10)/(9k − 10) → 8` as `k → ∞`, giving an
+asymptotic boundary exponent of `2 + 8 = 10` — coincidentally
+matching Mahler's μ=10 for integer Champernowne. If off-boundary
+PQs stay Khinchin-typical, this would yield `μ(C_10(n)) = 10`
+independent of n. Neither boundary-spike growth nor off-boundary
+control is proven.
 
 ## What this is not
 
-- **Not a Liouville number.** The digit count of the d=k spike grows
-  like `b^(k−1)`, but `log q` at that point grows like the cumulative
-  digit count, also `b^(k−2)`. Their ratio is bounded, so μ is finite.
+- **Not Liouville (heuristically).** Under the block-growth model,
+  boundary-spike exponents stay bounded as k → ∞. A rigorous
+  non-Liouville claim needs uniform a_i bounds across both boundary
+  and off-boundary indices, which we lack. The empirics are
+  consistent with non-Liouville; not a proof.
 - **Not "Mahler carried over without n-structure"** — the brief's
-  "probably nothing" outcome. Spike magnitudes track `(n−1)/n²` to
-  ~2% across six values of n.
+  "probably nothing" outcome. Spike magnitudes track `(n−1)/n²`
+  with sieve-density-explained drift across six values of n.
 
 ## Precision wall
 

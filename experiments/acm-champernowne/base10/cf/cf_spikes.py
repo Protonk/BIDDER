@@ -94,7 +94,7 @@ def safe_log10(v):
 
 def smoke_test():
     """Classical Champernowne 0.123456789101112... has tabulated PQs.
-    OEIS A030167: a_5 (1-indexed in the fractional CF) = 149083."""
+    OEIS A030167: a_4 (1-indexed in the fractional CF) = 149083."""
     digits = ''.join(str(i) for i in range(1, 4000))
     a = cf_partial_quotients(digits, 30, PREC_BITS_LO)
     print(f'[smoke] classical Champernowne first 8 PQs: {a[:8]}')
