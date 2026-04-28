@@ -1,0 +1,86 @@
+ACM-Mangoldt residual ablation grid
+===================================
+
+source: acm_mangoldt.csv
+rows: 15499
+target: rho = DeltaMertens / Out
+matching style: bucketed arithmetic coordinates, not a global regression
+
+=== Q1: height=2 residual by block type and cutoff witness bucket ===
+
+    block_type           Y_wit    count    median rho      mean rho     rho<0
+        smooth               0     1482       -0.0550       -0.0648     0.999
+        smooth               1      118       -0.1584       -0.1659     1.000
+        smooth               2       31       -0.1896       -0.2093     1.000
+        smooth             3-5       15       -0.2179       -0.2466     1.000
+   uncertified               0     1285       -0.0642       -0.0742     1.000
+   uncertified               1      119       -0.1850       -0.2048     1.000
+   uncertified               2       28       -0.2298       -0.2303     1.000
+   uncertified             3-5       19       -0.2896       -0.2946     1.000
+   uncertified             6-9        4       -0.4189       -0.3875     1.000
+
+=== Q2: smooth advantage after matching height=2 and cutoff witness bucket ===
+
+   Y_wit  smooth n   smooth mean  uncert n   uncert mean   smooth-uncert
+       0      1482       -0.0648      1285       -0.0742         +0.0094
+       1       118       -0.1659       119       -0.2048         +0.0389
+       2        31       -0.2093        28       -0.2303         +0.0209
+     3-5        15       -0.2466        19       -0.2946         +0.0479
+     6-9         0       +0.0000         4       -0.3875         +0.0000
+
+Positive smooth-uncert means smooth is less negative in the matched bucket.
+
+=== Q3: height=2 Lambda sign by n kind and payload2 tau2 ===
+
+        n_kind          p2_tau    count     Λ>0 %     Λ=0 %     Λ<0 %   neg_mass
+         prime             0-2      631      0.48     99.52      0.00     0.0000
+         prime             3-4      871      0.00      0.00    100.00     1.0000
+         prime             5-8      586      0.00      0.00    100.00     1.0000
+         prime            9-16      209      0.00      0.00    100.00     1.0000
+         prime             17+       14      0.00      0.00    100.00     1.0000
+     composite             0-2      201      1.49     98.51      0.00     0.0000
+     composite             3-4      316      0.00      0.00    100.00     1.0000
+     composite             5-8      218      0.00      0.00    100.00     1.0000
+     composite            9-16       54      0.00      0.00    100.00     1.0000
+     composite             17+        1      0.00      0.00    100.00     1.0000
+
+=== Q4: diag/prime disagreement inside block type and cutoff witness bucket ===
+
+    block_type     Y_wit        dp    count    median rho      mean rho   mean wc   mean spf
+        smooth         0     agree     7128       -0.0559       -0.0674      0.00       1.80
+        smooth         1     agree      593       -0.1683       -0.1783      1.00       2.20
+        smooth         2     agree      141       -0.2048       -0.2153      2.00       2.05
+        smooth       3-5     agree       30       -0.2083       -0.2430      3.00       2.00
+        smooth       3-5  disagree       32       -0.2200       -0.2479      3.72       2.00
+      family_E         1     agree        4       -0.4562       -0.4569      1.00       3.00
+      family_E         2     agree        1       -0.5343       -0.5343      2.00       3.00
+      family_E       3-5     agree        1       -0.5087       -0.5087      3.00       2.00
+      family_E       3-5  disagree        2       -0.5306       -0.5306      5.00       2.00
+      family_E       6-9  disagree        1       -0.6394       -0.6394      7.00       2.00
+   uncertified         0     agree     6708       -0.0644       -0.0752      0.00       2.30
+   uncertified         1     agree      587       -0.1859       -0.2026      1.00       2.34
+   uncertified         2     agree      145       -0.2310       -0.2459      2.00       2.26
+   uncertified       3-5     agree       60       -0.2866       -0.3096      3.13       2.12
+   uncertified       3-5  disagree       52       -0.2923       -0.3176      4.02       2.04
+   uncertified       6-9     agree        2       -0.5245       -0.5245      6.00       2.00
+   uncertified       6-9  disagree       12       -0.3577       -0.3954      7.00       2.00
+
+=== Q5: height=2 joint read, payload tau2 versus cutoff witness richness ===
+
+  p2_tau     Y_wit    count      mean rho     rho<0     Λ<0 %   neg_mass
+     0-2         0      703       -0.0744     1.000      0.00     0.0000
+     0-2         1       84       -0.1989     1.000      0.00     0.0000
+     0-2         2       18       -0.2343     1.000      0.00     0.0000
+     0-2       3-5       23       -0.2780     1.000      0.00     0.0000
+     0-2       6-9        4       -0.3875     1.000      0.00     0.0000
+     3-4         0     1059       -0.0711     1.000    100.00     1.0000
+     3-4         1       85       -0.1788     1.000    100.00     1.0000
+     3-4         2       33       -0.2188     1.000    100.00     1.0000
+     3-4       3-5       10       -0.2713     1.000    100.00     1.0000
+     5-8         0      732       -0.0654     0.999    100.00     1.0000
+     5-8         1       63       -0.1789     1.000    100.00     1.0000
+     5-8         2        8       -0.1874     1.000    100.00     1.0000
+     5-8       3-5        1       -0.1884     1.000    100.00     1.0000
+    9-16         0      258       -0.0599     1.000    100.00     1.0000
+    9-16         1        5       -0.1549     1.000    100.00     1.0000
+     17+         0       15       -0.0276     1.000    100.00     1.0000
