@@ -204,8 +204,9 @@ report already follows this discipline for `ρ` tables.
 Reporting (above) is descriptive. When a test is needed
 (graduation, falls, persistence claims), the workhorse is
 **Chatterjee's ξ correlation coefficient** (Chatterjee 2021;
-`scipy.stats.chatterjeexi` in scipy ≥ 1.15, ~5 lines of numpy
-otherwise).
+`scipy.stats.chatterjeexi` is available in the current Sage
+environment; otherwise use a local numpy implementation rather
+than adding a dependency).
 
 Key properties:
 
@@ -221,12 +222,19 @@ Defaults:
 
 | question | test |
 |---|---|
-| does `ρ` depend on a continuous scout (`τ_2(Y)`, witness count, …)? | `ξ(scout, ρ)` |
+| does `ρ` depend on a raw scout (`τ_2(Y)`, witness count, …)? | `ξ(scout, ρ)` with explicit tie handling; see below |
 | ranking of scouts by predictive power for `ρ`? | sort scouts by `ξ(scout, ρ)` descending |
 | does `ρ` shape track sign-fraction shape? | `ξ(bucket-mean-ρ, bucket-sign-fraction)` at bucket level (Pearson is also fine when bucket count is small and a co-located shape is the visual claim) |
 | does sign-fraction depend on bucket (categorical Y)? | χ² of independence |
 | smooth vs uncertified at fixed bucket (binary X)? | Mann-Whitney U or two-sample t-test |
 | is a *specific* shape (U vs monotone) the right one — *after* ξ confirms structure? | pre-specified polynomial contrasts: linear + quadratic |
+
+Tie caveat: `τ_2`, witness count, and bucket labels have many ties.
+SciPy currently breaks ties in the predictor arbitrarily. For ξ
+tests, use the raw integer scout, report the tie policy, and run a
+small tie-sensitivity check (for example deterministic jitter within
+ties, or permutation testing). Do not treat ξ on bucket labels as a
+standalone graduation test.
 
 Avoid as defaults:
 

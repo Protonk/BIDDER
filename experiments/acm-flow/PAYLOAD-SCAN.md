@@ -80,29 +80,31 @@ at a generic `Y_m` or one with peculiar structure.
 The provisional pattern from the L1d/e tables in
 `ACM-MANGOLDT.md`, at h ≥ 3, is **U-shaped**, not monotone:
 
-    payload τ_2 ≤ 4               → sign(Λ_n) negative-heavy
-    payload τ_2 ∈ [5, 16]          → sign(Λ_n) positive-dominated
+    payload τ_2 ≤ 4               → nonzero sign / mass negative-heavy
+    payload τ_2 ∈ [5, 16]          → nonzero sign / mass positive-dominated
     payload τ_2 ≥ 17 + diag/prime
-    disagreement                   → sign(Λ_n) negative-heavy again
+    disagreement                   → nonzero sign / mass negative-heavy again
 
 The graduation criterion below tests the U-shape, not monotonicity.
-A monotone `ρ` or sign-fraction would be a clean falsifier of the
-shape hypothesis, even if the *direction* of the trend looks
-"explanatory" — the L1d/e non-monotonicity is part of what's being
-tested, not noise to average away.
+A monotone version of `ρ`, the nonzero-sign split, or the
+negative-mass fraction would be a clean falsifier of the shape
+hypothesis, even if the *direction* of the trend looks "explanatory"
+— the L1d/e non-monotonicity is part of what's being tested, not
+noise to average away.
 
 The local coordinate **graduates** from "matched association" to
 "controlled local observable" if, at fixed `(n, Y-bucket)`, the
 controlled scan reproduces the U-shape:
 
-- the sign-fraction of `Λ_n` is negative-heavy at low payload τ_2
-  (≤ 4), flips positive-dominated through the middle (5–16), and
-  re-flips negative at high τ_2 (≥ 17) + disagreement — same bucket
-  boundaries as L1d/e, at h=3;
-- mean `ρ` is non-flat in `τ_2(m/n^h)` and tracks the sign-fraction
-  shape (its specific form is not prescribed beyond "varies in
-  step with sign"; what matters is that payload τ_2 moves ρ at
-  fixed Y-environment);
+- the nonzero-sign split and `neg_mass / abs_mass` for `Λ_n` are
+  negative-heavy at low payload τ_2 (≤ 4), flip positive-dominated
+  through the middle (5–16), and re-flip negative at high τ_2
+  (≥ 17) + disagreement — same bucket boundaries as L1d/e, at h=3.
+  Report both measures, since zeros can dominate raw sign counts;
+- mean `ρ` is non-flat in `τ_2(m/n^h)` and tracks the nonzero-sign
+  / negative-mass shape (its specific form is not prescribed beyond
+  "varies in step with sign"; what matters is that payload τ_2 moves
+  ρ at fixed Y-environment);
 - the prime-n vs composite-n split persists at matched Y-bucket
   (a height-3 reversal that depends on whether `n` itself is
   prime or composite is the kind of structural fact the previous
@@ -144,7 +146,9 @@ For every `τ_2(m/n^h)` bucket in every panel cell, report:
 - mean `ρ`
 - median `ρ`
 - sign-fraction (count of `ρ < 0`)
-- sign-fraction of `Λ_n(m)` (separate from `ρ` sign)
+- sign counts of `Λ_n(m)` and nonzero-sign fraction (separate from
+  `ρ` sign)
+- `neg_mass / abs_mass` for `Λ_n(m)`
 - bucket count
 - the `Y_m` distribution (so the reader can verify the target
   bucket was actually hit)

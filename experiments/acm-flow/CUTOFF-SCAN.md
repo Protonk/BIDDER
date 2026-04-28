@@ -1,10 +1,10 @@
 # CUTOFF-SCAN — controlled scan of the truncation coordinate
 
 The matched-association finding in L4d of `ACM-MANGOLDT.md` —
-that `ρ = Δ'/Out` factorises monotonically through `τ_2(Y)` with
-a consistent smooth-vs-uncertified offset — is at the level of
-"survives matching." This brief turns it into a controlled-source
-measurement.
+that `ρ = Δ'/Out` organizes through `τ_2(Y)` in the aggregate
+table, with a τ_2-dependent smooth-vs-uncertified offset — is at
+the level of "survives matching." This brief turns it into a
+controlled-source measurement.
 
 
 ## The control
