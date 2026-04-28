@@ -155,6 +155,16 @@ For every `τ_2(m/n^h)` bucket in every panel cell, report:
 
 Flag any bucket where mean and median diverge.
 
+**Tie protocol for ξ.** Lighter than the cutoff scan, since
+payload τ_2 buckets are coarser and `m` varies across many
+factorisation classes per bucket. Still apply the K-random-tie-
+break protocol from `ACM-MANGOLDT.md` (K ≥ 32) and report
+`ξ_mean` / `ξ_range`; never a single value.
+
+Scan scripts adopt the parent discipline at write-time. Do not
+wait for the parent tomography script to add median/sign-fraction
+columns first.
+
 
 ## Files (planned)
 

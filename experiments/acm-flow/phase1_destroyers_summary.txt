@@ -1,0 +1,29 @@
+phase1_destroyers summary
+K_SHUFFLES = 100, SEED = 42
+
+=== Destroyer 1 — cutoff dist_n² Y-shuffle ===
+  actual max |residual|: 1.22e-05
+  null mean max |residual|: 6.27e-06
+  max |z|: 4.34
+  mean |z| in dist=0 column: 2.41
+  mean |z| in dist=2 column: 2.79
+
+=== Destroyer 2 — payload ξ m-shuffle ===
+      (n, h)  count      obs ξ   null mean   null std         z
+  ( 2,  2)   2500    +0.8027     +0.0188     0.0050    +156.6
+  ( 2,  3)   1250    +0.9399     +0.3264     0.0097     +63.3
+  ( 3,  2)   1482    +0.8317     +0.0114     0.0059    +138.3
+  ( 3,  3)    494    +0.9115     +0.2057     0.0159     +44.5
+  ( 4,  2)    938    +0.7898     +0.0096     0.0078    +100.3
+  ( 4,  3)    234    +0.2912     +0.0019     0.0171     +16.9
+  ( 5,  2)    640    +0.8376     +0.0088     0.0092     +89.6
+  ( 5,  3)    128    +0.8190     +0.1798     0.0339     +18.9
+  ( 6,  2)    463    +0.8046     +0.0085     0.0123     +64.5
+  ( 6,  3)     77    +0.1718     +0.0018     0.0333      +5.1
+
+=== Subtraction 3 — family-geometry residual ===
+  max |residual|: 20.5642
+  mean |residual| by n_type:
+                   prime: 1.2672
+             prime_power: 0.0000
+             multi_prime: 0.0000

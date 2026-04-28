@@ -229,12 +229,24 @@ Defaults:
 | smooth vs uncertified at fixed bucket (binary X)? | Mann-Whitney U or two-sample t-test |
 | is a *specific* shape (U vs monotone) the right one — *after* ξ confirms structure? | pre-specified polynomial contrasts: linear + quadratic |
 
-Tie caveat: `τ_2`, witness count, and bucket labels have many ties.
-SciPy currently breaks ties in the predictor arbitrarily. For ξ
-tests, use the raw integer scout, report the tie policy, and run a
-small tie-sensitivity check (for example deterministic jitter within
-ties, or permutation testing). Do not treat ξ on bucket labels as a
-standalone graduation test.
+**Tie protocol.** `τ_2`, witness count, and bucket labels are
+integer-valued with massive tie clusters; SciPy's `chatterjeexi`
+breaks predictor ties arbitrarily, and on heavy-tie data that
+swings ξ enough to flip scout rankings. The default for any ξ
+report is therefore:
+
+1. compute `ξ` under K independent random tie-breakings of the
+   predictor (K ≥ 32; bump to ~100 for borderline calls);
+2. report `ξ_mean`, `ξ_range = max − min` across the K seeds,
+   and the K + base seed in the output table;
+3. if `ξ_range` is comparable to the gap between competing scouts,
+   the ranking is **not decisive** — fall back to Kruskal-Wallis
+   on the binned data, or report bucket means with explicit
+   hedge.
+
+A single ξ value on bucket labels is never a standalone graduation
+test. The cutoff scan, where (n, m) is fixed and the Y-sweep makes
+predictor ties dominant, is where this protocol bites hardest.
 
 Avoid as defaults:
 

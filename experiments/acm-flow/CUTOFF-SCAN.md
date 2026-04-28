@@ -151,6 +151,20 @@ Flag any bucket where mean and median diverge. The cutoff scan
 generates dense per-`Y` data; the high-leverage-tail risk is
 real, and matched buckets must be read for bulk vs tail.
 
+**Tie protocol for ξ.** This scan is the heaviest-ties case in the
+program — at fixed `(n, m)`, the predictors `τ_2(Y)`, witness
+count, and `n²`-distance are integer-valued with massive tie
+clusters across the `Y`-sweep. Apply the K-random-tie-break
+protocol from the statistical-method-discipline section of
+`ACM-MANGOLDT.md`: report `ξ_mean` and `ξ_range` over K ≥ 32
+random tie-breakings (K ≥ 100 for any borderline scout-ranking
+call), record K and base seed alongside the result. A single ξ
+value here is never decisive.
+
+Scan scripts adopt the parent discipline at write-time. Do not
+wait for the parent tomography script to add median/sign-fraction
+columns first.
+
 
 ## Files (planned)
 
