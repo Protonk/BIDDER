@@ -1,220 +1,230 @@
-# STRUCTURE-HUNT — what we go looking for after graduation
+# STRUCTURE-HUNT — what we go looking for after Phase 1
 
-The four-coordinate decomposition in `ACM-MANGOLDT.md` is a working
-hypothesis. The two scans (`CUTOFF-SCAN.md`, `PAYLOAD-SCAN.md`)
-test whether the local and truncation coordinates are independent
-observables. Once those land — graduate or fall — there is a
-structure-hunt program the experimental apparatus is positioned
-to run.
-
-This document is the proposal. Priorities can shift as Phase 1
-results come in; the phase-structure is the spine.
+**Phase 1 ran. The four-coordinate decomposition in `ACM-MANGOLDT.md`
+collapsed to two and changed observable.** This document is the
+post-Phase-1 plan. The pre-Phase-1 version (with cutoff × payload
+matrices, ρ-prediction, etc.) is preserved in git history and was
+written against a model the destroyers refuted.
 
 
-## Phase 1 — graduation (current)
+## Phase 1 outcomes
 
-Run `CUTOFF-SCAN`, then `PAYLOAD-SCAN`. The two outcomes determine
-which coordinates are first-class.
+See `PHASE1-RESULTS.md` and `MEMO-PHASE1.md`. In short:
 
-| outcome | implication for Phase 2+ |
+| pre-Phase-1 claim | post-destroyer status |
 |---|---|
-| both graduate | full decomposition. Phase 2–5 in sequence. |
-| cutoff graduates, payload falls | local coordinate folds back into height; Phase 2 collapses to a single-axis interaction with cutoff. |
-| payload graduates, cutoff falls | residuals are local; Phase 3 / Brief 4 prediction simplifies but the truncation arc closes. |
-| both fall | the four-coordinate model is wrong and Phase 2 is moot. Hunt resumes from the residuals, not from the lines. |
+| ρ is the spectroscopic observable | refuted; ρ doesn't carry payload signal |
+| four-coordinate decomposition | collapsed to two (height + payload divisor data) |
+| cutoff coordinate (general) | falls at scale 0.1; tiny n=2 residue at scale 10⁻⁵ that is *secretly* a `v_2(Y)` distinction (dist=0 ↔ 4|Y, dist=2 ↔ 2 mod 4 for n=2) |
+| payload graduation on Λ_n | evidence; m-shuffle null z ≥ 5 every cell |
+| Λ_n is the local observable | replaced by `Q_n(m) = Λ_n(m)/log(m)` (`payload_q_scan.py`) — exact rational, removes log(m) scale, family-geometry residual cuts 4× |
+| prime/composite-n split at h=3 | evidence; family-geometry subtraction by `n_type` cancels almost all bucket variation |
 
-Phase 1 is the gate. Nothing below assumes more than what
-Phase 1 returns.
 
+## The post-Phase-1 model
 
-## Phase 2 — interaction matrix
+**Local observable:** `Q_n(m) = Λ_n(m) / log(m)`, exact rational from
+the closed form
 
-If both scans graduate, the next question is whether the
-coordinates are additively separable or whether they couple.
-Three pairwise interaction tests, each a small extension of the
-Phase 1 scan infrastructure:
+    Q_n(m) = Σ_{j ≥ 1, n^j | m} (-1)^(j-1) τ_j(m/n^j) / j.
 
-| interaction | scan extension |
+**Coordinates:**
+
+| coordinate | role |
 |---|---|
-| height × payload-τ_2 | extend `PAYLOAD-SCAN` to sweep `h ∈ {2, 3, 4}` at fixed `(n, Y-bucket)`. Tests whether the U-shape's bucket boundaries shift with `h`. |
-| payload × cutoff-τ_2 | joint scan: at fixed `n`, sweep both payload τ_2 and cutoff τ_2 on a grid. Tests whether the two coordinates' effects compose additively or multiplicatively. |
-| block-type × cutoff | extend `CUTOFF-SCAN` to compare smooth and uncertified `m` at matched cutoff buckets. Tests whether the L4d gap-growth survives at fixed `(n, m)`. |
+| height `h = ν_n(m)` | sets the regime; selects which `τ_j` enter the sum |
+| payload divisor data | multivariate `(τ_2(m/n²), τ_3(m/n³), …, τ_h(m/n^h))` — the closed form is exactly a linear combination of these |
+| n-factorisation type | `prime / prime_power / multi_prime`; predicts which coefficient pattern Q_n exhibits |
 
-The interaction matrix is the first place the spectroscopic
-framing pays off — clean cross-terms or selection rules would mean
-the lines decompose into modes whose product structure is itself
-predictable. Heavy interactions mean the coordinates are not the
-primitives; some coupled basis is.
+The coordinates are *not* independent — they're connected through
+the closed form. The empirical question becomes: how cleanly do
+explicit divisor-function formulas describe each `(h, n_type, payload
+divisor data)` regime?
+
+**Side quest — cutoff coordinate.** Demoted but not eliminated. The
+n=2 dist_n² residue earned evidence (z ≈ ±4) at scale 10⁻⁵; for
+n ∈ {3, 4, 5} it's at sketch level (z ≈ ±1–2). Probably not a
+generic cutoff coordinate but a `v_2(Y)` shadow specific to n=2.
+Worth re-running at higher Y_max to see if other n's strengthen.
+
+
+## Phase 2 — explicit closed forms (the lemma)
+
+The prime/composite split at h=3 should become a **lemma**, not a
+panel. The closed form already expresses Q_n as a divisor-sum
+combination; for each `(h, n_type)` we should derive the explicit
+predictor and verify against the data.
+
+### 2.1 — derive Q_n(m) for `(h, n_type)`, all small h
+
+For `n_type ∈ {prime, prime_power, multi_prime}` and `h ∈ {2, 3, 4, 5}`:
+
+- substitute `m = n^h · k`, `gcd(n, k) = 1`;
+- expand `τ_j(n^(h-j) · k)` using multiplicativity on coprime
+  factors and `τ_j(p^a) = C(a + j − 1, j − 1)` for `n = p` prime;
+- collect Q_n(m) as a polynomial in the divisor data of `k`.
+
+Concrete h=3 prime n (n∤k) hand calculation already done:
+`Q_n(n³ k) = 1 − d(k) + τ_3(k)/3`. Verifies the observed zeros at
+`d(k) = 2` (k prime) and `d(k) = 3` (k = p²). Same approach for the
+other (h, n_type) cells.
+
+The output: a small table of explicit formulas per `(h, n_type)`,
+plus a script that evaluates each formula on `m`-samples and asserts
+agreement with `payload_q_scan.csv` to within Fraction equality.
+
+If the formulas match exactly, the lemma is proven (modulo writing
+it cleanly).
+
+### 2.2 — within-prime residual
+
+`payload_q_summary.txt` reports mean |family-geometry residual| =
+0.31 on the prime category. With the closed forms in 2.1, this
+residual should drop to numerical zero (since formulas predict Q
+exactly given the divisor data). What remains tells us whether the
+n-specific signal within "prime n" is structural or sampling.
+
+### 2.3 — h ≥ 4 sample-size discipline
+
+At `M_MAX = 50000`, h=5 panels for n ∈ {5, 6} have ≤13 m-points
+and the destroyer crashes (z < 1). Either bump `M_MAX` to 10⁶
+(τ-table grows linearly; cheap) or accept that h=5 is below
+resolution at the current scale. Document the choice in the
+script.
 
 
 ## Phase 3 — cross-experiment validation
 
-Three other places in the repo should be predictable from the
-four-coordinate model, each a separate confirmation. Phase 3 can
-run in parallel with Phase 2 once Phase 1 graduates.
+Now that the local observable is Q_n with explicit formulas, the
+cross-checks become predictions, not analogies.
 
-### Brief 2 cross-check (CF spikes)
+### 3.1 — Brief 2 (CF spikes)
 
-`experiments/acm-champernowne/base10/cf/SPIKE-HUNT.md` reports
-that mega-spike magnitudes scale as
-`(b−1)² · b^(k−2) · (n−1) · k / n²`. The `(n−1)/n²` factor *is*
-payload divisor density expressed differently. If the
-spectroscopy is real, the CF spike formula should be derivable
-from the four-coordinate model — the Mahler-style rational
-approximant at the d=k boundary in `C_b(n)` corresponds to a
-specific `(m, X)` pair whose `ρ` should sit on a known coordinate
-line.
+`experiments/acm-champernowne/base10/cf/SPIKE-HUNT.md` reports the
+mega-spike magnitude scales as `(b−1)² · b^(k−2) · (n−1) · k / n²`.
+Derive that formula from Q_n's closed form on the n-Champernowne
+real and the Mahler-style boundary approximation. If the derivation
+goes through, Brief 2's empirical fit becomes a corollary of the
+Phase 2 lemma. If it doesn't, we learn what's different about the
+CF setting.
 
-The pass/fail: does the empirical CF spike fit
-`(b−1)² · b^(k−2) · (n−1) · k / n²` come out of the coordinate
-model with an explicit mapping, or is it a parallel finding that
-happens to use the same density factor?
+### 3.2 — Brief 4 (BPPW MC on M_n)
 
-### Brief 4 prediction (BPPW MC)
+The brief is gated on the `Λ_n` (now Q_n) sign-table. The Phase 2
+formulas give the sign of Q_n in closed form for each
+`(h, n_type, payload data)` cell. The BPPW M_n(N)·Φ(N)/N prediction
+should follow from integrating Q_n's sign distribution against the
+multiplication-table count.
 
-`EXPERIMENTAL.md` Brief 4 (rewritten) asks for the shape of
-`M_n(N) · Φ(N) / N`. If the four coordinates govern `Λ_n` flow
-on `M_n`, they should also govern the multiplication-table count
-via the same poset structure. **Predict before measuring** — write
-down what shape the four-coordinate model says `M_n(N)` should
-take, then run BPPW MC and compare. A model that survives a
-prediction across an entirely different observable is what
-"earns its keep" looks like.
+### 3.3 — Cross-base
 
-### Cross-base
-
-The closed form `Λ_n(m) = log m · Σ (−1)^(j−1) τ_j(m/n^j)/j` is
-base-agnostic. The h=2 cliff `τ_2(m/n²) ≥ 3 ⇒ Λ_n < 0` is
-base-agnostic. But the cutoff `τ_2(Y)` signal, the witness-count
-scout, and the smooth/Family E partition all interact with
-base-specific sieve geometry through `SIEVES.md` and
-`ULAM-SPIRAL.md`.
-
-Run the same tomography in base 2 and base 12. The local
-coordinate should be base-invariant; the cutoff coordinate should
-be base-dependent in a *structured* way (specific scaling with
-`b`, predictable from the closed form). That's a clean test of
-which lines are intrinsic to the monoid and which are
-positional-arithmetic artefacts.
+Closed form is base-agnostic. h, payload τ_2 are base-agnostic. So
+Q_n itself is base-agnostic; only the *cutoff residue* coordinate
+might be base-dependent (since `dist_n²` interacts with the
+positional sieve). With the cutoff coordinate now demoted, cross-
+base doesn't add Phase 1 surprise; it's a routine sanity check.
 
 
 ## Phase 4 — predictive model
 
-If Phases 1–3 land, the four coordinates are independently
-observable, interactions are catalogued, and cross-experiments
-agree. The final test is predictive: build a model that takes
-`(h, payload τ_2, cutoff scout, block type)` and predicts `ρ`,
-with quantified residuals.
+If Phase 2's formulas match the data exactly, the predictive model
+is *not* a fit — it's the closed form. Phase 4 becomes:
 
-Method discipline:
+- evaluate Q_n on a held-out range of `m`;
+- compare prediction (formula) to observation (`payload_q_scan` re-run);
+- residual should be exactly zero, modulo Fraction arithmetic.
 
-- the model is *prespecified*; no adjusting after seeing
-  residuals;
-- use bucket-level features only (matches the discipline
-  in `ACM-MANGOLDT.md`);
-- residuals are evaluated with the same shape-agnostic ξ
-  and matched-bucket toolkit, against the held-out `Λ_n`,
-  cross-base, Brief 2, Brief 4 datasets;
-- a clean residual structure (all bias absorbed by the four
-  coordinates plus their Phase-2 interactions) confirms the
-  spectroscopy. Structured residuals point at Phase 5.
+A clean zero residual converts Phase 2 from "lemma" to "theorem."
+
+If Phase 2's formulas leave residual at certain `(h, n_type)`
+cells, Phase 4 fits a polynomial extension and we look at *that*
+residual's structure.
 
 
-## Phase 5 — missing lines
+## Phase 5 — missing lines (if any)
 
-If Phase 4 leaves systematic residuals, the structure hunt
-becomes: find the coordinate that explains them. Candidates
-already in the repo:
+After Phase 2–4 land, the remaining residuals (if any) point to
+coordinates not in the model:
 
-- `ν_p(n)` for each prime `p | n` (the prime-vs-composite-n
-  asymmetry suggests this matters but it's not a coordinate yet);
-- smallest-prime-factor of `m` (the cheapest-sieve scout);
-- the Λ-on-A_n positivity locus from the previous-turn
-  discussion (whether the *original-Λ* on the n-prime atoms
-  themselves controls anything beyond the monoid-Λ);
-- the digit-class boundary structure from `BLOCK-UNIFORMITY.md`
-  beyond just smooth/Family-E/uncertified — specifically the
-  spread-≤2 quantitative correction.
+- `ν_p(n)` for each prime `p | n` (within prime_power and
+  multi_prime)
+- ω(payload) — the number of distinct prime factors of the payload
+- the n=2 cutoff `v_2(Y)` shadow at scale 10⁻⁵, retested at
+  larger Y_max to see if it's a real spectral line or finite-size
+  artifact
 
-Each is a probe that hasn't been read into the model. Phase 5
-is candidate-by-candidate, with the same controlled-source
-discipline as Phase 1.
+Each is a small probe with the same destroyer + subtraction
+discipline.
 
 
-## Selection rules
+## Side quest — cutoff `v_2(Y)` residue
 
-A spectroscopic instrument doesn't just measure lines. It
-catalogues which transitions are allowed and which are forbidden.
-For us, "selection rules" are the (h, payload, cutoff, block)
-combinations that exhibit specific coordinate signatures.
-Examples worth looking for:
+The n=2 dist_n² coherent line is *secretly* a `v_2(Y)` distinction
+(distance=0 means 4 | Y, distance=2 means 2 mod 4 ≡ Y is exactly
+2 mod 4). The "n²-distance" framing was the wrong scout name. The
+right scout is `v_2(Y)`, and the question is whether the residue
+appears at all `n` (with `v_n(Y)` analog) or only at n=2.
 
-- **dark cells** — combinations where ρ ≈ 0 (no truncation defect
-  beyond the universal `−1/(m log X)` term). If these cluster on
-  a clean rule (e.g., "smooth m-block + low cutoff τ_2 + low
-  payload τ_2"), the rule is a finding.
-- **bright cells** — most-negative ρ. Likely cluster on the
-  composite-n + high-cutoff-witness corner; whether they cluster
-  *only* there is the test.
-- **excluded shapes** — combinations the model says cannot
-  produce a U-shape on the Λ_n side. Test by attempting to find
-  a witness in the L1 data.
+Test: at higher `Y_max` (5×10⁵ or 10⁶), rerun `cutoff_ray_scan` for
+a couple of cells and check whether `v_n(Y)` produces evidence-level
+z for n ∈ {3, 4, 5}, or whether the signal stays an n=2-only
+phenomenon.
 
-Selection rules are a Phase-4 byproduct: once the predictive
-model is in hand, the rules fall out of where the model says
-ρ has zeros, extrema, or sign reversals. Catalogue them as
-a separate output.
+If it stays n=2-only, the cutoff coordinate is fully demoted to a
+Lambda-on-A_n positivity-locus question, which is a different
+research direction (`POSET-FACTOR.md`'s framing).
 
 
-## Sequencing summary
+## Sequencing
 
 ```
-Phase 1   graduation               (current; CUTOFF, then PAYLOAD)
-Phase 2   interaction matrix       (gate: both Phase 1 scans graduate)
-Phase 3   cross-experiment val.    (parallel to Phase 2)
-Phase 4   predictive model         (gate: Phases 2, 3 land)
-Phase 5   missing lines            (gate: Phase 4 leaves residuals)
-selection rules                     (Phase 4 byproduct)
+Phase 2.1   derive Q_n closed forms per (h, n_type)         (analytic)
+Phase 2.2   verify against payload_q_scan.csv               (small script)
+Phase 2.3   bump M_MAX for h=5 if desired                   (parameter change)
+Phase 3.1   Brief 2 derivation                              (analytic)
+Phase 3.2   Brief 4 prediction                              (BPPW MC + analytic)
+Phase 3.3   cross-base sanity check                         (re-run scan)
+Phase 4     held-out predictive verification                (small script)
+Phase 5     missing-lines probes                            (per-candidate)
+
+Side quest  v_2(Y) at higher Y_max                          (re-run scan)
 ```
 
-Phase 1 is the only commitment. Phase 2+ shift in scope and
-priority based on Phase 1 outcomes; this document is the
-provisional plan, not a contract.
+Phase 2.1 is the gate. With closed forms in hand, everything
+downstream becomes either derivation or verification. Without
+them, downstream is fitting and the spectroscopy claim stays
+empirical.
 
 
 ## Files (planned, beyond Phase 1)
 
 | file | role | phase |
 |---|---|---|
-| `interaction_grid.py` | joint payload × cutoff scan | 2 |
-| `cross_base.py` | re-run tomography in base 2 and 12 | 3 |
-| `brief2_crosscheck.py` | CF spike formula derivation from coordinate model | 3 |
-| `brief4_predict.py` | predicted `M_n(N) · Φ(N) / N` shape from coordinates | 3 |
-| `predictive_model.py` | bucket-level model fit + residual analysis | 4 |
-| `STRUCTURE-HUNT.md` | this document | (any) |
+| `q_n_formulas.md` | closed forms per (h, n_type) | 2.1 |
+| `q_n_verify.py` | per-m formula vs Q_n(m) check | 2.2 |
+| `brief2_q_derivation.md` | CF spike formula from Q_n | 3.1 |
+| `brief4_q_prediction.py` | M_n(N)·Φ(N)/N from Q_n sign | 3.2 |
+| `cutoff_v2_y.py` | re-run cutoff at higher Y_max with `v_n(Y)` scout | side |
 
 
 ## Coupling
 
-- **`ACM-MANGOLDT.md`** — the four-coordinate decomposition under
-  test.
-- **`CUTOFF-SCAN.md` / `PAYLOAD-SCAN.md`** — Phase 1 scans.
-- **`EXPERIMENTAL.md` Brief 2 and Brief 4** — Phase 3 cross-checks.
-- **`core/BLOCK-UNIFORMITY.md`** — block partition for the
-  totalisation coordinate.
-- **`experiments/acm-champernowne/base10/cf/SPIKE-HUNT.md`** —
-  Brief 2 source of the (n−1)/n² scaling formula to predict.
-- **`experiments/acm/diagonal/cheapest_sieve/README.md`** — scout
-  vocabulary used across all phases.
+- **`ACM-MANGOLDT.md`** — needs trim to two-coordinate model on Q_n.
+  Current version still names ρ as the working residual statistic.
+- **`PHASE1-RESULTS.md`** — destroyer outcomes; tighten h=3 wording
+  ("no negative mass; low payload mostly zero, higher buckets turn
+  positive" — not "all zero at τ_2 ≤ 4").
+- **`MEMO-PHASE1.md`** — already calibrated.
+- **`payload_q_scan.py` / `payload_q_*.png`** — new Phase-1.5
+  artifacts on Q_n.
 
 
 ## What this is not
 
-- Not a replacement for `ACM-MANGOLDT.md` or the two scan briefs.
-  Those are the present-tense work; this is forward-look.
-- Not a commitment to Phases 2–5 in order. The phase order is
-  the assumption-stack; if Phase 1 falls, the stack collapses
-  and the hunt resumes from residuals.
-- Not a claim that the four-coordinate model is right. It is a
-  research program that takes the model seriously enough to test
-  it across multiple observables.
+- Not a commitment to all five phases. Phase 2.1 is the gate;
+  everything after assumes formulas in hand.
+- Not a claim that Q_n is the *final* observable. If h=4, 5
+  formulas leave residual, more coordinates remain. The discipline
+  doc's caution applies: "an almost finite scout palette at this
+  scale" — Q_n's clean structure at h ≤ 4 is finite-spectrum
+  evidence at this M_MAX, not a theorem about all m.

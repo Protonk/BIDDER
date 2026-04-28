@@ -1,0 +1,19 @@
+Experiment 1: prefix vs deep RLE histogram, n=2, W=200
+
+prefix K=[1, 200]
+  avg digit length (base 10): 2.8650
+  total bits (base 2): 1745
+  Hamming weight (count of 1s): 932
+  bit balance: 0.5341
+  RLE histogram (run length 1..11, then ≥12):
+    0-runs: [395, 85, 40, 17, 7, 3, 1, 0, 0, 0, 0, 0]
+    1-runs: [327, 127, 53, 24, 10, 4, 2, 1, 0, 0, 0, 0]
+
+deep K=[1000000000, 1000000199]
+  avg digit length (base 10): 10.0000
+  total bits (base 2): 6400
+  Hamming weight (count of 1s): 3535
+  bit balance: 0.5523
+  RLE histogram (run length 1..11, then ≥12):
+    0-runs: [1265, 550, 71, 33, 15, 7, 3, 1, 1, 0, 0, 0]
+    1-runs: [926, 526, 453, 23, 10, 4, 2, 1, 0, 1, 0, 0]

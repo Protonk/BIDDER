@@ -142,28 +142,31 @@ Pipeline correct.
 
 ### h=3 prime/composite split — the structural finding
 
-| n | h=3 τ_2 ≤ 4 | h=3 τ_2 ∈ [6, 16] |
-|---|---|---|
-| 2 (prime) | all zero | all positive |
-| 3 (prime) | all zero | all positive |
-| 5 (prime) | all zero | all positive |
-| 4 (composite) | all negative | mixed → positive |
-| 6 (composite) | all negative | mixed → positive |
+At h=3, **prime n** has *no negative mass* on Λ_n in any panel
+cell. Within prime n, the low-payload buckets are mostly zero
+(some with a single positive at τ_2 = 1) and higher payload
+buckets turn positive. **Composite n** (in our panel:
+`n_type = prime_power` for n=4, and `n_type = multi_prime` for
+n=6) has Λ_n < 0 at low payload τ_2, transitioning through mixed
+to positive at higher τ_2.
 
-At h=3, **prime n** has `Λ_n(m) ≥ 0` everywhere we sampled —
-either zero (low payload τ_2) or positive (high). No negative
-mass. **Composite n** has `Λ_n(m) < 0` at low payload τ_2,
-transitioning through mixed to positive at higher τ_2.
+| n_type | n | h=3 low payload (τ_2 ≤ 4) | h=3 mid payload (τ_2 ∈ [6, 16]) |
+|---|---|---|---|
+| prime | 2 | sign-fraction-of-Λ neg = 0; mostly zero with τ_2 = 1 atom positive | positive-dominated |
+| prime | 3 | same | positive-dominated |
+| prime | 5 | same | positive-dominated |
+| prime_power | 4 | negative-dominated | mixed → positive |
+| multi_prime | 6 | negative-dominated | mixed → positive |
 
-This is the **prime / `p^k` / composite asymmetry** the previous-turn
-discussion predicted, made empirical. The L1d/e tables at the
+This is the **prime / `p^k` / composite asymmetry** the previous-
+turn discussion predicted, made empirical. The L1d/e tables at the
 parent tomography's `X = 10000` were averaging across n; the split
 is invisible until you separate by `n`.
 
 The U-shape claim from `ACM-MANGOLDT.md` was a description of the
-n-aggregated L1d/e — under the controlled scan, the U-shape is
-revealed as a composite-n phenomenon, not a universal feature.
-Prime n at h=3 shows monotone-toward-positive, not U.
+n-aggregated L1d/e — under the controlled scan, the U-shape is a
+composite-n phenomenon, not a universal feature. Prime n at h=3
+is monotone-toward-positive, not U-shaped.
 
 
 ## Result 3 — ρ is essentially a (n, m, scale) statistic
@@ -237,8 +240,162 @@ h=3. The framing in `ACM-MANGOLDT.md` is partially correct —
 height and payload are real coordinates — but ρ is not the right
 observable for either of them. Λ_n is.
 
-The next move is updating `ACM-MANGOLDT.md` to reflect the
-two-coordinate model on Λ_n, deciding whether ρ deserves any
-remaining role at all (it might still be useful for the original
-1196-flow-certificate question, just not for spectroscopy), and
-moving to Phase 2's reduced agenda.
+
+## Destroyer tests
+
+Per `experiments/VISUAL-REDUCTION-DISCIPLINE.md`: every visual
+claim must pair with a destroyer. Three tests in
+`phase1_destroyers.py`.
+
+### Destroyer 1 — Y-shuffle for the cutoff dist_n² coherent line
+
+Within each `(n, m)` cell, shuffle ρ across post-saturation Y;
+recompute the dist_n² residual. Compare to a `K=100` null
+distribution.
+
+| (n, m) | actual dist=0 z | actual dist=2 z | verdict |
+|---|---:|---:|---|
+| 2, 4 | −4 | +4 | evidence |
+| 2, 12 | −4 | +4 | evidence |
+| 2, 36 | −4 | +4 | evidence |
+| 2, 100 | −4 | +4 | evidence |
+| 2, 180 | −4 | +4 | evidence |
+| 2, 72 | −4 | +4 | evidence |
+| 3, 36 | −2 | ~0 | borderline |
+| 5, 100 | −1 | ~0 | sketch |
+| 4, 48 | −2 | ~0 | borderline |
+
+The "cross-cell coherent" claim was overstated. The dist_n² line
+is **real for n = 2** (z ≈ ±4 in the dist = 0 and dist = 2 columns,
+across all six n=2 panel cells). For n ∈ {3, 4, 5} the same column
+pattern is much weaker (z ≈ ±1–2). So the signal is real but
+n-specific, not universal. The residual line is mostly an n=2
+phenomenon at this `Y_max = 50000`.
+
+### Destroyer 2 — m-shuffle for payload ξ graduation
+
+Within each `(n, h)` cell, shuffle Λ_n across m. Recompute
+ξ(payload τ_2 → Λ_n). Compare observed to `K=100` null.
+
+| (n, h) | obs ξ | null ξ ± std | z |
+|---|---:|---:|---:|
+| 2, 2 | +0.80 | +0.019 ± 0.005 | +156.6 |
+| 2, 3 | +0.94 | +0.326 ± 0.010 | +63.3 |
+| 3, 2 | +0.83 | +0.011 ± 0.006 | +138.3 |
+| 3, 3 | +0.91 | +0.206 ± 0.016 | +44.5 |
+| 4, 2 | +0.79 | +0.010 ± 0.008 | +100.3 |
+| 4, 3 | +0.29 | +0.002 ± 0.017 | +16.9 |
+| 5, 2 | +0.84 | +0.009 ± 0.009 | +89.6 |
+| 5, 3 | +0.82 | +0.180 ± 0.034 | +18.9 |
+| 6, 2 | +0.80 | +0.009 ± 0.012 | +64.5 |
+| 6, 3 | +0.17 | +0.002 ± 0.033 | +5.1 |
+
+Every cell's z exceeds 5; most exceed 50. Payload coordinate
+graduation on Λ_n is overwhelmingly robust under m-shuffle.
+**Earns "evidence."**
+
+Tie-handling caveat: my ξ implementation uses the no-ties formula
+with random jitter; under heavy ties (e.g., ~28% exact zeros at
+n=2, h=3) this introduces an upward bias visible in the high
+shuffled-null mean for prime-n h=3 cells (e.g., null mean 0.33 at
+n=2 h=3). The z-score against the null distribution is still
+valid; the absolute ξ is biased.
+
+### Subtraction 3 — family-geometry residual
+
+Coarse model: predict mean Λ_n per `(h, n_type, payload τ_2)`
+bucket where `n_type ∈ {prime, prime_power, multi_prime}`.
+Subtract bucket mean from each observation.
+
+Mean |residual| by `n_type`:
+
+| n_type | mean |residual| |
+|---|---:|
+| prime | 1.27 |
+| prime_power | 0.0 |
+| multi_prime | 0.0 |
+
+The `prime_power` and `multi_prime` residuals are exactly zero
+because each contains only one cell-class (`{4}` for prime_power;
+`{6, 10}` for multi_prime, but they sit at different
+`(n_type, h, τ_2)` 3-tuples once h is fixed).
+
+The `prime` category contains three n's (2, 3, 5) at each h. The
+nonzero mean residual reflects that n=2, n=3, n=5 give different
+Λ_n at the same `(h, payload τ_2)` bucket because Λ_n scales
+with `log m ≈ h log n`. Concentrated outliers at τ_2 = 17+ at
+h=3 (residuals up to ±20) are driven by tiny sample size (n_cell
+= 2 or 3) and the log(n) gap between primes.
+
+**The right normalized observable is `Q_n(m) = Λ_n(m) / log(m)`,
+not `Λ_n(m)` directly.** The closed form gives `Λ_n = log(m)·Q_n`
+where Q_n is the rational divisor-sum residual. Comparing across
+m and across n should use Q_n; the family-geometry model would
+likely show much smaller residual on Q_n than on Λ_n.
+
+### Updated claims after destroyers
+
+| Phase 1 claim | destroyer | post-destroyer status |
+|---|---|---|
+| Cutoff coordinate falls at scale ~0.1 | (no destroyer needed; the L4d gradient is gone at fixed (n, m)) | confirmed |
+| ρ doesn't carry payload signal | mean ρ row residual ~0 in payload heatmap | confirmed |
+| Payload graduation on Λ_n | m-shuffle null, z ≥ 5 every cell | evidence |
+| Prime/composite-n split at h=3 | visible in payload heatmap; family-geometry residual is small once n_type accounts for it | evidence |
+| Cutoff dist_n² coherent line at scale 10⁻⁵ | Y-shuffle null, z ≈ ±4 for n=2 cells, ~±1–2 for others | evidence-for-n=2; sketch elsewhere. **NB**: dist=0 ↔ `4 ∣ Y`, dist=2 ↔ `Y ≡ 2 mod 4`, so for n=2 this is *secretly* a `v_2(Y)` distinction. The "n²-distance" framing was the wrong scout name; the right scout is `v_n(Y)`. Higher-Y_max test of whether n ∈ {3, 4, 5} cross threshold under `v_n(Y)` is the side-quest in `STRUCTURE-HUNT.md`. |
+| Near-saturation transient at scale 10⁻³ | not formally tested with destroyer; per-cell heatmaps show finite extent | working assumption |
+
+The "next normalized observable" for Phase 2:
+
+- swap Λ_n for Q_n(m) = Λ_n(m)/log(m) and rerun the family-
+  geometry subtraction. Expect residuals to collapse, especially
+  for the prime category.
+- run the cutoff destroyer at higher Y_max (say 5×10⁵) to see if
+  the n ≠ 2 dist_n² signal grows or stays at z ≈ 1–2.
+
+The cutoff coordinate, instead of being uniformly demoted, now
+splits: for n = 2 it has a real residual line at scale 10⁻⁵
+(though still well below the payload effect sizes); for n ∈
+{3, 4, 5} it remains a sketch at this scale.
+
+
+## Q_n re-run
+
+`payload_q_scan.py` re-runs the payload sweep with `Q_n = Λ_n / log(m)`
+as observable, exact rational. Panel extended to h ∈ {2, 3, 4, 5}.
+
+Headline:
+
+- **Family-geometry residual on Q_n** (mean |residual| by n_type):
+  prime drops from 1.27 (on Λ_n) to **0.31** — 4× cut. Singletons
+  prime_power and multi_prime are 0 by tautology (one n-class each
+  in the panel).
+- **ξ destroyer extends to h=4** at z = 10–34 across cells. h=5
+  marginal at this M_MAX (z = 0.4 to 10.3 depending on sample size;
+  n=5 h=5 has 13 m-points, n=6 h=5 has 5 — below resolution).
+- **Heatmaps go visually pale** (`payload_q_matrix.png`). Most
+  cells are near zero in the family-geometry-residual panel; the
+  remaining structure is concentrated at high-payload-τ_2 buckets
+  (especially τ_2 = 17+) where samples are sparse and the closed
+  form gives extreme values that bucket-averaging across primes
+  doesn't fully capture.
+
+The remaining within-prime residual (~0.31 mean |residual|) plus
+the high-τ_2 outliers point to: **Phase 2 should derive explicit
+divisor-function formulas for Q_n per `(h, n_type)`, then verify
+against `payload_q_scan.csv` to within Fraction equality.** If the
+formulas match exactly, the residual collapses to zero and the
+prime/composite split becomes a lemma.
+
+Hand-derived for h=3, prime n, n∤k, m = n³·k:
+
+    Q_n(n³·k) = 1 − d(k) + τ_3(k) / 3.
+
+Verifies the observed Q = 0 at d(k) = 2 (k prime), Q = 0 at d(k) = 3
+(k = p²), Q = 0 at d(k) = 4, k = pq, etc. The exact pattern of
+zeros is predictable from this formula.
+
+For composite n (prime_power, multi_prime), the analogous derivation
+gives Q ≤ 0 at low payload τ_2 — matching the observed negativity.
+That is the next paper-shaped artifact: a one-page table of
+explicit Q_n formulas per `(h, n_type)`, plus the `q_n_verify.py`
+script that asserts agreement.

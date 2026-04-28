@@ -1,0 +1,9 @@
+Experiment 2: boundary-stitch v_2(n)=1 barcode at depth
+n=2, W=200, K0_deep=1000000000
+
+  trailing-bit (col 7) rate of 1:
+    prefix:       0.0000  (expected 0.0)
+    deep:         0.0000  (expected 0.0)
+    shuffle-null: 0.0000  (expected 0.0; entry shuffle preserves parity)
+
+The v_2(n)=1 trailing-zero barcode is closed-form arithmetic: p_K(n=2) = 2·(q·2 + r + 1) is always even, so its last bit is 0. This persists at any K. The shuffle null preserves the barcode (entries still even after shuffle) — *not* a real null for this claim, since the barcode is per-entry, not per-position. A correct destroyer would shuffle bits within entries, not entries within window.

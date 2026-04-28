@@ -1,0 +1,6 @@
+digit_position_i,true_K,true_offset,oracle_K,oracle_offset,match_K
+1,1,0,1,0,True
+100,43,0,43,0,True
+1000,320,0,320,0,True
+2000,570,0,570,0,True
+3000,820,0,820,0,True
