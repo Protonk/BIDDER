@@ -119,10 +119,10 @@ rank; it is mostly sample-size discipline.
 
 Decision. The identity question is settled by Phase 2.2 (zero
 mismatches over 24203 rows, including all present h=5 rows). Cells
-with row count below ~50 — `(3,5)`, `(5,5)`, `(6,5)`, `(10,4)` — are
-declared under-resolved-by-design; `(10,5)` is absent at this
-`M_MAX`. Their weak destroyer z-scores are not evidence against
-finite rank and are not to be cited that way. The distribution
+with row count below ~50 — `(4,5)`, `(5,5)`, `(6,5)`, `(10,3)`,
+`(10,4)` — are declared under-resolved-by-design; `(10,5)` is absent
+at this `M_MAX`. Their weak destroyer z-scores are not evidence
+against finite rank and are not to be cited that way. The distribution
 question is routed to Phase 5, where the held-out re-scan covers a
 different `m` range and naturally widens h=5. Compute that would have
 gone into a larger 2.3 scan goes to Phase 2.4 instead, since
@@ -175,9 +175,22 @@ Hardy Echo is the validation layer.
 
     (b-1)^2 · b^(k-2) · (n-1) · k / n².
 
-Derive the factor from Q plus radix-block geometry. The target is to
-explain both the `(n-1)/n²` density and the block-length factor, not
-just fit six points.
+`mega-spike/brief2_q_derivation.md` gives the first derivation pass.
+The exact part is radix-block geometry: smooth k-blocks contribute
+`D_k`, preceding blocks contribute `C_{k-1}`, and the naive spike
+height is `D_k - C_{k-1}`. This recovers the `(n-1)/n²` density and
+the block-length factor.
+
+The d=4 residual then explains why the earlier six-point scaling
+drifts. The better CF-scale form is
+
+    spike_digits(k,n) ~= T_k(n) - 2*L_{k-1}(n),
+
+where `T_k = C_{k-1}+D_k` is boundary digit depth and `L_{k-1}` is the
+actual logarithmic denominator depth just before the boundary. The
+remaining residual is almost exactly `-2*(L_{k-1}-C_{k-1})` on the
+existing table. So Phase 3.1 has moved from "find the density factor"
+to "model denominator inflation in the off-spike/background stream."
 
 ### 3.2 — Hardy Mode 3 Block Counts
 
@@ -279,7 +292,7 @@ Phase 2.2   exact verification on payload_q_scan.csv            COMPLETE
 Phase 2.3   h=5 resolution: under-resolved-by-design, route to P5  DECIDED
 Phase 2.4   Hardy composite-Q deep witnesses                    COMPLETE
 
-Phase 3.1   CF spike derivation from Q + block geometry         (analytic)
+Phase 3.1   CF spike derivation: boundary law + q inflation     STARTED
 Phase 3.2   Hardy Mode 3 large-d block-count checks             (parameter run)
 Phase 3.3   Hardy Mode 2 digit-position spike neighborhoods     (small script)
 Phase 3.4   Hardy Mode 4 tail destroyers for visual claims      (per-claim)
@@ -303,7 +316,9 @@ fitting.
 | `q_n_verify.py` | exact row-wise formula check | 2.2 |
 | `payload_q_scan.py` | Q scan and held-out scans | 2.2, 5 |
 | `hardy_composite_q.py` | deep product Q witnesses | 2.4 |
-| `brief2_q_derivation.md` | CF spike derivation from Q | 3.1 |
+| `mega-spike/MEGA-SPIKE.md` | Phase 3.1 tracker and pre-run prediction | 3.1 |
+| `mega-spike/brief2_q_derivation.md` | boundary law plus denominator-inflation residual | 3.1 |
+| `mega-spike/spike_drift_table.py` | reproducible d=4 residual table | 3.1 |
 | `hardy_block_spikes.py` | large-d block-count / spike neighborhood checks | 3.2, 3.3 |
 | `hardy_tail_destroyers.py` | matched deep-window visual destroyers | 3.4 |
 | `brief4_q_prediction.py` | `M_n(N)·Φ(N)/N` from Q sign distribution | 4 |
