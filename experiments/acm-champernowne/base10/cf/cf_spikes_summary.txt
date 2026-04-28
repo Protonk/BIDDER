@@ -1,0 +1,9 @@
+cf_spikes — MAX_PQ=5000, K_PRIMES=20000, PREC_BITS_LO=80000, PREC_BITS_HI=160000, SPIKE_THRESHOLD=10000
+
+  n  valid  pq_lo  stable  spikes  max_digits  max_idx
+  2    408   5000     408       6        8268      118
+  3    487   5000     487       4        7342      162
+  4    514   5000     514       4        6187      148
+  5    613   5000     613       4        5266      178
+  6    660   5000     660       4        4560      188
+ 10    843   5000     843       3        2908      212
