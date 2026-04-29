@@ -411,17 +411,19 @@ parameterised families. The literature is not empty.
 
 What would be unusual about ACM-Champernowne is *not* "a
 parameterised family of absolute normals exists." It is **a
-family designed for something else** turning out to be absolutely
-normal as a side effect. The construction was built for Hardy
-random access on n-primes, finite-rank `Q_n` local algebra, and
-the substrate's residual structure as investigative tool — not
-for absolute-normality production. If absolute normality of every
-member proves out, the substrate's machinery (finite, indexable,
-with `O(1)` digit oracle and factorisation by construction) ports
-with not much modification to adjacent hard problems: factoring
-in residue classes, points on curves, structured arithmetic on
-indexed lattices. The substrate becomes a transferable
-investigation method, not just an absolute-normality producer.
+family whose substrate machinery was built for substrate
+investigation** — Hardy random access on n-primes, finite-rank
+`Q_n` local algebra, the residual structure as a tool — turning
+out to be absolutely normal in the bargain. If absolute normality
+of every member proves out, we expect the substrate's machinery
+(finite, indexable, with `O(1)` digit oracle and factorisation
+by construction) would port with not much modification to
+adjacent hard problems: factoring in residue classes, points on
+curves, structured arithmetic on indexed lattices. We have not
+demonstrated the porting; we are reading the shape of the
+machinery and saying what it looks positioned to do. The substrate
+would become a transferable investigation method, not just an
+absolute-normality producer.
 
 That is the backstop stake. Not "no one has produced
 parameterised absolute normals" — they have. **Closing this with
@@ -554,14 +556,18 @@ proof would require closing what the substrate refuses to close.
   repo cannot yet articulate the cancellation. Both are hints
   that the substrate's residual structure has more to give.
 
-Each site is where an absolute-normality proof would have to
-make landfall via the substrate-side route. Each remains open.
-The lens predicts that work in this repo will make progress
-toward each, and *will not finish any* in a way that propagates
-across bases — finishing all three together, across bases, is
-the structural shape of an absolute-normality proof, and we
-expect the substrate's design not to permit it. We do not
-expect, but we acknowledge we have not foreclosed.
+Each is a site where the substrate exposes structure we don't
+see how to close. We don't claim closing all three is what an
+absolute-normality proof requires — §The Undecidable Heart
+disclaims the residual list as a gate. We claim each is a
+place the substrate's investigative tool shows complexity that
+we cannot reduce. The lens predicts that work in this repo
+will make progress on each, and *will not finish any* in a way
+that propagates across bases. The pattern of progress and
+non-finishing across the three is part of what the manifesto's
+bet rests on: this is what the substrate exposes, this is
+what we cannot close, and the gap is what we expect to
+remain. We don't claim foreclosure of alternative routes.
 
 
 ## One-Line Summary
