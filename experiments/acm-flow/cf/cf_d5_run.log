@@ -1,0 +1,67 @@
+cf_spikes_d5 — d=5 boundary push at b=10
+Closed form: spike(n) ≈ (n-1)/n² · F(5, 10) = (n-1)/n² · 411 111  base-10 digits
+
+[smoke] PASS — Mahler a_4=149083 reproduced.
+
+--- (b=10, n=2, d=5) ---
+  predicted spike ≈ 102777.8 base-10 digits = 102777.8 decimal digits
+  K_PRIMES=37700, prec_lo=1194971, prec_hi=2389942, max_pq=12000, spike_thr=10277.8
+  total base-10 digits available: 198423
+  LO CF: 12000 PQs, 134.3s
+  HI CF: 12000 PQs, 286.9s
+  validated prefix: 2903 PQs
+  spike at i=408: log_10=102765.65 (log_10=102765.65)
+  predicted log_10: 102777.75; gap = -12.10 base-10 digits = -0.0118%
+
+--- (b=10, n=3, d=5) ---
+  predicted spike ≈ 91358.0 base-10 digits = 91358.0 decimal digits
+  K_PRIMES=33533, prec_lo=1062196, prec_hi=2124392, max_pq=12000, spike_thr=9135.8
+  total base-10 digits available: 176508
+  LO CF: 12000 PQs, 122.2s
+  HI CF: 12000 PQs, 253.4s
+  validated prefix: 3855 PQs
+  spike at i=488: log_10=91337.95 (log_10=91337.95)
+  predicted log_10: 91358.00; gap = -20.05 base-10 digits = -0.0219%
+
+--- (b=10, n=4, d=5) ---
+  predicted spike ≈ 77083.3 base-10 digits = 77083.3 decimal digits
+  K_PRIMES=28325, prec_lo=896228, prec_hi=1792456, max_pq=12000, spike_thr=7708.3
+  total base-10 digits available: 149118
+  LO CF: 12000 PQs, 119.3s
+  HI CF: 12000 PQs, 249.0s
+  validated prefix: 4861 PQs
+  spike at i=516: log_10=77051.85 (log_10=77051.85)
+  predicted log_10: 77083.31; gap = -31.46 base-10 digits = -0.0408%
+
+--- (b=10, n=5, d=5) ---
+  predicted spike ≈ 65777.8 base-10 digits = 65777.8 decimal digits
+  K_PRIMES=24200, prec_lo=764781, prec_hi=1529562, max_pq=12000, spike_thr=6577.8
+  total base-10 digits available: 127423
+  LO CF: 12000 PQs, 87.1s
+  HI CF: 12000 PQs, 172.3s
+  validated prefix: 5731 PQs
+  spike at i=616: log_10=65737.05 (log_10=65737.05)
+  predicted log_10: 65777.76; gap = -40.71 base-10 digits = -0.0619%
+
+--- (b=10, n=6, d=5) ---
+  predicted spike ≈ 57098.8 base-10 digits = 57098.8 decimal digits
+  K_PRIMES=21033, prec_lo=663872, prec_hi=1327744, max_pq=12000, spike_thr=5709.9
+  total base-10 digits available: 110766
+  LO CF: 12000 PQs, 81.7s
+  HI CF: 12000 PQs, 150.2s
+  validated prefix: 5763 PQs
+  spike at i=660: log_10=57049.95 (log_10=57049.95)
+  predicted log_10: 57098.75; gap = -48.80 base-10 digits = -0.0855%
+
+--- (b=10, n=10, d=5) ---
+  predicted spike ≈ 37000.0 base-10 digits = 37000.0 decimal digits
+  K_PRIMES=13700, prec_lo=430189, prec_hi=860378, max_pq=12000, spike_thr=3700.0
+  total base-10 digits available: 72201
+  LO CF: 12000 PQs, 61.1s
+  HI CF: 12000 PQs, 111.0s
+  validated prefix: 6827 PQs
+  spike at i=844: log_10=36909.65 (log_10=36909.65)
+  predicted log_10: 36999.99; gap = -90.34 base-10 digits = -0.2442%
+
+wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-champernowne/base10/cf/cf_d5.csv
+wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-champernowne/base10/cf/cf_d5_summary.txt

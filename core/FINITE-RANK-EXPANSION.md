@@ -165,7 +165,7 @@ exponents**, and not automatic.
 Empirical state at the time of writing:
 
 - **Continued-fraction spikes**
-  (`experiments/acm-flow/mega-spike/`). The d=k mega-spike size obeys
+  (`experiments/acm-flow/cf/`). The d=k mega-spike size obeys
   `log_b(a) ≈ T_k − 2 L_{k−1} + log_b(b/(b−1))`, where `T_k` is the
   substrate-transparent boundary digit depth (closed-form via
   `BLOCK-UNIFORMITY`) and `L_{k−1}` is the previous convergent's log

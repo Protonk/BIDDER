@@ -1,7 +1,7 @@
 # Mega-Spike Four Ways
 
-A critique of `experiments/acm-flow/mega-spike/MECHANISTIC-DERIVATION.md`
-and the surrounding `mega-spike/` documentation. The question is not
+A critique of `experiments/acm-flow/cf/MECHANISTIC-DERIVATION.md`
+and the surrounding `cf/` documentation. The question is not
 "is the formula correct" — within its window of validity, it is. The
 question is what the formula actually *is*, read literally, as a
 statement about a single CF observable in a concatenated real.
@@ -46,7 +46,7 @@ Substituting and writing `L_{k−1} := log_b(q_{i_k − 1})`:
 
     log_b(a_k) ≈ T_k − 2 L_{k−1} + log_b(b/(b−1)).
 
-That is the master statement. Everything else in `mega-spike/` is
+That is the master statement. Everything else in `cf/` is
 either evaluating this formula at a panel of `(n, k)`, fitting
 `L_{k−1}` against substrate-known quantities, or attempting to
 mechanistically derive the residual.
@@ -311,7 +311,7 @@ Three places, in increasing order of difficulty:
    argument plausibly works; for ord = 2 the simple divisibility
    argument *fails* empirically and the right replacement is open.
    A parallel Mahler-style derivation in
-   `experiments/acm-champernowne/base10/cf/` has independently
+   `experiments/acm-flow/cf/` has independently
    named the same gap at looser `O(d · n)` resolution; cross-thread
    convergence on this step strengthens its identification as
    *the* load-bearing open problem of the spike-formula thread,

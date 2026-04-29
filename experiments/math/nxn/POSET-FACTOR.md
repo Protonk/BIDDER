@@ -172,7 +172,7 @@ be visible.
 ## What this is not
 
 - Not Brief 4 itself. Brief 4 is the BPPW Monte Carlo on `M_n(N)`.
-- Not the CF spike work in `experiments/acm-champernowne/base10/cf/`
+- Not the CF spike work in `experiments/acm-flow/cf/`
   (that's Brief 2).
 - Not the composite-lattice work in `experiments/acm/diagonal/`
   (that counts witness pairs per composite N — adjacent object,

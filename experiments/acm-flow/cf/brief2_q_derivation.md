@@ -87,7 +87,7 @@ scale and denominator scale is still a CF argument, not yet a theorem.
 ## What The Existing d=4 Data Says
 
 For base 10 and `k = 4`, compare the recorded mega-spikes from
-`experiments/acm-champernowne/base10/cf/SPIKE-HUNT.md`. The CF-scale
+`experiments/acm-flow/cf/SPIKE-HUNT.md`. The CF-scale
 quantity is `log10(a)`, so the residual column below uses the recorded
 `pq_log10`, not the integer digit count.
 
@@ -208,4 +208,4 @@ still has the precision wall, but the block and position side no
 longer do.
 
 The d=4 comparison table is reproducible with
-`experiments/acm-flow/mega-spike/spike_drift_table.py`.
+`experiments/acm-flow/cf/spike_drift_table.py`.

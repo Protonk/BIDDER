@@ -153,7 +153,7 @@ This document adds two more:
   questions (Mode 2/3, boundary stitch).
 - **The CF mega-spike is closed-form modulo one scalar.**
   GPT-5's Phase 3.1 first pass
-  (`experiments/acm-flow/mega-spike/brief2_q_derivation.md`)
+  (`experiments/acm-flow/cf/brief2_q_derivation.md`)
   finds
 
       log_b(a) ≈ T_k − 2 · L_{k−1}
@@ -306,6 +306,6 @@ For an agent picking up work in this repo:
 - `experiments/acm-flow/hardy_composite_q.py` — the Phase 2.4
   panel; reread as implementation-sanity rather than
   depth-validation.
-- `experiments/acm-flow/mega-spike/MEGA-SPIKE.md`,
-  `experiments/acm-flow/mega-spike/brief2_q_derivation.md` —
+- `experiments/acm-flow/cf/MEGA-SPIKE.md`,
+  `experiments/acm-flow/cf/brief2_q_derivation.md` —
   the CF mega-spike collapse: `log_b(a) ≈ T_k − 2 · L_{k−1}`.

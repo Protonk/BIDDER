@@ -1,3 +1,33 @@
+# Continued fractions of n-Champernowne reals — Brief 2 initial finding
+
+## ⚠️ STATUS UPDATE (superseded — kept as historical record)
+
+This was the initial Brief 2 writeup, the empirical scan that found the
+d=k tiered spike signature in `C_10(n)` and noted the `(n−1)/n²` density
+factor. It has been **superseded** by the canonical thread in this
+folder:
+
+- `MEGA-SPIKE.md` — the closed-form spike scale `S_k = D_k − C_{k−1}`
+  with the universal `8/9` (asymptotically `(b−2)/(b−1)`) prefactor.
+- `MULTI-K-RESULT.md` — multi-k confirmation with the
+  `log_b(b/(b−1))` boundary-truncation factor identified.
+- `OFFSPIKE-RESULT.md`, `EXTENDED-PANEL-RESULT.md`,
+  `PRIMITIVE-ROOT-FINDING.md` — `δ_k(n) = (n−1)k + offset(n)` and the
+  `ord(b, n)` family classification.
+- `MECHANISTIC-DERIVATION.md` — the partial proof; step 3 is the open
+  analytic gap.
+
+The "Open" items below have all been answered or absorbed (asymptotic
+prefactor is `(b−2)/(b−1)`; n=10 fits the extended panel via Family
+classification; non-smooth spread bounds collapse into the `O(b^{−k})`
+tail). The finite-K Diophantine table has been generalised to the
+conditional `μ → b` argument in `MU-CONDITIONAL.md`.
+
+Read this doc as a snapshot of where Brief 2 stood before the
+mechanistic thread, not as the current state.
+
+---
+
 # Continued fractions of n-Champernowne reals
 
 Brief 2 of `EXPERIMENTAL.md`. Where do unusually large partial quotients

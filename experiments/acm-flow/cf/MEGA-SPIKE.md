@@ -168,7 +168,7 @@ coordinate before any proof attempt is credible.
 
 The prediction section above is the pre-run position. The first Phase
 3.1 derivation pass is now recorded in
-`experiments/acm-flow/mega-spike/brief2_q_derivation.md`.
+`experiments/acm-flow/cf/brief2_q_derivation.md`.
 
 That pass keeps the block-density prediction but sharpens the residual:
 the refined `D_k - C_{k-1}` law explains the scale, while the monotone
@@ -202,7 +202,7 @@ Inputs already pinned:
 
 Current artifact:
 
-    experiments/acm-flow/mega-spike/brief2_q_derivation.md
-    experiments/acm-flow/mega-spike/spike_drift_table.py
-    experiments/acm-flow/mega-spike/spike_drift_table.csv
-    experiments/acm-flow/mega-spike/spike_drift_summary.txt
+    experiments/acm-flow/cf/brief2_q_derivation.md
+    experiments/acm-flow/cf/spike_drift_table.py
+    experiments/acm-flow/cf/spike_drift_table.csv
+    experiments/acm-flow/cf/spike_drift_summary.txt

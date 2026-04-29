@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Reproduce the Phase 3.1 d=4 mega-spike comparison table.
 
-The CF spike rows come from experiments/acm-champernowne/base10/cf.
+The CF spike rows come from experiments/acm-flow/cf/SPIKE-HUNT.md.
 The log10(q_before) values are the rounded values recorded in
 SPIKE-HUNT.md's Diophantine-consequence table.
 """
@@ -18,7 +18,7 @@ K = 4
 N_VALUES = (2, 3, 4, 5, 6, 10)
 
 # Rounded source values from:
-# experiments/acm-champernowne/base10/cf/SPIKE-HUNT.md
+# experiments/acm-flow/cf/SPIKE-HUNT.md
 LOG10_Q_BEFORE = {
     2: 727.7,
     3: 650.0,

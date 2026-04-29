@@ -222,7 +222,7 @@ generating-function objects.
 Two coupling-layer observables this project has explored:
 
 - **Continued fractions of the ACM-Champernowne real**
-  (`experiments/acm-flow/mega-spike/`). The CF expansion of
+  (`experiments/acm-flow/cf/`). The CF expansion of
   `0 . p_1 p_2 p_3 …` is a feature of the digit concatenation, not
   of `Q_n` at single atoms. The mega-spike formula
   `log_b(a) ≈ T_k − 2 L_{k−1} + log_b(b/(b−1))` involves substrate

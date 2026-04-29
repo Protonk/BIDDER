@@ -276,6 +276,6 @@ readings of streams — are governed by different generating-function
 objects and require their own analyses. `Q_n`'s local rank-h structure
 informs those observables but does not predict them automatically. See
 `experiments/acm-flow/mult-table/` and
-`experiments/acm-flow/mega-spike/` for the empirical state of those
+`experiments/acm-flow/cf/` for the empirical state of those
 couplings; the connections are real but at the prefactor /
 sub-leading level, not at the leading exponent level.

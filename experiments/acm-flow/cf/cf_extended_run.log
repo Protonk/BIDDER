@@ -1,0 +1,235 @@
+Closed form: spike_baseb_digits(n,d) ≈ (n-1)/n² · F(d,b)
+             F(d,b) = d(b-2)b^(d-1) + (b^d - 1)/(b - 1)
+
+[smoke] PASS — Mahler a_4=149083 reproduced.
+
+--- (b=10, n=7, d=4) ---
+  predicted spike ≈ 4054.4 base-10 digits = 4054.4 decimal digits
+  K_PRIMES=1936, prec_lo=80000, prec_hi=160000, max_pq=8000
+  total base-10 digits available: 8321
+  LO CF: 8000 PQs, 3.2s
+  HI CF: 8000 PQs, 7.5s
+  validated prefix: 3161 PQs
+  spike at i=218: a has 4007 decimal digits (log_10=4006.74, log_10=4006.74)
+  predicted log_10: 4054.41; gap = -47.67 base-10 digits = -1.176%
+
+--- (b=10, n=8, d=4) ---
+  predicted spike ≈ 3621.5 base-10 digits = 3621.5 decimal digits
+  K_PRIMES=1740, prec_lo=80000, prec_hi=160000, max_pq=8000
+  total base-10 digits available: 7486
+  LO CF: 8000 PQs, 3.2s
+  HI CF: 8000 PQs, 7.6s
+  validated prefix: 3073 PQs
+  spike at i=208: a has 3565 decimal digits (log_10=3564.85, log_10=3564.85)
+  predicted log_10: 3621.52; gap = -56.66 base-10 digits = -1.565%
+
+--- (b=10, n=9, d=4) ---
+  predicted spike ≈ 3270.2 base-10 digits = 3270.2 decimal digits
+  K_PRIMES=1581, prec_lo=80000, prec_hi=160000, max_pq=7681
+  total base-10 digits available: 6807
+  LO CF: 7681 PQs, 3.1s
+  HI CF: 7681 PQs, 7.3s
+  validated prefix: 2923 PQs
+  spike at i=200: a has 3210 decimal digits (log_10=3209.86, log_10=3209.86)
+  predicted log_10: 3270.22; gap = -60.36 base-10 digits = -1.846%
+
+--- (b=10, n=11, d=4) ---
+  predicted spike ≈ 2736.4 base-10 digits = 2736.4 decimal digits
+  K_PRIMES=1339, prec_lo=80000, prec_hi=160000, max_pq=6427
+  total base-10 digits available: 5777
+  LO CF: 6427 PQs, 2.6s
+  HI CF: 6427 PQs, 6.1s
+  validated prefix: 2526 PQs
+  spike at i=258: a has 2666 decimal digits (log_10=2665.21, log_10=2665.21)
+  predicted log_10: 2736.45; gap = -71.24 base-10 digits = -2.603%
+
+--- (b=10, n=12, d=4) ---
+  predicted spike ≈ 2529.3 base-10 digits = 2529.3 decimal digits
+  K_PRIMES=1245, prec_lo=80000, prec_hi=160000, max_pq=5941
+  total base-10 digits available: 5376
+  LO CF: 5941 PQs, 2.4s
+  HI CF: 5941 PQs, 5.6s
+  validated prefix: 2383 PQs
+  spike at i=260: a has 2439 decimal digits (log_10=2438.76, log_10=2438.76)
+  predicted log_10: 2529.31; gap = -90.55 base-10 digits = -3.580%
+
+--- (b=10, n=13, d=4) ---
+  predicted spike ≈ 2351.1 base-10 digits = 2351.1 decimal digits
+  K_PRIMES=1165, prec_lo=80000, prec_hi=160000, max_pq=5522
+  total base-10 digits available: 5037
+  LO CF: 5522 PQs, 2.2s
+  HI CF: 5522 PQs, 5.2s
+  validated prefix: 2368 PQs
+  spike at i=288: a has 2258 decimal digits (log_10=2257.07, log_10=2257.07)
+  predicted log_10: 2351.08; gap = -94.01 base-10 digits = -3.998%
+
+--- (b=10, n=15, d=4) ---
+  predicted spike ≈ 2060.2 base-10 digits = 2060.2 decimal digits
+  K_PRIMES=1033, prec_lo=80000, prec_hi=160000, max_pq=4839
+  total base-10 digits available: 4475
+  LO CF: 4839 PQs, 1.9s
+  HI CF: 4839 PQs, 4.5s
+  validated prefix: 2159 PQs
+  spike at i=298: a has 1951 decimal digits (log_10=1950.75, log_10=1950.75)
+  predicted log_10: 2060.24; gap = -109.49 base-10 digits = -5.314%
+
+--- (b=10, n=20, d=4) ---
+  predicted spike ≈ 1572.8 base-10 digits = 1572.8 decimal digits
+  K_PRIMES=812, prec_lo=80000, prec_hi=160000, max_pq=3694
+  total base-10 digits available: 3534
+  LO CF: 3694 PQs, 1.5s
+  HI CF: 3694 PQs, 3.5s
+  validated prefix: 2030 PQs
+  spike at i=322: a has 1426 decimal digits (log_10=1425.45, log_10=1425.45)
+  predicted log_10: 1572.77; gap = -147.32 base-10 digits = -9.367%
+
+--- (b=3, n=2, d=8) ---
+  predicted spike ≈ 5194.0 base-3 digits = 2478.2 decimal digits
+  K_PRIMES=2560, prec_lo=80000, prec_hi=160000, max_pq=8000
+  total base-3 digits available: 20580
+  LO CF: 8000 PQs, 3.4s
+  HI CF: 8000 PQs, 7.6s
+  validated prefix: 5226 PQs
+  spike at i=860: a has 2469 decimal digits (log_3=5172.89, log_10=2468.10)
+  predicted log_3: 5194.00; gap = -21.11 base-3 digits = -0.406%
+
+--- (b=3, n=3, d=8) ---
+  predicted spike ≈ 4616.9 base-3 digits = 2202.8 decimal digits
+  K_PRIMES=2287, prec_lo=80000, prec_hi=160000, max_pq=8000
+  total base-3 digits available: 18397
+  LO CF: 8000 PQs, 3.2s
+  HI CF: 8000 PQs, 7.5s
+  validated prefix: 5012 PQs
+  spike at i=986: a has 2188 decimal digits (log_3=4584.37, log_10=2187.30)
+  predicted log_3: 4616.89; gap = -32.52 base-3 digits = -0.704%
+
+--- (b=3, n=5, d=8) ---
+  predicted spike ≈ 3324.2 base-3 digits = 1586.0 decimal digits
+  K_PRIMES=1674, prec_lo=80000, prec_hi=160000, max_pq=7513
+  total base-3 digits available: 13493
+  LO CF: 7513 PQs, 3.0s
+  HI CF: 7513 PQs, 7.1s
+  validated prefix: 4269 PQs
+  [no d=8 boundary spike found in validated prefix]
+
+--- (b=4, n=2, d=6) ---
+  predicted spike ≈ 3413.2 base-4 digits = 2055.0 decimal digits
+  K_PRIMES=1636, prec_lo=80000, prec_hi=160000, max_pq=6987
+  total base-4 digits available: 10087
+  LO CF: 6987 PQs, 2.8s
+  HI CF: 6987 PQs, 6.6s
+  validated prefix: 2364 PQs
+  spike at i=310: a has 2048 decimal digits (log_4=3400.21, log_10=2047.13)
+  predicted log_4: 3413.25; gap = -13.04 base-4 digits = -0.382%
+
+--- (b=4, n=3, d=6) ---
+  predicted spike ≈ 3034.0 base-4 digits = 1826.7 decimal digits
+  K_PRIMES=1465, prec_lo=80000, prec_hi=160000, max_pq=6210
+  total base-4 digits available: 9041
+  LO CF: 6210 PQs, 2.5s
+  HI CF: 6210 PQs, 5.9s
+  validated prefix: 2185 PQs
+  spike at i=296: a has 1811 decimal digits (log_4=3007.38, log_10=1810.62)
+  predicted log_4: 3034.00; gap = -26.62 base-4 digits = -0.877%
+
+--- (b=4, n=5, d=6) ---
+  predicted spike ≈ 2184.5 base-4 digits = 1315.2 decimal digits
+  K_PRIMES=1083, prec_lo=80000, prec_hi=160000, max_pq=4471
+  total base-4 digits available: 6707
+  LO CF: 4471 PQs, 1.8s
+  HI CF: 4471 PQs, 4.3s
+  validated prefix: 1962 PQs
+  [no d=6 boundary spike found in validated prefix]
+
+--- (b=6, n=2, d=5) ---
+  predicted spike ≈ 6868.8 base-6 digits = 5344.9 decimal digits
+  K_PRIMES=3016, prec_lo=80000, prec_hi=160000, max_pq=8000
+  total base-6 digits available: 15764
+  LO CF: 8000 PQs, 3.2s
+  HI CF: 8000 PQs, 7.6s
+  validated prefix: 1848 PQs
+  spike at i=202: a has 5337 decimal digits (log_6=6858.10, log_10=5336.64)
+  predicted log_6: 6868.75; gap = -10.65 base-6 digits = -0.155%
+
+--- (b=6, n=3, d=5) ---
+  predicted spike ≈ 6105.6 base-6 digits = 4751.0 decimal digits
+  K_PRIMES=2692, prec_lo=80000, prec_hi=160000, max_pq=8000
+  total base-6 digits available: 14079
+  LO CF: 8000 PQs, 3.2s
+  HI CF: 8000 PQs, 7.6s
+  validated prefix: 2626 PQs
+  spike at i=244: a has 4736 decimal digits (log_6=6085.10, log_10=4735.13)
+  predicted log_6: 6105.56; gap = -20.45 base-6 digits = -0.335%
+
+--- (b=6, n=5, d=5) ---
+  predicted spike ≈ 4396.0 base-6 digits = 3420.8 decimal digits
+  K_PRIMES=1966, prec_lo=80000, prec_hi=160000, max_pq=8000
+  total base-6 digits available: 10302
+  LO CF: 8000 PQs, 3.2s
+  HI CF: 8000 PQs, 7.6s
+  validated prefix: 2864 PQs
+  spike at i=284: a has 3388 decimal digits (log_6=4353.69, log_10=3387.83)
+  predicted log_6: 4396.00; gap = -42.31 base-6 digits = -0.962%
+
+--- (b=8, n=2, d=4) ---
+  predicted spike ≈ 3218.2 base-8 digits = 2906.4 decimal digits
+  K_PRIMES=1636, prec_lo=80000, prec_hi=160000, max_pq=7133
+  total base-8 digits available: 7010
+  LO CF: 7133 PQs, 2.9s
+  HI CF: 7133 PQs, 6.8s
+  validated prefix: 1105 PQs
+  spike at i=88: a has 2898 decimal digits (log_8=3208.73, log_10=2897.77)
+  predicted log_8: 3218.25; gap = -9.52 base-8 digits = -0.296%
+
+--- (b=8, n=3, d=4) ---
+  predicted spike ≈ 2860.7 base-8 digits = 2583.4 decimal digits
+  K_PRIMES=1465, prec_lo=80000, prec_hi=160000, max_pq=6341
+  total base-8 digits available: 6285
+  LO CF: 6341 PQs, 2.5s
+  HI CF: 6341 PQs, 6.0s
+  validated prefix: 1402 PQs
+  spike at i=118: a has 2567 decimal digits (log_8=2842.18, log_10=2566.74)
+  predicted log_8: 2860.67; gap = -18.49 base-8 digits = -0.646%
+
+--- (b=8, n=5, d=4) ---
+  predicted spike ≈ 2059.7 base-8 digits = 1860.1 decimal digits
+  K_PRIMES=1083, prec_lo=80000, prec_hi=160000, max_pq=4565
+  total base-8 digits available: 4666
+  LO CF: 4565 PQs, 1.8s
+  HI CF: 4565 PQs, 4.3s
+  validated prefix: 1464 PQs
+  spike at i=146: a has 1834 decimal digits (log_8=2030.16, log_10=1833.42)
+  predicted log_8: 2059.68; gap = -29.52 base-8 digits = -1.433%
+
+--- (b=12, n=2, d=4) ---
+  predicted spike ≈ 17751.2 base-12 digits = 19156.8 decimal digits
+  K_PRIMES=7876, prec_lo=222731, prec_hi=445462, max_pq=8000
+  total base-12 digits available: 33725
+  LO CF: 8000 PQs, 12.1s
+  HI CF: 8000 PQs, 33.1s
+  validated prefix: 1285 PQs
+  spike at i=136: a has 19148 decimal digits (log_12=17742.48, log_10=19147.35)
+  predicted log_12: 17751.25; gap = -8.77 base-12 digits = -0.049%
+
+--- (b=12, n=3, d=4) ---
+  predicted spike ≈ 15778.9 base-12 digits = 17028.3 decimal digits
+  K_PRIMES=7012, prec_lo=197983, prec_hi=395966, max_pq=8000
+  total base-12 digits available: 30034
+  LO CF: 8000 PQs, 11.3s
+  HI CF: 8000 PQs, 25.4s
+  validated prefix: 1649 PQs
+  spike at i=182: a has 17010 decimal digits (log_12=15761.48, log_10=17009.49)
+  predicted log_12: 15778.89; gap = -17.41 base-12 digits = -0.110%
+
+--- (b=12, n=5, d=4) ---
+  predicted spike ≈ 11360.8 base-12 digits = 12260.4 decimal digits
+  K_PRIMES=5076, prec_lo=142548, prec_hi=285096, max_pq=8000
+  total base-12 digits available: 21761
+  LO CF: 8000 PQs, 7.5s
+  HI CF: 8000 PQs, 19.5s
+  validated prefix: 2161 PQs
+  spike at i=250: a has 12232 decimal digits (log_12=11333.63, log_10=12231.04)
+  predicted log_12: 11360.80; gap = -27.17 base-12 digits = -0.239%
+
+wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-champernowne/base10/cf/cf_extended.csv
+wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-champernowne/base10/cf/cf_extended_summary.txt
