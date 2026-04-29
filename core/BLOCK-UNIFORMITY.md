@@ -362,10 +362,11 @@ transparent window onto the block's digit structure.
 
 ## Downstream observables
 
-The same residue-counting fact powers four otherwise-distinct
-observables in this project. The reach is structural, not a coincidence
-of the panel; see `arguments/UNIFORMITY-FOUR-WAYS.md` for the four-ways
-reading.
+The doc's two lemmas — the integer lemma and the sieved lemma — reach
+several otherwise-distinct observables. See
+`arguments/UNIFORMITY-FOUR-WAYS.md` for the four-ways reading.
+
+The **sieved lemma**'s residue-counting fact reaches three:
 
 - **CF spike formula `T_k`** (`experiments/acm-flow/cf/MEGA-SPIKE.md`).
   The cumulative digit count `T_k = Σ_{d=1}^{k} d · N_d(n, b)` is this
@@ -375,22 +376,29 @@ reading.
 
 - **Multiplication-table asymptote**
   (`experiments/acm-flow/mult-table/`). `M_n(K)/M_Ford(K) → α_n =
-  (n − 1)/n` is the same density's single-coprime factor, surviving
-  Ford's image-counting anatomy under residue restriction.
+  (n − 1)/n` is the density of integers not divisible by n. M_n's
+  atoms have the form `n · c` with `n ∤ c`; their distinct products
+  land in residues not divisible by n, and Ford's image-counting
+  anatomy applied under that residue restriction gives `α_n`.
 
 - **Off-spike cofactor cycle slope**
   (`experiments/acm-flow/cf/OFFSPIKE-RESULT.md`). The slope `(n − 1)`
   in `δ_k(n) = (n − 1)k + offset(n)` is the cofactor cycle length —
   the numerator of the smooth-block density `(n − 1)/n²`.
 
-- **First-digit uniformity of `C_b(n)`** (`core/ACM-CHAMPERNOWNE.md`,
-  `EARLY-FINDINGS.md`). The leading-digit equidistribution claim is
-  the sieved lemma plus the corollary in §"Corollary: the encoding
-  preserves it" below.
+The **integer lemma** plus the corollary in §"Corollary: the encoding
+preserves it" below reaches a fourth observable through a different
+parent fact:
 
-The smooth-block closed form is the substrate-transparency reaching
-into all four. CF, multiplicative, spectroscopic, and digit-frequency
-observables all collapse to angles on one residue count.
+- **First-digit uniformity of `C_b(n)`** (`core/ACM-CHAMPERNOWNE.md`,
+  `sources/EARLY-FINDINGS.md`). The leading-digit distribution of
+  `C_b(n)` over a digit class equals the leading-digit distribution
+  of `n` over that class, which is uniform by the integer lemma. This
+  doesn't use the sieved lemma; it uses positional notation directly.
+
+CF, multiplicative, spectroscopic, and digit-frequency observables
+all collapse to angles on this one doc — three on the sieved lemma,
+one on its parent integer lemma.
 
 
 ## What depends on this
@@ -401,9 +409,10 @@ observables all collapse to angles on one residue count.
   over a complete digit block and applies a bijection, so the
   leading-digit distribution is preserved. (Integer lemma only;
   BIDDER does not currently use the sieved version.)
-- **EARLY-FINDINGS.md**, section 1: the empirical count (1111 of
-  each digit in 1..9999) is a direct consequence — {1, ..., 9999}
-  is the union of digit classes d = 1..4, each internally uniform.
+- **sources/EARLY-FINDINGS.md**, section 1: the empirical count
+  (1111 of each digit in 1..9999) is a direct consequence —
+  {1, ..., 9999} is the union of digit classes d = 1..4, each
+  internally uniform.
 - **Stratified sampling**: at block boundaries the generator has
   visited every stratum equally often, because each leading digit
   appeared exactly b^(d-1) times.
