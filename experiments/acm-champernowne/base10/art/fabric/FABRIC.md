@@ -94,6 +94,14 @@ This is still a fabric, but now the basic thread is a transition rather
 than a digit. It reveals local Markov structure: which adjacent digit
 pairs the sieve favors, and where abrupt changes occur.
 
+[`bigram_flow.py`](bigram_flow.py) keeps the same bigram plane but draws
+each transition as a short oriented stroke. Digits are placed on a
+10-point ring, and each bigram becomes the chord from the current digit
+to the next digit. The plane is then bent into a twisted polar shell,
+with low `n` pushed outward and stroke directions transformed through
+the local geometry. The same transition structure now appears as bright
+currents on a curved surface rather than colored cells.
+
 ### `polar_fabric`
 
 [`polar_fabric.py`](polar_fabric.py) wraps the rectangular digit fabric
