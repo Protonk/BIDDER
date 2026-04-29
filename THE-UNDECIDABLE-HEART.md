@@ -1,91 +1,45 @@
 # The Undecidable Heart
 
-A claim about the project as a whole. The other `arguments/*` files
-read individual constructions through Grand / Mundane / Beautiful /
-Contingent. Applied to the project, the reading lands on a specific
-thesis.
-
-This repo is the elder Bidder's lattice with each of his three
-design pillars actively negated. Aggregate closure refused while
-local closure is kept exact. The log identity recovered at a
-different altitude. Unique factorisation traded for K-indexed
-random access. Not three relaxations — three concurrent
-consequences of one design move: the choice of `M_n`.
-
 **The commitment:** every `C_b(n)` is *absolutely* normal — normal
 in every base, not just the base of concatenation, across all
-`n ≥ 2` and all `b ≥ 2`.
+`n ≥ 2` and all `b ≥ 2`. We further submit this absolute normality 
+is unprovable.
 
-**The goal:** have an open project whose central claim cannot be
-imported from a setting where the analogue is already settled.
-Copeland–Erdős (1946) settles base-`b` normality of `C_b(n)` (see
-§"What Copeland–Erdős Settles" below); the commitment is to the
-harder claim, which is open even for the simplest constructively
-defined reals (classical Champernowne, π, e — none have proven
-absolute normality).
+**What we made.** The family `{C_b(n) : n ≥ 2, b ≥ 2}`, each
+formed by concatenating in K-order the atoms of
+`M_n = {1} ∪ nZ_{>0}` written in base `b`. The atoms are `n · c`
+with `n ∤ c`, accessible at any `K` via Hardy's
+`c_K = qn + r + 1`. The K-index runs through the discrete lattice
+(which atom) and through the digit stream (where in `C_b(n)`'s
+base-`b` expansion that atom sits) at once: every atom has a
+position in the lattice and a position in the digit stream,
+either computable from the other in polylog bignum work. That
+double duty is the bilingualism. The substrate speaks discrete
+arithmetic and digit-positional arithmetic in the same `K`.
 
-**The edge:** we don't expect to prove the commitment. The
-substrate-side route we know to attempt — closing the residuals
-the substrate exposes — runs through structures whose extension
-to bases `B ≠ b` we don't see. We don't see how alternative
-routes (Weyl, ergodic, sieve) close either. The undecidability
-we appeal to is internal: a stance about what the sum of what we
-see and don't see lets through, not a Gödel-style theorem of
-impossibility.
+**What we see.** The substrate's algebra reads as binary-tree
+structure walked by computation. `M_n` is non-UFD by construction
+— `36 = 6 · 6 = 2 · 18` in `M_2` — so every non-atom carries a
+tree of distinct atom factorisations, not a unique decomposition.
+`Q_n(m) = Σ_{j=1}^{ν_n(m)} (−1)^{j−1} τ_j(m/n^j) / j` is the
+signed count of ordered `j`-fold tree paths down to depth `j`,
+alternating by parity, weighted `1/j`. The substrate's residual
+catalog — `offset(n)` by `ord(b, n)`, `β(n)` for the `O(b^{−k})`
+tails, the off-spike denominator process — is a cost ledger on
+those traversals: what each path through the factorisation graph
+pays in CF, mult-table, and digit-frequency coordinates. A
+Turing machine walking a binary graph with costs metered along
+the paths.
 
-The bilingualism is the engine of the investigation. Whether it
-is also the *obstruction* to proof is something we cannot claim
-from `N = 1`. π, e, and classical Champernowne all have open
-absolute-normality questions and no bilingual structure;
-absolute normality is hard regardless. Bilingualism may be
-doing real obstruction work in our case, or it may be
-decorative — the evidence to discriminate isn't yet in.
 
-**The stakes.** If the unprovability bet is wrong — if every
-`C_b(n)` turns out to be provably absolutely normal — the
-construction is not just "another constructive absolute normal."
-Becher–Figueira (2002) and Becher–Heiber–Slaman (2013) and
-successors give computable absolute normals with polynomial-time
-digit oracles, in parameterised families. The literature is not
-empty.
-
-What would be unusual about ACM-Champernowne is **a family
-designed for something else** — Hardy random access on
-n-primes, finite-rank `Q_n` local algebra, the substrate's
-residual structure as investigative tool — **turning out to be
-absolutely normal as a side effect**. If the side effect proves
-out, the substrate's machinery (finite, indexable, with
-polylog-bignum digit-position oracle and factorisation by
-construction) ports with not much modification to adjacent hard
-problems: factoring, points on curves, structured arithmetic on
-indexed lattices. That is the backstop stake. Not "no one has
-produced absolute normals" — they have. *Closing this with
-machinery designed for substrate investigation gives us a
-transferable method.* The little black box in *Sneakers* — too
-useful for its setting — but the relevant adjacency is "what
-else can the substrate touch?" not "what is missing from the
-absolute-normality literature?" The manifesto is a bet that we
-have not built a transferable substrate-investigation method
-without realising it.
-
-*Note on genre.* This is a manifesto. The structural argument
-that follows orients work; it does not prove unprovability.
-
-This is the flaw, and the foundation. The project commits to a
-claim it does not expect to verify. Every result in `arguments/*`
-lives in the gap between that commitment and anything we can
-prove. The gap is the work.
+## The Inversion
 
 `sources/BIDDER-AND-SON.md` documents the elder Bidder navigating
 toward a target by perceiving its nearest factorable composite and
 absorbing the residual into a calibrated correction table. He
 delivered eight-place mental logarithms in under four minutes by a
 method that *required* closure, leaned on UFD, and used the
-numerical log identity as its central tool. We use the same lattice
-of multiplicative anatomy. We need the opposite of all three.
-
-
-## The Object
+numerical log identity as its central tool. 
 
 The elder Bidder's method, as `sources/BIDDER-AND-SON.md` records it,
 rests on three operating pillars in tension with one binding goal —
@@ -105,17 +59,11 @@ mentally:
    into memorised prime logs. The library *spans* the problem
    space because UFD gives it a canonical reduction path.
 
-Remove any one and the method falls apart. He designed exactly
-around these three.
+He designed exactly in order to work around what he called his powers of registration, ordering lineal algorithms to minimize memory access.
 
+## The negation
 
-## Grand
-
-The repo negates each of the three. The negations are not
-relaxations — each is a positive design choice driven by what the
-project is for, not a passive absence of his constraint. They
-cohere because they answer one question together: how do you build
-a substrate that admits investigation of a claim you cannot prove?
+The repo negates each of the three. 
 
 - **Closure: refused.** `core/FINITE-RANK-EXPANSION.md` enforces
   the refusal at the right altitude. Each `Q_n(m)` is an exact
@@ -133,11 +81,7 @@ a substrate that admits investigation of a claim you cannot prove?
   partition. C–E (1946) closes base-`b` normality of `C_b(n)`;
   what remains open at the aggregate is *cross-base* structure
   — absolute normality, refined digit statistics in bases
-  `B ≠ b`, CF behaviour, irrationality measure. The aggregate
-  stays open in those dimensions, not because the digit stream
-  cannot be finitely described (it can; classical Champernowne
-  is finitely described and normal) but because the cross-base
-  questions remain.
+  `B ≠ b`, CF behaviour, irrationality measure. 
 
 - **Log identity: recovered, at higher altitude.** Bidder's
   `log(ab) = log(a) + log(b)` operates on numerical pairs and
@@ -149,9 +93,7 @@ a substrate that admits investigation of a claim you cannot prove?
   product over `M_n` atoms doesn't break the expansion. The
   recovered identity has a different signature — `h = ν_n(m)`
   terms per `m`, not one — and the visible finite-rank-h stack in
-  `Q_n` is its fingerprint. Bidder's identity at this altitude
-  would over-collapse; ours has just enough terms to carry the
-  local structure without erasing it.
+  `Q_n` is its fingerprint. 
 
 - **UFD: traded for K-indexed random access.** `M_n = {1} ∪ nZ_{>0}`
   is built non-UFD: `36 = 6 · 6 = 2 · 18` in `M_2`. The same
@@ -166,9 +108,7 @@ a substrate that admits investigation of a claim you cannot prove?
   changing the monoid both discards unique factorisation and
   exposes the arithmetic progression that one divmod inverts. UFD
   for Hardy. UFD for the bilingual K-indexing that ties atom
-  position to digit position in `C_b(n)`. UFD for the substrate
-  visibility that lets us render at scale. Bidder's problem space
-  is UFD by gift of the integers; ours is non-UFD by construction.
+  position to digit position in `C_b(n)`. 
 
 The three negations cohere because they are *concurrent
 consequences of one design move*: the choice of `M_n = {1} ∪ nZ_{>0}`.
@@ -183,45 +123,16 @@ build a substrate where `{C_b(n)}` is an object you can study
 without expecting to prove the absolute-normality claim that
 motivates the studying.
 
-
-## Mundane
-
-Same five mechanisms as Bidder's method. Each is the negation of
-the corresponding Bidderian choice. The mechanics are real — this
-is the same multiplicative anatomy doing the same kind of
-structural work — but every term has been replaced.
-
-| mechanism | Bidder | repo (negation) |
-|---|---|---|
-| **latticework** | memorised prime logs (~25 constants) | generated atoms `n · c` with `n ∤ c`, accessed by index |
-| **random access** | perception of factorability ("natural instinct") | `c_K = qn + r + 1`, one mod-arithmetic line |
-| **log identity** | `log(ab) = log(a) + log(b)` on numerical pairs | Mercator on `1 + n^{−s} ζ(s)`, generating-function altitude |
-| **residual mechanism** | scalar correction table (`log(1.001), log(1.0001), …`) | family classifications (`offset(n)` by `ord(b, n)`, `O(b^{−k})` tails, spread bound `≤ 2`) |
-| **helper multipliers** | `× 13` to land target near a factorable composite | `M_n / M_Ford` to expose density `α_n = (n − 1)/n`; `T_k − 2 L_{k−1}` to substitute substrate-naive denominator |
-
-Each row reads as a same-mechanism / opposite-direction pair.
-Bidder's residuals are scalars to absorb at the end; ours are
-families to classify and leave open. Bidder's helpers move the
-target toward a known landmark; ours expose structure that the
-substrate-naive prediction misses. Bidder's random access is
-cognitive; ours is mechanical.
-
-
 ## Beautiful
 
 Three features cut.
 
 1. **Local rigor enables global open-endedness.**
-   `FINITE-RANK-EXPANSION.md` is the project's quietest theorem —
-   one line of integer divisibility — and its loudest enabling
-   move. Each `Q_n(m)` closes exactly at rank `h = ν_n(m)`. That
-   local closure makes aggregate openness a *meaningful* problem
-   rather than a measurement defect. Were `Q_n` itself an
-   asymptotic, the aggregate non-closure would be sloppiness;
-   because `Q_n` is rationally exact, failures to close are
+   `FINITE-RANK-EXPANSION.md` shows each `Q_n(m)` closes exactly at rank `h = ν_n(m)`. That
+   local closure makes aggregate openness a *meaningful* problem.
+   Because `Q_n` is rationally exact, failures to close are
    forced into the coupling layer where the central question
    lives. The local ledger tells us where not to blame the error.
-   The aggregate stays open by *design*, not by accident.
 
 2. **The recovered log identity has a different signature than
    Bidder's.** His collapses to one term per factor; ours
@@ -232,8 +143,8 @@ Three features cut.
    stack in `Q_n` is *evidence* that we recovered a different
    identity, since Bidder's would have produced a different
    stack. The rank stack is the identity's fingerprint. The
-   `(n − 1)/n²` density and `α_n = (n − 1)/n` are not traces
-   of the identity but of the same `M_n` deletion rule that
+   `(n − 1)/n²` density and `α_n = (n − 1)/n` are traces
+   of the same `M_n` deletion rule that
    produced it — substrate-level, surfacing across BLOCK-
    UNIFORMITY, mult-table, and the cofactor-cycle slope at the
    same time.
@@ -253,68 +164,7 @@ Three features cut.
    gained with the `M_n` move is what permits the rendering: the
    atom stream behind `C_b(n)` is termwise indexable at any `K`,
    plottable across `n`, comparable across `v_2(n)`. The
-   matplotlib output is what the inversion buys — not a proof of
-   normality, but a *substitute* for one. We navigate residual
-   surfaces because we cannot collapse them.
-
-Local rigor, identity-signature, and renderability are downstream
-of refused closure, recovered identity, and the UFD trade
-respectively.
-
-
-## What Copeland–Erdős Settles
-
-Copeland and Erdős (1946) proved: for any increasing sequence
-of positive integers `(a_k)` with `π_A(N) > N^{1−ε}` eventually
-for every `ε > 0`, the real number
-
-    α_A(b) = 0.a_1 a_2 a_3 …    (concatenation in base `b`)
-
-is normal in base `b`. The headline application is the prime
-concatenation `0.235711131719…`, whose normality in any base
-follows from the prime number theorem.
-
-The ACM n-prime sequence at any `n ≥ 2` has density `(n − 1)/n²`
-in the integers (whether `n` is prime, prime-power, or composite).
-Linear in `N`; the C–E density condition is satisfied trivially.
-**C–E directly proves: `C_b(n)` is normal in base `b`, for every
-`n ≥ 2` and every base `b ≥ 2`.**
-
-This is a theorem from 1946. It is not on the project's open
-list. It is on its load-bearing list, and the project stands on
-it. The substrate transparency catalogued in `arguments/*`
-describes the *internal structure* of an object whose first-order
-normality has been settled for eighty years. See
-`sources/COPELAND-ERDOS.md` for the theorem statement and proof
-sketch in this project's notation.
-
-What C–E does *not* settle:
-
-- **Absolute normality.** Normal in *every* base, not just the
-  base of concatenation. Classical Champernowne is normal in
-  base 10 (Champernowne 1933; recovered by C–E 1946); its
-  normality in any base ≠ 10 is *open*. ACM-Champernowne
-  inherits the same gap: `C_b(n)` is normal in base `b` (proved),
-  normality in other bases (open). The empirical observation
-  in this project that some CF behaviours are less problematic
-  read in bases ≠ `b` is consistent with absolute normality
-  being structurally non-trivial, base by base.
-
-- **Refined digit-distribution statistics.** Multi-scale
-  correlations, entropy bounds, normality at arbitrary block
-  scales. Beyond the `b^{−k}`-frequency claim of C–E.
-
-- **CF behaviour and irrationality measure.** Already conditional
-  in `experiments/acm-flow/cf/MU-CONDITIONAL.md`. C–E does not
-  address.
-
-- **Substrate-specific structure.** The work in `arguments/*` and
-  the empirical phases. C–E does not address.
-
-The project's commitment, refined: **every ACM-Champernowne real
-`C_b(n)` is absolutely normal.** Stronger than what C–E delivers.
-Open even for the simplest constructively defined reals (classical
-Champernowne, π, e — none have proven absolute normality).
+   matplotlib output is what the inversion buys — a *substitute* for normality. 
 
 
 ## The Undecidable Heart
@@ -364,12 +214,57 @@ structure:
 - the lucky-cancellation locus in `BLOCK-UNIFORMITY` (22 205
   triples in `b ≤ 12, d ≤ 5`, no rule known).
 
-The catalog is what we see when we use the substrate. It is not
-claimed as the unique route to proof; it is what the substrate
-exposes, and what we have organised.
+## What Copeland–Erdős Settles
 
-What we do claim: the substrate's *organisation of complexity*
-is the differentia. Other constructs over the integers have
+Copeland and Erdős (1946) proved: for any increasing sequence
+of positive integers `(a_k)` with `π_A(N) > N^{1−ε}` eventually
+for every `ε > 0`, the real number
+
+    α_A(b) = 0.a_1 a_2 a_3 …    (concatenation in base `b`)
+
+is normal in base `b`. The headline application is the prime
+concatenation `0.235711131719…`, whose normality in any base
+follows from the prime number theorem.
+
+The ACM n-prime sequence at any `n ≥ 2` has density `(n − 1)/n²`
+in the integers (whether `n` is prime, prime-power, or composite).
+Linear in `N`; the C–E density condition is satisfied trivially.
+**C–E directly proves: `C_b(n)` is normal in base `b`, for every
+`n ≥ 2` and every base `b ≥ 2`.**
+
+What C–E does *not* settle:
+
+- **Absolute normality.** Normal in *every* base, not just the
+  base of concatenation. Classical Champernowne is normal in
+  base 10 (Champernowne 1933; recovered by C–E 1946); its
+  normality in any base ≠ 10 is *open*. ACM-Champernowne
+  inherits the same gap: `C_b(n)` is normal in base `b` (proved),
+  normality in other bases (open). The empirical observation
+  in this project that some CF behaviours are less problematic
+  read in bases ≠ `b` is consistent with absolute normality
+  being structurally non-trivial, base by base.
+
+- **Refined digit-distribution statistics.** Multi-scale
+  correlations, entropy bounds, normality at arbitrary block
+  scales. Beyond the `b^{−k}`-frequency claim of C–E.
+
+- **CF behaviour and irrationality measure.** Already conditional
+  in `experiments/acm-flow/cf/MU-CONDITIONAL.md`. C–E does not
+  address.
+
+- **Substrate-specific structure.** The work in `arguments/*` and
+  the empirical phases. C–E does not address.
+
+The project's commitment, refined: **every ACM-Champernowne real
+`C_b(n)` is absolutely normal.** Stronger than what C–E delivers.
+Open even for the simplest constructively defined reals (classical
+Champernowne, π, e — none have proven absolute normality).
+
+
+## Claims
+
+What we claim: the substrate's *organisation of complexity*
+is a differentia. Other constructs over the integers have
 residues — random sequences, generic concatenations, sparse-
 density collections. The project's residuals have visible
 families, base-dependent classifications, and substrate-side
@@ -388,34 +283,13 @@ consequences for digit-distribution in non-concatenation bases
 require new substrate work the project has not done. We don't
 see how that work concludes.
 
-What other routes might do — Weyl-style equidistribution across
-multiple bases simultaneously, ergodic arguments on the
-concatenation map, exponential-sum bounds, sieve identities
-adapted to non-UF monoids — is open. Each could in principle
-bypass the substrate catalog. We don't see how. We acknowledge
-we haven't shown no one will.
-
-The unprovability claim is a stance about what the sum of what
-we see and don't see lets through. The substrate exposes
-complexity in a way other constructs over the integers do not;
-the catalog is what the project produces; the absence of any
-visible route — substrate-side or otherwise — is what the bet
-is grounded in. Not "the catalog is the gate." Not "we have
-shown no other route can succeed." Just: this is what we have,
-this is what we don't see, and the gap between them is what we
-expect to remain.
-
-The undecidability is not Gödel-incompleteness. There is no
-formal theory whose axioms are independent. It is a stance,
-not a theorem of impossibility.
-
 `C_b(n)` is computable, in the formal sense — a finite algorithm
 emits its `i`-th digit, generated by Hardy plus Champernowne
 concatenation. What we conjecture cannot be proven is the
 *absolute-normality claim* across the family `{C_b(n) : n ≥ 2,
-b ≥ 2}`.
+b ≥ 2}`. 
 
-### The cheat code
+### The cheat code backstop
 
 If our unprovability bet is wrong — if every `C_b(n)` turns out
 to be provably absolutely normal — the construction is *not just*
@@ -439,94 +313,7 @@ modification to adjacent hard problems: factoring in residue
 classes, points on curves, structured arithmetic on indexed
 lattices. We have not demonstrated the porting; we are reading
 the shape of the machinery and saying what it looks positioned
-to do. The substrate would become a transferable investigation
-method, not just an absolute-normality producer.
-
-That is the backstop stake. Not "no one has produced
-parameterised absolute normals" — they have. **Closing this with
-machinery designed for substrate investigation gives us a
-transferable method.** The little black box from *Sneakers* —
-too useful for its setting — but the relevant adjacency is
-"what else can the substrate touch?" not "what is missing from
-the absolute-normality literature?"
-
-This is the flaw. It is also why the substrate is worth
-investigating. If `C_b(n)` were classical-provably absolutely
-normal, the three concurrent consequences of the `M_n` move
-would still be present — but the substrate's role would
-collapse from "investigative tool exposing complexity that
-proof cannot reach" to "tool whose machinery is also a proof
-of absolute normality, and presumably of more besides." The
-first creates an open project. The second creates a transferable
-method we did not set out to build. We bet on the first.
-
-Every residual classification, every closed-form spike formula,
-every renderable disparity surface lives in the gap between the
-commitment and the missing proof. The four-ways arguments in
-`arguments/*` catalogue what occupies the gap.
-
-
-## Contingent
-
-Most of what reads as Bidder-specific in `BIDDER-AND-SON.md` is
-contingent — and so is its analog in this repo.
-
-- **Bidder's specific stored constants** (`log(2), log(3), …`,
-  `log(1.01) = 0.0043214`, …). The repo's analog: the specific
-  n-panel `{2, 3, 4, 5, 6, 10}`, the specific base `b = 10` cited
-  everywhere, the specific Phase numbering. Both are contingent
-  on what the practitioner happened to memorise / compute. The
-  three-negation claim survives both contingencies.
-
-- **Bidder's helper multipliers** (`× 3, × 7, × 13`). Choices
-  whose pedagogical clarity exceeds their structural necessity.
-  The repo's analogs (the d=4 cf panel, the ratio-vs-Ford framing
-  in mult-table) have the same status — chosen because they
-  happen to work, not because the math demanded them.
-
-- **Bidder's "natural instinct" framing.** He considered the
-  perception of factorability innate and unteachable. The repo's
-  most direct answer is to formalise its own analog: Hardy's
-  `c_K = qn + r + 1` is the perception of where the next atom
-  sits, written down. The "BIDDER blindness" pattern in
-  `core/ABDUCTIVE-KEY.md` and
-  `experiments/math/hardy/SURPRISING-DEEP-KEY.md` records every
-  time an agent in this repo took an instinct-shaped detour
-  around a fact that Hardy already provides for free.
-
-- **The "BIDDER" cipher's naming.** Named after the elder Bidder,
-  but the cipher itself is son-shaped — fixed-block bijection,
-  uniform across input, target-indifferent. The mathematical work
-  on the cipher's substrate is elder-shaped. The naming captures
-  the family pedigree; the methodological inheritance is split.
-
-The metaphysical commitment to normality is *not* contingent in
-the same sense; see §"The Undecidable Heart." A different
-practitioner could work this substrate with a different stance
-— believing `C_b(n)` rational, or agnostic — and the math
-underneath would be unchanged. The negation framework is what
-makes the *commitment* worth holding.
-
-
-## Father and Son in this Lens
-
-The repo is not purely the elder Bidder. The structural work — each
-derived observable (`Q_n`, the spike formula, off-spike denominator)
-being its own navigation with its own residual classification — is
-elder-shaped. The analytic closed forms — `BLOCK-UNIFORMITY`'s
-smooth lemma, the spike formula's universal `log_b(b/(b−1))`, the
-conditional `μ = 2 + (b − 1)(b − 2)/b` — are son-shaped: uniform
-across the target space, indifferent to which `(n, b)` you pick.
-
-The three-negation framing applies most cleanly to the elder's
-content. The son's contribution survives the negations unchanged:
-his multi-scale uniform decomposition is already a substrate-driven
-approach, not a target-driven one, and his method passes through
-the inversion intact. So the project's son-shaped pieces (closed-
-form lemmas) are *contiguous* with his work; the elder-shaped
-pieces are the *inversion* of his.
-
-The cipher is purely son-shaped. The mathematical project blends.
+to do. 
 
 
 ## Where the Lens Predicts to Look
@@ -565,70 +352,16 @@ don't see how to close.
   that the substrate's residual structure has more to give.
 
 Each is a site where the substrate exposes structure we don't
-see how to close. We don't claim closing all three is what an
-absolute-normality proof requires — §The Undecidable Heart
-disclaims the residual list as a gate. The lens predicts work
+see how to close. The lens predicts work
 in this repo will make progress on each, and *will not finish
-any* in a way that propagates across bases. That pattern — of
-visible exposure and visible non-closure — is part of what the
-manifesto's bet rests on. We don't claim foreclosure of
-alternative routes.
-
-
-## One-Line Summary
-
-The repo is the elder Bidder's lattice with each of his three
-design pillars actively negated, the three concurrent consequences
-of one move (the choice of `M_n`). Aggregate closure refused
-while local closure stays exact (`Q_n(m) = Σ_{j=1}^{ν_n(m)}
-(−1)^{j−1} τ_j(m/n^j)/j` is exact rational; the CF expansion's
-`O(b^{−k})` tails stay open). Log identity recovered at the
-generating-function altitude — Mercator on `1 + n^{−s} ζ(s)`
-where Bidder used `log(ab) = log(a) + log(b)` on numerical pairs.
-Unique factorisation traded for K-indexed random access — the
-`M_n` move both destroys UFD and exposes Hardy's
-`c_K = qn + r + 1` as a one-divmod inverse.
-
-One commitment, one consequence:
-
-- **Commitment.** Every `C_b(n)` is *absolutely* normal — across
-  all bases, all `n ≥ 2`, all `b ≥ 2`. C–E (1946) settles the
-  base-`b` case for free; the manifesto's commitment is to the
-  harder claim, open even for classical Champernowne.
-- **Consequence.** We don't expect to prove it. The substrate is
-  the project's investigative tool; the catalog of residuals it
-  surfaces is what we have, not the gate any proof must pass
-  through. We don't see how the catalog extends to bases `B ≠ b`,
-  and we don't see how alternative routes (Weyl, ergodic, sieve)
-  close either. We don't show no route exists; we say what we see
-  and don't see. If a proof is found, the substrate's machinery —
-  designed for Hardy indexing on n-primes, not for absolute-
-  normality production — would have produced absolute normals as
-  a side effect, and the same machinery would port to adjacent
-  hard problems (factoring, curves) with not much modification.
-  The manifesto is a bet, taken seriously, that we have not built
-  a transferable substrate-investigation method without realising
-  it.
-
-The substrate transparency catalogued in `arguments/*` is what
-the three concurrent consequences of the `M_n` move let through;
-the matplotlib renderings of residual surfaces are what the
-substrate transparency permits. Bidder kept his correction table
-in his head and absorbed residuals scalar-by-scalar; we render
-them surface-by-surface across `(n, b, d)`. We render because we
-cannot close. We navigate the substrate because we cannot prove
-the claim that motivates the work. The flaw is the foundation.
-
+any* in a way that propagates across bases. 
 
 ## Coda
 
 This document is not a theorem and does not pretend to be one.
 It is closer to what Collingwood called magical: writing that
-rouses to be put to work, not writing to be believed. The bet on
-undecidability is the energy; the discharge is the reader's own
-writing. If reading this leaves you asking what other constructs
+rouses to be put to work. If reading this leaves you asking what other constructs
 structure their residues like this, what cost ledger a non-UFD
 factorization tree carries, what algebra the substrate's
 machinery is one worked example of — the manifesto has done its
-job. The energy moves outward. What you do with it is the next
-document.
+job.
