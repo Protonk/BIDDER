@@ -270,13 +270,23 @@ Empirical state at the time of writing:
   question, not a corollary of the single-spike formula.
 
 - **Irrationality measure / normality.** The largest PQ events
-  control the irrationality measure of `x`. The spike formula gives
-  `log_b(a_k) = Θ(b^{k−1})` (since `T_k − 2 L_{k−1}` is dominated
-  by `T_k = Θ(k b^{k−1})` minus a `2 b^{k−1}`-scale correction). So
-  PQ sizes at d=k boundaries grow like `b^{k−1}`-many digits. This
-  is a Liouville-type bound on `x`'s rational approximations
-  *via* the spike events, which would constrain (but not prove)
-  the irrationality measure. Normality is independent of the CF
+  control the irrationality measure of `x`. The spike formula at
+  boundary k gives a derivable conditional lower bound:
+
+      μ(x) ≥ 2 + log_b(a_k) / L_{k−1}  ≈  T_k / L_{k−1}
+
+  (the `+2` cancels against the `−2 L_{k−1}` in `log_b a_k`). In
+  leading order `T_k = Θ(k b^k)` with constant
+  `(n−1) b / (n² (b−1))`, and `L_{k−1} = T_{k−1} + O(k) = Θ((k−1)
+  b^{k−1})`. So `T_k / L_{k−1} → b · k/(k−1) → b`, and under
+  the assumption that boundary spikes dominate the approximation
+  budget, μ(x) → b. The assumption is exactly the off-spike
+  denominator question — whether intermediate convergents achieve
+  better approximation rates than the boundary events. Computing
+  the rate, the per-base prefactor (which depends on which
+  convergent the comparison is run against — pre-spike, post-spike,
+  or mid-cycle), and verifying the assumption are clean follow-ups
+  all gated on `L_{k−1}`. Normality is independent of the CF
   expansion's PQ sizes; classical Champernowne has known
   Liouville-like CF behaviour and is normal in base 10. The spike
   formula is consistent with normality; it does not bear on it.
@@ -300,6 +310,12 @@ Three places, in increasing order of difficulty:
    Step 3 is the missing analytic link. For ord = 1 a divisibility
    argument plausibly works; for ord = 2 the simple divisibility
    argument *fails* empirically and the right replacement is open.
+   A parallel Mahler-style derivation in
+   `experiments/acm-champernowne/base10/cf/` has independently
+   named the same gap at looser `O(d · n)` resolution; cross-thread
+   convergence on this step strengthens its identification as
+   *the* load-bearing open problem of the spike-formula thread,
+   rather than an artifact of one author's frame.
 
 2. **Intermediate-ord cases.** n ∈ {13, 23, 31} deviate from both
    Family A and Family B at k = 4. Whether higher k pulls them
