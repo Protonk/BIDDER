@@ -34,16 +34,12 @@ the paths.
 
 ## The Inversion
 
-`sources/BIDDER-AND-SON.md` documents the elder Bidder navigating
-toward a target by perceiving its nearest factorable composite and
-absorbing the residual into a calibrated correction table. He
-delivered eight-place mental logarithms in under four minutes by a
-method that *required* closure, leaned on UFD, and used the
-numerical log identity as its central tool. 
-
-The elder Bidder's method, as `sources/BIDDER-AND-SON.md` records it,
-rests on three operating pillars in tension with one binding goal —
-deliver an eight-decimal number for arbitrary integer input,
+`sources/BIDDER-AND-SON.md` documents the elder Bidder delivering
+eight-place mental logarithms in under four minutes by navigating
+to a target's nearest factorable composite and absorbing the
+residual into a calibrated correction table. The method rests on
+three operating pillars in tension with one binding goal —
+deliver a calibrated number for arbitrary integer input,
 mentally:
 
 1. **Closure.** Every problem terminates at a calibrated number.
@@ -59,9 +55,11 @@ mentally:
    into memorised prime logs. The library *spans* the problem
    space because UFD gives it a canonical reduction path.
 
-He designed exactly in order to work around what he called his powers of registration, ordering lineal algorithms to minimize memory access.
+He designed exactly around the cognitive constraints of mental
+arithmetic — finite stored constants, bounded working memory,
+public-verifiable answers in under four minutes.
 
-## The negation
+## The Negation
 
 The repo negates each of the three. 
 
@@ -139,15 +137,14 @@ Three features cut.
    collapses to `h = ν_n(m)` terms per `m`. The "finite rank"
    isn't a free parameter — it's the count of Mercator terms
    that survive truncation by integer divisibility on the
-   non-UFD monoid. Read backward: the visible finite-rank-h
-   stack in `Q_n` is *evidence* that we recovered a different
-   identity, since Bidder's would have produced a different
-   stack. The rank stack is the identity's fingerprint. The
-   `(n − 1)/n²` density and `α_n = (n − 1)/n` are traces
-   of the same `M_n` deletion rule that
-   produced it — substrate-level, surfacing across BLOCK-
-   UNIFORMITY, mult-table, and the cofactor-cycle slope at the
-   same time.
+   non-UFD monoid. The visible finite-rank-h stack in `Q_n` is
+   the identity's fingerprint — evidence we recovered a
+   different identity, since Bidder's would have produced a
+   different stack. The `(n − 1)/n²` density and
+   `α_n = (n − 1)/n` are traces of the same `M_n` deletion rule
+   that produced it — substrate-level, surfacing across
+   BLOCK-UNIFORMITY, mult-table, and the cofactor-cycle slope
+   at the same time.
 
 3. **The bilingual K-indexing makes residuals renderable.** Bidder
    kept his correction table in his head — a few dozen scalars at
@@ -165,6 +162,53 @@ Three features cut.
    atom stream behind `C_b(n)` is termwise indexable at any `K`,
    plottable across `n`, comparable across `v_2(n)`. The
    matplotlib output is what the inversion buys — a *substitute* for normality. 
+
+
+## What Copeland–Erdős Settles
+
+Copeland and Erdős (1946) proved: for any increasing sequence
+of positive integers `(a_k)` with `π_A(N) > N^{1−ε}` eventually
+for every `ε > 0`, the real number
+
+    α_A(b) = 0.a_1 a_2 a_3 …    (concatenation in base `b`)
+
+is normal in base `b`. The headline application is the prime
+concatenation `0.235711131719…`, whose normality in any base
+follows from the prime number theorem.
+
+The ACM n-prime sequence at any `n ≥ 2` has density `(n − 1)/n²`
+in the integers (whether `n` is prime, prime-power, or composite).
+Linear in `N`; the C–E density condition is satisfied trivially.
+**C–E directly proves: `C_b(n)` is normal in base `b`, for every
+`n ≥ 2` and every base `b ≥ 2`.**
+
+What C–E does *not* settle:
+
+- **Absolute normality.** Normal in *every* base, not just the
+  base of concatenation. Classical Champernowne is normal in
+  base 10 (Champernowne 1933; recovered by C–E 1946); its
+  normality in any base ≠ 10 is *open*. ACM-Champernowne
+  inherits the same gap: `C_b(n)` is normal in base `b` (proved),
+  normality in other bases (open). The empirical observation
+  in this project that some CF behaviours are less problematic
+  read in bases ≠ `b` is consistent with absolute normality
+  being structurally non-trivial, base by base.
+
+- **Refined digit-distribution statistics.** Multi-scale
+  correlations, entropy bounds, normality at arbitrary block
+  scales. Beyond the `b^{−k}`-frequency claim of C–E.
+
+- **CF behaviour and irrationality measure.** Already conditional
+  in `experiments/acm-flow/cf/MU-CONDITIONAL.md`. C–E does not
+  address.
+
+- **Substrate-specific structure.** The work in `arguments/*` and
+  the empirical phases. C–E does not address.
+
+The project's commitment, refined: **every ACM-Champernowne real
+`C_b(n)` is absolutely normal.** Stronger than what C–E delivers.
+Open even for the simplest constructively defined reals (classical
+Champernowne, π, e — none have proven absolute normality).
 
 
 ## The Undecidable Heart
@@ -213,52 +257,6 @@ structure:
   of `MU-CONDITIONAL.md`),
 - the lucky-cancellation locus in `BLOCK-UNIFORMITY` (22 205
   triples in `b ≤ 12, d ≤ 5`, no rule known).
-
-## What Copeland–Erdős Settles
-
-Copeland and Erdős (1946) proved: for any increasing sequence
-of positive integers `(a_k)` with `π_A(N) > N^{1−ε}` eventually
-for every `ε > 0`, the real number
-
-    α_A(b) = 0.a_1 a_2 a_3 …    (concatenation in base `b`)
-
-is normal in base `b`. The headline application is the prime
-concatenation `0.235711131719…`, whose normality in any base
-follows from the prime number theorem.
-
-The ACM n-prime sequence at any `n ≥ 2` has density `(n − 1)/n²`
-in the integers (whether `n` is prime, prime-power, or composite).
-Linear in `N`; the C–E density condition is satisfied trivially.
-**C–E directly proves: `C_b(n)` is normal in base `b`, for every
-`n ≥ 2` and every base `b ≥ 2`.**
-
-What C–E does *not* settle:
-
-- **Absolute normality.** Normal in *every* base, not just the
-  base of concatenation. Classical Champernowne is normal in
-  base 10 (Champernowne 1933; recovered by C–E 1946); its
-  normality in any base ≠ 10 is *open*. ACM-Champernowne
-  inherits the same gap: `C_b(n)` is normal in base `b` (proved),
-  normality in other bases (open). The empirical observation
-  in this project that some CF behaviours are less problematic
-  read in bases ≠ `b` is consistent with absolute normality
-  being structurally non-trivial, base by base.
-
-- **Refined digit-distribution statistics.** Multi-scale
-  correlations, entropy bounds, normality at arbitrary block
-  scales. Beyond the `b^{−k}`-frequency claim of C–E.
-
-- **CF behaviour and irrationality measure.** Already conditional
-  in `experiments/acm-flow/cf/MU-CONDITIONAL.md`. C–E does not
-  address.
-
-- **Substrate-specific structure.** The work in `arguments/*` and
-  the empirical phases. C–E does not address.
-
-The project's commitment, refined: **every ACM-Champernowne real
-`C_b(n)` is absolutely normal.** Stronger than what C–E delivers.
-Open even for the simplest constructively defined reals (classical
-Champernowne, π, e — none have proven absolute normality).
 
 
 ## Claims
@@ -351,10 +349,8 @@ don't see how to close.
   repo cannot yet articulate the cancellation. Both are hints
   that the substrate's residual structure has more to give.
 
-Each is a site where the substrate exposes structure we don't
-see how to close. The lens predicts work
-in this repo will make progress on each, and *will not finish
-any* in a way that propagates across bases. 
+The lens predicts work in this repo will make progress on each,
+and *will not finish any* in a way that propagates across bases.
 
 ## Coda
 
