@@ -1,5 +1,36 @@
 # ACM-Mangoldt flow tomography
 
+## ⚠️ STATUS UPDATE (after Phase 1 destroyers and Phase 2 closure)
+
+**The four-coordinate working hypothesis below was refuted by Phase 1
+destroyers**, replaced by the finite-rank `Q_n` framing now in
+`core/Q-FORMULAS.md` and `core/FINITE-RANK-EXPANSION.md`. The
+relevant corrections:
+
+- The truncated-flow residual `ρ` is **not** the local observable. It
+  mostly records cutoff placement and saturation, not arithmetic
+  signal (`PHASE1-RESULTS.md`).
+- The local arithmetic object is `Q_n(m) = Λ_n(m) / log m`, the
+  Mercator-of-`ζ_{M_n}(s) = 1 + n^{-s} ζ(s)` log-coefficient,
+  finite-rank-h by integer divisibility (`core/FINITE-RANK-EXPANSION.md`).
+- The four "spectral lines" framing below collapses: height, payload
+  divisor data, factorisation type of `n`, and overlap vector
+  `(t_i)` are exactly the parameters of the master expansion in
+  `core/Q-FORMULAS.md`. They are forced by the formula, not
+  independent observable coordinates.
+- The cutoff coordinate is demoted; only the n=2 `v_2(Y)` line
+  survived destroyers, and that's a separate positivity-locus problem
+  (`STRUCTURE-HUNT.md` side quest).
+
+**This document is preserved as the historical record of the Phase 1
+hypothesis.** Read it for context on what the project tested and how
+the experiments were designed. For the current local arithmetic
+framing, see `core/Q-FORMULAS.md` and `core/FINITE-RANK-EXPANSION.md`.
+For the Phase 1 destroyer results that drove the reframe, see
+`PHASE1-RESULTS.md`.
+
+---
+
 The 1196 proof works because it turns a primitive-set question into
 a weighted divisibility-flow certificate: edge weight
 `Λ(q) / (nq · log²(nq))` on the edge `nq → n`, with exact local

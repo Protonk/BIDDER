@@ -244,13 +244,58 @@ Candidate claims:
 
 ## Phase 4 — Brief 4 / Multiplication-Table Prediction
 
-The BPPW `M_n(N)·Φ(N)/N` prediction should now be written in terms of
-Q signs and finite-rank payload distributions, not raw `Λ_n`.
+Status: empirical phase complete (`mult-table/`); analytic Phase 4 (α′)
+deferred.
 
-Use Phase 2 formulas to integrate sign and magnitude over
-height/payload/factorisation cells. Then test against the existing
-Monte Carlo machinery. If the formula table is exact, any residual is
-in the multiplication-table distribution, not in Q.
+**What we set out to do.** Predict `M_n(N) · Φ(N) / N` from Q signs
+and finite-rank payload distributions, expecting Ford-flat with
+α_n²-style prefactor (`BRIEF4-h2.md`).
+
+**What actually happened.**
+
+- `h2_predictor.py` direct enumeration to N = 10⁷ showed the simple
+  `(n−1)²/n⁴` prediction is consistently below empirical, with the
+  diff *growing* with N — apparent c-shift signature.
+- `h2_predictor_n1e8.py` extended to N = 10⁸ confirmed drift slowing
+  but not stopping. Drift slowdown ratios per decade ≤ 1 for n ≤ 7,
+  ≈ 1 for n = 11, 13. Asymptote not reachable from this data alone.
+- `h2_ratio_vs_ford.py` ran the cross-thread agent's recommended
+  disambiguator: `M_n(K) / M_Ford(K)` against α_n² (BRIEF4-h2's
+  prediction) and α_n (independence baseline). At K = 10⁴..10⁸, the
+  ratio is between α_n² and α_n, drifting toward α_n with slowing
+  rate, *away* from α_n².
+- `h2_cell_resolved.py` and `h2_cell_fixedK.py` showed that at fixed
+  K, mean d(k) on the multiplication-table image is monotone in n.
+  The d-distribution shift is real and controlled. Earlier "this is
+  the c-shift mechanism" framing (`H2-CELL-RESULT.md`) was withdrawn:
+  per-cell asymptotic forms differ qualitatively across cells, so a
+  unified Ford c_D fit is the wrong test.
+
+**Current reading.** Asymptotic deficit exponent for `M_n(N)` is
+**Ford's c**, same as ordinary integers. The ratio `M_n / M_Ford →
+α_n` is the most likely asymptote, with finite-K convergence whose
+functional form has not yet been pinned (three live shapes:
+`1/log K` with higher-order terms, `(log log K)/(log K)`, or
+`(log K)^{−γ}` for some `γ ∈ (0, 1)`). The "c(n) > c" inferred from
+finite-K bare-count data is a slowly-vanishing prefactor transient,
+not a real exponent shift.
+
+**Implication for `core/FINITE-RANK-EXPANSION.md`.** The "shadow of
+rank layers" speculation lives at the prefactor / sub-leading level,
+not at the leading-exponent level. Rank-2 Q_n cell structure does not
+predict the deficit exponent of `M_n(N)`; it informs the d-distribution
+on the Ford image, which contributes to a finite-K transient.
+
+**Phase 4 (α′) — analytic, deferred.** The sharp analytic question
+is `P(k ⊥ n | k ∈ Ford-image-of-K)` for K → ∞, derivable via
+inclusion-exclusion in Ford's machinery (Ford 2008 §6) and the
+anatomy of integers in residue classes (Tenenbaum, Norton,
+Koukoulopoulos 2010 §4–5). 1–2 days of analytic work. Won't by
+itself close the convergence-rate question — sub-leading corrections
+through K = 10⁸ are of comparable magnitude to the leading c_1(n).
+
+See `mult-table/ALPHA-PRIME-PRE-WRITE.md` for the synthesis and
+empirical c_1(n) values.
 
 
 ## Phase 5 — Held-Out Prediction
@@ -297,7 +342,7 @@ Phase 3.2   Hardy Mode 3 large-d block-count checks             (parameter run)
 Phase 3.3   Hardy Mode 2 digit-position spike neighborhoods     (small script)
 Phase 3.4   Hardy Mode 4 tail destroyers for visual claims      (per-claim)
 
-Phase 4     Brief 4 / multiplication-table prediction           (analytic + MC)
+Phase 4     Brief 4 / mult-table: empirical (h=2) DONE; (α′) analytic DEFERRED
 Phase 5     held-out exact Q verification                       (small script)
 
 Side quest  cutoff v_n(Y) at higher Y_max                       (re-run scan)
@@ -321,7 +366,12 @@ fitting.
 | `mega-spike/spike_drift_table.py` | reproducible d=4 residual table | 3.1 |
 | `hardy_block_spikes.py` | large-d block-count / spike neighborhood checks | 3.2, 3.3 |
 | `hardy_tail_destroyers.py` | matched deep-window visual destroyers | 3.4 |
-| `brief4_q_prediction.py` | `M_n(N)·Φ(N)/N` from Q sign distribution | 4 |
+| `mult-table/BRIEF4-h2.md` | h=2 derivation of α_n² prediction (refuted) | 4 |
+| `mult-table/h2_predictor.py` | direct enumeration to N=10⁷ | 4 |
+| `mult-table/h2_predictor_n1e8.py` | extension to N=10⁸ | 4 |
+| `mult-table/h2_ratio_vs_ford.py` | ratio test M_n / M_Ford disambiguator | 4 |
+| `mult-table/h2_cell_resolved.py`, `h2_cell_fixedK.py` | cell-resolved + fixed-K | 4 |
+| `mult-table/ALPHA-PRIME-PRE-WRITE.md` | synthesis + empirical c_1(n) | 4 |
 | `cutoff_vn_y.py` | higher-Y cutoff side quest | side |
 
 

@@ -1,5 +1,41 @@
 # Deep Trouble No. 4
 
+## ⚠️ STATUS UPDATE (Hardy is a bijection)
+
+The "deep-field microscope" framing below was the right *instrument*
+framing for order-dependent observables (Mode 2: digit-position
+oracle; Mode 3: block-boundary probe; Mode 4: tail destroyer for
+position-anchored claims). It was the **wrong** framing for
+substrate-only Q_n / depth-invariance questions, because for prime n,
+
+    c(K, n) := p_K(n) / n  =  qn + r + 1,  (q,r) = divmod(K-1, n-1)
+
+is just the order-preserving bijection from `Z_{≥1}` to
+`{c : n ∤ c}`. Sampling cofactors via Hardy at any K is the same as
+sampling the K-th integer coprime to n in magnitude order — there is
+no "deep" axis to vary that the substrate hasn't already collapsed.
+
+See `experiments/math/hardy/SURPRISING-DEEP-KEY.md` for the full
+write-up: the depth-invariance experiments did not test depth, they
+verified the bijection. The genuine number-theoretic content the
+experiments did surface is the multiplicative-divisor correlation
+`E[d(c_1 c_2)]` for cofactors at growing magnitude — Erdős /
+Tenenbaum territory on integers coprime to n.
+
+Modes 2/3/4 below are still the right framing for **order-dependent**
+questions: digit-position into the concatenated real, radix-block
+counts, position-anchored prefix-era visuals. Mode 1 (atom-only deep
+windows) and any "deep Q_n at atoms" reading are substrate-only and
+should be read through `SURPRISING-DEEP-KEY.md` rather than as a
+deep-field instrument. The atoms-only caveat at the end of this doc
+already flags that nontrivial-rank Q-tests need composite m and
+recommends the right deep-Q sanity loop.
+
+For the local algebra see `core/Q-FORMULAS.md` and
+`core/FINITE-RANK-EXPANSION.md`.
+
+---
+
 Hardy Sidestep changes the experimental posture. We do not have to
 stand at the start of an ACM-Champernowne stream and watch prefixes
 grow. For `n >= 2`, the K-th n-prime is closed form:

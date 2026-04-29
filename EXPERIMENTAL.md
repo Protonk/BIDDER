@@ -65,6 +65,19 @@ Four latches. Each structured the same way. I'm sticking to what's visible in th
 
 ## Brief 4 (rewritten) — Multiplication table on M_n
 
+> **STATUS (2026-04):** Brief 4 (h=2) has been executed empirically in
+> `experiments/acm-flow/mult-table/`. The K=10⁸ ratio test
+> (`h2_ratio_n1e8.py`) found `M_n(K) / M_Ford(K) → α_n = (n−1)/n`,
+> i.e. the asymptotic deficit exponent is **Ford's c, unchanged**;
+> there is no asymptotic c-shift. Finite-K convergence is slow and the
+> functional form is not yet pinned (three live candidates remain;
+> see `core/FINITE-RANK-EXPANSION.md` and `mult-table/H2-RATIO-RESULT.md`).
+> The Λ_n-sign-gating story below was a pre-empirical framing; the
+> finite-rank closed form `Q_n` (`core/Q-FORMULAS.md`) supersedes
+> the Λ_n / antichain diagnostic as the local algebraic object.
+> The (α′) analytic chunk — Ford-anatomy of `P(k ⊥ n | k ∈ Ford-image)`
+> — is deferred.
+
 **Reframe.** The original brief asked whether Ford's deficit exponent c shifts when (a, b) range over A_n. That's a question about the answer. The better question is about the structure: what is the right poset on M_n, and does the multiplication-table count factor through that poset? The Λ_n / antichain framing from the previous turn is upstream of this; this brief assumes you've done that diagnostic and want to know what the multiplication table looks like *given* whatever the Λ_n picture turned out to be.
 
 **Question.** Define M_n(N) = |{a · b : a, b ∈ A_n, a · b ≤ N}|. Does M_n(N) follow Ford's Θ(N / Φ(N)) shape with the same constant c = 1 − (1+log log 2)/log 2, a shifted constant c(n), or a different growth law entirely? And — this is the new part — does the answer depend on whether Λ_n stays nonnegative on the relevant range, or is it independent of the flow story?

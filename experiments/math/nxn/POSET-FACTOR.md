@@ -1,5 +1,39 @@
 # POSET-FACTOR — Λ_n sign-table diagnostic
 
+## ⚠️ STATUS UPDATE (Brief 4 has been re-executed)
+
+This document was written as a **prerequisite gating diagnostic** for
+Brief 4 (multiplication-table-on-M_n). That gating role is now
+historical:
+
+- **Brief 4 (h=2) has been executed empirically** in
+  `experiments/acm-flow/mult-table/`. The "Λ_n stays nonneg ⇒ standard
+  anatomy applies" / "Λ_n goes negative ⇒ structural direction" decision
+  table below was written before the local algebra was understood. The
+  finite-rank closed form `Q_n(m) = Σ_{j=1}^{ν_n(m)} (-1)^(j-1) τ_j(m/n^j)/j`
+  (`core/Q-FORMULAS.md`) shows the sign locus is determined by ordered
+  divisor counts on the payload `k = m/n^h`, not by anything
+  flow-certified or UF-related at the level Brief 4's anatomy lives.
+- **The h=2 empirical work** found `M_n(K) / M_Ford(K) → α_n = (n−1)/n`
+  (asymptotic deficit exponent unchanged from Ford's `c`), with the
+  finite-K convergence form unpinned. The "non-monotonicity ⇒ structural
+  signal" reading in the coupling table below did not pan out as a
+  diagnostic axis.
+- **What's still useful here.** The M_n monoid setup (atoms, antichain
+  framing, non-UF defect at `m=36`), the closed form for `Λ_{M_n}`
+  derived via `Z_{M_n}(s) = 1 + n^{-s}ζ(s)` and Mercator, and the
+  sanity check `Λ_{M_2}(36) = −log 6` are all still correct setup
+  material for `Q_n`. Read this doc as a setup reference, not as a
+  live gating decision for Brief 4.
+
+For the current state of the local algebra see
+`core/Q-FORMULAS.md` and `core/FINITE-RANK-EXPANSION.md`. For the h=2
+multiplication-table empirics see `experiments/acm-flow/mult-table/`.
+
+---
+
+# POSET-FACTOR — Λ_n sign-table diagnostic
+
 The Λ_n / antichain diagnostic. Prerequisite for Brief 4 of
 `EXPERIMENTAL.md` (the multiplication-table-on-M_n question).
 Decides whether the multiplication-table count on M_n factors
