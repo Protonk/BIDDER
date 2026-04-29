@@ -99,7 +99,7 @@ normal in base `b`.
 
 This is the project's first-order normality result. It is *not*
 on the open list. The interesting open question — what the
-manifesto in `THE-UNDECIDABLE-HEART.md` commits to — is **absolute
+manifesto in `THE-OPEN-HEART.md` commits to — is **absolute
 normality**: normality in *every* base, not just the base of
 concatenation.
 
@@ -165,7 +165,7 @@ real. ACM-Champernowne is one entry in this family.
 - `core/BLOCK-UNIFORMITY.md` — the smooth-block n-prime count
   `(b−1) b^{d−1} (n−1)/n²`, of which `(n−1)/n²` is the linear
   density rate.
-- `THE-UNDECIDABLE-HEART.md` — manifesto. Engages C–E directly
+- `THE-OPEN-HEART.md` — manifesto. Engages C–E directly
   as the precedent for what's settled vs what's open. The
   manifesto's commitment is to *absolute* normality, the
   refinement C–E does not address.
@@ -191,5 +191,5 @@ The project's panel `n ∈ {2, 3, 4, 5, 6, 10}` is therefore all
 inside C–E's scope. The substrate-specific work (Q_n, mult-table,
 mega-spike, BLOCK-UNIFORMITY) addresses internal structure of
 already-proved-normal reals; the absolute-normality conjecture
-in `THE-UNDECIDABLE-HEART.md` is the genuinely open commitment
+in `THE-OPEN-HEART.md` is the genuinely open commitment
 the project carries.
