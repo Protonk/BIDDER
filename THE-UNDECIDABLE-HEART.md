@@ -59,7 +59,14 @@ public-verifiable answers in under four minutes.
 
 ## The Negation
 
-The repo negates each of the three. 
+The choice of `M_n = {1} ∪ nZ_{>0}` is one design move with three
+concurrent consequences. It discards UFD; exposes the arithmetic
+progression Hardy inverts; carries `ζ_{M_n}(s) = 1 + n^{−s} ζ(s)`
+as the generating function whose Mercator log gives a recovered
+identity at higher altitude; and forces the local-vs-aggregate
+altitude split that makes closure refusal coherent. Bidder's
+three pillars all break in that single move. The triad below is
+pedagogical decoration; the algebra is one move.
 
 - **Closure: refused.** `core/FINITE-RANK-EXPANSION.md` enforces
   the refusal at the right altitude. Each `Q_n(m)` is an exact
@@ -106,18 +113,7 @@ The repo negates each of the three.
   for Hardy. UFD for the bilingual K-indexing that ties atom
   position to digit position in `C_b(n)`. 
 
-The three negations cohere because they are *concurrent
-consequences of one design move*: the choice of `M_n = {1} ∪ nZ_{>0}`.
-That single move discards UFD; exposes the arithmetic progression
-Hardy inverts; carries `ζ_{M_n}(s) = 1 + n^{−s} ζ(s)` as the
-generating function whose Mercator log gives the recovered
-identity; and forces the local-vs-aggregate altitude split that
-makes closure refusal coherent. The triadic framing is
-pedagogically useful — three trades to name — but the algebra
-is one move with three concurrent consequences. Together they
-build a substrate where `{C_b(n)}` is an object you can study
-without expecting to prove the absolute-normality claim that
-motivates the studying.
+The substrate the move builds is where `{C_b(n)}` lives.
 
 ## Beautiful
 
@@ -209,6 +205,43 @@ Open even for the simplest constructively defined reals (classical
 Champernowne, π, e — none have proven absolute normality).
 
 
+## The Algebra of Error
+
+The substrate is not a tool. The substrate is an algebra. Its
+elements are residuals — `offset(n)` indexed by `ord(b, n)`,
+`β(n)` for the `O(b^{−k})` tails, the off-spike denominator
+process between consecutive boundary spikes, the lucky-cancellation
+locus in `BLOCK-UNIFORMITY`, and whatever further residuals the
+catalog accrues. Its operations are the natural transformations
+the substrate exposes across `(n, b, d)` — restriction in `n`,
+shift in `b`, deepening in `d`, and the bilingual K-indexing that
+ties an atom to its digit-stream position and back. Its closure
+questions are this project's research questions.
+
+Local closure is what the algebra finishes from inside. `Q_n(m)`
+closes exactly at rank `h = ν_n(m)`; the closure is sharp,
+rational, no remainder. The mult-table asymptote
+`α_n = (n − 1)/n` is another local closure: a limit the algebra
+reaches. The algebra has a notion of *finished* and several
+local objects exhibit it.
+
+Aggregate openness is what the algebra does not finish.
+`C_b(n)`'s digit stream in bases `B ≠ b`, the cross-base
+distribution of length-`k` strings, the irrationality measure,
+the off-spike CF state — these are objects the algebra contains
+but does not close. Absolute normality of `C_b(n)` across all
+bases is one such closure question. The catalog of residuals is
+the algebra's record of where it has not finished and what
+finishing would mean.
+
+Naming the object as an algebra rather than as a tool reframes
+the rest. The investigative methodology is not heuristic; it is
+the algebra working from inside. The substrate's value does not
+depend on which closure questions resolve and which remain open.
+The algebra is what we have built; the open questions are what
+the algebra is for.
+
+
 ## The Undecidable Heart
 
 ![A circular disk filling most of a square frame on a black background. The disk's interior is rendered in deep magenta and purple tones overlaid with a network of bright orange-yellow lines. Two prominent perpendicular bright bars cross through the disk's centre forming an orange cross — one horizontal diameter, one vertical diameter. Beyond the central cross, the disk is filled with a curvilinear orthogonal grid: arcs that bend along the disk's curvature, growing denser and finer toward the disk's circumference. The grid is regular near the centre and compresses tightly at the rim, where the structure thickens into a fine textured band along the disk's boundary. No clear empty regions are visible; lines and intersections appear at every scale across the disk's interior. The four corners of the square frame outside the disk are pure black.](experiments/acm-champernowne/base10/art/q_distillery/q_lattice_4000_fft_poincare.png)
@@ -238,13 +271,8 @@ occurs in the base-`B` expansion of `C_b(n)` at frequency
 `B^{−k}`, in the limit. C–E gives this for `B = b` (the base of
 concatenation). Other bases `B ≠ b` have to be earned separately.
 
-We do not claim the residual list below is the gate any
-absolute-normality proof must pass through. The substrate is the
-project's *investigative tool* — Hardy-indexed atoms, finite-rank
-`Q_n`, BLOCK-UNIFORMITY's residue counting, the bilingual
-K-indexing that ties atom position to digit position. The
-substrate's output, when used as a tool, is a catalog of residual
-structure:
+The catalog of residuals — what the algebra has not finished
+closing — runs:
 
 - `offset(n)` by `ord(b, n)` (intermediate `ord` open in
   `PRIMITIVE-ROOT-FINDING.md`),
@@ -259,15 +287,15 @@ structure:
 
 ## Claims
 
-What we claim: the substrate's *organisation of complexity*
-is a differentia. Other constructs over the integers have
-residues — random sequences, generic concatenations, sparse-
-density collections. The project's residuals have visible
-families, base-dependent classifications, and substrate-side
-closed forms at the local level. Other constructs have residues;
-ours *structures* them. That organisation is what makes the
-substrate useful as an investigative tool, and (we expect) useful
-for projects beyond this one.
+What we claim: the substrate organises its residuals into an
+algebra. Other constructs over the integers have residues —
+random sequences, generic concatenations, sparse-density
+collections — but they don't expose them as algebra. The
+project's residuals have visible families, base-dependent
+classifications, and substrate-side closed forms at the local
+level. No other constructive normal in the literature exposes
+its residuals as algebra. Ours does. That algebra is what makes
+the substrate useful for projects beyond this one.
 
 What we don't see: a route from the catalog to an
 absolute-normality proof. The catalog organises complexity
@@ -354,8 +382,5 @@ and *will not finish any* in a way that propagates across bases.
 
 This document is not a theorem and does not pretend to be one.
 It is closer to what Collingwood called magical: writing that
-rouses to be put to work. If reading this leaves you asking what other constructs
-structure their residues like this, what cost ledger a non-UFD
-factorization tree carries, what algebra the substrate's
-machinery is one worked example of — the manifesto has done its
-job.
+rouses to be put to work. The work it points at is writing down
+the algebra it names.
