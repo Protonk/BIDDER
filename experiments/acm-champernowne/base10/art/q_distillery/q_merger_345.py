@@ -1,12 +1,28 @@
 """
-q_merger_345.py - merger D across h in {3, 4, 5}.
+q_merger_345.py - Q_n towers and trajectories across h in {3, 4, 5}.
 
 Three stacked panels. Each panel: faint background towers per (n, k)
-showing pre-cancellation mass, with highlighted k polylines threading
-Q_n through those towers across the four n positions.
+showing pre-cancellation mass, with highlighted-k polylines connecting
+Q_n through those towers across the four n positions, ordered by
+(omega(n), Omega(n)) - prime-structure of n, which is the actual axis
+the master expansion responds to.
 
 h=1 (trivially Q_n=1) and h=2 (n-independent formula 1 - d(k)/2)
 are dropped - they don't reward the canvas space.
+
+Highlighted k's labelled by tau-signature so structural identities
+are visible: k=25 [p^2] and k=49 [p^2] produce identical Q at every
+(n, h) - they are the same point in the visualisation, not two
+points coincidentally aligned.
+
+At every prime n at h=5, the coefficient pattern (+1, -2, +2, -1,
++1/5) annihilates polynomials of degree 1..4 in j. Since tau_j(p^e)
+is degree e in j, Q_p(p^5 k) = 0 for any k coprime to p with
+Omega(k) in [1, 4]. The n=2 column at h=5 shows five highlighted
+k's stacked on the zero line for this reason - a stated identity,
+not a clustering coincidence. The same identity does NOT hold at
+h=3 or h=4 (different coefficient patterns) - hence the qualitative
+shape difference between the three panels.
 """
 
 import os
@@ -114,11 +130,12 @@ def main():
             + 2 * column_half_width * lk_norm[k_idx]
         )
 
+    # k labelled by tau-signature in the legend below.
     highlights = [
         (1,   (1.00, 0.84, 0.30)),  # gold
         (5,   (0.50, 1.00, 0.70)),  # mint
         (25,  (0.95, 0.55, 1.00)),  # magenta
-        (35,  (0.40, 0.85, 1.00)),  # cyan (the V violation at h=5)
+        (35,  (0.40, 0.85, 1.00)),  # cyan
         (49,  (1.00, 0.55, 0.55)),  # red-pink
         (125, (1.00, 0.85, 0.55)),  # peach
     ]
@@ -213,12 +230,17 @@ def main():
             color=(0.30, 0.34, 0.40), alpha=0.16, lw=0.4, zorder=0.4,
         )
 
-        # X-axis: ticks only on bottom panel.
+        # X-axis: ticks only on bottom panel. Annotated with Omega(n)
+        # (total prime exponent) to name the ordering principle of the
+        # polylines explicitly - the polyline is a path along
+        # (omega, Omega) of n, the structural axis of the master
+        # expansion.
+        omega_str = lambda n: str(sum(e for _p, e in factor_tuple(n)))
         ax.set_xticks(n_centers)
         if h_idx == len(H_VALUES) - 1:
             ax.set_xticklabels(
-                [f'n = {n}' for n in PANEL_NS],
-                fontsize=15, color=LABEL_COLOR,
+                [f'n = {n}\nΩ = {omega_str(n)}' for n in PANEL_NS],
+                fontsize=14, color=LABEL_COLOR,
             )
         else:
             ax.set_xticklabels([])
@@ -247,7 +269,17 @@ def main():
     leg_ax.set_ylim(0, 1)
     leg_ax.set_axis_off()
 
-    canon_labels = ['k=1', 'k=5', 'k=25', 'k=5·7', 'k=7²', 'k=5³']
+    # tau-signature in brackets after each k makes structural
+    # equivalences readable from the legend alone: k=25 and k=49 are
+    # both [p^2], hence identical Q at every (n, h).
+    canon_labels = [
+        'k=1  [const]',
+        'k=5  [p]',
+        'k=25 [p²]',
+        'k=5·7 [pq]',
+        'k=7² [p²]',
+        'k=5³ [p³]',
+    ]
     canon_colors = [c for _, c in highlights]
     legend_x_step = 0.155
     legend_x_start = (1 - (len(canon_labels) - 1) * legend_x_step) * 0.5 - 0.04

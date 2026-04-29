@@ -16,23 +16,37 @@ Bulk (~100 k coprime to 12): faint towers and faint polylines, drawn
 as a "fog" of cancellation context.
 
 Highlighted k (canonical anchors): bright towers, bright Q dots,
-bright polyline. Each highlighted k tells a structural story:
+bright polyline. Each k is labelled by its tau-signature so that
+structural identities are visible (k = 25 and k = 49 are both p^2
+and produce identical Q at every n).
 
-  - k = 1 (simple payload): towers small at n=2 / n=4 (primes/p-powers
-    side); larger at n=6 / n=12. Polyline shape mirrors q_trajectory's
-    h=5 panel.
-  - k = 5 (single prime): same shape, scaled.
-  - k = 25 = 5^2 (prime square): bigger towers because tau_j growth.
-  - k = 35 = 5*7 (the dramatic violation): towers tall everywhere,
-    polyline traces 0 -> -3 -> -24 -> +60 - the cancellation flips
-    the surviving sign at n=12 even as towers stay roughly comparable.
-  - k = 49 = 7^2 and k = 121 = 11^2: more prime-square structure.
+Structural fact at n = 2: the prime-h=5 coefficient pattern is
+(+1, -2, +2, -1, +1/5). Applied as a linear functional on tau_j(k)
+viewed as a polynomial in j, this kernel annihilates every
+polynomial of degree 1..4. Since tau_j(p^e) is a polynomial of
+degree e in j, every k coprime to 2 with Omega(k) in [1, 4] gives
+Q_2(2^5 k) = 0 exactly. The five non-trivial highlighted k's
+(k = 5, 25, 35, 49, 125) all stack on the zero line at n = 2 for
+this reason; only k = 1 (Omega = 0) escapes, with Q = 1/5.
 
-The visual claim is: hierarchy reads as TOWER GROWTH (warm + cool
-extent), the polyline is where the residual lands within those
-towers. A polyline punching DEEP into a tower (Q_n far from 0
-relative to P + N) is rare structure; a polyline hugging the
-midline (Q_n ~ 0 relative to P + N) is heavy cancellation.
+The polyline traces Q_n(n^5 k) across n = 2, 4, 6, 12. The
+ordering implied by the polyline is by (omega(n), Omega(n)) - the
+binomial-product structure. Q is non-monotone in n; the shape of
+each polyline is what the master expansion produces, not a
+"trajectory" through a continuous space and not a "violation" of
+any default expectation.
+
+Verified Q values at h = 5 across the panel:
+  k=1   ->  +0.20, +0.20, +1.20, +7.20
+  k=5   ->  +0.00, +0.00, +6.00, +24.00
+  k=25  ->  +0.00, -1.50, +12.00, +42.00
+  k=35  ->  +0.00, -3.00, +18.00, +60.00     (a small dip at n=4,
+                                              then ascent - not the
+                                              V-shape claimed in
+                                              earlier drafts)
+  k=49  ->  +0.00, -1.50, +12.00, +42.00     (identical to k=25 by
+                                              tau-signature)
+  k=125 ->  +0.00, -6.00, +16.00, +52.00
 """
 
 import os
@@ -178,13 +192,17 @@ def main():
 
     # ---- foreground: highlighted canonical k ----
 
+    # Labels include each k's tau-signature so structural identities are
+    # visible: k = 25 and k = 49 are both p^2 and produce identical Q at
+    # every n (one of the structural facts the visualisation should
+    # surface, not hide behind overlapping annotations).
     highlights = [
-        (1,   'k=1',    (1.00, 0.84, 0.30)),  # gold
-        (5,   'k=5',    (0.50, 1.00, 0.70)),  # mint
-        (25,  'k=25',   (0.95, 0.55, 1.00)),  # magenta
-        (35,  'k=5·7',  (0.40, 0.85, 1.00)),  # cyan
-        (49,  'k=7²',   (1.00, 0.55, 0.55)),  # red-pink
-        (125, 'k=5³',   (1.00, 0.85, 0.55)),  # peach (cube, distinct shape)
+        (1,   'k=1  [const]',   (1.00, 0.84, 0.30)),  # gold
+        (5,   'k=5  [p]',       (0.50, 1.00, 0.70)),  # mint
+        (25,  'k=25 [p²]',      (0.95, 0.55, 1.00)),  # magenta
+        (35,  'k=5·7 [pq]',     (0.40, 0.85, 1.00)),  # cyan
+        (49,  'k=7² [p²]',      (1.00, 0.55, 0.55)),  # red-pink
+        (125, 'k=5³ [p³]',      (1.00, 0.85, 0.55)),  # peach
     ]
 
     annotations = []
@@ -254,11 +272,43 @@ def main():
     # Zero line.
     ax.axhline(0.0, color=(0.95, 0.97, 1.00, 0.40), lw=0.8, zorder=1)
 
+    # Structural-zero annotation at the n=2 column. The prime-h=5
+    # coefficient pattern (+1, -2, +2, -1, +1/5) annihilates polynomials
+    # of degree 1..4 in j; tau_j(p^e) is degree e in j; so every k
+    # coprime to 2 with Omega(k) in [1, 4] satisfies Q_2(2^5 k) = 0.
+    # Without this label the n=2 column reads as "polylines accidentally
+    # cluster near 0"; with it, the cluster is a stated identity.
+    n2_x = n_centers[0]
+    ax.annotate(
+        'structural zero —\n5/6 highlighted k\nvanish exactly\n(coeff. kernel\nkills τ_j of\ndeg. 1..4)',
+        xy=(n2_x + 0.05, 0.0),
+        xytext=(n2_x - 0.85, slog(-3.5)),
+        textcoords='data',
+        fontsize=8.5,
+        color=(0.95, 0.96, 1.00, 0.78),
+        fontstyle='italic',
+        ha='left', va='center',
+        arrowprops=dict(
+            arrowstyle='->',
+            color=(0.95, 0.96, 1.00, 0.55),
+            lw=0.7,
+            shrinkA=2, shrinkB=2,
+        ),
+        zorder=9,
+    )
+
     # ---- axes cosmetics ----
 
+    # x-axis labels show n, type, and Omega(n) = total prime exponent.
+    # Naming Omega makes the implicit ordering principle of the polyline
+    # explicit: x is sorted by (omega, Omega) of n, the structural axis
+    # of the master expansion. The polyline is a path along that axis,
+    # not through "n-space" generally.
+    omega_str = lambda n: str(sum(e for _p, e in factor_tuple(n)))
     ax.set_xticks(n_centers)
     ax.set_xticklabels(
-        [f'n = {n}\n({t})' for n, t in zip(PANEL_NS, N_TYPES)],
+        [f'n = {n}\n({t})\nΩ = {omega_str(n)}'
+         for n, t in zip(PANEL_NS, N_TYPES)],
         fontsize=12, color=TICK_COLOR,
     )
     ax.tick_params(axis='x', length=0)

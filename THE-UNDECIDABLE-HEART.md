@@ -13,9 +13,7 @@ with `n ∤ c`, accessible at any `K` via Hardy's
 (which atom) and through the digit stream (where in `C_b(n)`'s
 base-`b` expansion that atom sits) at once: every atom has a
 position in the lattice and a position in the digit stream,
-either computable from the other in polylog bignum work. That
-double duty is the bilingualism. The substrate speaks discrete
-arithmetic and digit-positional arithmetic in the same `K`.
+either computable from the other in polylog bignum work. 
 
 **What we see.** The substrate's algebra reads as binary-tree
 structure walked by computation. `M_n` is non-UFD by construction

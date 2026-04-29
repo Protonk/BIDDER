@@ -84,3 +84,48 @@ bar of total `Σ_{j odd} (count_j / j)`, a cool bar of total
 `Σ_{j even} (count_j / j)`, and a diamond at the signed difference
 `Q_n(m)`. For prime `n` at `h = 3` with single-prime `k`, the diamond
 lands dead-centre — the low-payload zero band as perfect cancellation.
+
+`q_merger_h5.py` and `q_merger_345.py` thread the towers (warm + cool
+pre-cancellation mass) and the polyline (signed surviving `Q_n`) into
+one canvas across the four-column panel `n ∈ {2, 4, 6, 12}`. `_h5`
+zooms to `h = 5` only; `_345` stacks `h = 3, 4, 5`. Highlighted `k`
+are labelled by τ-signature (`k=25 [p²]`, `k=49 [p²]`, …) so that
+structural identities — same τ-signature ⇒ same `Q` at every
+`(n, h)` — are readable from the legend rather than discoverable
+only by overlapping numeric labels. The `n=2` column at `h=5`
+carries an explicit annotation: the prime-h=5 coefficient kernel
+`(+1, −2, +2, −1, +1/5)` annihilates polynomials of degree 1..4
+in `j`, which kills `τ_j(k)` for any `k` coprime to 2 with
+`Ω(k) ∈ [1, 4]` — five of the six highlighted `k` vanish exactly,
+not by coincidence.
+
+`q_h5_full_scan.py` extends the four-column merger to all `n ∈
+[2, 30]`, sorted by n-shape class (sorted-exponent signature). The
+shape determines the binomial-product coefficient pattern; `k`'s
+τ-signature determines the residue; `Q` is a function of
+`(shape(n), τ-signature(k))`. Inside each shape class the coloured
+horizontal segments connecting `Q` dots are dead flat by
+construction — flatness IS the structural identity. Heights jump
+only at class boundaries. The headline structural fact: across the
+ten-column prime block (`n = 2, 3, 5, 7, 11, 13, 17, 19, 23, 29`)
+five of six highlighted `k` stack on `Q = 0` exactly, by the kernel
+identity above. Outside the prime block the kernel partially
+extends to `p²` for the linear-τ case (`k = 31`) and breaks
+elsewhere; the visualisation lets the reader see exactly where the
+zero band ends.
+
+`q_h5_shape_tau_matrix.py` is the structural skeleton extracted
+from the 29-column scan. Rows are the eight n-shape classes
+(`p, p², pq, p³, p²q, pqr, p⁴, p³q`); columns are six τ-signatures
+(`const, p, p², pq, p³, pqr`); cells carry `Q_n(n^5 k)` for any
+`(n, k)` of those classes with `gcd(k, n) = 1`. Cells where `Q = 0`
+exactly are gold-ringed and dotted. The kernel zeros cluster in the
+upper-left corner: the prime row has five (the alternating-binomial
+identity kills τ-polynomials of degree 1..4); the `p²` and `p³`
+rows each have one (linear-τ kernel: `Σ_j (−1)^(j−1) C(a(h-j)+j-1,
+j-1) = 0` for `a ∈ {1, 2, 3}` at `h = 5`); the `p⁴` row breaks the
+linear kernel, recording where the alternating sum stops vanishing.
+Squarefree multi-prime shapes (`pq, p²q, p³q, pqr`) carry no
+kernel zeros at this height. The right-side strip prints each
+row's coefficient pattern `(c_1, c_2, c_3, c_4, c_5)` so the
+zeros can be checked by inspection against any τ-signature.
