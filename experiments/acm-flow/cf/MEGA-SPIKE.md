@@ -50,6 +50,11 @@ d-block satisfying `n² | b^{d−1}`:
 
     N_d(n, b) = (b − 1) b^{d−1} (n − 1) / n²    (smooth d-block).
 
+The same density factor `(n − 1)/n²` (or its single-coprime form
+`(n − 1)/n` and its numerator `n − 1`) is the asymptote `α_n` in the
+multiplication-table work and the slope of the cofactor cycle in
+`OFFSPIKE-RESULT.md`. One residue count, three angles.
+
 When all blocks `d = 1, …, k` are smooth, `D_k`, `C_{k−1}`, `T_k`
 admit a closed form. Using
 

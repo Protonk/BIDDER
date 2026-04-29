@@ -86,7 +86,11 @@ operationalised:
 - The digit-position oracle exists *because* digit lengths are a
   closed-form function of K via Hardy.
 - The block-boundary inverse exists *because* the substrate's
-  density is `(n−1)/n²` and block boundaries are radix powers.
+  density is `(n−1)/n²` and block boundaries are radix powers. The
+  same density factor powers the CF spike formula's `T_k`, the
+  mult-table asymptote `α_n = (n−1)/n`, and the cofactor cycle
+  slope `(n−1)` — `core/BLOCK-UNIFORMITY.md` is the central
+  substrate-transparency engine, not one fact among many.
 - Greedy reconstruction works *because* a strictly ascending row
   list satisfies `n_k ≥ k+1`, which puts the diagonal inside the
   rank-1 region.

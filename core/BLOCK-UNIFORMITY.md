@@ -91,6 +91,15 @@ n-primes in the block. The total number of n-primes in the block is
 `(b−1) · b^(d-1) · (n−1) / n²`, smaller than the integer block by a
 factor of `n² / (n−1)`.
 
+**Scope.** The smooth condition `n² | b^(d-1)` requires `n` to be
+*b*-smooth (every prime factor of `n` divides `b`). For prime `n`
+coprime to `b` — most of the n-panel in `experiments/acm-flow/cf/`
+— no `d` satisfies smooth, and the closed-form count is then
+asymptotic with `O(1)` per-block correction (bounded by the spread
+bound below). What's "exact" is restricted to smooth, Family E, and
+lucky-cancellation triples; what carries the load downstream is the
+asymptotic form.
+
 **Proof.** Fix `j ∈ {1, …, b−1}` and consider the leading-digit strip
 
     S_j = [j·b^(d-1), (j+1)·b^(d-1) − 1].
@@ -349,6 +358,39 @@ digit is 1.
 Over the full block {10, ..., 99}, these first digits cycle
 through 1..9, each appearing 10 times. The encoding is a
 transparent window onto the block's digit structure.
+
+
+## Downstream observables
+
+The same residue-counting fact powers four otherwise-distinct
+observables in this project. The reach is structural, not a coincidence
+of the panel; see `arguments/UNIFORMITY-FOUR-WAYS.md` for the four-ways
+reading.
+
+- **CF spike formula `T_k`** (`experiments/acm-flow/cf/MEGA-SPIKE.md`).
+  The cumulative digit count `T_k = Σ_{d=1}^{k} d · N_d(n, b)` is this
+  count integrated by digit weight. The closed-form spike scale
+  `S_k = D_k − C_{k−1} = (n − 1)/n² · (b^{k−1}(k(b−2) + b/(b−1))
+  − 1/(b−1))` is a smooth-family sum.
+
+- **Multiplication-table asymptote**
+  (`experiments/acm-flow/mult-table/`). `M_n(K)/M_Ford(K) → α_n =
+  (n − 1)/n` is the same density's single-coprime factor, surviving
+  Ford's image-counting anatomy under residue restriction.
+
+- **Off-spike cofactor cycle slope**
+  (`experiments/acm-flow/cf/OFFSPIKE-RESULT.md`). The slope `(n − 1)`
+  in `δ_k(n) = (n − 1)k + offset(n)` is the cofactor cycle length —
+  the numerator of the smooth-block density `(n − 1)/n²`.
+
+- **First-digit uniformity of `C_b(n)`** (`core/ACM-CHAMPERNOWNE.md`,
+  `EARLY-FINDINGS.md`). The leading-digit equidistribution claim is
+  the sieved lemma plus the corollary in §"Corollary: the encoding
+  preserves it" below.
+
+The smooth-block closed form is the substrate-transparency reaching
+into all four. CF, multiplicative, spectroscopic, and digit-frequency
+observables all collapse to angles on one residue count.
 
 
 ## What depends on this

@@ -45,6 +45,12 @@ cofactor density is `(n − 1)/n`. The accumulated log-denominator
 growth per `k`-step picks up `(n − 1)` units of `log b` from this
 cofactor structure.
 
+The numerator `(n − 1)` here is the same numerator as in the
+smooth-block n-prime count `N_d(n, b) = (b − 1) b^{d−1} (n − 1)/n²`
+of `core/BLOCK-UNIFORMITY.md`. Same residue-counting fact, viewed
+through the cofactor cycle rather than through the digit-block
+strip.
+
 This is suggestive, not a proof. The cycle-disruption argument that
 links cofactor structure to convergent denominator growth lives in
 `MECHANISTIC-DERIVATION.md`.
