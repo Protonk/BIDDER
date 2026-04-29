@@ -33,20 +33,29 @@ tail-spikes for small `n`.
 
 ## The rule
 
-For primes `p` with `gcd(p, b) = 1`:
+The rule is stated for primes `p` with `gcd(p, b) = 1`, the only
+case where `ord(b, p)` is defined:
 
     offset(p) = log_b(b/p)         if ord(b, p) = p − 1     (Family A)
     offset(p) = log_b(b/p²)        if ord(b, p) ≤ 2          (Family B)
 
-Family A: `n = 7, 17, 19, 29` (primitive root). Offset matches
-`log_b(b/n)` to four to five decimals.
+Family A members in panel: `n = 7, 17, 19, 29` (primitive-root
+primes). Offset matches `log_b(b/n)` to four to five decimals.
 
-Family B: `n = 3` (ord = 1) and `n = 11` (ord = 2). Offset matches
-`log_b(b/n²)`, i.e. Family A shifted by `−log_b(n)`.
+Family B members in panel: `n = 3` (ord = 1) and `n = 11` (ord = 2).
+Offset matches `log_b(b/n²)`, i.e. Family A shifted by `−log_b(n)`.
 
-Non-coprime or composite rows: `n = 2, 4` join Family A;
-`n = 5` (with `n | b`) lands at offset 0; `n = 6` lands at
-`log_b(1/(b−1)) = −log_b(b−1)`.
+Outside the rule's scope (the rows where `gcd(n, b) > 1` or `n` is
+composite), the offsets line up empirically:
+
+- `n = 2, 4` land at `log_b(b/n)` — the Family A value, even though
+  the rule's coprime hypothesis fails.
+- `n = 5` (with `n | b` exactly) lands at offset 0.
+- `n = 6` (composite) lands at `log_b(1/(b−1)) = −log_b(b−1)`.
+
+These are observed extensions, not consequences of the rule. Whether
+they reflect a broader structure or are case-by-case substrate
+accidents is open.
 
 
 ## Intermediate ord

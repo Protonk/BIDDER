@@ -177,9 +177,7 @@ def load_panel_spikes():
 
     Takes the first spike per (n, k) tier in index order — the canonical
     d=k mega-spike. Ignores off-tier events and d=k-tail spikes."""
-    cf_csv = os.path.join(
-        ROOT, 'experiments', 'acm-champernowne', 'base10', 'cf', 'cf_spikes.csv'
-    )
+    cf_csv = os.path.join(HERE, 'cf_spikes.csv')
     spikes = {n: {} for n in NS}
     with open(cf_csv, newline='') as f:
         rows = sorted(csv.DictReader(f), key=lambda r: (int(r['n']), int(r['index'])))
@@ -222,7 +220,7 @@ def main():
     )]
 
     summary_lines = [
-        'Phase 3.1 multi-k spike-drift table — actual vs smooth T_k',
+        'Multi-k spike-drift table — actual vs smooth T_k',
         '',
         ('  k | n  | idx | obs log10(a) | log10(q_prev) | '
          'T_k smooth |  T_k actual |  res (smooth) |  res (actual)'),

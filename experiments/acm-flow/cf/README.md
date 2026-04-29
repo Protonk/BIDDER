@@ -11,9 +11,10 @@ and the conditional irrationality measure.
 
 1. `MEGA-SPIKE.md` — master document. Master statement
    `log_b(a_{i_k}) = T_k − 2 L_{k−1} + log_b(b/(b−1)) − O(b^{−k})`,
-   block algebra giving the closed-form spike scale
-   `S_k = D_k − C_{k−1}`, derivation of the CF correction, and
-   pointers to the empirical and analytic state.
+   with `T_k` read from actual atom counts and the smooth-count
+   algebra giving the closed-form spike scale `S_k = D_k − C_{k−1}`;
+   derivation of the CF correction; pointers to the empirical and
+   analytic state.
 2. `MULTI-K-RESULT.md` — k ∈ {2, 3, 4} confirmation at b = 10;
    isolation of the universal `log_b(b/(b−1))` constant; geometric
    `b^{−k}` decay of the residual.
@@ -21,7 +22,7 @@ and the conditional irrationality measure.
    decomposition; substrate-driven slope, per-`n` offset.
 4. `EXTENDED-PANEL-RESULT.md` — n ∈ {2..13} at b = 10, d = 4;
    Family A / B / D / F + transient classification.
-5. `PRIMITIVE-ROOT-FINDING.md` — extended prime panel
+5. `PRIMITIVE-ROOT-FINDING.md` — extended prime-order panel
    `n ∈ {17, 19, 23, 29, 31}`; family selection rule by
    `ord(b, n) ∈ {1, 2, n − 1}`; intermediate ord open.
 6. `MECHANISTIC-DERIVATION.md` — partial proof. Slope `(n − 1)`

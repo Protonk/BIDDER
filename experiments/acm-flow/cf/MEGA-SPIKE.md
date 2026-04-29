@@ -19,63 +19,64 @@ process.
 
 ## The master statement
 
-For `n ≥ 2`, base `b`, and actual atom counts through the d=k
-radix block, the d=k boundary spike satisfies
+For `n ≥ 2` and base `b`, the d=k boundary spike satisfies
 
     log_b(a_{i_k}) = T_k − 2 L_{k−1} + log_b(b/(b−1)) − O(b^{−k}),
 
 where:
 
 - `a_{i_k}` is the partial quotient at the boundary index `i_k`;
-- `T_k = Σ_{d=1}^{k} d · N_d^{actual}(n,b)` is the cumulative
-  digit count through the d=k atom block;
+- `N_d(n, b)` is the actual atom count in the d-block, `D_k = k · N_k`,
+  `C_{k−1} = Σ_{d=1}^{k−1} d · N_d`, and `T_k = C_{k−1} + D_k`;
 - `L_{k−1} := log_b(q_{i_k − 1})` is the log denominator of the
   convergent immediately before the boundary;
 - `log_b(b/(b−1))` is the universal boundary-truncation factor.
 
 The two derivable terms (`T_k` and the truncation factor) come from
-substrate counting and a single CF identity. In any smooth d-block
-(`n² | b^{d−1}`), `core/BLOCK-UNIFORMITY.md` gives
-`N_d(n,b) = (b−1) b^{d−1} (n−1)/n²`; otherwise `T_k` is computed by
-the exact atom count. The third term `L_{k−1}` is what the off-spike
-CF process delivers up to the boundary; its leading-order
-decomposition is empirical and documented in `OFFSPIKE-RESULT.md`.
+substrate counting and a single CF identity. The third term `L_{k−1}`
+is what the off-spike CF process delivers up to the boundary; its
+leading-order decomposition is empirical and documented in
+`OFFSPIKE-RESULT.md`.
+
+**Convention used throughout this folder:** `N_d`, `D_k`, `C_{k−1}`,
+`T_k` always denote *actual* atom counts. They reduce to a closed
+form in the smooth subcase below.
 
 
-## Block algebra
+## Block algebra (smooth subcase)
 
-`core/BLOCK-UNIFORMITY.md` gives the smooth-block n-prime count
-for any d-block satisfying `n² | b^{d−1}`:
+`core/BLOCK-UNIFORMITY.md` gives the n-prime count *exactly* for any
+d-block satisfying `n² | b^{d−1}`:
 
-    N_d(n, b) = (b − 1) b^{d−1} (n − 1) / n²
+    N_d(n, b) = (b − 1) b^{d−1} (n − 1) / n²    (smooth d-block).
 
-Using that smooth-block count, the d=k atom block contributes
-
-    D_k(n, b) = k · N_k(n, b)
-
-digits to the concatenated real, and the preceding blocks contribute
-
-    C_{k−1}(n, b) = (b − 1)(n − 1)/n² · Σ_{d=1}^{k−1} d · b^{d−1}.
-
-Using
+When all blocks `d = 1, …, k` are smooth, `D_k`, `C_{k−1}`, `T_k`
+admit a closed form. Using
 
     Σ_{d=1}^{k−1} d · b^{d−1} = ((k − 1) b^k − k b^{k−1} + 1) / (b − 1)²,
 
 the closed-form digit-mass increment is
 
     S_k(n, b) := D_k − C_{k−1}
-              = (n − 1)/n² · (b^{k−1} (k(b − 2) + b/(b − 1)) − 1/(b − 1)).
+              = (n − 1)/n² · (b^{k−1} (k(b − 2) + b/(b − 1)) − 1/(b − 1)),
 
-For base 10, `S_k(n, 10) = (n − 1)/n² · (10^{k−1}(8k + 10/9) − 1/9)`.
-At `k = 4` this is `33 111 · (n − 1)/n²`.
+valid in the all-smooth case. For base 10,
+`S_k(n, 10) = (n − 1)/n² · (10^{k−1}(8k + 10/9) − 1/9)`. At `k = 4`
+this is `33 111 · (n − 1)/n²`.
 
-`S_k` is the smooth substrate-transparent piece. Everything in it —
-the density `(n−1)/n²`, the cumulative digit count, the
-`(b − 2)/(b − 1)` prefactor structure — is closed-form in
-`(n, b, k)`. The actual-count version of `T_k` is used when the
-smooth condition fails at small blocks. The cross-base panel in
-`CROSS-BASE-RESULT.md` confirms the prefactor structure across
-`b ∈ {3, 4, 6, 8, 10, 12}` to within the sub-leading correction.
+When some d-block isn't smooth — typically `d = 1` or `d = 2`, where
+`n² ∤ b^{d−1}` — the actual `D_k − C_{k−1}` differs from `S_k` by
+`O(1)` per non-smooth block. The actual values are what the spike
+formula above uses; the smooth closed form `S_k` is reserved for the
+smooth subcase. They coincide whenever the smooth hypothesis holds at
+every block `1, …, k`.
+
+`S_k` is the substrate-transparent piece in the smooth subcase.
+Everything in it — the density `(n−1)/n²`, the cumulative digit
+count, the `(b − 2)/(b − 1)` prefactor structure — is closed-form in
+`(n, b, k)`. The cross-base panel in `CROSS-BASE-RESULT.md` confirms
+the prefactor structure across `b ∈ {3, 4, 6, 8, 10, 12}` to within
+the sub-leading correction.
 
 
 ## The CF correction
@@ -138,23 +139,30 @@ asymptote uniformly across the tested panel; the per-`n` constant
 The fully closed-form spike size in the asymptotic regime is
 
     log_b(a_{i_k}) = D_k − C_{k−1} − 2(n − 1) k − 2 · offset(n)
-                   + log_b(b/(b−1)) − O(b^{−k}).
+                   + log_b(b/(b−1)) − O(b^{−k}),
 
-Verification at `(n, k) = (2, 4)`, `b = 10`: predicted 8267.65,
-observed 8267.6479. The other low-`n` k=4 cases match similarly;
-see `EXTENDED-PANEL-RESULT.md` for the full panel.
+with `D_k`, `C_{k−1}` actual atom counts (per the convention above).
+In the smooth subcase the leading two terms collapse to `S_k(n, b)`.
+
+Verification at `(n, k) = (2, 4)`, `b = 10`: actual `D_4 = 9000`,
+`C_3 = 723`, `offset(2) = log_{10}(5)`, giving
+`9000 − 723 − 8 − 2·log_{10}(5) + log_{10}(10/9) = 8267.65` predicted
+vs `8267.6479` observed. Smooth would give `C_3(smooth) = 722.25`
+(since `n² ∤ b^{d−1}` at `d = 1, 2` for `n = 2, b = 10`); the 0.75
+gap is the per-non-smooth-block `O(1)` correction. The other low-`n`
+k=4 cases match similarly; see `EXTENDED-PANEL-RESULT.md` for the
+full panel.
 
 
 ## What is exact, what is heuristic
 
 Exact:
 
-- the actual atom counts `N_d^{actual}(n, b)` and cumulative digit
-  count `T_k`;
+- the actual atom counts `N_d(n, b)` and cumulative digit count `T_k`;
 - the smooth-block n-prime count
   `N_d(n, b) = (b−1)b^{d−1}(n−1)/n²` whenever `n² | b^{d−1}`;
 - the algebraic identity giving `S_k = D_k − C_{k−1}` in closed form
-  for the smooth-count model.
+  in the all-smooth subcase.
 
 Standard CF identity (textbook):
 

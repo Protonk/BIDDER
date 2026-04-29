@@ -1,4 +1,4 @@
-Phase 3.1 multi-k spike-drift table — actual vs smooth T_k
+Multi-k spike-drift table — actual vs smooth T_k
 
   k | n  | idx | obs log10(a) | log10(q_prev) | T_k smooth |  T_k actual |  res (smooth) |  res (actual)
 ----|----|-----|--------------|---------------|-----------|-------------|---------------|----------------

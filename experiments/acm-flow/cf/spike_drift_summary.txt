@@ -1,6 +1,6 @@
-Phase 3.1 d=4 mega-spike drift table
+d=4 mega-spike drift table
 
-log10(q_before) is rounded to the one-decimal values recorded in the original CF panel (cf_spikes.py output).
+log10(q_before) is rounded to one-decimal values from the original CF panel (cf_spikes.py output).
 
  n  idx  obs_log10   D-C       residual_log10   -2*(logq-C)   scaled_digits
  2  118  8267.6479 8277.7500        -10.1021      -10.9000      33072.0000

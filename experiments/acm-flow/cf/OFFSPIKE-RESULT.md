@@ -39,18 +39,15 @@ exactly, within `b^{−k}`-decaying corrections. For `n = 4` and
 ## Why the slope is `(n − 1)`
 
 For every `n ≥ 2`, the cofactors of n-primes are the integers not
-divisible by `n` enumerated by Hardy's bijection. There are exactly
-`n − 1` nonzero residue classes mod `n`, so cofactors come in cycles
-of length `n − 1`: within a cycle the atom values increase by `n`
-each step, between cycles the jump is `2n`. For prime `n` this is
-the usual coprime residue cycle. The accumulated log-denominator
+divisible by `n` enumerated by Hardy's bijection: in any window of
+`n` consecutive integers exactly `n − 1` are cofactors, so the
+cofactor density is `(n − 1)/n`. The accumulated log-denominator
 growth per `k`-step picks up `(n − 1)` units of `log b` from this
 cofactor structure.
 
-This is suggestive, not a proof. A rigorous derivation would track
-the CF state through the cycle and show the convergent denominator
-stops growing at the cycle boundary. See `MECHANISTIC-DERIVATION.md`
-for the partial argument.
+This is suggestive, not a proof. The cycle-disruption argument that
+links cofactor structure to convergent denominator growth lives in
+`MECHANISTIC-DERIVATION.md`.
 
 
 ## The per-`n` offset

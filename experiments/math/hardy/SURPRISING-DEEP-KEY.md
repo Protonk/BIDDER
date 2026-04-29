@@ -97,12 +97,14 @@ viewed from a useful angle. Different angles, same substrate.
 
 ## The current instance — Hardy is a bijection
 
-For prime `n ≥ 2`, define `c(K, n) := p_K(n) / n`. Then
+For any `n ≥ 2`, define `c(K, n) := p_K(n) / n`. Then
 
     c(·, n) : Z_{≥1}  →  {c ∈ Z_{≥1} : n ∤ c}
 
 is the order-preserving bijection sending K to the K-th smallest
-positive integer not divisible by n.
+positive integer not divisible by n. (For prime n this set
+coincides with the integers coprime to n; for composite n it is
+strictly larger, but the bijection itself doesn't use primality.)
 
 *Proof.* Write `(q, r) = divmod(K − 1, n − 1)` with
 `r ∈ {0, …, n − 2}`. Then `c(K, n) = qn + r + 1 ≡ r + 1 (mod n)`,

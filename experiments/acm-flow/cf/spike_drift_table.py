@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Reproduce the Phase 3.1 d=4 mega-spike comparison table.
+"""Reproduce the d=4 mega-spike comparison table.
 
-The CF spike rows come from experiments/acm-flow/cf/the original CF panel (cf_spikes.py output).
-The log10(q_before) values are the rounded values recorded in
-the original CF panel (cf_spikes.py output)'s Diophantine-consequence table.
+The CF spike rows come from cf_spikes.csv (output of cf_spikes.py).
+The log10(q_before) values are the rounded values recorded against
+the original Diophantine-consequence table.
 """
 
 from __future__ import annotations
@@ -29,8 +29,7 @@ LOG10_Q_BEFORE = {
 }
 
 
-EXPERIMENTS = Path(__file__).resolve().parents[2]
-CF_SPIKES = EXPERIMENTS / "acm-champernowne" / "base10" / "cf" / "cf_spikes.csv"
+CF_SPIKES = Path(__file__).with_name("cf_spikes.csv")
 OUT_CSV = Path(__file__).with_name("spike_drift_table.csv")
 OUT_SUMMARY = Path(__file__).with_name("spike_drift_summary.txt")
 
@@ -116,9 +115,9 @@ def main() -> None:
         writer.writerows(out_rows)
 
     lines = [
-        "Phase 3.1 d=4 mega-spike drift table",
+        "d=4 mega-spike drift table",
         "",
-        "log10(q_before) is rounded to the one-decimal values recorded in the original CF panel (cf_spikes.py output).",
+        "log10(q_before) is rounded to one-decimal values from the original CF panel (cf_spikes.py output).",
         "",
         (
             " n  idx  obs_log10   D-C       residual_log10   "

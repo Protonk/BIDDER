@@ -2,7 +2,7 @@
 offspike_inflation.py — does L_{k-1} - C_{k-1} have a closed form?
 =====================================================================
 
-Phase 3.1: denominator inflation at the boundary.
+Off-spike denominator inflation at the boundary.
 
 `spike_drift_multi_k.py` showed that with empirical L_{k-1} = log_b(q
 at the d=k mega-spike index − 1), the spike formula closes to within
@@ -111,7 +111,7 @@ def main():
     )]
 
     summary_lines = [
-        'Phase 3.1 (B) — off-spike denominator inflation δ_k(n) = L_{k-1} - C_{k-1}',
+        'Off-spike denominator inflation δ_k(n) = L_{k-1} - C_{k-1}',
         '',
         '  n  | k | idx |   L_{k-1}    |   C_{k-1}    |    δ_k    | step (δ_k - δ_{k-1})',
         '-----+---+-----+--------------+--------------+-----------+----------------------',

@@ -1,4 +1,4 @@
-Phase 3.1 (B) — off-spike denominator inflation δ_k(n) = L_{k-1} - C_{k-1}
+Off-spike denominator inflation δ_k(n) = L_{k-1} - C_{k-1}
 
   n  | k | idx |   L_{k-1}    |   C_{k-1}    |    δ_k    | step (δ_k - δ_{k-1})
 -----+---+-----+--------------+--------------+-----------+----------------------

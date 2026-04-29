@@ -2,7 +2,8 @@
 spike_drift_extended.py — extend the offset(n) panel to n ∈ {7, 11, 13}
 ========================================================================
 
-Phase 3.1 (B), follow-up. The previous panel established:
+Follow-up to spike_drift_multi_k.py / offspike_inflation.py. Previous
+panel established:
 
     δ_k(n) = L_{k-1}(n) - C_{k-1}(n) ~ (n - 1) · k + offset(n) - O(b^{-k})
 
