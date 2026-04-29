@@ -243,23 +243,24 @@ Coupling-layer questions are not free:
 - normality and irrationality measure, conditional on the above.
 
 Phase 2 was substrate algebra; it was free. Phase 3 is coupling;
-it is not. The two-stream hypothesis (`MEGA-SPIKE.md`) is currently
-the cleanest attack on the coupling question — its claim is that
-the off-spike denominator process is itself low-complexity in its
-own coordinates, and the CF complexity comes from interleaving two
-simple streams. If true, even the coupling layer turns out to be
-substrate-transparent in disguise; the substrate keeps reaching.
-If false, the coupling layer is where the real opacity sits, and
-that is where research effort should concentrate.
+it is not. The current attack on the coupling question is the
+off-spike denominator process isolated in `MEGA-SPIKE.md`: whether
+`L_{k−1}` has its own low-complexity substrate description, rather
+than only an empirical boundary value. If true, even this coupling
+layer turns out to be substrate-transparent in disguise; the
+substrate keeps reaching. If false, the coupling layer is where the
+real opacity sits, and that is where research effort should
+concentrate.
 
 
 ## Foothold or perimeter?
 
 `ABDUCTIVE-KEY.md` introduced the distinction. Foothold: rich
 consequences from a trivial surface. Perimeter: no structure
-beneath. After three instances the prior was uncertain. After
-five — three recovery collapses, the Hardy bijection collapse,
-and the CF mega-spike collapse — the prior is visibly *foothold*.
+beneath. After three instances the prior was uncertain. After six
+observations — three recovery collapses, the Hardy bijection
+collapse, the CF mega-spike collapse, and the cross-thread CF
+rederivation — the prior is visibly *foothold*.
 Each collapse has revealed a specific upper layer where genuine
 work lives. None has revealed empty space.
 
@@ -273,11 +274,10 @@ the coupling layer.
 
 This forecast is testable. It will fail eventually — perimeters do
 exist, and the substrate's transparency does run out somewhere.
-The interesting question is *where*. The two-stream hypothesis is
-the current frontier of the foothold conjecture: if even the
-off-spike CF denominator process turns out to be substrate-driven
-through some recurrence, the substrate has reached one layer
-deeper than we thought it could.
+The interesting question is *where*. The off-spike CF denominator
+process is the current frontier of the foothold conjecture: if it
+turns out to be substrate-driven through some recurrence, the
+substrate has reached one layer deeper than we thought it could.
 
 
 ## Practical residue
@@ -294,11 +294,12 @@ For an agent picking up work in this repo:
   number-theoretic fact about the substrate.
 - When something works easily, that is informative about the
   question, not flattery for the method.
-- The hard work is at the coupling layer. Phase 3, the CF
-  background process, and the substrate-to-real-number map are
+- The hard work is at the coupling layer. Phase 3, the off-spike CF
+  process, and the substrate-to-real-number map are
   where research effort earns its keep.
 - Believe the foothold prior, but watch for its limit. The fifth
-  instance broadened the pattern; the sixth may break it. Either
+  instance broadened the pattern; the cross-thread sixth sharpened
+  the documentation failure mode. The next one may break it. Either
   outcome is information.
 
 

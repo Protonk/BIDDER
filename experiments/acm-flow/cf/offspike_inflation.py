@@ -2,7 +2,7 @@
 offspike_inflation.py — does L_{k-1} - C_{k-1} have a closed form?
 =====================================================================
 
-Phase 3.1 (B): the live two-stream test.
+Phase 3.1: denominator inflation at the boundary.
 
 `spike_drift_multi_k.py` showed that with empirical L_{k-1} = log_b(q
 at the d=k mega-spike index − 1), the spike formula closes to within
@@ -18,9 +18,10 @@ the deviation
 between the actual log-denominator at the d=k boundary and the
 substrate-naive prediction (log q ≈ cumulative digit count).
 
-Two-stream hypothesis (MEGA-SPIKE.md): δ_k(n) is itself a substrate
-quantity, given by a finite recurrence in n, k. If true, the entire
-spike formula becomes fully closed-form.
+The working question from MEGA-SPIKE.md: whether δ_k(n) is itself a
+substrate quantity, given by a closed form or finite recurrence in
+n and k. If true, the boundary-spike formula becomes fully
+closed-form.
 
 This script reads `spike_drift_multi_k.csv`, computes δ_k(n) per
 (n, k), and looks for closed-form structure:
@@ -35,7 +36,7 @@ Outputs:
   offspike_inflation_summary.txt    human-readable tables and notes
 
 Usage:
-    python3 offspike_inflation.py
+    sage -python offspike_inflation.py
 """
 
 import csv

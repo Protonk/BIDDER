@@ -186,7 +186,7 @@ where `T_k = C_{k-1}+D_k` is boundary digit depth and `L_{k-1}` is the
 actual logarithmic denominator depth just before the boundary. The
 remaining residual is almost exactly `-2*(L_{k-1}-C_{k-1})` on the
 existing table. So Phase 3.1 has moved from "find the density factor"
-to "model denominator inflation in the off-spike/background stream."
+to "model denominator inflation in the off-spike CF process."
 
 ### 3.2 — Hardy Mode 3 Block Counts
 

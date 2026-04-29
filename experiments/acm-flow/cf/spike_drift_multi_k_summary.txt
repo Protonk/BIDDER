@@ -23,7 +23,6 @@ Phase 3.1 multi-k spike-drift table — actual vs smooth T_k
 
 PREC_BITS=80000, MAX_PQ=250, K_PRIMES=20000
 
-Per the metaphysical commitment, a clean residual at every (n, k) does not
-mean closure — it means the residue has migrated upstream into L_{k−1},
-i.e. into the off-spike denominator process. The residual is a position
-update on where the unclosability now lives, not a finish line.
+A clean residual at every (n, k) does not mean closure. It locates the
+remaining scalar in L_{k−1}, i.e. in the off-spike denominator
+process before the boundary.

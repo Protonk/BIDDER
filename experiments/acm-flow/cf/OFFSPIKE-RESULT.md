@@ -38,14 +38,14 @@ exactly, within `b^{−k}`-decaying corrections. For `n = 4` and
 
 ## Why the slope is `(n − 1)`
 
-For prime `n`, the cofactors of n-primes are the integers coprime
-to `n` enumerated by Hardy's bijection. There are exactly `n − 1`
-residue classes `mod n` an integer can occupy without being
-divisible by `n`, so cofactors come in cycles of length `n − 1`:
-within a cycle the atom values increase by `n` each step, between
-cycles the jump is `2n`. The accumulated log-denominator growth
-per `k`-step picks up `(n − 1)` units of `log b` from this cofactor
-structure.
+For every `n ≥ 2`, the cofactors of n-primes are the integers not
+divisible by `n` enumerated by Hardy's bijection. There are exactly
+`n − 1` nonzero residue classes mod `n`, so cofactors come in cycles
+of length `n − 1`: within a cycle the atom values increase by `n`
+each step, between cycles the jump is `2n`. For prime `n` this is
+the usual coprime residue cycle. The accumulated log-denominator
+growth per `k`-step picks up `(n − 1)` units of `log b` from this
+cofactor structure.
 
 This is suggestive, not a proof. A rigorous derivation would track
 the CF state through the cycle and show the convergent denominator
@@ -67,10 +67,11 @@ offset:
 | 6 | −0.9543 | −1 + log_{10}(10/9) |
 | 10 | −0.3011 | (transient) |
 
-For prime `n ∈ {2, 3, 5}` and `n = 6`, the offset has a clean
-closed form. The offsets for prime-powers and larger primes are
-the subject of `EXTENDED-PANEL-RESULT.md`; the family classification
-by `ord(b, n)` is in `PRIMITIVE-ROOT-FINDING.md`.
+For `n ∈ {2, 3, 5, 6}`, the offset has a clean closed form. The
+offsets for prime powers, composites, and larger primes are the
+subject of `EXTENDED-PANEL-RESULT.md`; the family classification
+by `ord(b, n)` in the coprime prime subcase is in
+`PRIMITIVE-ROOT-FINDING.md`.
 
 
 ## Closed-form spike size in the asymptotic regime

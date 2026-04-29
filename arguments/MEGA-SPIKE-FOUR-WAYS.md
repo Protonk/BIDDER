@@ -10,12 +10,12 @@ The reading below sorts the spike formula into substrate-transparent
 bookkeeping (most of it), one genuinely surprising reach (substrate
 density propagating through a CF observable), and one unmodelled
 scalar (`L_{k−1}`, the off-spike denominator process) that is being
-asked to carry more weight than it currently can.
+asked to carry more weight than it can.
 
 
 ## The Object
 
-The base-b ACM-Champernowne real for prime n is
+The base-b ACM-Champernowne real for `n ≥ 2` is
 
     x = C_b(n) = 0 . p_1(n) p_2(n) p_3(n) ...
 
@@ -40,8 +40,9 @@ immediately before the d=k radix-block boundary. Empirically,
     L_match(i_k − 1) = T_k + log_b(b / (b−1)),
 
 where `T_k = Σ_{d=1}^k d · N_d(n,b)` is the cumulative digit count
-through the d=k block and `N_d(n,b) = (b−1) b^{d−1} (n−1)/n²` is the
-smooth-block n-prime count from `core/BLOCK-UNIFORMITY.md`.
+through the d=k block. In smooth blocks,
+`N_d(n,b) = (b−1) b^{d−1} (n−1)/n²` is the n-prime count from
+`core/BLOCK-UNIFORMITY.md`; otherwise the actual atom count is used.
 Substituting and writing `L_{k−1} := log_b(q_{i_k − 1})`:
 
     log_b(a_k) ≈ T_k − 2 L_{k−1} + log_b(b/(b−1)).
@@ -71,8 +72,9 @@ nontrivial functions of the entire prefix.
 
 Here:
 
-- `T_k` is closed-form because n-prime density is `(n−1)/n²` and
-  smooth-block boundaries are radix powers (`core/BLOCK-UNIFORMITY.md`).
+- `T_k` is substrate-counted: closed-form in smooth blocks because
+  n-prime density is `(n−1)/n²` and block boundaries are radix powers
+  (`core/BLOCK-UNIFORMITY.md`), exact by atom count otherwise.
 - `log_b(b/(b−1))` is the residual-fraction boundary-truncation
   factor — universal, derived in three lines.
 - `−2 L_{k−1}` is the standard CF error formula; nothing about
@@ -114,7 +116,7 @@ Given the standard CF identity, the rest is forced.
 | `T_k` | smooth-block n-prime count `(b−1) b^{d−1} (n−1)/n²` summed digit-weighted. |
 | `log_b(b/(b−1))` | residual-fraction `≈ (b−1)/b · b^{−T_k}` past the d=k boundary; "average leading-digit" heuristic at the next position. |
 | `O(b^{−k})` tail | the dropped `log_b(1 + α/a_{i+1})` and finite-k boundary alignment. |
-| the `(n−1)/n²` density factor | n-primes are multiples of n with cofactor coprime to n; density is `(1/n) · ((n−1)/n)`. |
+| the `(n−1)/n²` density factor | n-primes are multiples of n whose cofactor is not divisible by n; density is `(1/n) · ((n−1)/n)`. |
 | the cumulative digit count `T_k = Σ d · N_d` | summation. |
 
 There is no new mathematics in the master statement. `BLOCK-UNIFORMITY`
@@ -127,8 +129,8 @@ mundane:
 - the `(n−1)/n²` factor;
 - the `log_b(b/(b−1))` boundary-truncation factor;
 - the cofactor-cycle decomposition into `(n−1)`-length cycles;
-- the digit-sum and alternating-sum divisibility tests for ord=1
-  and ord=2.
+- the digit-sum divisibility test for ord=1 and the alternating-sum
+  constraint for ord=2.
 
 These are substrate facts. They do real organisational work in the
 documentation but they are not where the open analytic content is.
@@ -148,13 +150,13 @@ Three features are pretty.
    right to.
 
 2. **The cofactor cycle gives the slope `(n−1)`.** Cofactors of
-   n-primes are the integers coprime to n in order; within any
-   window of `n` consecutive integers exactly `n−1` are coprime;
-   cofactors come in cycles of length `n−1`; the convergent before
-   the d=k mega-spike captures one full cycle past the d=(k−1)
-   boundary. The link from "cycle disruption" to "convergent
-   denominator stops growing" is heuristic, but the identification
-   of the *slope* with the *coprime density* is structural.
+   n-primes are the integers not divisible by n in order; within any
+   window of `n` consecutive integers exactly `n−1` survive; cofactors
+   come in cycles of length `n−1`; the convergent before the d=k
+   mega-spike captures one full cycle past the d=(k−1) boundary. The
+   link from "cycle disruption" to "convergent denominator stops
+   growing" is heuristic, but the identification of the *slope* with
+   the deletion density is structural.
    `(n−1)/n` appears as the multiplication-table asymptote
    `α_n = M_n(K)/M_Ford(K)` in `mult-table/` and as the slope of
    `δ_k(n)` here; both are the same density viewed from different
@@ -185,7 +187,7 @@ have been chosen otherwise without changing the mathematics" or
   research category; the formula speaks only to the d=k convergent.
 
 - **The d=k specialisation.** The empirical formula is reported at
-  `k ∈ {2, 3, 4}` for primes where the d=k spike exists (formula
+  `k ∈ {2, 3, 4}` for `n` values where the d=k spike exists (formula
   predicts negative spike size for large n at small k). The
   k-dependence has been verified in `MULTI-K-RESULT.md`. The
   formula's *structure* doesn't depend on k=k; it is a statement
@@ -200,22 +202,15 @@ have been chosen otherwise without changing the mathematics" or
   bins; that organisation is real for n where ord ∈ {1, 2, n−1}
   and *speculative* for the rest. Whether the intermediate-ord
   deviations are finite-k transients or genuine third-family
-  behaviour is currently undecided. Calling them "(transient?)"
+  behaviour is undecided. Calling them "(transient?)"
   in the table is the right hedge.
 
-- **The "two-stream hypothesis"** (`MEGA-SPIKE.md` and elsewhere).
-  The claim is that the CF spectrum is a merge of a low-complexity
-  off-spike background and a low-complexity boundary-spike subsequence,
-  with the apparent complexity coming from the interleaving. This is
-  an interesting framing but it upgrades the *single unmodelled
-  scalar* `L_{k−1}` (or its sub-piece, the off-spike denominator
-  process) into a programme. Mathematically, the spike formula
-  needs `L_{k−1}` as data; it does not need the off-spike process
-  to be low-complexity in any other sense. The two-stream framing
-  may turn out to be right, but the spike formula is independent
-  of it. Naming the off-spike process as "low-complexity" is
-  load-bearing for the metaphysical commitment (normality /
-  irrationality), not for the formula.
+- **The off-spike denominator programme.** The spike formula needs
+  `L_{k−1}` as data; it does not require the full off-spike process
+  to be low-complexity. Treating that process as a separate object is
+  useful because it is exactly where the remaining scalar lives, but
+  it should not be mistaken for an extra premise of the boundary-spike
+  formula.
 
 - **The Family B "mechanism" via M divisibility.** Empirically
   refuted for n=11 (ord=2) in `MECHANISTIC-DERIVATION.md` itself:
@@ -228,13 +223,11 @@ have been chosen otherwise without changing the mathematics" or
   divisibility is contingent, half-derived, and partly known to be
   wrong.
 
-- **The "metaphysical commitment" coda.** Several mega-spike docs
-  carry a "Per the metaphysical commitment" section noting where
-  unclosability has migrated (b^{−k} tails, intermediate-ord
-  behaviour, off-spike CF). This is good housekeeping but it is
-  doing project-management work, not mathematical work; the formula
-  is true or false independent of where one chooses to lodge the
-  residual.
+- **Residual bookkeeping.** Several mega-spike docs note where the
+  residual has moved (b^{−k} tails, intermediate-ord behaviour,
+  off-spike CF). This is useful project hygiene, but it is not
+  mathematical content; the formula is true or false independent of
+  where one chooses to lodge the residual.
 
 
 ## Single-Spike vs Aggregate
@@ -266,7 +259,7 @@ Empirical state at the time of writing:
   spike formula to k ∈ {2, 3, 4} in panel; the per-(n, k) fit is
   sharp. But the *aggregate* of spike events across k — their
   density along the index axis i, their pairwise correlations,
-  their interaction with off-spike events — is the two-stream
+  their interaction with off-spike events — is an aggregate CF
   question, not a corollary of the single-spike formula.
 
 - **Irrationality measure / normality.** The largest PQ events
@@ -305,11 +298,10 @@ Three places, in increasing order of difficulty:
 
 1. **Step 3 of the mechanistic derivation.** Show that
    `q_{i_k − 1} = b^{C_{k−1} + (n−1)k + 1} / n^{j(n)}` to within
-   `O(b^{−k})`. Steps 1 and 2 (best-rational characterisation,
-   substrate divisibility for ord ∈ {1, 2}) are standard / known.
-   Step 3 is the missing analytic link. For ord = 1 a divisibility
-   argument plausibly works; for ord = 2 the simple divisibility
-   argument *fails* empirically and the right replacement is open.
+   `O(b^{−k})`. Step 1 (best-rational characterisation) is standard
+   CF theory. Step 2 is clean for ord = 1, but for ord = 2 the simple
+   divisibility argument *fails* empirically and the right replacement
+   is open. Step 3 is the missing analytic link.
    A parallel Mahler-style derivation in
    `experiments/acm-flow/cf/` has independently
    named the same gap at looser `O(d · n)` resolution; cross-thread
@@ -320,16 +312,16 @@ Three places, in increasing order of difficulty:
 2. **Intermediate-ord cases.** n ∈ {13, 23, 31} deviate from both
    Family A and Family B at k = 4. Whether higher k pulls them
    into a clean third family or whether they remain
-   transient-finite-k artifacts is currently undecided. Either
+   transient-finite-k artifacts is undecided. Either
    resolution is informative.
 
 3. **The off-spike denominator process.** This is what `L_{k−1}` is.
-   It is currently fit by `C_{k−1} + (n−1) k + offset(n)`; the
+   It is fit by `C_{k−1} + (n−1) k + offset(n)`; the
    `(n−1) k` slope has a heuristic cofactor-cycle argument; the
    `offset(n)` is partially classified by `ord(b, n)`; nothing about
    the *off-spike intermediate convergents* (the i indices between
-   consecutive boundary spikes) is currently modelled. The
-   "two-stream hypothesis" names this gap; it does not fill it.
+   consecutive boundary spikes) is modelled. Naming the
+   off-spike process isolates this gap; it does not fill it.
 
 
 ## One-Line Summary
@@ -343,6 +335,6 @@ part is that the substrate's `(n−1)/n²` density propagates through
 to control the dominant CF observable at boundaries. The mundane
 part is that two of the three terms are bookkeeping. The contingent
 part is the surrounding category structure — "mega-spike",
-Family A/B, two-stream — built around a single load-bearing
-unmodelled scalar `L_{k−1}` that is currently the off-spike
-denominator process and not yet a derived quantity.
+Family A/B, off-spike denominator process — built around a single
+load-bearing unmodelled scalar `L_{k−1}` that is not yet a derived
+quantity.

@@ -1,13 +1,14 @@
 # Boundary-spike size for ACM-Champernowne reals
 
-The base-`b` ACM-Champernowne real for prime `n ≥ 2` with
-`gcd(n, b) = 1` is
+The base-`b` ACM-Champernowne real for `n ≥ 2` is
 
     x = C_b(n) = 0 . p_1(n) p_2(n) p_3(n) …
 
 where `p_K(n) = n · c_K`, `c_K = q_K n + r_K + 1`,
 `(q_K, r_K) = divmod(K-1, n-1)`. The K-th n-prime in ascending
-order is the K-th positive integer coprime to `n`, scaled by `n`.
+order is the K-th positive integer not divisible by `n`, scaled by
+`n`. For prime `n`, this is the same as scaling the K-th positive
+integer coprime to `n`.
 
 The continued-fraction expansion of `x` carries large partial
 quotients near each radix-block boundary. This document derives
@@ -18,36 +19,37 @@ process.
 
 ## The master statement
 
-For prime `n` with `gcd(n,b) = 1` and the smooth-block condition
-`n^2 | b^{k-1}`, the d=k boundary spike satisfies
+For `n ≥ 2`, base `b`, and actual atom counts through the d=k
+radix block, the d=k boundary spike satisfies
 
     log_b(a_{i_k}) = T_k − 2 L_{k−1} + log_b(b/(b−1)) − O(b^{−k}),
 
 where:
 
 - `a_{i_k}` is the partial quotient at the boundary index `i_k`;
-- `T_k = Σ_{d=1}^{k} d · N_d(n,b)` is the cumulative digit count
-  through the d=k atom block, with
-  `N_d(n,b) = (b−1) b^{d−1} (n−1)/n²` (smooth-block n-prime count
-  from `core/BLOCK-UNIFORMITY.md`);
+- `T_k = Σ_{d=1}^{k} d · N_d^{actual}(n,b)` is the cumulative
+  digit count through the d=k atom block;
 - `L_{k−1} := log_b(q_{i_k − 1})` is the log denominator of the
   convergent immediately before the boundary;
 - `log_b(b/(b−1))` is the universal boundary-truncation factor.
 
-The two derivable terms (`T_k` and the truncation factor) come
-from substrate density and a single CF identity. The third term
-`L_{k−1}` is what the off-spike CF process delivers up to the
-boundary; its leading-order decomposition is empirical and
-documented in `OFFSPIKE-RESULT.md`.
+The two derivable terms (`T_k` and the truncation factor) come from
+substrate counting and a single CF identity. In any smooth d-block
+(`n² | b^{d−1}`), `core/BLOCK-UNIFORMITY.md` gives
+`N_d(n,b) = (b−1) b^{d−1} (n−1)/n²`; otherwise `T_k` is computed by
+the exact atom count. The third term `L_{k−1}` is what the off-spike
+CF process delivers up to the boundary; its leading-order
+decomposition is empirical and documented in `OFFSPIKE-RESULT.md`.
 
 
 ## Block algebra
 
 `core/BLOCK-UNIFORMITY.md` gives the smooth-block n-prime count
+for any d-block satisfying `n² | b^{d−1}`:
 
     N_d(n, b) = (b − 1) b^{d−1} (n − 1) / n²
 
-so the d=k atom block contributes
+Using that smooth-block count, the d=k atom block contributes
 
     D_k(n, b) = k · N_k(n, b)
 
@@ -67,12 +69,13 @@ the closed-form digit-mass increment is
 For base 10, `S_k(n, 10) = (n − 1)/n² · (10^{k−1}(8k + 10/9) − 1/9)`.
 At `k = 4` this is `33 111 · (n − 1)/n²`.
 
-`S_k` is the substrate-transparent piece. Everything in it — the
-density `(n−1)/n²`, the cumulative digit count, the `(b − 2)/(b − 1)`
-prefactor structure — is closed-form in `(n, b, k)`. The cross-base
-panel in `CROSS-BASE-RESULT.md` confirms the prefactor structure
-across `b ∈ {3, 4, 6, 8, 10, 12}` to within the sub-leading
-correction.
+`S_k` is the smooth substrate-transparent piece. Everything in it —
+the density `(n−1)/n²`, the cumulative digit count, the
+`(b − 2)/(b − 1)` prefactor structure — is closed-form in
+`(n, b, k)`. The actual-count version of `T_k` is used when the
+smooth condition fails at small blocks. The cross-base panel in
+`CROSS-BASE-RESULT.md` confirms the prefactor structure across
+`b ∈ {3, 4, 6, 8, 10, 12}` to within the sub-leading correction.
 
 
 ## The CF correction
@@ -128,7 +131,7 @@ The difference `−2 δ_k(n) = −2(n−1)k − 2·offset(n) + O(b^{−k})`
 appears as a per-`n` correction that the substrate-naive prediction
 misses. The decomposition `δ_k(n) = (n−1) k + offset(n)` is the
 content of `OFFSPIKE-RESULT.md`. The slope `(n − 1)` reaches its
-asymptote uniformly across the prime panel; the per-`n` constant
+asymptote uniformly across the tested panel; the per-`n` constant
 `offset(n)` is classified by `ord(b, n)` in
 `PRIMITIVE-ROOT-FINDING.md`.
 
@@ -144,11 +147,14 @@ see `EXTENDED-PANEL-RESULT.md` for the full panel.
 
 ## What is exact, what is heuristic
 
-Exact under `n^2 | b^{k−1}`:
+Exact:
 
-- the smooth-block n-prime count `N_d(n, b)`;
-- the cumulative digit-mass formulas `C_{k−1}, D_k`;
-- the algebraic identity giving `S_k = D_k − C_{k−1}` in closed form.
+- the actual atom counts `N_d^{actual}(n, b)` and cumulative digit
+  count `T_k`;
+- the smooth-block n-prime count
+  `N_d(n, b) = (b−1)b^{d−1}(n−1)/n²` whenever `n² | b^{d−1}`;
+- the algebraic identity giving `S_k = D_k − C_{k−1}` in closed form
+  for the smooth-count model.
 
 Standard CF identity (textbook):
 
@@ -172,7 +178,7 @@ Confirmed empirically across the panel:
   `D5-RESULT.md`);
 - cross-base consistency at `b ∈ {3, 4, 6, 8, 10, 12}` with the
   `(b − 2)/(b − 1)` prefactor structure intact (`CROSS-BASE-RESULT.md`);
-- `δ_k(n)` slope `(n − 1)` asymptotically across the prime panel
+- `δ_k(n)` slope `(n − 1)` asymptotically across the tested panel
   (`OFFSPIKE-RESULT.md`, `EXTENDED-PANEL-RESULT.md`);
 - `offset(n)` family classification by `ord(b, n)` for
   `ord ∈ {1, 2, n−1}` (`PRIMITIVE-ROOT-FINDING.md`).
@@ -235,7 +241,7 @@ mundane, beautiful, and contingent in it — is in
   consumed by `MULTI-K-RESULT.md`.
 - `offspike_inflation.py` (and CSV / summary) — δ_k(n) decomposition
   consumed by `OFFSPIKE-RESULT.md`.
-- `spike_drift_extended.py` (and CSV / summary) — extended prime
+- `spike_drift_extended.py` (and CSV / summary) — extended `n`
   panel consumed by `EXTENDED-PANEL-RESULT.md` and
   `PRIMITIVE-ROOT-FINDING.md`.
 - `cf_spikes.py`, `cf_spikes_extended.py`, `cf_spikes_d5.py` (and

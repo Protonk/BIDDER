@@ -44,7 +44,7 @@ Family A: `n = 7, 17, 19, 29` (primitive root). Offset matches
 Family B: `n = 3` (ord = 1) and `n = 11` (ord = 2). Offset matches
 `log_b(b/n²)`, i.e. Family A shifted by `−log_b(n)`.
 
-Composite `n` and `gcd(n, b) > 1`: `n = 2, 4` join Family A;
+Non-coprime or composite rows: `n = 2, 4` join Family A;
 `n = 5` (with `n | b`) lands at offset 0; `n = 6` lands at
 `log_b(1/(b−1)) = −log_b(b−1)`.
 

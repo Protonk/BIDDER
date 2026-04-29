@@ -5,7 +5,7 @@ The off-spike denominator inflation has the asymptotic form
     δ_k(n) = L_{k−1}(n) − C_{k−1}(n) ~ (n − 1) k + offset(n) − O(b^{−k})
 
 (`OFFSPIKE-RESULT.md`). The per-`n` constant `offset(n)` lands on
-clean closed-form values for the original 6-prime panel. The
+clean closed-form values for the original six-`n` panel. The
 extended panel — `n ∈ {7, 11, 13}` added — separates the offset
 into structured families plus genuine transients.
 
@@ -62,7 +62,8 @@ Asymptotic slope check: per-`k` step from `k = 3` to `k = 4`:
 | 13 | +10.9035 | 12 | off by −1.097 |
 
 The slope `(n − 1)` is reached at `k = 4` for `n ∈ {2, 3, 5, 6}`
-(the primes and prime-powers with at least one `d = 1` atom).
+(the rows in this panel with enough early-block support to have
+settled by this rank).
 For `n ∈ {4, 7, 10, 11, 13}` the explored range is still
 transient.
 

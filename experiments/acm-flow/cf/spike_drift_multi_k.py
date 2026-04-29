@@ -21,12 +21,10 @@ Method:
   5. Compute T_k(n,b) by closed form. Compare observed log10(a_i)
      against predicted T_k − 2 · log10(q_{i−1}). Tabulate residuals.
 
-Per the metaphysical commitment (ACM-Champernowne is normal, so
-irrational): a clean fit at every k does not mean the structure
-closes. It means the residue has migrated upstream into L_{k−1}
-itself — i.e. into the off-spike denominator process. Recording
-this script's output as evidence of *where the residue has moved
-to*, not as a closure.
+A clean fit at every k does not close the structure. It locates the
+remaining scalar in L_{k−1} itself: the off-spike denominator process
+before the boundary. This script records where the residual lives,
+not a finished derivation of that residual.
 
 Outputs:
   spike_drift_multi_k.csv       per-(n, k) row
@@ -162,7 +160,7 @@ def safe_log10_int(v):
 # ---- spike identification by digit-count tier ----
 
 def classify_by_tier(n, pq_digits):
-    """Per the empirical b=10 panel: d=2 spikes have 5-50 digits,
+    """From the empirical b=10 panel: d=2 spikes have 5-50 digits,
     d=3 have ~150-700, d=4 mega-spikes have ~2500-8500. Returns k or
     None for non-tier spikes (like the n=2 i=71 13-digit off-tier event)."""
     if 5 <= pq_digits <= 50:
@@ -296,13 +294,10 @@ def main():
                          f'K_PRIMES={K_PRIMES}')
     summary_lines.append('')
     summary_lines.append(
-        'Per the metaphysical commitment, a clean residual at every '
-        '(n, k) does not\n'
-        'mean closure — it means the residue has migrated upstream into '
-        'L_{k−1},\n'
-        'i.e. into the off-spike denominator process. The residual is a '
-        'position\n'
-        'update on where the unclosability now lives, not a finish line.'
+        'A clean residual at every (n, k) does not mean closure. '
+        'It locates the\n'
+        'remaining scalar in L_{k−1}, i.e. in the off-spike denominator\n'
+        'process before the boundary.'
     )
     with open(summary_path, 'w') as f:
         f.write('\n'.join(summary_lines) + '\n')

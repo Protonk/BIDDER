@@ -24,20 +24,27 @@ intermediate `ord`.
 
 ## Setup
 
-For prime `n` with `gcd(n, b) = 1`, let `p_K(n) = n · c_K` denote
-the K-th n-prime, where `c_K = q_K · n + r_K + 1` with
+For `n ≥ 2`, let `p_K(n) = n · c_K` denote the K-th n-prime, where
+`c_K = q_K · n + r_K + 1` with
 `(q_K, r_K) = divmod(K − 1, n − 1)`. Cofactors enumerate the
 integers `{c : n ∤ c}` in increasing order, with density `(n − 1)/n`.
+When `n` is prime, this is the same as enumerating integers coprime
+to `n`. The `ord(b, n)` family discussion below applies in the
+coprime subcase `gcd(n, b) = 1`.
 
 The d=k digit block contains atoms `p_K(n)` with
-`b^{k−1} ≤ p_K(n) < b^k`. Under the smooth condition `n² | b^{k−1}`,
-the count is exactly
+`b^{k−1} ≤ p_K(n) < b^k`. For any smooth d-block
+(`n² | b^{d−1}`), the count is exactly
 
     N_k(n, b) = (b − 1) b^{k−1} (n − 1) / n²,
 
-and the boundary digit positions are
+and otherwise the same `T_k` is computed by exact atom counting. The
+boundary digit positions are
 
-    T_k = Σ_{d=1}^{k} d · N_d(n, b) = cumulative digit count through d=k.
+    T_k = Σ_{d=1}^{k} d · N_d(n, b) = cumulative digit count through d=k,
+
+where `N_d` denotes the actual d-block count, with the smooth formula
+available in smooth blocks.
 
 The d=k spike formula reads
 
@@ -101,7 +108,7 @@ than the typical-CF prediction `b^{T_k/2}`.
 
 ### Cofactor cycle: the slope (n − 1)
 
-For prime `n`, cofactors come in cycles of length `n − 1`: every
+For every `n ≥ 2`, cofactors come in cycles of length `n − 1`: every
 `(n − 1)` cofactors, one "skip" occurs (the cofactor that would
 have been a multiple of `n` is omitted). Inside each cycle the
 atom values increase by `n` each step; between cycles the jump
@@ -202,11 +209,11 @@ divisibility argument only for ord = 1.
    the application to `x = C_b(n)` needs work.
 
 2. Show that for `x = C_b(n)`, the integer `M` (digit prefix as
-   integer) is divisible by `n^{j(n)}` where `j(n) = 1` for
-   primitive root and `j(n) = 2` for ord ≤ 2. Digit-sum and
-   alternating-sum tests provide this for ord = 1 and ord = 2;
-   for primitive root the divisibility comes from the last atom
-   alone.
+   integer) supplies the factor predicted by the offset family.
+   Direct divisibility gives this for ord = 1; for ord = 2 the
+   alternating-sum constraint does not lift to `n² | M`, so the
+   argument needs a replacement. For primitive-root primes the
+   direct divisibility comes from the last atom alone.
 
 3. Show that the convergent denominator `q_{i_k − 1}` equals
    `b^{T_{k−1} + (n−1)k + 1} / n^{j(n)}` to within `O(b^{−k})`
