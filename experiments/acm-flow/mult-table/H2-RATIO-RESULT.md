@@ -1,5 +1,39 @@
 # Ratio Test M_n(K) / M_Ford(K) — Outcome 2 (likely)
 
+## ⚠️ STATUS UPDATE (after K=10⁸ extension)
+
+**The (α_n + α_n²)/2 midpoint hypothesis raised below is refuted.**
+`h2_ratio_n1e8.py` extended the ratio test to K=10⁸:
+
+- For n=2: ratio drifted from 0.3749 (K=10⁷, ≈ midpoint 0.375) to
+  **0.3777** (K=10⁸) — drifted *past* the midpoint.
+- For n=3: drifted from 0.5543 to 0.5578, similarly past midpoint.
+
+So the midpoint matches at K=10⁷ were finite-K coincidences on the way
+up, not an asymptotic limit. The cross-thread agent's "numerology"
+critique was correct: midpoint had no mechanism and isn't the
+answer.
+
+**The asymptote is α_n** (outcome 2 with slow convergence). All six
+panel values fell within pre-written ±0.001-0.002 ranges at K=10⁸,
+consistent with geometric drift slowdown toward α_n.
+
+**See `ALPHA-PRIME-PRE-WRITE.md`** for the corrected analysis,
+including:
+- Empirical c_1(n) values from `(ρ_K − α_n) · log K` at K=10⁸.
+- Why the agent's quick `c_1(n) ∝ log n / n²` heuristic isn't
+  quantitatively right (the "doubling heuristic" undercounts
+  multiples-of-n in the Ford image by 2.5× — the m ∈ (K/n², K/n]
+  regime contributes the majority).
+- The corrected reading of the Phase 4 c-shift as a finite-K
+  transient, not an asymptotic exponent shift.
+
+The body below is preserved as it was at the time of writing
+(after K=10⁷ ratio test, before K=10⁸).
+
+---
+
+
 The cross-thread agent's recommended disambiguator. Per the
 suggestion, we ran the ratio test before proposing any analytic
 target. The result determines which analytic target to pose.

@@ -1,5 +1,43 @@
 # Brief 4 / Phase 4 (A) — h=2 result at N = 10^8
 
+## ⚠️ STATUS UPDATE (after ratio test + K=10⁸)
+
+**The "c-shift confirmed" reading below is now corrected.** Subsequent
+work in `H2-RATIO-RESULT.md` (ratio test M_n / M_Ford) and
+`h2_ratio_n1e8.py` (K = 10⁸ extension) reframed this finding:
+
+- The drift in `M_n(N) · Φ(N) / N` away from `(n−1)²/n⁴` is real, but
+  it is **a finite-K transient, not an asymptotic c-shift**.
+- At fixed K, `M_n(K) / M_Ford(K)` drifts toward α_n with slowing rate
+  — the slowdown is consistent with `ρ_K(n) → α_n` (independence)
+  asymptotically, not `ρ → α_n²`.
+- So the asymptotic deficit exponent for `M_n(N)` is **Ford's c**,
+  same as ordinary integers. The "c(n) > c" inferred below is the
+  finite-K bias, not a true exponent shift.
+
+**The cleaner Phase 4 framing:** asymptotically `M_n(N) ≈ α_n · N /
+Φ(N) · κ_F'` (Ford-flat with α_n prefactor, plus higher-order
+corrections). The bias I attributed to a c-shift comes from a
+slowly-vanishing prefactor correction that decays as `1/log K` (or
+slower), driven by the over-representation of multiples of small
+primes in the Ford image.
+
+**Implication for `FINITE-RANK-EXPANSION.md`:** the speculation that
+"rank-2 Q_n cell structure causes the deficit-exponent shift" is
+**refuted at h=2** — there is no asymptotic deficit-exponent shift to
+cause. The cell-distribution structure shifts the *prefactor*, not
+the exponent.
+
+The body of this document below records the original "c-shift"
+reading at K ≤ 10⁸. It's preserved for context — the c(n) − c(2)
+estimates here are slope estimates from a finite-K range and
+correspond to the prefactor bias's apparent c-shift, not asymptotic
+exponents. See `ALPHA-PRIME-PRE-WRITE.md` for the corrected analysis
+and the empirical c_1(n) leading-correction values.
+
+---
+
+
 ## Setup
 
 Per `BRIEF4-h2.md` and `h2_predictor.py`: the simple Ford-flat

@@ -1,5 +1,42 @@
 # Cell-Resolved h=2 — empirical mechanism for the c-shift
 
+## ⚠️ STATUS UPDATE (after fixed-K + ratio-test corrections)
+
+**The "empirical mechanism for the c-shift" framing in this document
+overclaimed in two ways**, both subsequently corrected:
+
+**Correction 1 — fixed-N confound (`H2-FIXEDK-RESULT.md`):** comparing
+⟨d(k)⟩ across n at fixed N confounds three n-dependent variables
+(residue density α_n, cofactor box √K = √N/n, and image size). The
+proper controlled experiment holds K fixed, varying N = K·n². At
+fixed K, ⟨d(k)⟩ is monotone in n with no reversal at n=7.
+
+**Correction 2 — there is no asymptotic c-shift to explain
+(`H2-RATIO-RESULT.md`, `h2_ratio_n1e8.py`):** the ratio test
+`M_n(K) / M_Ford(K)` drifts toward α_n at slowing rate, consistent
+with `ρ_K(n) → α_n` asymptotically. So the "c(n) > c" inferred from
+the bare-count drift is **finite-K transient**, not an asymptotic
+deficit-exponent shift. The d-distribution shift on the Ford image
+shifts the prefactor of M_n(K), not the deficit exponent.
+
+**The cleaner Phase 4 framing:** at h=2 the cell-distribution shift
+is real and controlled (`H2-FIXEDK-RESULT.md`), but it manifests as
+a finite-K prefactor bias in `M_n(N) · Φ(N)/N`, not an asymptotic
+c-shift. The rank-2 "shadow of FINITE-RANK-EXPANSION" speculation
+holds at the prefactor level, not the exponent level.
+
+**See `ALPHA-PRIME-PRE-WRITE.md` for the corrected synthesis.**
+
+The body below records the original cell-resolved analysis at fixed
+N. It's preserved for context — the bin distributions are still
+correctly computed; the *interpretation* of "this causes the c-shift"
+is what was wrong. The corrected interpretation is "this contributes
+to the finite-K prefactor bias that decays slowly toward the α_n
+asymptote."
+
+---
+
+
 Phase 4 (B). Bins distinct rank-2 products by `d(k) = d(m/n²)`,
 binds the Q_n value at each cell via `Q_n(n²k) = 1 − d(k)/2`, and
 tabulates per-bin counts, log-sums, and aggregate Q-weighted sums
