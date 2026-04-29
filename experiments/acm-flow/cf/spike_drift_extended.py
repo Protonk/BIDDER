@@ -15,10 +15,11 @@ with per-n offsets:
     n=6:  -1 + log_10(10/9)
 
 Each is a clean closed form individually, but the n → offset(n) rule
-isn't unified. Adding three more primes (n = 7, 11, 13) tests whether
-a unified rule pops out, or whether the offset really is per-n.
+isn't unified. Extending to `n ∈ {7, 11, 13, 17, 19, 23, 29, 31}`
+tests whether a unified rule appears, or whether the offset really is
+per-n.
 
-This script self-contained: runs CF expansion for the new primes,
+This script is self-contained: it runs CF expansion for the new primes,
 identifies d = 2, 3, 4 mega-spikes by digit tier, computes δ_k via
 log_b(q_{i-1}) tracking, and combines with the previously-recorded
 data from offspike_inflation.csv to produce one unified offset table.

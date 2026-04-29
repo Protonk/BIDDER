@@ -18,8 +18,9 @@ Method:
      log10(q_{i−1})).
   4. Identify each spike's k-tier (k = 2, 3, 4) by digit count tier
      from the d=4 mega-spike scaling.
-  5. Compute T_k(n,b) by closed form. Compare observed log10(a_i)
-     against predicted T_k − 2 · log10(q_{i−1}). Tabulate residuals.
+  5. Compute both smooth and actual T_k(n,b). Compare observed
+     log10(a_i) against predicted T_k − 2 · log10(q_{i−1}).
+     Tabulate residuals.
 
 A clean fit at every k does not close the structure. It locates the
 remaining scalar in L_{k−1} itself: the off-spike denominator process

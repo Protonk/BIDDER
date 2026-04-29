@@ -113,7 +113,7 @@ Given the standard CF identity, the rest is forced.
 | feature in the spike formula | source |
 |---|---|
 | `−2 L_{k−1}` | the `q²` in `\|x − p/q\| = 1/(q·(a q + q_prev))`. |
-| `T_k` | smooth-block n-prime count `(b−1) b^{d−1} (n−1)/n²` summed digit-weighted. |
+| `T_k` | actual n-prime block counts summed digit-weighted; in smooth blocks this reduces to `(b−1) b^{d−1} (n−1)/n²`. |
 | `log_b(b/(b−1))` | residual-fraction `≈ (b−1)/b · b^{−T_k}` past the d=k boundary; "average leading-digit" heuristic at the next position. |
 | `O(b^{−k})` tail | the dropped `log_b(1 + α/a_{i+1})` and finite-k boundary alignment. |
 | the `(n−1)/n²` density factor | n-primes are multiples of n whose cofactor is not divisible by n; density is `(1/n) · ((n−1)/n)`. |
