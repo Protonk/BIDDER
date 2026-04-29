@@ -26,29 +26,46 @@ defined reals (classical Champernowne, π, e — none have proven
 absolute normality).
 
 **The edge:** we don't expect to prove the commitment. The
-construction is built so that closing the residuals — what an
-absolute-normality proof would require, going beyond what C–E
-gives — is exactly the substrate-side route we don't expect to
-close. The bilingualism is the engine of investigation and (we
-believe) the obstruction to proof, simultaneously. The
-undecidability we appeal to is internal: a stance about what the
-construction's design lets through, not a Gödel-style theorem of
+substrate-side route we know to attempt — closing the residuals
+the substrate exposes — runs through structures whose extension
+to bases `B ≠ b` we don't see. We don't see how alternative
+routes (Weyl, ergodic, sieve) close either. The undecidability
+we appeal to is internal: a stance about what the sum of what we
+see and don't see lets through, not a Gödel-style theorem of
 impossibility.
 
-**The stakes.** If the commitment is wrong — if every `C_b(n)` is
-provably absolutely normal — then the construction is a
-*constructive mechanism for producing absolutely normal numbers
-on demand*, Hardy-indexed by `(n, b)`, with `O(1)` digit-position
-oracle, factorisation-by-construction, and arbitrary depth. A
-mechanism of that strength does not exist in the rest of the
-absolute-normality literature. Producing one, accidentally, while
-pursuing a different research goal, would be the mathematical
-equivalent of the little black box in *Sneakers* — a thing too
-useful for its setting, whose existence would reshape what is
-reachable. Believing the commitment is unprovable is equivalent
-to believing the construction is interesting but not *that*
-powerful. The manifesto is a bet, taken seriously, that we have
-not invented a cheat code.
+The bilingualism is the engine of the investigation. Whether it
+is also the *obstruction* to proof is something we cannot claim
+from `N = 1`. π, e, and classical Champernowne all have open
+absolute-normality questions and no bilingual structure;
+absolute normality is hard regardless. Bilingualism may be
+doing real obstruction work in our case, or it may be
+decorative — the evidence to discriminate isn't yet in.
+
+**The stakes.** If the commitment is wrong — if every `C_b(n)`
+is provably absolutely normal — the construction is not just
+"another constructive absolute normal." Becher–Figueira (2002)
+and Becher–Heiber–Slaman (2013) and successors give computable
+absolute normals with polynomial-time digit oracles, in
+parameterised families. The literature is not empty.
+
+What would be unusual about ACM-Champernowne is **a family
+designed for something else** — Hardy random access on
+n-primes, finite-rank `Q_n` local algebra, the substrate's
+residual structure as investigative tool — **turning out to be
+absolutely normal as a side effect**. If the side effect proves
+out, the substrate's machinery (finite, indexable, with `O(1)`
+digit oracle and factorisation by construction) ports with not
+much modification to adjacent hard problems: factoring, points
+on curves, structured arithmetic on indexed lattices. That is
+the backstop stake. Not "no one has produced absolute normals"
+— they have. *Closing this with machinery designed for
+substrate investigation gives us a transferable method.* The
+little black box in *Sneakers* — too useful for its setting —
+but the relevant adjacency is "what else can the substrate
+touch?" not "what is missing from the absolute-normality
+literature?" The manifesto is a bet that we have not built a
+transferable substrate-investigation method without realising it.
 
 *Note on genre.* This is a manifesto. The structural argument
 that follows orients work; it does not prove unprovability. The
@@ -308,42 +325,65 @@ occurs in the base-`B` expansion of `C_b(n)` at frequency
 `B^{−k}`, in the limit. C–E gives this for `B = b` (the base of
 concatenation). Other bases `B ≠ b` have to be earned separately.
 
-The substrate-side route we see — and don't expect to close —
-proceeds through closing the residuals: showing that the
-filtering induced by the n-prime sieve exactly accounts for the
-digit-distribution deviation in every base, and that the deviation
-vanishes asymptotically in every base. Every item on the
-project's open list is part of that closure:
+We do not claim the residual list below is the gate any
+absolute-normality proof must pass through. The substrate is the
+project's *investigative tool* — Hardy-indexed atoms, finite-rank
+`Q_n`, BLOCK-UNIFORMITY's residue counting, the bilingual
+K-indexing that ties atom position to digit position. The
+substrate's output, when used as a tool, is a catalog of residual
+structure:
 
-- closed-form `offset(n)` for all `n` (intermediate `ord(b, n)`
-  open in `PRIMITIVE-ROOT-FINDING.md`),
-- closed-form `β(n)` for the `O(b^{−k})` tails (per-`n`,
-  currently uncharacterised),
-- a model of the off-spike denominator process between consecutive
-  boundary spikes (load-bearing in `MEGA-SPIKE.md` step 3 and
-  the premise of `MU-CONDITIONAL.md`),
-- a unifying characterisation of the lucky-cancellation locus
-  (22 205 triples in `b ≤ 12, d ≤ 5`, no rule known).
+- `offset(n)` by `ord(b, n)` (intermediate `ord` open in
+  `PRIMITIVE-ROOT-FINDING.md`),
+- `β(n)` for the `O(b^{−k})` tails (per-`n`, currently
+  uncharacterised),
+- the off-spike denominator process between consecutive boundary
+  spikes (load-bearing in `MEGA-SPIKE.md` step 3 and the premise
+  of `MU-CONDITIONAL.md`),
+- the lucky-cancellation locus in `BLOCK-UNIFORMITY` (22 205
+  triples in `b ≤ 12, d ≤ 5`, no rule known).
 
-Each is documented as not closed. The substrate-side route asks
-us to close them all in a way that propagates across bases —
-because absolute normality is across bases, not within one. This
-is what the substrate's design appears to refuse. The bilingualism
-that gives us substrate-driven access is the *same* bilingualism
-that generates the residuals as a structural consequence of the
-trades; reducing the bilingualism to its monolingual constituents
-(digit-positional or multiplicative-anatomy) is what classical
-Champernowne does in Z + UFD, where C–E already gives base-of-
-concatenation normality but absolute normality remains open.
+The catalog is what we see when we use the substrate. It is not
+claimed as the unique route to proof; it is what the substrate
+exposes, and what we have organised.
 
-We do not prove this route is the only one. Other techniques —
-Weyl-style equidistribution across multiple bases simultaneously,
-ergodic-theoretic arguments, exponential-sum bounds, sieve
-identities adapted to non-UF monoids — could in principle bypass
-the residual list. We don't see how. We acknowledge we haven't
-shown no one will. The unprovability claim is a stance about
-what the construction's design lets through, supported by the
-absence of any known route, not a theorem of impossibility.
+What we do claim: the substrate's *organisation of complexity*
+is the differentia. Other constructs over the integers have
+residues — random sequences, generic concatenations, sparse-
+density collections — but they don't structure them like this.
+The project's residuals have visible families, base-dependent
+classifications, and substrate-side closed forms at the local
+level. That kind of organisation is what makes the substrate
+useful as an investigative tool, and (we expect) useful for
+projects beyond this one. Other constructs have residues; ours
+*structures* them.
+
+What we don't see: a route from the catalog to an
+absolute-normality proof. The catalog organises complexity
+visibly across `(n, b, d)` *for the base of concatenation*; its
+direct extension to bases `B ≠ b` runs through substrate
+quantities that don't carry across base in any obvious way. The
+`Q_n` local algebra is base-agnostic in its definition, but its
+consequences for digit-distribution in non-concatenation bases
+require new substrate work the project has not done. We don't
+see how that work concludes.
+
+What other routes might do — Weyl-style equidistribution across
+multiple bases simultaneously, ergodic arguments on the
+concatenation map, exponential-sum bounds, sieve identities
+adapted to non-UF monoids — is open. Each could in principle
+bypass the substrate catalog. We don't see how. We acknowledge
+we haven't shown no one will.
+
+The unprovability claim is a stance about what the sum of what
+we see and don't see lets through. The substrate exposes
+complexity in a way other constructs over the integers do not;
+the catalog is what the project produces; the absence of any
+visible route — substrate-side or otherwise — is what the bet
+is grounded in. Not "the catalog is the gate." Not "we have
+shown no other route can succeed." Just: this is what we have,
+this is what we don't see, and the gap between them is what we
+expect to remain.
 
 The undecidability is not Gödel-incompleteness. There is no
 formal theory whose axioms are independent. It is structural: a
@@ -362,41 +402,46 @@ their digits do across all bases in the limit.
 ### The cheat code
 
 If we are wrong — if every `C_b(n)` is provably absolutely normal
-— the construction is a **constructive mechanism for producing
-absolutely normal numbers on demand**, parameterised by `(n, b)`,
-with `O(1)` digit-position oracle, factorisation-by-construction
-on the underlying lattice, and arbitrary depth. A mechanism of
-that strength does not exist in the rest of the absolute-normality
-literature. Specific reals have been shown absolutely normal
-(Sierpiński 1917, Stoneham 1973, the Becher–Figueira constructions
-2002+) by careful case-by-case effort; no one has produced a
-*family* parameterised by elementary integer choices `(n, b)`
-that generates absolutely normal reals as easily as ACM-Champernowne
-generates its members.
+— the construction is *not just* "another constructive absolute
+normal." Sierpiński (1917), Stoneham (1973), Becher–Figueira
+(2002), Becher–Heiber–Slaman (2013), and successors have produced
+computable absolute normals with explicit constructions and, in
+some cases, polynomial-time digit oracles. There are
+parameterised families. The literature is not empty.
 
-If we accidentally have, the construction's downstream consequences
-are large. The absolute-normality literature is one of the
-hardest in number theory; producing a parameterised family that
-makes it easy is the mathematical equivalent of the little black
-box in *Sneakers* — a thing too useful for its setting, whose
-existence would reshape the difficulty profile of the surrounding
-problem. The manifesto's commitment to unprovability is
-equivalently a commitment that we have not built such a thing.
-The construction is interesting and rich; we expect it is not
-*that* powerful. Believing in the gap between substrate
-transparency and absolute-normality proof is also believing the
-construction respects the difficulty profile of the absolute-
-normality problem.
+What would be unusual about ACM-Champernowne is *not* "a
+parameterised family of absolute normals exists." It is **a
+family designed for something else** turning out to be absolutely
+normal as a side effect. The construction was built for Hardy
+random access on n-primes, finite-rank `Q_n` local algebra, and
+the substrate's residual structure as investigative tool — not
+for absolute-normality production. If absolute normality of every
+member proves out, the substrate's machinery (finite, indexable,
+with `O(1)` digit oracle and factorisation by construction) ports
+with not much modification to adjacent hard problems: factoring
+in residue classes, points on curves, structured arithmetic on
+indexed lattices. The substrate becomes a transferable
+investigation method, not just an absolute-normality producer.
+
+That is the backstop stake. Not "no one has produced
+parameterised absolute normals" — they have. **Closing this with
+machinery designed for substrate investigation gives us a
+transferable method.** The little black box from *Sneakers* —
+too useful for its setting — but the relevant adjacency is
+"what else can the substrate touch?" not "what is missing from
+the absolute-normality literature?" The manifesto's commitment
+to unprovability is equivalently a commitment that we have not
+built such a transferable method without realising it.
 
 This is the flaw. It is also why the substrate is worth
 investigating. If `C_b(n)` were classical-provably absolutely
 normal, the three concurrent consequences of the `M_n` move
-would still be present — but the manifesto's commitment would
-collapse from "absolute normality is what the substrate
-transparency cannot reach" to "absolute normality is what the
-substrate transparency reaches trivially." The first creates an
-open project; the second creates a cheat code. We bet on the
-first.
+would still be present — but the substrate's role would
+collapse from "investigative tool exposing complexity that
+proof cannot reach" to "tool whose machinery is also a proof
+of absolute normality, and presumably of more besides." The
+first creates an open project. The second creates a transferable
+method we did not set out to build. We bet on the first.
 
 The unprovability creates the open structure for the substrate-
 driven investigation to populate. Every residual classification,
@@ -539,15 +584,20 @@ One commitment, one consequence:
   all bases, all `n ≥ 2`, all `b ≥ 2`. C–E (1946) settles the
   base-`b` case for free; the manifesto's commitment is to the
   harder claim, open even for classical Champernowne.
-- **Consequence.** We don't expect to prove it. The substrate-side
-  route runs through residual closure; the residuals don't close
-  in a way that propagates across bases without undoing the
-  construction. We don't show no other route exists; we don't see
-  one. If one is found, the construction becomes a parameterised
-  family that produces absolutely normal numbers cheaply — a
-  result the absolute-normality literature does not contain. The
-  manifesto is a bet, taken seriously, that we have not built
-  such a thing.
+- **Consequence.** We don't expect to prove it. The substrate is
+  the project's investigative tool; the catalog of residuals it
+  surfaces is what we have, not the gate any proof must pass
+  through. We don't see how the catalog extends to bases `B ≠ b`,
+  and we don't see how alternative routes (Weyl, ergodic, sieve)
+  close either. We don't show no route exists; we say what we see
+  and don't see. If a proof is found, the substrate's machinery —
+  designed for Hardy indexing on n-primes, not for absolute-
+  normality production — would have produced absolute normals as
+  a side effect, and the same machinery would port to adjacent
+  hard problems (factoring, curves) with not much modification.
+  The manifesto is a bet, taken seriously, that we have not built
+  a transferable substrate-investigation method without realising
+  it.
 
 The substrate transparency catalogued in `arguments/*` is what
 the three concurrent consequences of the `M_n` move let through;
