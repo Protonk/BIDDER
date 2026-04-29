@@ -319,6 +319,27 @@ Champernowne, π, e — none have proven absolute normality).
 
 ## The Undecidable Heart
 
+![A circular disk filling most of a square frame on a black background. The disk's interior is rendered in deep magenta and purple tones overlaid with a network of bright orange-yellow lines. Two prominent perpendicular bright bars cross through the disk's centre forming an orange cross — one horizontal diameter, one vertical diameter. Beyond the central cross, the disk is filled with a curvilinear orthogonal grid: arcs that bend along the disk's curvature, growing denser and finer toward the disk's circumference. The grid is regular near the centre and compresses tightly at the rim, where the structure thickens into a fine textured band along the disk's boundary. No clear empty regions are visible; lines and intersections appear at every scale across the disk's interior. The four corners of the square frame outside the disk are pure black.](experiments/acm-champernowne/base10/art/q_distillery/q_lattice_4000_fft_poincare.png)
+
+What got destroyed: linear scale (slog), spatial location (2D
+FFT), phase information (magnitude only), and Euclidean geometry
+(the Poincaré radial transform `r_disk = tanh(s · r_fft / 2)`).
+Four orthogonal violences, each killing a different kind of
+structure other constructs over the integers would have surrendered
+to. The substrate's response is the image. The perpendicular
+bright cross through the centre is the FFT's DC backbone —
+first-order autocorrelation in `n` and `k` carrying through all
+four transforms intact. The orthogonal arc grid filling the disk
+is the Q-lattice's prime-harmonic content, surviving FFT as sharp
+spectral lines and compressing toward the rim under the
+hyperbolic distortion. The pattern repeats at every visible
+scale: primary cross at the centre, secondary crosses radiating
+out at smaller scales, the rim packed with the same grid finer
+than itself. No thinning. No spectral flooding. The substrate
+shows the same shape under every magnification because the shape
+*is* the algebra. The undecidable heart is what survives the
+mauling.
+
 An *absolute* normality proof for `C_b(n)` would need to show:
 for every base `B ≥ 2`, every length-`k` digit string in base `B`
 occurs in the base-`B` expansion of `C_b(n)` at frequency
