@@ -2,16 +2,15 @@
 
 A claim about the project as a whole. The other `arguments/*` files
 read individual constructions through Grand / Mundane / Beautiful /
-Contingent. Applied to the project, the reading lands on a thesis
-with a sharper edge than any of them.
+Contingent. Applied to the project, the reading lands on a specific
+thesis.
 
 This repo is the elder Bidder's lattice with each of his three
 design pillars actively negated. Aggregate closure refused while
 local closure is kept exact. The log identity recovered at a
 different altitude. Unique factorisation traded for K-indexed
 random access. Not three relaxations — three concurrent
-consequences of one design move (the choice of `M_n`), each
-driven by one commitment, all in service of one goal.
+consequences of one design move: the choice of `M_n`.
 
 **The commitment:** every `C_b(n)` is *absolutely* normal — normal
 in every base, not just the base of concatenation, across all
@@ -68,10 +67,7 @@ literature?" The manifesto is a bet that we have not built a
 transferable substrate-investigation method without realising it.
 
 *Note on genre.* This is a manifesto. The structural argument
-that follows orients work; it does not prove unprovability. The
-arguments are about why the project expects absolute normality
-of the family `{C_b(n)}` to remain open under the construction's
-design, not about why it is logically impossible to prove.
+that follows orients work; it does not prove unprovability.
 
 This is the flaw, and the foundation. The project commits to a
 claim it does not expect to verify. Every result in `arguments/*`
@@ -174,15 +170,11 @@ Hardy inverts; carries `ζ_{M_n}(s) = 1 + n^{−s} ζ(s)` as the
 generating function whose Mercator log gives the recovered
 identity; and forces the local-vs-aggregate altitude split that
 makes closure refusal coherent. The triadic framing is
-pedagogically useful — three things to think about, three trades
-to name — but the algebra is one move that has three concurrent
-consequences. Closure refused: so the residuals stay open and the
-central claim stays in play. Log identity recovered: so local
-structure is exact while the aggregate stays unsealed. UFD traded:
-so the substrate is *visible* — indexable, plottable, reachable
-by mod arithmetic. Together they build a substrate where the
-family `{C_b(n)}` is an object you can study without expecting
-to prove the absolute-normality claim that motivates the studying.
+pedagogically useful — three trades to name — but the algebra
+is one move with three concurrent consequences. Together they
+build a substrate where `{C_b(n)}` is an object you can study
+without expecting to prove the absolute-normality claim that
+motivates the studying.
 
 
 ## Mundane
@@ -205,8 +197,7 @@ Bidder's residuals are scalars to absorb at the end; ours are
 families to classify and leave open. Bidder's helpers move the
 target toward a known landmark; ours expose structure that the
 substrate-naive prediction misses. Bidder's random access is
-cognitive; ours is mechanical. The mechanism survives the inversion
-at every row.
+cognitive; ours is mechanical.
 
 
 ## Beautiful
@@ -256,11 +247,9 @@ Three features cut.
    normality, but a *substitute* for one. We navigate residual
    surfaces because we cannot collapse them.
 
-These three together describe what the negations let through.
 Local rigor, identity-signature, and renderability are downstream
 of refused closure, recovered identity, and the UFD trade
-respectively. Each Beautiful feature is the productive face of
-the corresponding negation.
+respectively.
 
 
 ## What Copeland–Erdős Settles
@@ -350,13 +339,12 @@ exposes, and what we have organised.
 What we do claim: the substrate's *organisation of complexity*
 is the differentia. Other constructs over the integers have
 residues — random sequences, generic concatenations, sparse-
-density collections — but they don't structure them like this.
-The project's residuals have visible families, base-dependent
-classifications, and substrate-side closed forms at the local
-level. That kind of organisation is what makes the substrate
-useful as an investigative tool, and (we expect) useful for
-projects beyond this one. Other constructs have residues; ours
-*structures* them.
+density collections. The project's residuals have visible
+families, base-dependent classifications, and substrate-side
+closed forms at the local level. Other constructs have residues;
+ours *structures* them. That organisation is what makes the
+substrate useful as an investigative tool, and (we expect) useful
+for projects beyond this one.
 
 What we don't see: a route from the catalog to an
 absolute-normality proof. The catalog organises complexity
@@ -386,18 +374,14 @@ this is what we don't see, and the gap between them is what we
 expect to remain.
 
 The undecidability is not Gödel-incompleteness. There is no
-formal theory whose axioms are independent. It is structural: a
-stance about the construction's design and the absence of any
-visible proof route, not a theorem about what no proof can do.
+formal theory whose axioms are independent. It is a stance,
+not a theorem of impossibility.
 
-`C_b(n)` is computable, in the formal sense — there is a finite
-algorithm that emits its `n`-th digit. The digit stream is
-generated by Hardy + Champernowne concatenation; nothing about
-its existence is in question. What we conjecture cannot be
-proven, structurally and (we expect) permanently, is the
+`C_b(n)` is computable, in the formal sense — a finite algorithm
+emits its `n`-th digit, generated by Hardy plus Champernowne
+concatenation. What we conjecture cannot be proven is the
 *absolute-normality claim* across the family `{C_b(n) : n ≥ 2,
-b ≥ 2}`. We have the numbers; we don't expect to prove what
-their digits do across all bases in the limit.
+b ≥ 2}`.
 
 ### The cheat code
 
@@ -431,9 +415,7 @@ machinery designed for substrate investigation gives us a
 transferable method.** The little black box from *Sneakers* —
 too useful for its setting — but the relevant adjacency is
 "what else can the substrate touch?" not "what is missing from
-the absolute-normality literature?" The manifesto's commitment
-to unprovability is equivalently a commitment that we have not
-built such a transferable method without realising it.
+the absolute-normality literature?"
 
 This is the flaw. It is also why the substrate is worth
 investigating. If `C_b(n)` were classical-provably absolutely
@@ -445,12 +427,10 @@ of absolute normality, and presumably of more besides." The
 first creates an open project. The second creates a transferable
 method we did not set out to build. We bet on the first.
 
-The unprovability creates the open structure for the substrate-
-driven investigation to populate. Every residual classification,
-every closed-form spike formula, every renderable disparity
-surface lives in the gap between the commitment and the missing
-proof. The four-ways arguments in `arguments/*` catalogue what
-occupies the gap.
+Every residual classification, every closed-form spike formula,
+every renderable disparity surface lives in the gap between the
+commitment and the missing proof. The four-ways arguments in
+`arguments/*` catalogue what occupies the gap.
 
 
 ## Contingent
@@ -491,11 +471,8 @@ The metaphysical commitment to normality is *not* contingent in
 the same sense; see §"The Undecidable Heart." A different
 practitioner could work this substrate with a different stance
 — believing `C_b(n)` rational, or agnostic — and the math
-underneath would be unchanged. But the negation framework is
-what makes the *commitment* worth holding in the first place.
-Drop the commitment and the project becomes recreational; keep
-the commitment and the project becomes the investigation of an
-object whose central truth resists proof.
+underneath would be unchanged. The negation framework is what
+makes the *commitment* worth holding.
 
 
 ## Father and Son in this Lens
@@ -517,15 +494,13 @@ form lemmas) are *contiguous* with his work; the elder-shaped
 pieces are the *inversion* of his.
 
 The cipher is purely son-shaped. The mathematical project blends.
-The three negations are how the elder's content gets inverted; the
-son's content joins the project without needing inversion at all.
 
 
 ## Where the Lens Predicts to Look
 
 Bidder's hard cases predict the repo's open frontiers under the
-inversion. Each is a *site of the undecidability* — a place where
-proof would require closing what the substrate refuses to close.
+inversion. Each is a place the substrate exposes structure we
+don't see how to close.
 
 - **Off-spike denominator process** (`MEGA-SPIKE.md` step 3,
   `MU-CONDITIONAL.md` premise). Bidder's "no nearby landmark"
@@ -559,15 +534,12 @@ proof would require closing what the substrate refuses to close.
 Each is a site where the substrate exposes structure we don't
 see how to close. We don't claim closing all three is what an
 absolute-normality proof requires — §The Undecidable Heart
-disclaims the residual list as a gate. We claim each is a
-place the substrate's investigative tool shows complexity that
-we cannot reduce. The lens predicts that work in this repo
-will make progress on each, and *will not finish any* in a way
-that propagates across bases. The pattern of progress and
-non-finishing across the three is part of what the manifesto's
-bet rests on: this is what the substrate exposes, this is
-what we cannot close, and the gap is what we expect to
-remain. We don't claim foreclosure of alternative routes.
+disclaims the residual list as a gate. The lens predicts work
+in this repo will make progress on each, and *will not finish
+any* in a way that propagates across bases. That pattern — of
+visible exposure and visible non-closure — is part of what the
+manifesto's bet rests on. We don't claim foreclosure of
+alternative routes.
 
 
 ## One-Line Summary
