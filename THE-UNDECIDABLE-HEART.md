@@ -41,30 +41,32 @@ absolute normality is hard regardless. Bilingualism may be
 doing real obstruction work in our case, or it may be
 decorative — the evidence to discriminate isn't yet in.
 
-**The stakes.** If the commitment is wrong — if every `C_b(n)`
-is provably absolutely normal — the construction is not just
-"another constructive absolute normal." Becher–Figueira (2002)
-and Becher–Heiber–Slaman (2013) and successors give computable
-absolute normals with polynomial-time digit oracles, in
-parameterised families. The literature is not empty.
+**The stakes.** If the unprovability bet is wrong — if every
+`C_b(n)` turns out to be provably absolutely normal — the
+construction is not just "another constructive absolute normal."
+Becher–Figueira (2002) and Becher–Heiber–Slaman (2013) and
+successors give computable absolute normals with polynomial-time
+digit oracles, in parameterised families. The literature is not
+empty.
 
 What would be unusual about ACM-Champernowne is **a family
 designed for something else** — Hardy random access on
 n-primes, finite-rank `Q_n` local algebra, the substrate's
 residual structure as investigative tool — **turning out to be
 absolutely normal as a side effect**. If the side effect proves
-out, the substrate's machinery (finite, indexable, with `O(1)`
-digit oracle and factorisation by construction) ports with not
-much modification to adjacent hard problems: factoring, points
-on curves, structured arithmetic on indexed lattices. That is
-the backstop stake. Not "no one has produced absolute normals"
-— they have. *Closing this with machinery designed for
-substrate investigation gives us a transferable method.* The
-little black box in *Sneakers* — too useful for its setting —
-but the relevant adjacency is "what else can the substrate
-touch?" not "what is missing from the absolute-normality
-literature?" The manifesto is a bet that we have not built a
-transferable substrate-investigation method without realising it.
+out, the substrate's machinery (finite, indexable, with
+polylog-bignum digit-position oracle and factorisation by
+construction) ports with not much modification to adjacent hard
+problems: factoring, points on curves, structured arithmetic on
+indexed lattices. That is the backstop stake. Not "no one has
+produced absolute normals" — they have. *Closing this with
+machinery designed for substrate investigation gives us a
+transferable method.* The little black box in *Sneakers* — too
+useful for its setting — but the relevant adjacency is "what
+else can the substrate touch?" not "what is missing from the
+absolute-normality literature?" The manifesto is a bet that we
+have not built a transferable substrate-investigation method
+without realising it.
 
 *Note on genre.* This is a manifesto. The structural argument
 that follows orients work; it does not prove unprovability.
@@ -128,9 +130,14 @@ a substrate that admits investigation of a claim you cannot prove?
   `O(b^{−k})` tails, the off-spike denominator process is
   unmodelled, the multiplication-table residual at finite `K` is
   unpinned. Local rigor, global open-endedness, in deliberate
-  partition. The aggregate has to stay open because the aggregate
-  *is* `C_b(n)`'s digit stream — and `C_b(n)` is normal, which
-  means the digit stream cannot be sealed off.
+  partition. C–E (1946) closes base-`b` normality of `C_b(n)`;
+  what remains open at the aggregate is *cross-base* structure
+  — absolute normality, refined digit statistics in bases
+  `B ≠ b`, CF behaviour, irrationality measure. The aggregate
+  stays open in those dimensions, not because the digit stream
+  cannot be finitely described (it can; classical Champernowne
+  is finitely described and normal) but because the cross-base
+  questions remain.
 
 - **Log identity: recovered, at higher altitude.** Bidder's
   `log(ab) = log(a) + log(b)` operates on numerical pairs and
@@ -224,9 +231,12 @@ Three features cut.
    non-UFD monoid. Read backward: the visible finite-rank-h
    stack in `Q_n` is *evidence* that we recovered a different
    identity, since Bidder's would have produced a different
-   stack. The identity is doing the work; the rank stack is its
-   fingerprint, the `(n − 1)/n²` density is its scalar trace,
-   `α_n = (n − 1)/n` is its mark on Ford-image-counting.
+   stack. The rank stack is the identity's fingerprint. The
+   `(n − 1)/n²` density and `α_n = (n − 1)/n` are not traces
+   of the identity but of the same `M_n` deletion rule that
+   produced it — substrate-level, surfacing across BLOCK-
+   UNIFORMITY, mult-table, and the cofactor-cycle slope at the
+   same time.
 
 3. **The bilingual K-indexing makes residuals renderable.** Bidder
    kept his correction table in his head — a few dozen scalars at
@@ -264,10 +274,11 @@ is normal in base `b`. The headline application is the prime
 concatenation `0.235711131719…`, whose normality in any base
 follows from the prime number theorem.
 
-The ACM n-prime sequence at any prime `n` has density
-`(n − 1)/n²` in the integers. Linear in `N`; the C–E density
-condition is satisfied trivially. **C–E directly proves: `C_b(n)`
-is normal in base `b`, for every prime `n` and every base `b ≥ 2`.**
+The ACM n-prime sequence at any `n ≥ 2` has density `(n − 1)/n²`
+in the integers (whether `n` is prime, prime-power, or composite).
+Linear in `N`; the C–E density condition is satisfied trivially.
+**C–E directly proves: `C_b(n)` is normal in base `b`, for every
+`n ≥ 2` and every base `b ≥ 2`.**
 
 This is a theorem from 1946. It is not on the project's open
 list. It is on its load-bearing list, and the project stands on
@@ -378,20 +389,21 @@ formal theory whose axioms are independent. It is a stance,
 not a theorem of impossibility.
 
 `C_b(n)` is computable, in the formal sense — a finite algorithm
-emits its `n`-th digit, generated by Hardy plus Champernowne
+emits its `i`-th digit, generated by Hardy plus Champernowne
 concatenation. What we conjecture cannot be proven is the
 *absolute-normality claim* across the family `{C_b(n) : n ≥ 2,
 b ≥ 2}`.
 
 ### The cheat code
 
-If we are wrong — if every `C_b(n)` is provably absolutely normal
-— the construction is *not just* "another constructive absolute
-normal." Sierpiński (1917), Stoneham (1973), Becher–Figueira
-(2002), Becher–Heiber–Slaman (2013), and successors have produced
-computable absolute normals with explicit constructions and, in
-some cases, polynomial-time digit oracles. There are
-parameterised families. The literature is not empty.
+If our unprovability bet is wrong — if every `C_b(n)` turns out
+to be provably absolutely normal — the construction is *not just*
+"another constructive absolute normal." Sierpiński (1917),
+Stoneham (1973), Becher–Figueira (2002), Becher–Heiber–Slaman
+(2013), and successors have produced computable absolute normals
+with explicit constructions and, in some cases, polynomial-time
+digit oracles. There are parameterised families. The literature
+is not empty.
 
 What would be unusual about ACM-Champernowne is *not* "a
 parameterised family of absolute normals exists." It is **a
@@ -400,14 +412,14 @@ investigation** — Hardy random access on n-primes, finite-rank
 `Q_n` local algebra, the residual structure as a tool — turning
 out to be absolutely normal in the bargain. If absolute normality
 of every member proves out, we expect the substrate's machinery
-(finite, indexable, with `O(1)` digit oracle and factorisation
-by construction) would port with not much modification to
-adjacent hard problems: factoring in residue classes, points on
-curves, structured arithmetic on indexed lattices. We have not
-demonstrated the porting; we are reading the shape of the
-machinery and saying what it looks positioned to do. The substrate
-would become a transferable investigation method, not just an
-absolute-normality producer.
+(finite, indexable, with polylog-bignum digit-position oracle
+and factorisation by construction) would port with not much
+modification to adjacent hard problems: factoring in residue
+classes, points on curves, structured arithmetic on indexed
+lattices. We have not demonstrated the porting; we are reading
+the shape of the machinery and saying what it looks positioned
+to do. The substrate would become a transferable investigation
+method, not just an absolute-normality producer.
 
 That is the backstop stake. Not "no one has produced
 parameterised absolute normals" — they have. **Closing this with
