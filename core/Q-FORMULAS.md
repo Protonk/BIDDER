@@ -10,6 +10,35 @@ and base-agnostic. They do not see digit concatenation, cutoff effects,
 or continued-fraction geometry.
 
 
+## Object
+
+The monoid `M_n = {1} ∪ nZ_{>0}` has Dirichlet series
+
+    ζ_{M_n}(s) = Σ_{m ∈ M_n} m^{-s} = 1 + n^{-s} ζ(s).
+
+`Q_n` is the log-coefficient of this generating function:
+
+    Q_n(m) = [m^{-s}] log ζ_{M_n}(s)
+           = [m^{-s}] log(1 + n^{-s} ζ(s)).
+
+This is the `M_n`-monoid analog of the classical fact
+
+    Λ(n) / log n = [n^{-s}] log ζ(s).
+
+The formulas in the rest of this document are evaluations of that one
+coefficient at specific `m`, obtained by Mercator expansion of the log
+and multiplicativity of the resulting `τ_j` coefficients at the primes
+of `n`.
+
+Caveat. `ζ_{M_n}(s) = 1 + n^{-s} ζ(s)` does not have an Euler product
+over the atoms of `M_n` (the monoid is not UF — e.g. `36 = 6·6 = 2·18`
+in `M_2`). Formal Mercator manipulations carry over from classical
+`Λ / log` for free; deeper analytic content (Tauberian theorems beyond
+the formal level, residue arguments, sieve identities exploiting
+multiplicativity at the prime level) needs individual translation, not
+free analogy.
+
+
 ## Universal Formula
 
 Let `m ∈ M_n` have exact height
@@ -66,6 +95,26 @@ Therefore
 
 Every formula below is this master expansion with specific
 `(a_i, t_i)`.
+
+
+## Integer-Language Reading
+
+The master expansion has a clean combinatorial interpretation.
+`τ_j(m / n^j)` counts ordered j-tuples `(d_1, …, d_j)` with
+`d_1 · … · d_j = m / n^j`, equivalently ordered j-tuples
+`(n d_1, …, n d_j)` with product `m` whose every factor is a multiple
+of `n`. So:
+
+    Q_n(m) = Σ_{j=1}^{ν_n(m)}
+             (-1)^(j-1) · #{ordered factorisations of m into j multiples of n} / j.
+
+`Q_n(m)` is a signed Möbius-style count of ordered factorisations of
+`m` into multiples of `n`, alternating by tuple length, weighted
+`1/j`. The master expansion above is just this count reorganised by
+sorting `m` into `(h, t_1, …, t_r, k')` and using multiplicativity of
+`τ_j`. The two readings — generating-function log-coefficient and
+signed factorisation count — are the same fact in two languages. Pick
+whichever serves the next move (analytic / combinatorial).
 
 
 ## Prime n
@@ -192,8 +241,11 @@ corollary of these formulas.
 | prime power (`4`) | negative or zero in the first `t` sub-cases |
 | squarefree multi-prime (`6,10`) | negative in low-overlap payloads; overlap can transition |
 
-Thus the split is no longer merely empirical. The experiment found the
-visible shadow of the binomial-product coefficients.
+The trichotomy reflects the structure of `τ_j` localised at the primes
+of `n`: one binomial factor when `n` is prime; one binomial with `a` in
+its index when `n = p^a`; a product of binomials when `n` is multi-prime.
+The displayed sign profiles are evaluations of those specialisations at
+small payloads.
 
 
 ## Scope
@@ -212,3 +264,14 @@ specialisations have zero mismatches.
 
 This document is not a sign-classification theorem and not a statement
 about normality. It is the local algebraic formula sheet for `Q_n`.
+
+The formulas here compute `Q_n` at a *single* `m`. Global observables
+that aggregate over many `m` — multiplication-table counts on `M_n`,
+continued-fraction expansions of digit concatenations, Walsh / wavelet
+readings of streams — are governed by different generating-function
+objects and require their own analyses. `Q_n`'s local rank-h structure
+informs those observables but does not predict them automatically. See
+`experiments/acm-flow/mult-table/` and
+`experiments/acm-flow/mega-spike/` for the empirical state of those
+couplings; the connections are real but at the prefactor /
+sub-leading level, not at the leading exponent level.

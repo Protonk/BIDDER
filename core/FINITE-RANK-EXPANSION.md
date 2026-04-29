@@ -1,10 +1,10 @@
 # Finite Rank Expansion
 
-Driving conjecture: after the right normalization, the local
-ACM-Mangoldt structure is finite-rank. The complicated global pictures
-come from how these finite local layers are concatenated, cut off, and
-read in a radix stream; they are not evidence that the local arithmetic
-requires an infinite hierarchy.
+The local ACM-Mangoldt object `Q_n` is a finite-rank linear combination
+of ordered-divisor coefficients, with rank equal to `ν_n(m)`. This is
+a theorem of one line, not a conjecture. What remains conjectural is
+how the finite-rank local structure couples to global ACM-Champernowne
+observables; that is a separate question, addressed below.
 
 For
 
@@ -26,14 +26,36 @@ The normalized local observable is
 
     Q_n(m) = Λ_n(m) / log(m).
 
-The exact formula, recorded and expanded in `core/Q-FORMULAS.md`, is
+It is the log-coefficient of the `M_n` monoid's Dirichlet series:
+
+    ζ_{M_n}(s) = Σ_{m ∈ M_n} m^{-s} = 1 + n^{-s} ζ(s),
+
+    Q_n(m) = [m^{-s}] log ζ_{M_n}(s) = [m^{-s}] log(1 + n^{-s} ζ(s)).
+
+This is the `M_n`-monoid analog of `Λ(n)/log n = [n^{-s}] log ζ(s)`.
+Mercator expansion of the log gives the formula recorded in
+`core/Q-FORMULAS.md`:
 
     Q_n(m) =
         sum_{j=1}^{ν_n(m)}
             (-1)^(j-1) τ_j(m / n^j) / j.
 
-The upper limit is the point. The expansion stops at rank `h` because
-`n^j` no longer divides `m` above that height.
+
+## Rank Lemma (one-line proof)
+
+The Mercator expansion `log(1 + x) = Σ_{j ≥ 1} (-1)^(j-1) x^j / j`
+applied to `x = n^{-s} ζ(s)` gives terms with factor `n^{-js}`. The
+coefficient of `m^{-s}` in `n^{-js} ζ(s)^j` is `τ_j(m/n^j)` when
+`n^j | m` and zero otherwise. Therefore the sum truncates at
+`j = ν_n(m) = h`. The local Q_n object is finite-rank-h by
+**integer divisibility**: the j-th term contributes to `[m^{-s}]`
+only when `n^j` literally divides `m`.
+
+This is the only structural surprise in the formula. A formally
+infinite Mercator series collapses to `h` terms because of how many
+times `n` divides `m`. Visible to a clean reader of the formula in
+minutes; the kind of integer-divisibility fact catalogued in
+`memory/abductive_surprise_pattern.md`.
 
 
 ## BQN Annotation
@@ -105,18 +127,60 @@ factorisation type of `n`.
 
 ## What It Would Buy
 
-If this is the right organising principle, then the visual reduction
-tower has a local endpoint:
+The visual reduction tower has a local endpoint:
 
     raw stream -> visual residuals -> local Λ_n -> finite-rank Q_n.
 
-The remaining hard structure in ACM-Champernowne would then live in the
-coupling between this local rank stack and global concatenation effects:
-radix block boundaries, Hardy-accessed deep windows, continued-fraction
-spikes, and cutoff-sieve residues.
+The remaining hard structure in ACM-Champernowne lives in the coupling
+between this local rank stack and global concatenation effects: radix
+block boundaries, Hardy-accessed deep windows, continued-fraction
+spikes, multiplication-table counts, and cutoff-sieve residues.
 
-Speculation: the continued-fraction spike law and the
-multiplication-table experiments may be shadows of the same rank layers
-seen through different global projections. That is not proven; it is
-the next target because the larger alternatives have started to fall
-away.
+`Q_n` is the log-coefficient of `ζ_{M_n}(s)` at a *single* `m`. Global
+observables that aggregate over many `m` (mult-table counts, CF
+expansions of digit concatenations, Walsh / wavelet readings) are
+governed by different generating-function objects and require their
+own analyses. The connection from `Q_n`'s local rank-h structure to
+those observables is real but **not at the level of leading
+exponents**, and not automatic.
+
+Empirical state at the time of writing:
+
+- **Continued-fraction spikes**
+  (`experiments/acm-flow/mega-spike/`). The d=k mega-spike size obeys
+  `log_b(a) ≈ T_k − 2 L_{k−1} + log_b(b/(b−1))`, where `T_k` is the
+  substrate-transparent boundary digit depth (closed-form via
+  `BLOCK-UNIFORMITY`) and `L_{k−1}` is the previous convergent's log
+  denominator. The off-spike denominator process drives `L_{k−1}`
+  away from the substrate-naive `C_{k−1}` by an amount that is
+  asymptotically `(n−1) k + offset(n)`. The slope `(n−1)` is
+  cleanly substrate-driven; `offset(n)` is per-n with no unified
+  closed form across the prime panel.
+
+- **Multiplication-table counts on M_n**
+  (`experiments/acm-flow/mult-table/`). At h=2 for prime n, the
+  ratio `M_n(K) / M_Ford(K)` drifts toward `α_n = (n−1)/n` (not
+  `α_n²`) with slow `1/log K`-style convergence. The asymptotic
+  deficit exponent is **Ford's c** — there is no asymptotic
+  c-shift. The "c(n) > c" inferred from finite-K bare-count data is
+  a slowly-vanishing prefactor transient, not a real exponent
+  shift.
+
+So the "shadow of rank layers" speculation lives at the prefactor /
+sub-leading level, not at the leading exponent level. Walking up
+rank by rank exercises the local algebra correctly but couples to
+global observables through specific case-by-case translations that
+have to be done individually. Phase 4 (α′) — the inclusion-exclusion
+calculation of `P(k ⊥ n | k ∈ Ford-image-of-K)` — is the next
+analytic chunk if we want a quantitative coupling story at h=2.
+
+What we did NOT find: a clean local-to-global mapping where rank-h
+Q_n cells directly predict deficit exponents in mult-table or
+spike-size regularities at the leading order. That picture was the
+initial speculation; the empirical work refined it. The local
+algebra is closed and exact; the coupling layer is structured but
+finite-K bias is large at experimentally reachable scales, and
+asymptotic deficit-exponent shifts inferred from finite-K data have
+turned out to be transient. The local Q_n object retains its
+analytic claim to importance via the Mercator-of-`ζ_{M_n}` framing;
+its couplings are ongoing work.
