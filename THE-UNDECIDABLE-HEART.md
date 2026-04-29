@@ -597,3 +597,17 @@ in his head and absorbed residuals scalar-by-scalar; we render
 them surface-by-surface across `(n, b, d)`. We render because we
 cannot close. We navigate the substrate because we cannot prove
 the claim that motivates the work. The flaw is the foundation.
+
+
+## Coda
+
+This document is not a theorem and does not pretend to be one.
+It is closer to what Collingwood called magical: writing that
+rouses to be put to work, not writing to be believed. The bet on
+undecidability is the energy; the discharge is the reader's own
+writing. If reading this leaves you asking what other constructs
+structure their residues like this, what cost ledger a non-UFD
+factorization tree carries, what algebra the substrate's
+machinery is one worked example of — the manifesto has done its
+job. The energy moves outward. What you do with it is the next
+document.
