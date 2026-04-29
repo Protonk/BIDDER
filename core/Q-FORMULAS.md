@@ -36,7 +36,11 @@ in `M_2`). Formal Mercator manipulations carry over from classical
 `Λ / log` for free; deeper analytic content (Tauberian theorems beyond
 the formal level, residue arguments, sieve identities exploiting
 multiplicativity at the prime level) needs individual translation, not
-free analogy.
+free analogy. The right literature for sharpening the analytic
+mileage of `Q_n` is non-UF arithmetic semigroup theory — Beurling
+generalised primes, Diamond–Zhang on arithmetic semigroups — rather
+than classical multiplicative number theory, which assumes the Euler
+product the M_n monoid does not provide.
 
 
 ## Universal Formula

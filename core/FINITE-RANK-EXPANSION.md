@@ -57,6 +57,17 @@ times `n` divides `m`. Visible to a clean reader of the formula in
 minutes; the kind of integer-divisibility fact catalogued in
 `memory/abductive_surprise_pattern.md`.
 
+This document is itself a case study in that pattern. The opening of
+this file previously read "Driving conjecture: after the right
+normalization, the local ACM-Mangoldt structure is finite-rank." That
+framing presented as conjecture what is, mechanically, a one-line
+bookkeeping fact about `n^{-js}` and the integers `n^j | m`. The
+reframe to "theorem with a one-line proof, plus a separate coupling
+conjecture" removes the over-claim and matches what the math actually
+says. The lesson is in `core/ABDUCTIVE-KEY.md`: when something in this
+project is presented as an ongoing research question, ask first
+whether it is mechanically settled by reading the formula.
+
 
 ## BQN Annotation
 
@@ -93,7 +104,14 @@ this monoid-rank formula.
 
 ## Rank Reading
 
-| rank | local form | interpretation |
+The table below illustrates the **prime-n specialisation** of the
+master expansion. For prime n at h=3, `τ_2(nk) = 2 d(k)` so the
+displayed h=3 entry simplifies to `1 - d(k) + τ_3(k)/3`, matching
+the prime row of `core/Q-FORMULAS.md`. For composite n the rank-h
+forms are products of binomial-coefficient factors over the primes
+of n; see `core/Q-FORMULAS.md` for the full master expansion.
+
+| rank | local form (prime n) | interpretation |
 |---|---|---|
 | `h = 1` | `Q_n(m) = 1` | atoms are positive. |
 | `h = 2` | `Q_n(n²k) = 1 - τ_2(k)/2` | the first sign cliff is exact. |
@@ -159,12 +177,17 @@ Empirical state at the time of writing:
 
 - **Multiplication-table counts on M_n**
   (`experiments/acm-flow/mult-table/`). At h=2 for prime n, the
-  ratio `M_n(K) / M_Ford(K)` drifts toward `α_n = (n−1)/n` (not
-  `α_n²`) with slow `1/log K`-style convergence. The asymptotic
-  deficit exponent is **Ford's c** — there is no asymptotic
-  c-shift. The "c(n) > c" inferred from finite-K bare-count data is
-  a slowly-vanishing prefactor transient, not a real exponent
-  shift.
+  ratio `M_n(K) / M_Ford(K)` drifts toward `α_n = (n−1)/n` (rather
+  than `α_n²`) with slow convergence whose functional form has not
+  yet been pinned: the simple `α_n + c_1/log K` leading correction
+  does not fit, since the empirical `c_1` grows ~10% per decade
+  through `K = 10⁸`. Three candidate shapes remain live —
+  `1/log K` with non-subdominant higher-order corrections,
+  `(log log K)/(log K)`, or `(log K)^{−γ}` with `0 < γ < 1` — and
+  current data cannot pin one. The asymptotic deficit exponent is
+  **Ford's c** — there is no asymptotic c-shift; the "c(n) > c"
+  reading inferred from finite-K bare-count data is a slowly-vanishing
+  prefactor transient, not a real exponent shift.
 
 So the "shadow of rank layers" speculation lives at the prefactor /
 sub-leading level, not at the leading exponent level. Walking up
@@ -173,6 +196,14 @@ global observables through specific case-by-case translations that
 have to be done individually. Phase 4 (α′) — the inclusion-exclusion
 calculation of `P(k ⊥ n | k ∈ Ford-image-of-K)` — is the next
 analytic chunk if we want a quantitative coupling story at h=2.
+
+(α′) by itself may not close the convergence-rate question. Even
+after a Ford-anatomy derivation of the leading correction `c_1(n)`,
+the empirical K-dependence may not match a single leading-order
+form — sub-leading corrections through `K = 10⁸` are of comparable
+magnitude. So (α′) might give the leading-order asymptotic and
+leave finite-K behaviour to be modeled separately. The doc should
+not treat (α′) as automatically closing the coupling problem.
 
 What we did NOT find: a clean local-to-global mapping where rank-h
 Q_n cells directly predict deficit exponents in mult-table or
