@@ -2,10 +2,11 @@
 spike_drift_multi_k.py — test T_k − 2 L_{k−1} at k ∈ {2, 3, 4}
 ================================================================
 
-Phase 3.1 follow-up. `spike_drift_table.py` verified the formula at
-k = 4 only, using rounded log10(q_before) values from SPIKE-HUNT.md.
-This script computes log10(q_{i−1}) directly along the CF expansion
+spike_drift_table.py verified the formula at k = 4 only, using
+rounded log10(q_before) values from the original CF panel. This
+script computes log10(q_{i−1}) directly along the CF expansion
 for each n in the panel and tests the formula at k = 2, 3, 4.
+Consumed by MULTI-K-RESULT.md.
 
 Method:
   1. Build C_b(n) digit string (smoke-tested against classical
@@ -161,9 +162,9 @@ def safe_log10_int(v):
 # ---- spike identification by digit-count tier ----
 
 def classify_by_tier(n, pq_digits):
-    """Per SPIKE-HUNT.md: d=2 spikes have 5-50 digits, d=3 have ~150-700,
-    d=4 mega-spikes have ~2500-8500. Returns k or None for non-tier
-    spikes (like the n=2 i=71 13-digit off-tier event)."""
+    """Per the empirical b=10 panel: d=2 spikes have 5-50 digits,
+    d=3 have ~150-700, d=4 mega-spikes have ~2500-8500. Returns k or
+    None for non-tier spikes (like the n=2 i=71 13-digit off-tier event)."""
     if 5 <= pq_digits <= 50:
         return 2
     if 150 <= pq_digits <= 800:

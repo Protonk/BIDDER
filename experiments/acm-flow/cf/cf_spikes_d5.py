@@ -2,12 +2,10 @@
 cf_spikes_d5.py — d=5 boundary spike push at b=10
 =================================================
 
-Phase 2 of BRIEF2-CLOSED-FORM.md / SPIKE-CLOSED-FORM-PANEL.md (a):
-push the closed-form prediction one decade in d. The d=4 panel covered
-varying d across bases but tested d-scaling only weakly (different
-bases at different d). This script does direct d-scaling at b=10:
-n ∈ {2, 3, 4, 5, 6, 10} at d=5, vs. the same n-set at d=4 in the
-original cf_spikes.py.
+d=5 push of the closed-form prediction at b=10. The original
+cf_spikes.py panel ran d=4 across n ∈ {2, 3, 4, 5, 6, 10}; this
+runs the same n-set at d=5 to test d-scaling at fixed base.
+Consumed by D5-RESULT.md.
 
 Predicted at b=10:
     F(5, 10) = 5 · 8 · 10⁴ + (10⁵ - 1)/9 = 400 000 + 11 111 = 411 111

@@ -2,7 +2,7 @@
 cf_spikes_extended.py — extended (b, n, d) panel for the closed-form
 ====================================================================
 
-Tests the closed-form spike prediction from BRIEF2-CLOSED-FORM.md:
+Tests the closed-form spike prediction from MEGA-SPIKE.md:
 
     spike_baseb_digits(n, d, b)  ≈  (n − 1)/n²  ·  F(d, b)
     F(d, b)  =  d (b − 2) b^(d−1)  +  (b^d − 1) / (b − 1)

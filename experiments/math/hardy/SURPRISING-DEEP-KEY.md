@@ -152,8 +152,8 @@ This document adds two more:
   questions; it remains the right category for order-dependent
   questions (Mode 2/3, boundary stitch).
 - **The CF mega-spike is closed-form modulo one scalar.**
-  GPT-5's Phase 3.1 first pass
-  (`experiments/acm-flow/cf/brief2_q_derivation.md`)
+  The Phase 3.1 derivation
+  (`experiments/acm-flow/cf/MEGA-SPIKE.md`)
   finds
 
       log_b(a) ≈ T_k − 2 · L_{k−1}
@@ -173,6 +173,22 @@ correction. The CF case is especially striking because CF
 expansion is paradigmatically opaque elsewhere; here, the
 substrate's transparency reaches into the CF observable through the
 digit-position structure.
+
+A sixth instance has the same shape but a different mode of
+visibility — *cross-thread*, not *cross-frame*. In April 2026 an
+agent in a parallel CF thread independently rederived the
+closed-form spike scale `S_k = D_k − C_{k−1}` already on the page
+in `experiments/acm-flow/cf/MEGA-SPIKE.md`, plus produced parallel
+panel and Mahler-style derivation docs duplicating canonical work.
+The agent self-caught via `arguments/MEGA-SPIKE-FOUR-WAYS.md` and
+the four duplicate docs were retired (preserved in git history,
+commit `8f39d00` and earlier). The variant is: the elementary
+fact (the closed form) wasn't being missed in the formula being
+read, it was being missed in a *sibling thread's* documentation.
+Disparate doc locations — `acm-flow/mega-spike/` and
+`acm-champernowne/base10/cf/` — magnified the blindness.
+Consolidation into `experiments/acm-flow/cf/` removed the
+structural cause.
 
 
 ## The deeper claim
@@ -306,6 +322,5 @@ For an agent picking up work in this repo:
 - `experiments/acm-flow/hardy_composite_q.py` — the Phase 2.4
   panel; reread as implementation-sanity rather than
   depth-validation.
-- `experiments/acm-flow/cf/MEGA-SPIKE.md`,
-  `experiments/acm-flow/cf/brief2_q_derivation.md` —
+- `experiments/acm-flow/cf/MEGA-SPIKE.md` —
   the CF mega-spike collapse: `log_b(a) ≈ T_k − 2 · L_{k−1}`.

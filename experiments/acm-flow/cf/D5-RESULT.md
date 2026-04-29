@@ -1,19 +1,16 @@
-# d = 5 confirmation — closed form holds at one more rank
+# d = 5 confirmation of the spike formula at b = 10
 
-The closed form `S_k(n, b) ≈ D_k(n, b) − C_{k−1}(n, b)` from
-`MEGA-SPIKE.md` lines 41–49 was empirically validated at
-`k ∈ {2, 3, 4}` in `MULTI-K-RESULT.md`, with the residual at k = 4
-collapsing to the universal boundary-truncation factor
-`log_b(b/(b − 1)) ≈ 0.0458` once `T_k` is computed via direct atom
-counting (`T_k(actual)`).
+The closed-form spike scale `S_k(n, b) ≈ D_k(n, b) − C_{k−1}(n, b)`
+(`MEGA-SPIKE.md`) was empirically validated at `k ∈ {2, 3, 4}` in
+`MULTI-K-RESULT.md`, with the residual at `k = 4` collapsing to
+the universal boundary-truncation factor `log_b(b/(b − 1)) ≈ 0.0458`
+once `T_k` is computed via direct atom counting.
 
-This document tests one more rank: `k = 5`, at b = 10, across the
-same n-panel `{2, 3, 4, 5, 6, 10}`.
-
-**Pure confirmation: the formula holds at k = 5 with relative gap
-~10× smaller than at k = 4 across all n. No new families surface.
-The `O(b^{−k})` deficit-decay rate from `MULTI-K-RESULT.md` extends
-one rank.**
+Extending one rank to `k = 5` at `b = 10` across the panel
+`n ∈ {2, 3, 4, 5, 6, 10}`: the formula holds with relative gap
+roughly 10× smaller than at `k = 4` across all `n`. No new
+families surface; the `O(b^{−k})` deficit-decay rate from
+`MULTI-K-RESULT.md` extends one rank.
 
 
 ## Headline
@@ -28,11 +25,10 @@ one rank.**
 | 10 | −2.420 % | −0.244 % |  9.9× |
 
 `F(d, b)` scales as `~ b^{d-1}` so the predicted spike grows by a
-factor `b ≈ 12` per `d`-step (more precisely `F(5, 10)/F(4, 10) =
-411 111 / 33 111 = 12.4`). Relative gap dropping by ~10× is the
-arithmetic match: **absolute gap in base-`b` digits is roughly
-constant in `d` at fixed `n`**, with the leading order absorbing the
-b-scaling.
+factor `b ≈ 12` per `d`-step (`F(5, 10)/F(4, 10) = 411 111 / 33 111
+= 12.4`). Relative gap dropping by ~10× is the arithmetic match:
+absolute gap in base-`b` digits is roughly constant in `d` at fixed
+`n`, with the leading order absorbing the b-scaling.
 
 
 ## Panel
@@ -59,42 +55,40 @@ Compare absolute base-10 digit gap k=4 → k=5:
 | 6  | −38  | −48.80 | 1.28× |
 | 10 | −72  | −90.34 | 1.25× |
 
-Gap grows 1.21–1.50× per `d`-step, while predicted spike grows 12.4×.
-Sub-leading correction is bounded as `d` increases, consistent with
-the `MULTI-K-RESULT.md` finding that the residual decays as
-`b^{−k}` past `T_k(actual) − 2 L_{k−1} + log_b(b/(b−1))`.
+Gap grows 1.21–1.50× per `d`-step while the predicted spike grows
+12.4×. Sub-leading correction is bounded as `d` increases,
+consistent with `MULTI-K-RESULT.md`'s finding that the residual
+decays as `b^{−k}` past `T_k(actual) − 2 L_{k−1} + log_b(b/(b−1))`.
 
 
 ## What this rules out and what it doesn't
 
-**Rules out.** The "d = 4 coincidence" concern flagged in
-`arguments/MEGA-SPIKE-FOUR-WAYS.md` and in the earlier brief 2
-framing — that the cumulative-digit-gap identity `D_k − C_{k−1}`
-might be a fitted match at one rank and not the actual spike size at
-others. Predicted vs observed at d = 5 for n = 2 is 102 778 vs
-102 766 base-10 digits — gap of 12 digits, vs the 10-digit gap at
-d = 4. The closed form tracks d = 5 spikes within ~10⁻⁴ relative
-error.
+The `k = 4` panel could in principle have been a fitted match at
+one rank only, with the cumulative-digit-gap identity `D_k − C_{k−1}`
+not the actual spike size at other ranks. d=5 rules this out:
+predicted vs observed at `n = 2` is 102 778 vs 102 766 base-10
+digits — gap of 12 digits, vs the 10-digit gap at `k = 4`. The
+closed form tracks d=5 spikes within `~10⁻⁴` relative error.
 
-**Does not surface new structure.** The n-panel at k = 5 reproduces
-the same monotone-in-`n` curve seen at k = 4, with no per-`n`
-classification breakdown that wasn't already present at k = 4. So
-this is a confirmation rank, not an exploration rank.
+The n-panel at `k = 5` reproduces the same monotone-in-`n` curve
+seen at `k = 4`, with no per-`n` classification breakdown that
+wasn't already present at `k = 4`. So this is a confirmation rank,
+not an exploration rank.
 
-**Does not address.** The `O(b^{−k})` deficit's per-n coefficient
-`β(n)` from `MULTI-K-RESULT.md` (some `n` share, some don't) — at
-k = 5 we see relative gaps roughly 10⁻⁴, but the panel was not
-designed to extract `β(n)`. That extension is straightforward but
-not pursued here.
+What this does not address:
 
-The off-spike denominator process (`L_{k−1}` structure) is also not
-addressed — same gating issue as `MECHANISTIC-DERIVATION.md` step 3.
+- The `O(b^{−k})` deficit's per-`n` coefficient `β(n)` from
+  `MULTI-K-RESULT.md` (some `n` share, some don't). The panel was
+  not designed to extract `β(n)`; that extension is straightforward
+  but not pursued here.
+- The off-spike denominator process. Same gating issue as step 3
+  of `MECHANISTIC-DERIVATION.md`.
 
 
-## Compute summary
+## Compute
 
-Per-case timings (sage-python, mpmath), at PREC_BITS_LO scaled to
-~3.5× predicted spike size in bits:
+Per-case timings (sage-python, mpmath), with `PREC_BITS_LO` scaled
+to `~3.5×` predicted spike size in bits:
 
 | n  | prec_LO bits | LO time | HI time | total | validated PQs |
 |---:|---:|---:|---:|---:|---:|
@@ -105,37 +99,18 @@ Per-case timings (sage-python, mpmath), at PREC_BITS_LO scaled to
 | 6  |   663 872 |  82 s |  150 s |  3.9 min | 5 763 |
 | 10 |   430 189 |  61 s |  111 s |  2.9 min | 6 827 |
 
-Full panel: ~34 minutes. Memory: peak ~1 GB during n = 2 (mpf
+Full panel: ~34 minutes. Memory: peak ~1 GB during `n = 2` (mpf
 intermediates at 2.4 M-bit HI precision).
 
-The runner (`cf_spikes_d5.py`) uses inline spike identification
-rather than storing the full convergent denominator list — at d = 5
-those grow to 10⁵-decimal-digit bignums and storing 8000 of them
+`cf_spikes_d5.py` uses inline spike identification rather than
+storing the full convergent denominator list — at `d = 5` those
+grow to `10⁵`-decimal-digit bignums and storing 8 000 of them
 would use multi-GB.
 
 
 ## Files
 
-- `../../../experiments/acm-flow/cf/cf_spikes_d5.py`
-  — panel runner.
-- `../../../experiments/acm-flow/cf/cf_d5.csv` —
-  per-cell data.
-- `../../../experiments/acm-flow/cf/cf_d5_summary.txt`
-  — same data, table form.
-- `../../../experiments/acm-flow/cf/cf_d5_run.log` —
-  per-case timings and diagnostics.
-
-(Compute artifacts live in `cf/`; analysis lives here.)
-
-
-## Provenance
-
-Closed form: `MEGA-SPIKE.md` lines 41–49. Multi-k extension at
-b = 10 across `k ∈ {2, 3, 4}`: `MULTI-K-RESULT.md`. The four-ways
-framing of the formula's open content:
-`arguments/MEGA-SPIKE-FOUR-WAYS.md`. The empirical work for this
-d = 5 push was originally done under a parallel framing in
-`experiments/acm-flow/cf/SPIKE-D5-RESULT.md`
-(now superseded; see status preamble there).
-
-**This is the canonical home for the d = 5 confirmation.**
+- `cf_spikes_d5.py` — panel runner.
+- `cf_d5.csv` — per-cell data.
+- `cf_d5_summary.txt` — same data, table form.
+- `cf_d5_run.log` — per-case timings and diagnostics.

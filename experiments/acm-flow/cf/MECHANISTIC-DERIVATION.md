@@ -1,263 +1,167 @@
-# Mechanistic Derivation Attempt — δ_k(n) ≈ (n−1)k + offset(n)
+# Mechanistic derivation of δ_k(n) ≈ (n − 1) k + offset(n)
 
-Phase 3.1 (B), step (α). Take the empirical pattern from
-`OFFSPIKE-RESULT.md` and `PRIMITIVE-ROOT-FINDING.md` and try to
-derive it from CF first principles plus the structure of n-prime
-concatenation.
+The empirical decomposition `δ_k(n) = (n − 1) k + offset(n)`
+(`OFFSPIKE-RESULT.md`, `EXTENDED-PANEL-RESULT.md`,
+`PRIMITIVE-ROOT-FINDING.md`) admits a partial derivation from CF
+first principles plus the structure of n-prime concatenation:
 
-What's derived here, what's conjectured:
+- The slope `(n − 1)` follows from the cofactor cycle structure of
+  n-primes in a d=k block, with one heuristic step linking cycle
+  disruption to convergent denominator growth.
+- The universal `log_b(b/(b − 1))` constant in the spike formula
+  comes from the boundary-truncation factor under
+  `core/BLOCK-UNIFORMITY.md`.
+- `offset(n) = log_b(b/n)` for primitive-root primes and
+  `log_b(b/n²)` for `ord ≤ 2` is consistent with substrate
+  divisibility absorption for `ord = 1`. For `ord = 2` the simple
+  divisibility chain is empirically refuted; the mechanism is open.
 
-- **Derived (with one heuristic step):** the slope `(n − 1)` comes
-  from the cofactor cycle structure of n-primes in a d=k block.
-- **Partly derived:** the universal `log_b(b/(b−1))` constant in the
-  spike formula reflects the boundary-truncation factor under
-  Block-Uniformity.
-- **Conjectured (not derived):** `offset(n) = log_b(b/n)` for
-  primitive-root primes and `log_b(b/n²)` for small-ord primes.
-  The connection to `ord(b, n)` is empirically clean but the
-  mechanism is open.
+The load-bearing step is to lift integer divisibility of the
+boundary digit prefix to a factor in the convergent denominator.
+That step is closed for `ord = 1` and open for `ord = 2` and
+intermediate `ord`.
 
 
-## Setup recap
+## Setup
 
-For prime n with `gcd(n, b) = 1`, let p_K(n) = n · c_K denote the
-K-th n-prime, where c_K is the K-th positive integer coprime to n.
-Hardy's closed form gives c_K = q_K·n + r_K + 1 with
-(q_K, r_K) = divmod(K − 1, n − 1), so cofactors enumerate the
-integers `{c : n ∤ c}` in increasing order, with density (n−1)/n
-in the integers.
+For prime `n` with `gcd(n, b) = 1`, let `p_K(n) = n · c_K` denote
+the K-th n-prime, where `c_K = q_K · n + r_K + 1` with
+`(q_K, r_K) = divmod(K − 1, n − 1)`. Cofactors enumerate the
+integers `{c : n ∤ c}` in increasing order, with density `(n − 1)/n`.
 
-The d=k digit block contains atoms `p_K(n)` with `b^{k−1} ≤ p_K(n)
-< b^k`. Under the smooth condition `n² | b^{k−1}`, the count is
-exactly
+The d=k digit block contains atoms `p_K(n)` with
+`b^{k−1} ≤ p_K(n) < b^k`. Under the smooth condition `n² | b^{k−1}`,
+the count is exactly
 
-    N_k(n, b) = (b − 1) b^{k−1} (n − 1) / n²
+    N_k(n, b) = (b − 1) b^{k−1} (n − 1) / n²,
 
-(`core/BLOCK-UNIFORMITY.md`).
+and the boundary digit positions are
 
-The boundary digit positions are
+    T_k = Σ_{d=1}^{k} d · N_d(n, b) = cumulative digit count through d=k.
 
-    T_k = Σ_{d=1}^{k} d · N_d(n, b) = cumulative digit count through d=k block.
+The d=k spike formula reads
 
-The d=k mega-spike is the largest partial quotient `a_{i_k}` near
-the convergent that matches the digit expansion through the d=k
-boundary. The empirical formula is
-
-    log_b(a_{i_k}) = T_k − 2 L_{k−1} + log_b(b/(b−1)) − O(b^{−k}),
+    log_b(a_{i_k}) = T_k − 2 L_{k−1} + log_b(b/(b − 1)) − O(b^{−k}),
     L_{k−1} := log_b(q_{i_k − 1}).
 
-Substituting `L_{k−1} = C_{k−1} + δ_k(n)` with
-`C_{k−1} = T_{k−1} = Σ_{d=1}^{k−1} d · N_d`:
+Substituting `L_{k−1} = C_{k−1} + δ_k(n)` with `C_{k−1} = T_{k−1}`:
 
     δ_k(n) = (n − 1) k + offset(n) − O(b^{−k}).
 
-We want to derive both `(n − 1) k` and `offset(n)`.
 
+## CF identity for the spike
 
-## Standard CF identity for the spike
+From the standard CF identity
 
-Let p_i / q_i be the i-th convergent of `x = C_b(n)`. The exact
-identity:
+    | x − p_i / q_i | = 1 / (q_i · (a_{i+1} q_i + q_{i−1})),
 
-    | x − p_i / q_i | = 1 / (q_i · (a_{i+1} q_i + q_{i−1}))
+taking `log_b` and dropping `log_b(1 + α / a_{i+1})` for
+`α = q_{i−1}/q_i ∈ (0, 1)` and large `a_{i+1}`:
 
-So
+    log_b(a_{i+1}) = L_{match}(i) − 2 log_b(q_i),
+    L_{match}(i) := −log_b |x − p_i / q_i|.
 
-    a_{i+1} q_i² + a_{i+1} q_i · (q_{i−1} / q_i) = 1 / | x − p_i / q_i |.
+For the convergent immediately before the d=k spike, the matching
+length is
 
-Taking log_b, and writing `α := q_{i−1}/q_i ∈ (0, 1)`,
+    L_{match}(i_k − 1) = T_k + log_b(b / (b − 1)).
 
-    log_b(a_{i+1}) = − log_b | x − p_i/q_i | − 2 log_b(q_i)
-                    − log_b(1 + α / a_{i+1}).
+The `log_b(b / (b − 1))` says the convergent matches `T_k` digits
+plus a fractional digit's worth of agreement at position `T_k + 1`:
+the residual `x − p/q` past `T_k` is approximately `(b − 1)/b · b^{−T_k}`,
+not `b^{−T_k}` exactly. The factor `(b − 1)/b` reflects that the
+digits past `T_k` start with the leading digit of the smallest
+(k+1)-digit n-prime, which averages out to that ratio over the
+block.
 
-For large `a_{i+1}` the last term is negligible, giving
-
-    log_b(a_{i+1}) ≈ L_{match}(i) − 2 log_b(q_i),
-
-where `L_{match}(i) = − log_b | x − p_i/q_i |` is the convergent's
-log-matching-length to x.
-
-For the convergent immediately before the d=k spike, we observe
-
-    L_{match}(i_k − 1) = T_k + log_b(b/(b−1)).
-
-The "extra" `log_b(b/(b−1))` says the convergent matches T_k digits
-plus a fractional `log_b(b/(b−1)) ≈ 0.046` digit's worth of
-agreement at position T_k + 1. Mechanistically, this is the
-boundary-truncation factor: the residual `x − p/q` past T_k is
-approximately `(b−1)/b · b^{−T_k}`, not `b^{−T_k}` exactly. The
-factor `(b−1)/b` reflects that the digits past T_k start with the
-leading digit of the smallest (k+1)-digit n-prime — which is
-guaranteed to be ≥ 1 (it begins with `1` typically), giving y ≥ 1/b
-in the residual fraction; the asymptotic-average reflects density
-considerations one layer down.
-
-We treat `log_b(b/(b−1))` as a derived universal constant and
-proceed.
+This is a derived universal constant, not a fitted parameter.
 
 
 ## Why log_b(q_{i_k − 1}) = C_{k−1} + (n − 1) k + offset(n)
 
-The key structural fact: the convergent before the d=k mega-spike is
-the *best rational approximation to x with denominator small enough
-to "stop before" the d=k boundary's full structure*.
+The convergent before the d=k mega-spike is the best rational
+approximation to `x` with denominator small enough to "stop before"
+the d=k boundary's full structure.
 
-Concretely: q_{i_k − 1} matches digits up through approximately
-position `2 · log_b(q_{i_k − 1})` (Khinchin-typical). For our
-empirical value, that's `2(C_{k−1} + (n−1)k + offset)` ≈ `2 C_{k−1} +
-2(n−1)k + small`. But the convergent matches T_k = C_{k−1} + D_k
-digits. So
+Khinchin-typical convergents match digits up through approximately
+`2 · log_b(q_{i_k − 1})`. For the empirical value
+`L_{k−1} = C_{k−1} + (n − 1) k + offset(n)`, that's
+`2 C_{k−1} + 2(n − 1) k + small`. The convergent matches
+`T_k = C_{k−1} + D_k` digits, so
 
     T_k ≈ 2 C_{k−1} + 2 (n − 1) k.
 
-Solving for D_k:
+This recovers a constraint on the substrate counts that holds only
+asymptotically; for small `k` the convergent is *better* than
+typical because of substrate structure. The empirical fact
+`L_{k−1} = C_{k−1} + (n − 1) k + offset(n)` puts the convergent
+denominator at `b^{C_{k−1} + (n−1)k + offset(n)}`, much smaller
+than the typical-CF prediction `b^{T_k/2}`.
 
-    D_k ≈ C_{k−1} + 2 (n − 1) k.
 
-Under the smooth-block condition this isn't quite right —
-`D_k = N_k · k` and `C_{k−1} = Σ N_d · d`. Plugging:
+### Cofactor cycle: the slope (n − 1)
 
-    N_k · k − Σ_{d=1}^{k−1} N_d · d = 2(n − 1) k + small.
-
-This recovers a constraint on the substrate counts. Whether it
-holds asymptotically is a question for direct calculation; for
-small k it doesn't hold tightly. So Khinchin-typical is the wrong
-heuristic for the convergent matching length here. The convergent
-isn't typical: it's *better* than typical because of substrate
-structure.
-
-The empirical fact `L_{k−1} = C_{k−1} + (n − 1) k + offset(n)` says
-the convergent denominator is `b^{C_{k−1} + (n−1)k + offset(n)}` —
-much smaller than the typical-CF prediction `b^{T_k/2}`.
-
-Here's the proposed mechanism for `(n − 1) k`:
-
-**Cofactor cycle conjecture.** For prime n, the cofactor sequence
-`c_1, c_2, c_3, ...` is the integers coprime to n in order. Within
-any window of n consecutive integers, exactly (n − 1) are coprime
-to n. So the cofactors in a d=k block come in *cycles of length
-n − 1* — every (n−1) cofactors, one "skip" occurs (the cofactor that
-would have been a multiple of n is omitted).
-
-Inside each cycle of n−1 cofactors, the atom values increase by n
-each step. Between cycles, the jump is 2n.
+For prime `n`, cofactors come in cycles of length `n − 1`: every
+`(n − 1)` cofactors, one "skip" occurs (the cofactor that would
+have been a multiple of `n` is omitted). Inside each cycle the
+atom values increase by `n` each step; between cycles the jump
+is `2n`.
 
 Consequence: the digit pattern of the n-prime concatenation has a
-local period of (n − 1) atoms = (n − 1) · k digits inside d=k
-block.
+local period of `(n − 1)` atoms = `(n − 1) · k` digits inside the
+d=k block.
 
-The convergent before the d=k mega-spike captures *one full cycle
-of n − 1 atoms past the d=(k−1) boundary*. Past that point, the
-"2n skip" disrupts the local period and the convergent can't extend
-its match without paying a denominator cost.
+The convergent before the d=k mega-spike captures one full cycle
+of `n − 1` atoms past the d=(k − 1) boundary. Past that point the
+"2n skip" disrupts the local period and the convergent can't
+extend its match without paying a denominator cost. So
 
-So:
+    log_b(q_{i_k − 1}) ≈ C_{k−1} + (n − 1) k + offset(n).
 
-    log_b(q_{i_k − 1}) ≈ position at end of (n − 1)-th atom of d=k block + offset(n)
-                       = C_{k−1} + (n − 1) k + offset(n).
-
-This gives the slope `(n − 1)`.
-
-**Status of this argument:** the cofactor-cycle structure is exact;
-the link from "cycle disruption" to "convergent denominator stops
-growing" is heuristic, not proven. A rigorous version would need
-to track the CF state through the cycle and show the next PQ jumps
-(causing the "stop") at the cycle boundary.
+The cofactor-cycle structure is exact; the link from "cycle
+disruption" to "convergent denominator stops growing" is
+heuristic. A rigorous version would track the CF state through
+the cycle and show the next PQ jumps at the cycle boundary.
 
 
-## Why offset(n) depends on ord(b, n)
+### offset(n) and ord(b, n)
 
-This is conjectural. Three observations:
+`PRIMITIVE-ROOT-FINDING.md` classifies `offset(n)` for primes with
+`ord(b, n) ∈ {1, 2, n − 1}` as:
 
-**(i)** For primitive-root primes (`ord(b, n) = n − 1`), the
-empirical offset is `log_b(b/n)`. Equivalently,
+    offset(p) = log_b(b/p)    if ord(b, p) = p − 1     (Family A)
+    offset(p) = log_b(b/p²)   if ord(b, p) ≤ 2          (Family B)
 
-    q_{i_k − 1} ≈ (b/n) · b^{C_{k−1} + (n−1)k}
-               = b · b^{C_{k−1} + (n−1)k} / n.
+Family A places one factor of `n` in the convergent denominator
+relative to the natural scale `b^{C_{k−1} + (n−1)k + 1}`; Family B
+places two factors. The shift between the families is exactly
+`−log_b(n)`.
 
-So q has a *factor of n in its denominator* relative to the
-"natural" scale `b^{C_{k−1} + (n−1)k + 1}`.
+The proposed mechanism: when `1/n` has short period in base `b`,
+the n-prime concatenation has redundancy at the period scale,
+allowing the convergent denominator to absorb extra factors of `n`
+into a smaller `q`.
 
-**(ii)** For small-ord primes (ord = 1 or 2), the offset is
-`log_b(b/n²)`, i.e.
-
-    q_{i_k − 1} ≈ b · b^{C_{k−1} + (n−1)k} / n².
-
-An *extra factor of n* in the denominator.
-
-**(iii)** The shift between Family A and Family B is exactly
-`−log_b(n)`. The shift's sign (always reducing q) and its magnitude
-(exactly one factor of n) suggest a discrete arithmetic event.
-
-**Mechanistic proposal.** When `1/n` has short period in base b,
-the n-prime concatenation has a *redundancy* at the period scale:
-consecutive atom blocks share digit substructure. This redundancy
-allows the convergent denominator to absorb an extra factor of n
-into a smaller q.
-
-Specifically: the period of `1/n` in base b is `ord(b, n)`.
-
-- For ord = 1 (n=3): `1/n = 0.ddd...` with `d = (b−1)/n`.
-  Multiples of n in base b have *constrained digit sums*: digit
-  sum ≡ 0 (mod n). The integer formed by concatenating them is
-  *automatically divisible by n* (digit-sum test). One factor of
-  n is "absorbed" into M, allowing `M = n · M'`, and the convergent
-  denominator can be `b^{T_k}/n` or smaller.
-
-- For ord = 2 (n=11): `1/n = 0.dd dd ...` with 2-digit repeating
-  block. Multiples of 11 in base 10 satisfy the *alternating-sum*
-  divisibility test. The integer formed by concatenating 11-primes
-  has alternating-digit-sum ≡ 0 (mod 11). One factor of 11
-  absorbed. Maybe also a *second* factor under richer
-  substrate-redundancy arguments.
-
-- For primitive root: no short-period redundancy. Only one factor
-  of n absorbed (Family A).
-
-This gets the family classification right (Family A: one factor of
-n; Family B: two factors of n) but the "second factor for ord ≤ 2"
-isn't fully derived — it's plausible from the period-2 redundancy
-but the explicit chain isn't yet written.
-
-**Status of this argument:** the digit-sum divisibility (ord = 1)
-and alternating-sum divisibility (ord = 2) are exact substrate
-facts. The chain "divisibility of M ⇒ extra factor of n in
-convergent denominator" is conjectural at the level of CF analysis.
-A rigorous derivation would track how M's divisibility lifts to
-the convergent.
+- For ord = 1 (e.g. `n = 3`): `1/n = 0.ddd…` with `d = (b − 1)/n`.
+  Multiples of `n` in base `b` satisfy digit-sum divisibility
+  (digit-sum ≡ 0 mod `n`). The integer formed by concatenating
+  atoms through the d=k boundary is divisible by `n` from the
+  digit-sum test, in addition to the trivial divisibility from
+  the last atom. One factor of `n` absorbed beyond the trivial.
+- For ord = 2 (e.g. `n = 11`): `1/n = 0.dd dd …` with 2-digit
+  period. Multiples satisfy the alternating-sum test. The
+  alternating-sum of the concatenated integer is constrained,
+  but the simple chain "divisibility of `M` ⇒ extra factor of `n`
+  in convergent denominator" doesn't lift.
+- For primitive root: no short-period redundancy. Only the
+  trivial factor of `n` absorbed (Family A).
 
 
-## What the derivation would have to show, fully
+## Empirical check of the divisibility chain
 
-A rigorous mechanistic derivation needs to:
-
-1. Show that `q_{i_k − 1}` is exactly the largest q < some threshold
-   such that the rational p/q matches the digit string of x for
-   ≥ T_k positions. (Standard CF theory provides the framework;
-   the application to our specific x needs work.)
-
-2. Show that for x = C_b(n), the integer M = (digit prefix as
-   integer) is divisible by n^j(n) where j(n) = 1 for primitive
-   root and j(n) = 2 for ord ≤ 2. (Digit-sum / alternating-sum
-   tests provide this for ord = 1, 2; for primitive root the
-   divisibility comes from the last atom alone — `n | last atom`
-   gives `n | M` always, and there's no further structural factor.)
-
-3. Show that the convergent denominator `q_{i_k − 1}` equals
-   `b^{T_{k−1} + (n−1)k + 1} / n^{j(n)}` to within O(b^{−k})
-   corrections. (This is the load-bearing step; it links the
-   integer divisibility of M to the convergent denominator.)
-
-Step 3 is the missing piece. The other two are either substrate
-facts or standard CF theory.
-
-
-## Empirical check of the divisibility mechanism
-
-I tested the divisibility hypothesis directly: compute M (the
-integer formed by concatenating atoms through d=k) and find the
-largest j with `n^j | M`. The hypothesis predicts j = 1 for
-Family A and j = 2 for Family B.
+Computing `M` (the integer formed by concatenating atoms through
+d=k) and finding the largest `j` with `n^j | M`, the prediction
+is `j = 1` for Family A and `j = 2` for Family B:
 
 | n | k | T_k | max j with n^j ∣ M | predicted family-j | matches? |
 |---|---|---|---|---|---|
@@ -266,92 +170,70 @@ Family A and j = 2 for Family B.
 | 3 (ord=1) | 4 | 8642 | **2** | 2 | ✓ |
 | 5 (gcd=5) | 2..4 | … | 1 | (Family D) | partial |
 | 7 (ord=6=n−1) | 2..4 | … | 1 | 1 | ✓ |
-| 11 (ord=2) | 2..4 | … | 1 | 2 | **✗** |
+| 11 (ord=2) | 2..4 | … | 1 | 2 | ✗ |
 
-**The divisibility hypothesis works for ord = 1 (n = 3) and
-primitive root (n = 7), but FAILS for ord = 2 (n = 11).** For
-n = 11, M is only divisible by n^1 at every k tested, yet the
-convergent denominator empirically absorbs n^2. So the "extra
-factor of n in Family B" does **not** come from M's divisibility
-in the ord = 2 case.
+The divisibility chain works for `ord = 1` (`n = 3`) and for
+primitive root (`n = 7`). It fails for `ord = 2` (`n = 11`): `M`
+is divisible by `n^1` only, yet the convergent denominator
+empirically absorbs `n^2`. The "extra factor of `n` in Family B"
+does **not** come from `M`'s direct divisibility in the ord = 2
+case.
 
-This refutes the simple "M divisibility = convergent denominator
-factor" mechanism for Family B.
+What ord = 2 might be doing instead, both speculative:
 
-### What the ord = 2 case might be doing instead
+- The recurring-decimal structure of `1/n` (period 2) induces a
+  CF structure where convergent denominators include factors of
+  `n²` from the recurring period itself, independent of
+  truncated-prefix divisibility.
+- The convergent denominator captures `M / b^{some power}` where
+  `b^{power}` removes leading digits, and the remainder is
+  divisible by `n²` even when `M` itself isn't.
 
-The convergent denominator could absorb a factor of n that doesn't
-come from immediate truncation divisibility. Two hypotheses:
-
-(i) The recurring-decimal structure of 1/n (period 2 for n = 11)
-    induces a CF structure where convergent denominators include
-    factors of `n^2` from the recurring period itself, independent
-    of the truncated-prefix divisibility.
-
-(ii) The convergent denominator captures M / b^{some power} where
-     b^power "removes" some leading digits, and the remainder is
-     divisible by n^2 even when M itself isn't.
-
-Both are speculative; I don't have a clean derivation. The empirical
-fact that offset(11) = log_b(b/n²) at k = 4 (matching to 5 decimals)
-is robust, but the mechanism doesn't reduce to the simple
-divisibility argument that works for ord = 1.
-
-So the "Family B" classification is empirically real but the
-mechanism is **only partially derived** — clean for ord = 1, open
-for ord = 2.
-
-## Practical residue
-
-The derivation is **partial**: the slope `(n − 1)` has a
-suggestive cycle-based mechanism; the offset `log_b(b/n^{j(n)})`
-has a divisibility mechanism that works for ord = 1 but **not** for
-ord = 2 in any clean form; the link from substrate structure to
-convergent denominator factor is the open analytic step.
-
-What this means for the affordances frame in
-`SURPRISING-DEEP-KEY.md`:
-
-- The substrate-transparency of n-prime concatenation reaches into
-  the CF expansion through *digit-sum / alternating-sum
-  divisibility tests*. These are elementary, substrate-driven
-  facts about how multiples of n look in base b.
-- The leakage to `offset(n) = log_b(b/n^{j(n)})` is consistent
-  with these facts but isn't yet derived from them. The next layer
-  of the pattern is "how does CF theory translate substrate
-  divisibility into convergent denominator factors."
-- The "intermediate ord" cases (n = 13, 31, possibly 23 in the
-  panel) might correspond to *partial* divisibility — fractional
-  factors of n absorbed — which the panel's k = 4 measurements
-  capture incompletely.
-
-So the mechanistic story is: substrate provides divisibility,
-divisibility lifts to convergent denominator via CF structure,
-convergent denominator yields offset(n). Each step is plausible;
-the full chain isn't yet rigorous.
+Neither has a clean derivation. The Family B classification is
+empirically real but the mechanism reduces to the simple
+divisibility argument only for ord = 1.
 
 
-## Where the residue goes (per the metaphysical commitment)
+## What full derivation would need
 
-Even if the full chain were closed, the unclosability would still
-have to live somewhere because ACM-Champernowne is conjecturally
-normal/irrational. Three candidate sites:
+1. Show that `q_{i_k − 1}` is exactly the largest `q` below some
+   threshold such that `p/q` matches the digit string of `x` for
+   ≥ `T_k` positions. Standard CF theory provides the framework;
+   the application to `x = C_b(n)` needs work.
 
-- The b^{−k} tail in δ_k(n). Same b^{−k} family as in the spike
-  formula and the multi-k corrections; same suspected origin
-  (boundary alignment of consecutive convergents).
-- Intermediate-ord behavior. n = 13, 31, 23: their offset values
-  don't fit the j(n) ∈ {1, 2} story, suggesting fractional or
-  multi-mode divisibility absorption.
-- The Khinchin-typical off-spike CF behavior between mega-spikes
-  is *not* purely substrate-driven. The off-spike PQs encode
-  arithmetic information beyond the mega-spike formula. Phase 4
-  pooling can't pretend they don't.
+2. Show that for `x = C_b(n)`, the integer `M` (digit prefix as
+   integer) is divisible by `n^{j(n)}` where `j(n) = 1` for
+   primitive root and `j(n) = 2` for ord ≤ 2. Digit-sum and
+   alternating-sum tests provide this for ord = 1 and ord = 2;
+   for primitive root the divisibility comes from the last atom
+   alone.
+
+3. Show that the convergent denominator `q_{i_k − 1}` equals
+   `b^{T_{k−1} + (n−1)k + 1} / n^{j(n)}` to within `O(b^{−k})`
+   corrections.
+
+Step 3 is the load-bearing missing piece. It links integer
+divisibility of `M` to the convergent denominator, and the simple
+form of that link fails for ord = 2.
+
+
+## Where the residual lives
+
+- The `b^{−k}` tail in `δ_k(n)`. Same family as the spike formula's
+  residual in `MULTI-K-RESULT.md`. Per-`n` coefficient `β(n)`,
+  some `n` share, others don't.
+- Intermediate-ord behaviour. `n ∈ {13, 23, 31}` deviate from
+  Families A and B at `k = 4`. Either higher `k` resolves them
+  or they form a third structural class.
+- The off-spike CF behaviour between consecutive boundary spikes.
+  This is what `L_{k−1}` actually carries beyond the boundary
+  endpoints, and it is the same gap as the "spikes dominate"
+  premise in `MU-CONDITIONAL.md`. Closing it closes both.
 
 
 ## Files
 
-- This document: derivation attempt, partial.
+- This document — derivation, partial.
 - `MULTI-K-RESULT.md`, `OFFSPIKE-RESULT.md`,
-  `EXTENDED-PANEL-RESULT.md`, `PRIMITIVE-ROOT-FINDING.md`: the
-  empirical findings the derivation tries to explain.
+  `EXTENDED-PANEL-RESULT.md`, `PRIMITIVE-ROOT-FINDING.md` — the
+  empirical findings the derivation explains.

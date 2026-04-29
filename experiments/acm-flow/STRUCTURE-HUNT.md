@@ -171,15 +171,11 @@ Hardy Echo is the validation layer.
 
 ### 3.1 — CF Spike Derivation
 
-`experiments/acm-flow/cf/SPIKE-HUNT.md` reports
-
-    (b-1)^2 · b^(k-2) · (n-1) · k / n².
-
-`cf/brief2_q_derivation.md` gives the first derivation pass.
-The exact part is radix-block geometry: smooth k-blocks contribute
-`D_k`, preceding blocks contribute `C_{k-1}`, and the naive spike
-height is `D_k - C_{k-1}`. This recovers the `(n-1)/n²` density and
-the block-length factor.
+`experiments/acm-flow/cf/MEGA-SPIKE.md` gives the closed-form
+spike scale and derivation. The exact part is radix-block geometry:
+smooth k-blocks contribute `D_k`, preceding blocks contribute
+`C_{k-1}`, and the naive spike height is `D_k - C_{k-1}`. This
+recovers the `(n-1)/n²` density and the block-length factor.
 
 The d=4 residual then explains why the earlier six-point scaling
 drifts. The better CF-scale form is
@@ -361,8 +357,7 @@ fitting.
 | `q_n_verify.py` | exact row-wise formula check | 2.2 |
 | `payload_q_scan.py` | Q scan and held-out scans | 2.2, 5 |
 | `hardy_composite_q.py` | deep product Q witnesses | 2.4 |
-| `cf/MEGA-SPIKE.md` | Phase 3.1 tracker and pre-run prediction | 3.1 |
-| `cf/brief2_q_derivation.md` | boundary law plus denominator-inflation residual | 3.1 |
+| `cf/MEGA-SPIKE.md` | master derivation; closed-form spike scale + CF correction | 3.1 |
 | `cf/spike_drift_table.py` | reproducible d=4 residual table | 3.1 |
 | `hardy_block_spikes.py` | large-d block-count / spike neighborhood checks | 3.2, 3.3 |
 | `hardy_tail_destroyers.py` | matched deep-window visual destroyers | 3.4 |

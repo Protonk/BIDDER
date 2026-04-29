@@ -1,208 +1,243 @@
-# Mega-Spike Experiment
+# Boundary-spike size for ACM-Champernowne reals
 
-This tracks the Phase 3.1 attempt to explain the base-10 continued-
-fraction mega-spikes of ACM-Champernowne numbers.
+The base-`b` ACM-Champernowne real for prime `n ≥ 2` with
+`gcd(n, b) = 1` is
 
-The target is not another fit. The target is a mechanism. We want to
-know why the largest partial quotient near the k-digit block boundary
-has approximately
+    x = C_b(n) = 0 . p_1(n) p_2(n) p_3(n) …
 
-    (b-1)^2 * b^(k-2) * (n-1) * k / n^2
+where `p_K(n) = n · c_K`, `c_K = q_K n + r_K + 1`,
+`(q_K, r_K) = divmod(K-1, n-1)`. The K-th n-prime in ascending
+order is the K-th positive integer coprime to `n`, scaled by `n`.
 
-digits, and why the scaled column in `SPIKE-HUNT.md` is close but not
-constant.
+The continued-fraction expansion of `x` carries large partial
+quotients near each radix-block boundary. This document derives
+the closed form for the largest of these, the d=k boundary spike,
+and locates the residual content in the off-spike denominator
+process.
 
 
-## Prediction Before The Run
+## The master statement
 
-The mega-spike is driven primarily by deterministic radix-block
-boundary geometry, with the n-dependence supplied by the exact n-prime
-density `(n-1)/n^2`. It is not primarily driven by the sign pattern of
-`Q_n`; `Q_n` supplies the local finite-rank algebra, but the spike is
-what happens when that local stream is concatenated and then truncated
-at a typographic block boundary.
+For prime `n` with `gcd(n,b) = 1` and the smooth-block condition
+`n^2 | b^{k-1}`, the d=k boundary spike satisfies
 
-For a smooth block, `n^2 | b^(k-1)`, the count of k-digit n-primes is
+    log_b(a_{i_k}) = T_k − 2 L_{k−1} + log_b(b/(b−1)) − O(b^{−k}),
 
-    N_k(n,b) = (b-1) * b^(k-1) * (n-1) / n^2.
+where:
 
-The k-digit block contributes
+- `a_{i_k}` is the partial quotient at the boundary index `i_k`;
+- `T_k = Σ_{d=1}^{k} d · N_d(n,b)` is the cumulative digit count
+  through the d=k atom block, with
+  `N_d(n,b) = (b−1) b^{d−1} (n−1)/n²` (smooth-block n-prime count
+  from `core/BLOCK-UNIFORMITY.md`);
+- `L_{k−1} := log_b(q_{i_k − 1})` is the log denominator of the
+  convergent immediately before the boundary;
+- `log_b(b/(b−1))` is the universal boundary-truncation factor.
 
-    D_k(n,b) = k * N_k(n,b)
+The two derivable terms (`T_k` and the truncation factor) come
+from substrate density and a single CF identity. The third term
+`L_{k−1}` is what the off-spike CF process delivers up to the
+boundary; its leading-order decomposition is empirical and
+documented in `OFFSPIKE-RESULT.md`.
 
-digits. The preceding blocks contribute
 
-    C_{k-1}(n,b)
-      = (n-1)/n^2 * (b-1) * sum_{d=1}^{k-1} d*b^(d-1).
+## Block algebra
 
-My prediction is that the mega-spike digit count is controlled by the
-new block mass minus the cumulative old mass:
+`core/BLOCK-UNIFORMITY.md` gives the smooth-block n-prime count
 
-    S_k(n,b) ~= D_k(n,b) - C_{k-1}(n,b).
+    N_d(n, b) = (b − 1) b^{d−1} (n − 1) / n²
 
-Equivalently,
+so the d=k atom block contributes
 
-    S_k(n,b) ~=
-      (n-1)/n^2 *
-      ( b^(k-1) * (k*(b-2) + b/(b-1)) - 1/(b-1) ).
+    D_k(n, b) = k · N_k(n, b)
 
-For base 10 this is
+digits to the concatenated real, and the preceding blocks contribute
 
-    S_k(n,10) ~=
-      (n-1)/n^2 * ( 10^(k-1) * (8k + 10/9) - 1/9 ).
+    C_{k−1}(n, b) = (b − 1)(n − 1)/n² · Σ_{d=1}^{k−1} d · b^{d−1}.
 
-So the earlier scout
+Using
 
-    (b-1)^2 * b^(k-2) * (n-1) * k / n^2
+    Σ_{d=1}^{k−1} d · b^{d−1} = ((k − 1) b^k − k b^{k−1} + 1) / (b − 1)²,
 
-is expected to be a good finite-k leading term, but not the exact
-shape. The observed monotone drift in the scaled column should shrink
-after comparing against the refined `D_k - C_{k-1}` prediction. If it
-does not, the missing term is not just block mass.
+the closed-form digit-mass increment is
 
+    S_k(n, b) := D_k − C_{k−1}
+              = (n − 1)/n² · (b^{k−1} (k(b − 2) + b/(b − 1)) − 1/(b − 1)).
 
-## Working Hypothesis: Two Low-Complexity Processes
+For base 10, `S_k(n, 10) = (n − 1)/n² · (10^{k−1}(8k + 10/9) − 1/9)`.
+At `k = 4` this is `33 111 · (n − 1)/n²`.
 
-There is a second reason the mega-spike matters.
+`S_k` is the substrate-transparent piece. Everything in it — the
+density `(n−1)/n²`, the cumulative digit count, the `(b − 2)/(b − 1)`
+prefactor structure — is closed-form in `(n, b, k)`. The cross-base
+panel in `CROSS-BASE-RESULT.md` confirms the prefactor structure
+across `b ∈ {3, 4, 6, 8, 10, 12}` to within the sub-leading
+correction.
 
-The continued-fraction spectrum may be a merge of two separately
-low-complexity event streams:
 
-    off-spike background;
-    boundary-spike subsequence.
+## The CF correction
 
-The off-spike background, after removing boundary events, appears
-close to rational or finite-recurrence behaviour in its own
-coordinates. The spike subsequence also appears structured: its
-locations and sizes are governed by block counts, cumulative digit
-mass, and boundary placement. The full continued-fraction sequence
-stops looking rational-like when these two event streams are
-interleaved at the actual ACM-Champernowne boundary schedule.
+Let `p_i / q_i` be the i-th convergent of `x`. The standard CF
+identity is
 
-This is not an additive decomposition of the real. Continued fractions
-are too nonlinear for that. The defensible claim is weaker and more
-testable:
+    | x − p_i / q_i | = 1 / (q_i · (a_{i+1} q_i + q_{i−1})).
 
-    CF spectrum =
-        structured background
-      + structured boundary-event schedule
-      + nonlinear interaction from interleaving.
+Taking `log_b` and dropping the `log_b(1 + α / a_{i+1})` term where
+`α = q_{i−1}/q_i ∈ (0, 1)`, valid for large `a_{i+1}`:
 
-If true, the source of apparent complexity is not that either component
-is individually wild. It is the coupling between a low-complexity
-background process and a low-complexity spike process at nontrivial
-block positions.
+    log_b(a_{i+1}) ≈ L_{match}(i) − 2 log_b(q_i),
 
+with `L_{match}(i) := −log_b |x − p_i / q_i|` the convergent's
+log-matching length to `x`.
 
-## What I Think The Residual Is
+For the convergent `p_{i_k − 1} / q_{i_k − 1}` immediately before
+the d=k boundary, the matching length is
 
-After the refined boundary-mass correction, I expect the remaining
-residual to be mostly entry-boundary arithmetic:
+    L_{match}(i_k − 1) = T_k + log_b(b/(b − 1)).
 
-- trailing radix zeros for cases such as `n = 10`;
-- non-smooth block effects when `n^2` does not divide `b^(k-1)`;
-- lower-block contamination of the preceding convergent denominator;
-- finite-precision CF validation limits.
+The `log_b(b/(b − 1))` says the convergent matches `T_k` digits
+plus a fractional digit's worth of agreement at position `T_k + 1`:
+the residual `x − p/q` past `T_k` is approximately `(b−1)/b · b^{−T_k}`,
+not `b^{−T_k}` exactly. The factor `(b−1)/b` reflects that the
+digits past `T_k` start with the leading digit of the smallest
+(k+1)-digit n-prime, which is bounded below by 1 and averages out
+to that ratio over the block.
 
-I do **not** expect the residual to require a new local arithmetic
-coordinate beyond finite-rank `Q_n`. If a new coordinate appears, it
-should be a global concatenation coordinate: where the digit-position
-oracle lands relative to entry boundaries, not another term in the
-local Q expansion.
+Substituting and writing `L_{k−1} := log_b(q_{i_k − 1})`:
 
+    log_b(a_{i_k}) ≈ T_k − 2 L_{k−1} + log_b(b/(b − 1)).
 
-## Checks
+
+## The substrate-naive prediction and where it misses
 
-1. **Derivation check.** Derive `D_k - C_{k-1}` cleanly from
-   `core/BLOCK-UNIFORMITY.md`. Mark which steps are exact and which
-   step turns into a CF-size heuristic.
+If one assumed `L_{k−1} ≈ C_{k−1}` (the convergent denominator
+matches the cumulative substrate digit count), the formula collapses
+to
 
-2. **Hardy block-count check.** Use Hardy Mode 3 to verify the smooth
-   block counts at large d for `n in {2,5,10}` without materializing
-   the prefix.
+    log_b(a_{i_k}) ≈ T_k − 2 C_{k−1} + log_b(b/(b−1))
+                  = D_k − C_{k−1} + log_b(b/(b−1))
+                  = S_k + log_b(b/(b−1)).
 
-3. **Digit-position check.** Use Hardy Mode 2 to sample exact stream
-   neighborhoods around predicted block joins. This tests whether the
-   spike is boundary geometry in the concatenated real, not only a
-   count identity.
+This is the "substrate-naive" prediction. It is correct in scaling
+but misses by a per-`n` amount that grows linearly in `k`:
 
-4. **Residual check.** Compare observed spike digit counts against
-   both formulas:
+    L_{k−1} = C_{k−1} + δ_k(n),
+    δ_k(n) = (n − 1) k + offset(n) − O(b^{−k}).
 
-       scout:   (b-1)^2 * b^(k-2) * (n-1) * k / n^2
-       refined: D_k - C_{k-1}
+The difference `−2 δ_k(n) = −2(n−1)k − 2·offset(n) + O(b^{−k})`
+appears as a per-`n` correction that the substrate-naive prediction
+misses. The decomposition `δ_k(n) = (n−1) k + offset(n)` is the
+content of `OFFSPIKE-RESULT.md`. The slope `(n − 1)` reaches its
+asymptote uniformly across the prime panel; the per-`n` constant
+`offset(n)` is classified by `ord(b, n)` in
+`PRIMITIVE-ROOT-FINDING.md`.
 
-   The refined residual should be smaller and less monotone in n.
+The fully closed-form spike size in the asymptotic regime is
 
-5. **Destroyer check.** Once the boundary neighborhood is isolated,
-   entry-shuffle should damage position-side spike structure while
-   preserving per-entry algebraic invariants. If every destroyer leaves
-   the spike intact, we are not looking at boundary order.
+    log_b(a_{i_k}) = D_k − C_{k−1} − 2(n − 1) k − 2 · offset(n)
+                   + log_b(b/(b−1)) − O(b^{−k}).
 
-6. **Two-stream check.** Split the CF sequence into spike indices and
-   off-spike indices. Test each subsequence for finite-recurrence or
-   finite-state compressibility in its own natural coordinates, then
-   test whether the true interleaving schedule is what destroys the
-   rational-like behaviour.
+Verification at `(n, k) = (2, 4)`, `b = 10`: predicted 8267.65,
+observed 8267.6479. The other low-`n` k=4 cases match similarly;
+see `EXTENDED-PANEL-RESULT.md` for the full panel.
 
 
-## Normality Relevance
+## What is exact, what is heuristic
 
-This is connected to normality, but it is not the normality proof.
-Large continued-fraction partial quotients are compatible with normal
-numbers; classical Champernowne is the warning example. The reason this
-matters is that a normality proof for ACM-Champernowne has to separate
-two facts that visually interfere:
+Exact under `n^2 | b^{k−1}`:
 
-    digit blocks are equidistributed after the n-prime sieve;
-    block boundaries create extremely good rational approximants.
+- the smooth-block n-prime count `N_d(n, b)`;
+- the cumulative digit-mass formulas `C_{k−1}, D_k`;
+- the algebraic identity giving `S_k = D_k − C_{k−1}` in closed form.
 
-If the mega-spike is explained by exact block density plus boundary
-truncation, then it is evidence for a controlled boundary artifact,
-not evidence against normality. If the residual demands a new
-arithmetic coordinate, then the normality route has to account for that
-coordinate before any proof attempt is credible.
+Standard CF identity (textbook):
 
+- `|x − p/q| = 1/(q · (a q + q_prev))` and its log form.
 
-## Status
+Heuristic, supported by empirics:
 
-The prediction section above is the pre-run position. The first Phase
-3.1 derivation pass is now recorded in
-`experiments/acm-flow/cf/brief2_q_derivation.md`.
+- the boundary convergent achieves matching length
+  `L_{match} = T_k + log_b(b/(b−1))`. The `+ log_b(b/(b−1))` part
+  is the leading-digit averaging argument, which gives the right
+  asymptotic value but leaves an `O(b^{−k})` residual;
+- the boundary convergent's denominator scale is `L_{k−1}`, not
+  `T_k/2`. The convergent is *better than Khinchin-typical* because
+  of substrate structure; see `MECHANISTIC-DERIVATION.md` for the
+  partial proof and the open analytic step.
 
-That pass keeps the block-density prediction but sharpens the residual:
-the refined `D_k - C_{k-1}` law explains the scale, while the monotone
-drift is almost exactly the CF denominator correction
+Confirmed empirically across the panel:
 
-    -2 * (log_b(q_before) - C_{k-1}).
+- multi-`k` consistency at `b = 10`, `k ∈ {2, 3, 4, 5}`, with
+  residuals decaying as `b^{−k}` (`MULTI-K-RESULT.md`,
+  `D5-RESULT.md`);
+- cross-base consistency at `b ∈ {3, 4, 6, 8, 10, 12}` with the
+  `(b − 2)/(b − 1)` prefactor structure intact (`CROSS-BASE-RESULT.md`);
+- `δ_k(n)` slope `(n − 1)` asymptotically across the prime panel
+  (`OFFSPIKE-RESULT.md`, `EXTENDED-PANEL-RESULT.md`);
+- `offset(n)` family classification by `ord(b, n)` for
+  `ord ∈ {1, 2, n−1}` (`PRIMITIVE-ROOT-FINDING.md`).
 
-So the current working model is
 
-    spike_digits(k,n) ~= T_k(n) - 2*L_{k-1}(n),
+## Where the residual lives
 
-where `T_k` is the boundary digit depth and `L_{k-1}` is the actual
-preceding denominator depth. The next problem is no longer the
-`(n-1)/n^2` factor. It is the off-spike denominator process that
-inflates `q_before`.
+`L_{k−1}` is the load-bearing unmodelled scalar. The closed-form
+piece of it (`C_{k−1} + (n − 1) k + offset(n)`) covers the leading
+order at boundary indices for primes where `ord(b, n) ∈ {1, 2, n−1}`.
+What remains:
 
+- **Off-spike intermediate convergents.** Between consecutive
+  boundary spikes at `i_{k−1}` and `i_k`, the CF runs through many
+  intermediate convergents whose denominators are not modelled.
+  The decomposition `δ_k(n) = (n−1)k + offset(n)` describes only
+  the boundary endpoints.
+- **Intermediate-`ord` primes.** For `n ∈ {13, 23, 31}` with
+  `ord(b, n) ∉ {1, 2, n−1}`, the offset at `k = 4` doesn't fit
+  Family A or B. Either higher `k` resolves them into a third
+  family or they remain transient.
+- **The mechanism for `offset(n)` itself.** The slope `(n − 1)`
+  has a heuristic cofactor-cycle argument; the offset has a
+  divisibility argument that works for `ord = 1` and fails for
+  `ord = 2` (`MECHANISTIC-DERIVATION.md` §"Empirical check of the
+  divisibility mechanism"). The right replacement for ord=2 is open.
+- **The `O(b^{−k})` tail.** Per-`n` coefficient `β(n)` for the
+  geometric decay of the residual; some primes share, some don't
+  (`MULTI-K-RESULT.md`).
 
-## Inputs
+The first item — characterising the off-spike denominator process
+— is the load-bearing open problem. It gates step 3 of
+`MECHANISTIC-DERIVATION.md` and the "spikes dominate" premise
+in `MU-CONDITIONAL.md` simultaneously; closing one closes the other.
 
-Inputs already pinned:
 
-- `core/Q-FORMULAS.md`: local Q formula verified on the Phase 2 panel.
-- `experiments/acm-flow/q_n_verify.py`: 24203 CSV rows, zero
-  mismatches.
-- `experiments/acm-flow/hardy_composite_q.py`: deep composite Q
-  witnesses, zero mismatches.
-- `core/BLOCK-UNIFORMITY.md`: exact smooth-block count and spread
-  bound.
-- `experiments/math/hardy/DEEP-TROUBLE-No-4.md`: deep access, block
-  inverse, digit-position oracle, destroyer taxonomy.
+## Consequences
 
-Current artifact:
+The conditional irrationality measure of `C_b(n)` follows from the
+spike formula by the standard CF identity, under the assumption
+that boundary spikes dominate the approximation budget:
 
-    experiments/acm-flow/cf/brief2_q_derivation.md
-    experiments/acm-flow/cf/spike_drift_table.py
-    experiments/acm-flow/cf/spike_drift_table.csv
-    experiments/acm-flow/cf/spike_drift_summary.txt
+    μ(C_b(n)) = 2 + (b − 1)(b − 2) / b,    independent of n.
+
+Derivation and load-bearing premise in `MU-CONDITIONAL.md`. For
+`b = 10` the conditional value is `9.2`, comparable to but distinct
+from Mahler's classical Champernowne `μ = 10`.
+
+The structural reading of the spike formula — what's grand,
+mundane, beautiful, and contingent in it — is in
+`arguments/MEGA-SPIKE-FOUR-WAYS.md`.
+
+
+## Files
+
+- `spike_drift_table.py` — d = 4 reproducibility script for the
+  spike formula's match against the CF data.
+- `spike_drift_table.csv`, `spike_drift_summary.txt` — output.
+- `spike_drift_multi_k.py` (and CSV / summary) — multi-k panel
+  consumed by `MULTI-K-RESULT.md`.
+- `offspike_inflation.py` (and CSV / summary) — δ_k(n) decomposition
+  consumed by `OFFSPIKE-RESULT.md`.
+- `spike_drift_extended.py` (and CSV / summary) — extended prime
+  panel consumed by `EXTENDED-PANEL-RESULT.md` and
+  `PRIMITIVE-ROOT-FINDING.md`.
+- `cf_spikes.py`, `cf_spikes_extended.py`, `cf_spikes_d5.py` (and
+  outputs) — CF panel runners at b = 10 d ∈ {2,3,4} / cross-base /
+  d = 5.
