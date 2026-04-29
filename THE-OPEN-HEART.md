@@ -29,7 +29,7 @@ Turing machine walking a binary graph with costs metered along
 the paths.
 
 
-## The Inversion
+## The Foothold
 
 `sources/BIDDER-AND-SON.md` documents the elder Bidder delivering
 eight-place mental logarithms in under four minutes by navigating
@@ -206,7 +206,7 @@ Champernowne, π, e — none have proven absolute normality).
 
 ## The Algebra of Error
 
-The substrate is not a tool. The substrate is an algebra. Its
+The substrate is an algebra. Its
 elements are residuals — `offset(n)` indexed by `ord(b, n)`,
 `β(n)` for the `O(b^{−k})` tails, the off-spike denominator
 process between consecutive boundary spikes, the lucky-cancellation
@@ -232,13 +232,6 @@ but does not close. Absolute normality of `C_b(n)` across all
 bases is one such closure question. The catalog of residuals is
 the algebra's record of where it has not finished and what
 finishing would mean.
-
-Naming the object as an algebra rather than as a tool reframes
-the rest. The investigative methodology is not heuristic; it is
-the algebra working from inside. The substrate's value does not
-depend on which closure questions resolve and which remain open.
-The algebra is what we have built; the open questions are what
-the algebra is for.
 
 
 ## The Open Heart
