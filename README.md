@@ -10,7 +10,7 @@ George Bidder's logarithms, which everyone seems to forget about.
 
 ## What this is
 
-For each positive integer n, the multiplicative monoid nZ+ has irreducible elements — n-primes (multiples of n not divisible by n²). Concatenating these into a decimal real produces a signal whose leading-digit distribution is exactly uniform — not approximately uniform, exactly uniform.
+For each positive integer n, the multiplicative monoid nZ+ has irreducible elements — n-primes (multiples of n not divisible by n²). 
 
 The first few n-primes for small `n`:
 

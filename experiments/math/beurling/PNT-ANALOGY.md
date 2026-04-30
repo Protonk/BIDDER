@@ -44,8 +44,11 @@ establish that an asymptotic exists.** For positive Beurling
 Chebyshev measures, residue plus boundary regularity gives the
 asymptotic via Wiener–Ikehara — the proof routes through
 non-negativity of the underlying measure. Here `Λ_{M_n}` is
-signed, so the standard Tauberian closure does not apply
-directly. What replaces it is part of O1 below.
+signed, so the standard Tauberian closure does not apply, and
+no off-the-shelf replacement theorem is currently known. See O1
+for the list of pieces that would have to be supplied; whether
+they suffice — and whether any closing theorem exists for an
+object like `ψ_{M_n}` — is itself open.
 
 ## BQN annotation
 
@@ -132,36 +135,48 @@ E4. **The lowest discrete zero does not predict the residual.**
     For `n = 10`, the lowest found zero `ρ ≈ 0.437 + 28.4i`
     predicts `|x^ρ / ρ| ≈ 29` at `x = 5 × 10⁶`; empirical
     `|ψ - x| ≈ 8.5×10⁵`. Four orders of magnitude apart.
-    Possible explanations include: (a) many higher-`t` zeros
-    summing coherently; (b) the Perron-formula decomposition for
-    non-UF `ζ_{M_n}` differing from the classical case; (c) a
-    continuous boundary-distribution contribution we have not
-    isolated; (d) a finite-range transient masking the eventual
-    asymptotic; or (e) the missing signed Tauberian condition
-    (O1) admitting a regime where no clean zero/residue
-    decomposition applies. Discriminating among these requires
-    denser zero data and longer ψ runs.
+    Several non-exclusive explanations are consistent with this:
+    (a) many higher-`t` zeros summing coherently; (b) the
+    Perron-formula decomposition for non-UF `ζ_{M_n}` differing
+    from the classical case; (c) a continuous boundary-distribution
+    contribution we have not isolated; (d) a finite-range
+    transient; or (e) `ψ_{M_n}` sitting in a regime where no clean
+    zero/residue decomposition applies (consistent with O1's
+    framing). The list is not claimed to be exhaustive. Denser
+    zero data and longer ψ runs would narrow the field but may
+    not single out one mechanism, and other explanations not
+    listed here remain live.
 
 ## What is open
 
-O1. **A signed Tauberian theorem for `ψ_{M_n}`.** Standard
-    Wiener–Ikehara/Debruyne closure of "residue ⇒ asymptotic"
-    needs both:
+O1. **A closing theorem for `ψ_{M_n}` does not currently exist.**
+    The positive-Mangoldt closure of "residue ⇒ asymptotic"
+    routes through:
     *(i) Analytic-side input.* `-ζ'_{M_n}(s)/ζ_{M_n}(s) - 1/(s - 1)`
     has local pseudofunction boundary behaviour on `Re s = 1`.
     Necessary for this is global absence of zeros and other bad
     boundary singularities of `ζ_{M_n}` on the entire line
     `Re s = 1`. The E3 finite-window scan is *weak evidence*
     consistent with this but does not establish it.
-    *(ii) Arithmetic-side input.* `ψ_{M_n}` satisfies a one-sided
-    Tauberian condition — slow decrease, bounded decrease, bounded
-    variation in a transformed variable, or a replacement
-    theorem. For positive Mangoldt this is automatic from
-    `Λ ≥ 0`; for signed `Λ_{M_n}` it is not. The standard
-    Beurling proofs of `ψ ~ ρx` route through positivity to
-    bypass this; here we do not have that route.
-    Without both, the residue calculation identifies a candidate
-    main term but does not yield a proven asymptotic.
+    *(ii) Arithmetic-side input.* The cumulant satisfies a
+    one-sided Tauberian condition — slow decrease, bounded
+    decrease, bounded variation in a transformed variable, or a
+    replacement theorem. For positive Mangoldt this is automatic
+    from `Λ ≥ 0`; for signed `Λ_{M_n}` it is not, and we have no
+    independent reason to expect it.
+    **Even granting both (i) and (ii), no off-the-shelf theorem
+    closes them into a proven asymptotic for signed `Λ_{M_n}`.**
+    The classical Wiener–Ikehara theorem and the Debruyne
+    abstract Tauberian theorems (`BEURLING.md`) are stated for
+    non-negative measures or one-sided Tauberian conditions on
+    the cumulant. A signed analog would have to be proved as new
+    theory. Whether such a theorem exists for objects like
+    `ψ_{M_n}` is an open question; it is also possible that the
+    empirical convergence we observe is a regime the existing
+    Tauberian theory does not describe. The residue calculation
+    identifies a candidate main term, and the empirical evidence
+    supports the conjecture; whether *any* closing theorem applies
+    is not currently known.
 
 O2. **The exact rate of `ψ_{M_n}(x) - x`.** Empirically
     `n`-dependent and at finite `x` larger than `x / log x` (E2);
@@ -212,9 +227,11 @@ A reader who wants to falsify or sharpen the conjecture should:
 The residue calculation **identifies the candidate main term**
 (`+1`, independent of `n`); the asymptotic `ψ_{M_n}(x) ~ x`
 itself remains a **conjecture**, supported empirically for
-`n ∈ {2, 3, 5, 6, 10}` to `x = 5 × 10⁶`. Closure requires a
-signed-Tauberian argument (O1) that we have not supplied. The
-finite-`x` rate of convergence is `n`-dependent and unexplained.
+`n ∈ {2, 3, 5, 6, 10}` to `x = 5 × 10⁶`. Whether any theory
+closes over `ψ_{M_n}` — proving the asymptotic, refuting it, or
+demonstrating that `ψ_{M_n}` sits outside the range of available
+Tauberian techniques — is itself open. The finite-`x` rate of
+convergence is `n`-dependent and unexplained.
 
 ## References
 
