@@ -32,3 +32,4 @@ test_bidder_root_c
 # Local paper/source PDFs
 /sources/*.pdf
 /sources/**/*.pdf
+.claude/scheduled_tasks.lock

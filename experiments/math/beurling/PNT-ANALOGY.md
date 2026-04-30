@@ -20,10 +20,12 @@ The Chebyshev-style cumulant is
 
     ψ_{M_n}(x) ~ x       as x → ∞,    for every n ≥ 2.
 
-The asymptotic rate is `+1` independent of `n`, despite `Q_n`
-being signed and `M_n` not having unique factorisation.
+The conjectured limit `ψ/x → 1` is independent of `n` (a meta-fact
+from the residue calculation; see "Why the candidate rate is +1"
+below), despite `Q_n` being signed and `M_n` not having unique
+factorisation.
 
-## Why the leading rate is `+1`
+## Why the candidate rate is `+1`
 
 `ζ_{M_n}(s) = 1 + n^{-s} ζ(s)` has a simple pole at `s = 1` with
 residue `1/n`. Its Laurent expansion gives
@@ -34,12 +36,16 @@ so
 
     -ζ'_{M_n}(s) / ζ_{M_n}(s) = 1/(s - 1) + (log n - n - γ) + O(s - 1).
 
-Coefficient of `1/(s - 1)` is `+1`, independent of `n`. Under
-Wiener–Ikehara-style hypotheses, the corresponding cumulant
-inherits leading rate `+1`: `ψ_{M_n}(x) ~ x`.
+Coefficient of `1/(s - 1)` is `+1`, independent of `n`.
 
-The Wiener–Ikehara hypothesis itself is not established for
-`M_n`. See "What is open" below.
+What this establishes: the *candidate* main term of any
+asymptotic of the form `ψ_{M_n}(x) ~ rx` is `r = 1`. **It does not
+establish that an asymptotic exists.** For positive Beurling
+Chebyshev measures, residue plus boundary regularity gives the
+asymptotic via Wiener–Ikehara — the proof routes through
+non-negativity of the underlying measure. Here `Λ_{M_n}` is
+signed, so the standard Tauberian closure does not apply
+directly. What replaces it is part of O1 below.
 
 ## BQN annotation
 
@@ -88,41 +94,79 @@ noted:
 | 6    | 0.95433          | -228362           |
 | 10   | 0.83063          | -846825           |
 
-E1. **Convergence to 1.** `ψ/x` is monotonically increasing
-    (after small-x oscillations) for every `n` tested in
-    `{2, 3, 5, 6, 10}`. No plateau apparent through `x = 5 × 10⁶`.
+E1. **Finite-range approach toward 1.** `ψ/x` is monotonically
+    increasing (after small-x oscillations) for every `n` tested
+    in `{2, 3, 5, 6, 10}`. No plateau apparent through
+    `x = 5 × 10⁶`. The conjecture is that the limit is `1`;
+    a finite-range monotonic approach is consistent with that but
+    does not establish it.
 
-E2. **Convergence rate is `n`-dependent and slower than
-    classical PNT.** The classical residual is `O(x · exp(-c√log x))`,
-    faster than any inverse polylog. The `M_n` residual is slower
-    than `x / log x` for every `n` tested:
-    `|ψ - x| · log x / x` is non-constant and far from zero at
-    `x = 5 × 10⁶` for larger `n` (`n = 10`: 2.61).
+E2. **Convergence rate is `n`-dependent.** At `x = 5 × 10⁶` the
+    diagnostic `|ψ - x| · log x / x` takes the values
 
-E3. **Zeros of `ζ_{M_n}` in the critical strip, none on
-    `Re s = 1`.** Search in `σ ∈ [0.4, 1.05], t ∈ [0.1, 50]`
-    finds zeros at `σ ≈ 0.42–0.60` for `n in {2, 3, 5, 6, 10}`.
-    For `n = 6, 10` some zeros lie at `σ < 1/2`, so no
-    Riemann-hypothesis analog for `ζ_{M_n}` holds.
+        n =  2:  0.010    n =  3:  0.063    n =  5:  0.368
+        n =  6:  0.704    n = 10:  2.612
+
+    For `n ∈ {2, 3, 5, 6}` the residual at this `x` is **below**
+    `x / log x`; only `n = 10` exceeds it (by a factor of `~2.6`).
+    The diagnostic is monotonically decreasing in `x` for every
+    `n` tested. **The asymptotic limit is not determined by this
+    data**: it could go to `0` (residual `o(x / log x)`), to a
+    non-zero constant (`Θ(x / log x)`), or away from `0`. The
+    classical zero-free-region PNT gives residual
+    `O(x exp(-c √log x))` — faster than any inverse polylog;
+    RH-conditional bounds give `O(x^{1/2} (log x)^2)`. Whether
+    `M_n` reaches either regime is not established here.
+
+E3. **Zeros of `ζ_{M_n}` found in the scanned window of the
+    critical strip; none found on `Re s = 1`.** Search in
+    `σ ∈ [0.4, 1.05], t ∈ [0.1, 50]` (30 × 200 grid plus
+    refinement) finds zeros at `σ ≈ 0.42–0.60` for
+    `n in {2, 3, 5, 6, 10}`. For `n = 6, 10` some zeros lie at
+    `σ < 1/2`, so no Riemann-hypothesis analog holds *within
+    this window*. **No claim is made about zeros at `t > 50`,
+    about the rest of the critical strip, or about
+    `Re s = 1` outside the scanned `t` range.**
 
 E4. **The lowest discrete zero does not predict the residual.**
-    For `n = 10`, the lowest zero `ρ ≈ 0.437 + 28.4i` predicts
-    `|x^ρ / ρ| ≈ 29` at `x = 5 × 10⁶`; empirical `|ψ - x| ≈ 8.5×10⁵`.
-    Four orders of magnitude apart. Either many higher-`t` zeros
-    sum coherently, or the Perron-formula decomposition for non-UF
-    `ζ_{M_n}` differs from the classical case.
+    For `n = 10`, the lowest found zero `ρ ≈ 0.437 + 28.4i`
+    predicts `|x^ρ / ρ| ≈ 29` at `x = 5 × 10⁶`; empirical
+    `|ψ - x| ≈ 8.5×10⁵`. Four orders of magnitude apart.
+    Possible explanations include: (a) many higher-`t` zeros
+    summing coherently; (b) the Perron-formula decomposition for
+    non-UF `ζ_{M_n}` differing from the classical case; (c) a
+    continuous boundary-distribution contribution we have not
+    isolated; (d) a finite-range transient masking the eventual
+    asymptotic; or (e) the missing signed Tauberian condition
+    (O1) admitting a regime where no clean zero/residue
+    decomposition applies. Discriminating among these requires
+    denser zero data and longer ψ runs.
 
 ## What is open
 
-O1. **Wiener–Ikehara hypothesis for `ζ_{M_n}`.** Need:
-    `-ζ'_{M_n}(s)/ζ_{M_n}(s) - 1/(s - 1)` has local pseudofunction
-    boundary behaviour on `Re s = 1`. No `Re s = 1` zeros (E3) is
-    necessary; sufficient is not yet checked. Without this, the
-    rate-`+1` is a residue calculation, not a proven asymptotic.
+O1. **A signed Tauberian theorem for `ψ_{M_n}`.** Standard
+    Wiener–Ikehara/Debruyne closure of "residue ⇒ asymptotic"
+    needs both:
+    *(i) Analytic-side input.* `-ζ'_{M_n}(s)/ζ_{M_n}(s) - 1/(s - 1)`
+    has local pseudofunction boundary behaviour on `Re s = 1`.
+    Necessary for this is global absence of zeros and other bad
+    boundary singularities of `ζ_{M_n}` on the entire line
+    `Re s = 1`. The E3 finite-window scan is *weak evidence*
+    consistent with this but does not establish it.
+    *(ii) Arithmetic-side input.* `ψ_{M_n}` satisfies a one-sided
+    Tauberian condition — slow decrease, bounded decrease, bounded
+    variation in a transformed variable, or a replacement
+    theorem. For positive Mangoldt this is automatic from
+    `Λ ≥ 0`; for signed `Λ_{M_n}` it is not. The standard
+    Beurling proofs of `ψ ~ ρx` route through positivity to
+    bypass this; here we do not have that route.
+    Without both, the residue calculation identifies a candidate
+    main term but does not yield a proven asymptotic.
 
-O2. **The exact rate of `ψ_{M_n}(x) - x`.** Empirically slower
-    than `x / log x` and `n`-dependent (E2). A closed-form rate
-    function `R_n(x)` consistent with the data is unknown.
+O2. **The exact rate of `ψ_{M_n}(x) - x`.** Empirically
+    `n`-dependent and at finite `x` larger than `x / log x` (E2);
+    asymptotic behaviour undetermined. A closed-form rate function
+    `R_n(x)` consistent with the data is unknown.
 
 O3. **The full zero distribution of `ζ_{M_n}`.** E3 found a
     handful of zeros in a finite scan window. The density
@@ -140,9 +184,13 @@ O4. **σ < 1/2 zeros for composite `n`.** E3 finds zeros below
 A reader who wants to falsify or sharpen the conjecture should:
 
 1. Recompute `ψ_{M_n}(x) / x` at larger `x` for `n ∈ {6, 10}`
-   (say `x = 10⁸`). The conjecture predicts continued
-   monotonic approach to `1`. A plateau or reversal at any `n`
-   falsifies it.
+   (say `x = 10⁸`). The conjecture predicts the values
+   eventually approach `1`; **it does not predict monotonicity**.
+   A finite plateau or reversal is consistent with the conjecture
+   (the limit could still be `1`). Falsification requires
+   stronger evidence: `lim sup ψ / x < 1`, or a stable approach
+   to a value `c ≠ 1` over a much larger range with the
+   diagnostic `(ψ/x - c)` going to zero.
 
 2. Verify the rate `+1` claim algebraically by an independent
    path: the residue argument is one line, but reproducing it
@@ -161,9 +209,12 @@ A reader who wants to falsify or sharpen the conjecture should:
 
 ## Status, in one line
 
-The leading rate is established by residue calculation; the
-asymptotic itself is empirical for `n ∈ {2, 3, 5, 6, 10}` to
-`x = 5 × 10⁶`; the rate of convergence is unexplained.
+The residue calculation **identifies the candidate main term**
+(`+1`, independent of `n`); the asymptotic `ψ_{M_n}(x) ~ x`
+itself remains a **conjecture**, supported empirically for
+`n ∈ {2, 3, 5, 6, 10}` to `x = 5 × 10⁶`. Closure requires a
+signed-Tauberian argument (O1) that we have not supplied. The
+finite-`x` rate of convergence is `n`-dependent and unexplained.
 
 ## References
 
