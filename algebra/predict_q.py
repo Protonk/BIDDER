@@ -194,64 +194,15 @@ def q_row(n: int, h: int, k_max: int) -> list:
 
 
 # --------------------------------------------------------------------------
-# self-check: matrix anchors when run as a script
+# Verification entry point
 # --------------------------------------------------------------------------
-
-def _self_check():
-    """Verify q_value_by_class against the 8x6 matrix at h = 5."""
-    SHAPES = [
-        (1,), (2,), (1, 1), (3,), (2, 1), (1, 1, 1), (4,), (3, 1),
-    ]
-    TAU_SIGS = [
-        (), (1,), (2,), (1, 1), (3,), (1, 1, 1),
-    ]
-    expected = {
-        ((1,), ()):       Fraction(1, 5),
-        ((1,), (1,)):     Fraction(0),
-        ((1,), (2,)):     Fraction(0),
-        ((1,), (1, 1)):   Fraction(0),
-        ((1,), (3,)):     Fraction(0),
-        ((1,), (1, 1, 1)):Fraction(0),
-
-        ((2,), ()):       Fraction(1, 5),
-        ((2,), (1,)):     Fraction(0),
-        ((2,), (2,)):     Fraction(-3, 2),
-        ((2,), (1, 1)):   Fraction(-3),
-        ((2,), (3,)):     Fraction(-6),
-        ((2,), (1, 1, 1)):Fraction(-27),
-
-        ((3,), ()):       Fraction(8, 15),
-        ((3,), (1,)):     Fraction(0),
-        ((3,), (2,)):     Fraction(-5),
-        ((3,), (1, 1)):   Fraction(-10),
-        ((3,), (3,)):     Fraction(-56, 3),
-        ((3,), (1, 1, 1)):Fraction(-82),
-
-        ((4,), ()):       Fraction(19, 20),
-        ((4,), (1,)):     Fraction(-1),
-        ((4,), (2,)):     Fraction(-13),
-        ((4,), (1, 1)):   Fraction(-25),
-        ((4,), (3,)):     Fraction(-43),
-        ((4,), (1, 1, 1)):Fraction(-181),
-    }
-    H = 5
-    fails = 0
-    for shape in SHAPES:
-        for tau_sig in TAU_SIGS:
-            got = q_value_by_class(shape, H, tau_sig)
-            key = (shape, tau_sig)
-            if key in expected:
-                want = expected[key]
-                ok = got == want
-                if not ok:
-                    print(f'FAIL  shape={shape} tau_sig={tau_sig}: got {got} expected {want}')
-                    fails += 1
-    if fails == 0:
-        print('predict_q self-check: PASS (all anchors match)')
-    else:
-        print(f'predict_q self-check: FAIL ({fails} mismatches)')
-    return fails
-
+# The canonical anchor harness lives in test_anchors.py, which checks
+# this module against the prime-row 1/h identity, the 8x6 matrix at
+# h = 5, the universal h = 2 cliff, the master/class-form consistency,
+# and the full payload_q_scan.csv. To avoid duplicate frozen tables
+# drifting apart, running predict_q.py as a script delegates to that
+# harness rather than maintaining a parallel expected-values dict.
 
 if __name__ == '__main__':
-    raise SystemExit(_self_check())
+    import test_anchors
+    raise SystemExit(test_anchors.main())

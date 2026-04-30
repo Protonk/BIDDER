@@ -101,6 +101,61 @@ Every formula below is this master expansion with specific
 `(a_i, t_i)`.
 
 
+### BQN Annotation
+
+The master expansion as small specialisations. The general form
+`Qn` is in `algebra/FINITE-RANK-EXPANSION.md` ("BQN Annotation");
+this block adds the specific row formulas tabulated above as
+short one-liners. They are implementation mirrors of the
+corresponding rows of `algebra/predict_q.py:q_value_by_class`.
+
+Assume `Tau` is in scope from `algebra/FINITE-RANK-EXPANSION.md`
+(ordered divisor count, `2 Tau x = d(x)`).
+
+```bqn
+# Universal cliff at h = 2 (any n, any k):
+#   Q_n(n²k) = 1 - d(k)/2.
+H2 ← {1 - (2 Tau 𝕩) ÷ 2}
+
+# Prime n at h = 3 with gcd(p, k) = 1:
+#   Q_p(p³k) = 1 - d(k) + τ_3(k)/3.
+PrimeH3 ← {(1 - 2 Tau 𝕩) + (3 Tau 𝕩) ÷ 3}
+
+# Binomial coefficient C(𝕩, 𝕨), used in master-expansion derivations.
+Choose ← {(!𝕩) ÷ (!𝕨) × !𝕩-𝕨}
+```
+
+Status:
+
+- These specialisations return floats; the rationals in the
+  tables above (e.g. `Q_3(3³ · 1) = 1/3`) are computed by
+  `algebra/predict_q.py` over `Fraction`. The BQN block matches
+  the algebra, not the arithmetic precision.
+- The factored class form (with `shape` of `n` and τ-signature of
+  `k'` as keys) is intrinsically multi-argument and reads more
+  cleanly as `q_value_by_class(shape, h, tau_sig)` in Python than
+  as a BQN one-liner. This block does not attempt the general
+  factored evaluator — `algebra/predict_q.py` is the canonical
+  implementation. BQN here is for the displayed row formulas.
+
+Reference values (verify against `algebra/test_anchors.py` or
+the Prime-n table at `h = 3`):
+
+- `H2 1` = `0.5`  (universal cliff at `k = 1`:
+  `1 - d(1)/2 = 1 - 1/2 = 1/2`).
+- `H2 6` = `−1`  (universal cliff at `k = 6`:
+  `1 - d(6)/2 = 1 - 4/2 = -1`).
+- `PrimeH3 1` = `0.33...`  (prime-row identity
+  `Q_p(p³ · 1) = 1/h = 1/3`).
+- `PrimeH3 2` = `0`  (low-payload zero band, `k = q` for any
+  prime `q ≠ p`: `1 - d(2) + τ_3(2)/3 = 1 - 2 + 3/3 = 0`,
+  matching the prime row of the `h = 3` table).
+- `PrimeH3 4` = `0`  (`k = q²` zero, `τ_3(4) = C(2+2, 2) = 6`:
+  `1 - 3 + 6/3 = 0`).
+- `PrimeH3 6` = `0`  (`k = qr` zero, `τ_3(6) = τ_3(2)·τ_3(3) =
+  9`: `1 - 4 + 9/3 = 0`).
+
+
 ## Integer-Language Reading
 
 The master expansion has a clean combinatorial interpretation.
@@ -266,6 +321,15 @@ table checks for the displayed specialisations. On the current CSV
 (`n ∈ {2,3,4,5,6,10}`), the master expansion and declared
 specialisations have zero mismatches.
 
+The formulas in this document and their algebraic claims are checked
+in **exact Python `Fraction` arithmetic** by
+`algebra/predict_q.py` and `algebra/test_anchors.py` — no floats, no
+`mpmath`, no `sympy`. Every rational displayed in this sheet is
+either typed by hand against a `Fraction` value, or copied from a
+`Fraction` printout of the master expansion at that cell. The chain
+from the formula sheet to the implementation to the anchor harness
+is rational-only.
+
 This document is not a sign-classification theorem and not a statement
 about normality. It is the local algebraic formula sheet for `Q_n`.
 
@@ -279,3 +343,62 @@ informs those observables but does not predict them automatically. See
 `experiments/acm-flow/cf/` for the empirical state of those
 couplings; the connections are real but at the prefactor /
 sub-leading level, not at the leading exponent level.
+
+
+## Pending Tables
+
+The master expansion is universal; the displayed-table coverage in
+this document is not. A future agent extending the formula sheet
+should know which cells are still un-tabulated. Each gap below has
+been verified to be reachable by `predict_q.q_value_by_class`
+(returning exact `Fraction`s); only the human-readable table is
+missing.
+
+- **Prime n at `h = 5`.** `Q_p(p^5 k) = Σ_{j=1}^5 (-1)^{j-1}
+  C(4, j-1) τ_j(k) / j` for `gcd(p, k) = 1`. Worth tabulating
+  alongside the `h = 1..4` entries in §"Prime n", with an
+  explicit note on the alternating-binomial kernel
+  `Σ_j (-1)^{j-1} C(4, j-1) j^d = 0` for `0 ≤ d ≤ 3` (the source
+  of the kernel-zero band visible in
+  `q_h5_shape_tau_matrix.png`).
+
+- **Prime n at `h = 6, 7, 8`.** Companion entries to the `h = 5`
+  table. The kernel-zero set widens with `h`; the master
+  expansion makes this mechanical.
+
+- **Prime power `n = p^a`, `a = 3` (i.e. `n = 8, 27, …`).**
+  `Q_{p^3}(p^{3h+t} k')` for `t ∈ {0, 1, 2}`, `gcd(p, k') = 1`.
+  The §"Prime Powers" table covers `n = 4 = 2²` only.
+
+- **Squarefree multi-prime `n` at `h = 5+`.** §"Squarefree
+  Multi-Prime n" tabulates `r = 2` through `h = 4`. `h ≥ 5` and
+  `r ≥ 3` (e.g. `n = 30 = 2·3·5`) follow from the master
+  expansion with no new mechanism.
+
+- **Mixed-exponent `n` such as `n = 12 = 2² · 3`.** Currently
+  flagged "require no new formula, but they are not tabulated
+  here." The master expansion gives them; the displayed tables
+  do not.
+
+- **The 8 × 6 (shape, τ-signature) matrix at higher `h`.** The
+  matrix at `h = 5` is the canonical algebraic fingerprint
+  (frozen in `algebra/test_anchors.py`). Computing the same matrix
+  at `h = 6, 7, 8` and observing how the kernel-zero set evolves
+  is the natural extension; this is what `algebra/HIGHER-H` —
+  not yet started — would address.
+
+- **`Q_n(n^h k)` autocorrelation closed forms.** The within-row
+  autocorrelation profile (`algebra/WITHIN-ROW-PARITY.md`)
+  factors as `A = Σ_{c1, c2} D(c1, c2) · V(c1) · V(c2)` where
+  the **algebraic factor** `V(c) = q_value_by_class(shape, h+t,
+  tau_sig)` is closed-form (exact `Fraction` via
+  `algebra/predict_q.py`), and the **combinatorial factor**
+  `D(c1, c2)` — the joint density of class pairs at lag `L` — is
+  the open piece (a shifted-divisor-density problem in the
+  Tenenbaum III §4 family). A formula sheet entry would document
+  the V table per class and the structure of D, isolating the
+  closed-form part from the open part.
+
+A claim becomes a table entry once the workflow standard in
+`README.md` is satisfied for it: stated, implemented, anchored,
+cross-checked against the lattice if applicable, and documented.

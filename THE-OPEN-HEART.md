@@ -77,8 +77,8 @@ pedagogical decoration; the algebra is one move.
 
   Local closure is sharp — no remainder, no asymptotic. *Aggregate*
   observables don't close: the CF expansion of `C_b(n)` carries
-  `O(b^{−k})` tails, the off-spike denominator process is
-  unmodelled, the multiplication-table residual at finite `K` is
+  `O(b^{−k})` tails, the off-spike intermediate-magnitude excess
+  is open, the multiplication-table residual at finite `K` is
   unpinned. Local rigor, global open-endedness, in deliberate
   partition. C–E (1946) closes base-`b` normality of `C_b(n)`;
   what remains open at the aggregate is *cross-base* structure
@@ -119,11 +119,12 @@ The substrate the move builds is where `{C_b(n)}` lives.
 Three features cut.
 
 1. **Local rigor enables global open-endedness.**
-   `FINITE-RANK-EXPANSION.md` shows each `Q_n(m)` closes exactly at rank `h = ν_n(m)`. That
-   local closure makes aggregate openness a *meaningful* problem.
-   Because `Q_n` is rationally exact, failures to close are
-   forced into the coupling layer where the central question
-   lives. The local ledger tells us where not to blame the error.
+   `algebra/FINITE-RANK-EXPANSION.md` shows each `Q_n(m)` closes
+   exactly at rank `h = ν_n(m)`. That local closure makes aggregate
+   openness a *meaningful* problem. Because `Q_n` is rationally
+   exact, failures to close are forced into the coupling layer where
+   the central question lives. The local ledger tells us where not
+   to blame the error.
 
 2. **The recovered log identity has a different signature than
    Bidder's.** His collapses to one term per factor; ours
@@ -191,9 +192,10 @@ What C–E does *not* settle:
   correlations, entropy bounds, normality at arbitrary block
   scales. Beyond the `b^{−k}`-frequency claim of C–E.
 
-- **CF behaviour and irrationality measure.** Already conditional
-  in `experiments/acm-flow/cf/MU-CONDITIONAL.md`. C–E does not
-  address.
+- **CF behaviour and irrationality measure.** Conditional in
+  `experiments/acm-flow/cf/MU-CONDITIONAL.md`; the "spikes
+  dominate" premise is supported at the marginal level by
+  `experiments/acm-flow/cf/KHINCHIN-RESULT.md`. C–E does not address.
 
 - **Substrate-specific structure.** The work in `arguments/*` and
   the empirical phases. C–E does not address.
@@ -218,20 +220,20 @@ ties an atom to its digit-stream position and back. Its closure
 questions are this project's research questions.
 
 Local closure is what the algebra finishes from inside. `Q_n(m)`
-closes exactly at rank `h = ν_n(m)`; the closure is sharp,
-rational, no remainder. The mult-table asymptote
-`α_n = (n − 1)/n` is another local closure: a limit the algebra
-reaches. The algebra has a notion of *finished* and several
-local objects exhibit it.
+closes exactly at rank `h = ν_n(m)` (sharp, rational, no remainder);
+the mult-table asymptote `α_n = (n − 1)/n` is another local closure.
+The literal `algebra/` workspace makes both computable in exact
+Fractions; `algebra/WITHIN-ROW-PARITY.md` is the first closed-form
+deliverable beyond the formula sheet.
 
-Aggregate openness is what the algebra does not finish.
-`C_b(n)`'s digit stream in bases `B ≠ b`, the cross-base
-distribution of length-`k` strings, the irrationality measure,
-the off-spike CF state — these are objects the algebra contains
-but does not close. Absolute normality of `C_b(n)` across all
-bases is one such closure question. The catalog of residuals is
-the algebra's record of where it has not finished and what
-finishing would mean.
+Aggregate openness is what the algebra does not finish. `C_b(n)`'s
+digit stream in bases `B ≠ b`, the cross-base distribution of
+length-`k` strings, the irrationality measure, the intermediate-
+magnitude excess in the off-spike CF — these are objects the algebra
+contains but does not close. Absolute normality of `C_b(n)` across
+all bases is one such closure question. The catalog of residuals is
+the algebra's record of where it has not finished and what finishing
+would mean.
 
 
 ## The Open Heart
@@ -267,14 +269,15 @@ The catalog of residuals — what the algebra has not finished
 closing — runs:
 
 - `offset(n)` by `ord(b, n)` (intermediate `ord` open in
-  `PRIMITIVE-ROOT-FINDING.md`),
+  `experiments/acm-flow/cf/PRIMITIVE-ROOT-FINDING.md`),
 - `β(n)` for the `O(b^{−k})` tails (per-`n`, currently
   uncharacterised),
-- the off-spike denominator process between consecutive boundary
-  spikes (load-bearing in `MEGA-SPIKE.md` step 3 and the premise
-  of `MU-CONDITIONAL.md`),
-- the lucky-cancellation locus in `BLOCK-UNIFORMITY` (22 205
-  triples in `b ≤ 12, d ≤ 5`, no rule known).
+- the intermediate-magnitude excess in the off-spike CF (substrate
+  envelope and small-PQ marginal closed via
+  `experiments/acm-flow/cf/DENOMINATOR-PROCESS.md` and
+  `KHINCHIN-RESULT.md`; the `≈3×` Khinchin renewal-rate excess open),
+- the lucky-cancellation locus in `core/BLOCK-UNIFORMITY.md`
+  (22 205 triples in `b ≤ 12, d ≤ 5`, no rule known).
 
 
 ## Claims
@@ -312,16 +315,16 @@ Bidder's hard cases predict the repo's open frontiers under the
 inversion. Each is a place the substrate exposes structure we
 don't see how to close.
 
-- **Off-spike denominator process** (`MEGA-SPIKE.md` step 3,
-  `MU-CONDITIONAL.md` premise). Bidder's "no nearby landmark"
-  case in CF coordinates. He responded with helper multipliers
-  to transform the target into one near a landmark. The repo's
-  analog is the off-spike CF state between consecutive boundary
-  spikes, currently unmodelled. The "spikes dominate" conditional
-  in `MU-CONDITIONAL.md` is asking whether helper multipliers
-  exist for this case — equivalently, whether the off-spike
-  denominator admits a substrate-side description that would
-  close its contribution to the digit-frequency aggregate.
+- **Off-spike intermediate-magnitude excess**
+  (`experiments/acm-flow/cf/DENOMINATOR-PROCESS.md` Test C).
+  Bidder's "no nearby landmark" case in CF coordinates. The
+  substrate envelope (Test A) and the small-PQ Gauss–Kuzmin
+  interior (Test B + `KHINCHIN-RESULT.md`) are now closed; the
+  `≈3×` Khinchin renewal-rate excess at intermediate magnitude
+  is the remaining piece. The "spikes dominate" conditional of
+  `MU-CONDITIONAL.md` is supported at the marginal level;
+  whether the intermediate excess admits a substrate-side
+  description is the open question.
 
 - **Intermediate-ord primes** (`PRIMITIVE-ROOT-FINDING.md`,
   `n ∈ {13, 23, 31}` at `b = 10`). Targets where the residual
@@ -333,16 +336,18 @@ don't see how to close.
   do better helpers exist for these targets, or are they outside
   the residual-table coverage?
 
-- **Lucky-cancellation triples** (`BLOCK-UNIFORMITY.md`, 22 205
-  triples in `b ≤ 12, d ≤ 5` outside both sufficient families).
+- **Lucky-cancellation triples** (`core/BLOCK-UNIFORMITY.md`,
+  22 205 triples in `b ≤ 12, d ≤ 5` outside both sufficient families).
   Bidder's analog: targets that happen to factor cleanly without
   obvious reason. The unifying characterisation is open in both
   directions — Bidder couldn't articulate his perception, the
   repo cannot yet articulate the cancellation. Both are hints
   that the substrate's residual structure has more to give.
 
-The lens predicts work in this repo will make progress on each,
-and *will not finish any* in a way that propagates across bases.
+The lens predicts partial progress on each — substrate envelopes
+close, perimeters relocate — without finishing across bases.
+Foothold and perimeter are symmetric findings: each localises
+where the substrate's transparency stops.
 
 ## Coda
 

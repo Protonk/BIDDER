@@ -232,12 +232,90 @@ def anchor_q_general_vs_class() -> int:
     return fails
 
 
+# --------------------------------------------------------------------------
+# A6 -- displayed h=3 tables (prime / prime-power / squarefree multi-prime)
+# --------------------------------------------------------------------------
+
+def anchor_h3_displayed_tables() -> int:
+    """Freeze the specific (n, k, Q) values displayed at h=3 in
+    algebra/Q-FORMULAS.md across the three factorisation types.
+
+    A4 already verifies q_general against payload_q_scan.csv, but A4
+    only checks the implementation against itself; if a typo enters
+    either the formula sheet or q_value_by_class without invalidating
+    the master expansion, A4 won't catch it. A6 freezes the *displayed*
+    values from the formula sheet so a divergence between the human
+    table and the implementation is caught as a FAIL.
+
+    Tables covered (Q-FORMULAS.md sections "Prime n", "Prime Powers",
+    "Squarefree Multi-Prime n"):
+      - Prime n at h=3: 1/h identity at k=1, low-payload zero band
+        at k in {q, q^2, qr} for primes q, r != p.
+      - Prime power n=4 at h=3: t=0 sub-cases (k coprime to 2) and
+        t=1 sub-cases (k = 2 * k' with k' coprime to 2).
+      - Squarefree multi-prime n=6, n=10 at h=3 with (0, 0) overlap
+        (k coprime to n): k' in {1, q, q^2, qr}.
+    """
+    cases = [
+        # Prime n at h=3: Q_p(p^3 k) = 1 - d(k) + tau_3(k)/3.
+        # k=1 -> 1/h; k in {q, q^2, qr} -> 0 (low-payload zero band).
+        (3, 3, 1, Fraction(1, 3)),    # 1/h identity
+        (3, 3, 2, Fraction(0)),       # k = q
+        (3, 3, 4, Fraction(0)),       # k = q^2
+        (3, 3, 10, Fraction(0)),      # k = qr (q=2, r=5)
+        (5, 3, 1, Fraction(1, 3)),
+        (5, 3, 2, Fraction(0)),
+        (5, 3, 4, Fraction(0)),
+        (5, 3, 6, Fraction(0)),       # k = qr (q=2, r=3)
+        (7, 3, 1, Fraction(1, 3)),
+        (7, 3, 6, Fraction(0)),
+
+        # Prime power n=4 at h=3, t=0 (k coprime to 2):
+        # Q_4 = 1 - 3 d(k')/2 + tau_3(k')/3.
+        (4, 3, 1, Fraction(-1, 6)),   # k'=1: 1 - 3/2 + 1/3 = -1/6
+        (4, 3, 3, Fraction(-1)),      # k'=q=3: 1 - 3 + 1 = -1
+        (4, 3, 5, Fraction(-1)),      # k'=q=5: same shape
+
+        # Prime power n=4 at h=3, t=1 (k = 2 * k' with k' coprime to 2):
+        # Q_4 = 1 - 2 d(k') + tau_3(k').
+        (4, 3, 2, Fraction(0)),       # k=2 (k'=1): 1 - 2 + 1 = 0
+        (4, 3, 6, Fraction(0)),       # k=6 (k'=3): 1 - 4 + 3 = 0
+        (4, 3, 10, Fraction(0)),      # k=10 (k'=5): same
+
+        # Squarefree multi-prime n=6 at h=3, (0,0) overlap
+        # (k coprime to 6, k = k'): Q_6 = 1 - 2 d(k') + tau_3(k')/3.
+        (6, 3, 1, Fraction(-2, 3)),   # k'=1: 1 - 2 + 1/3 = -2/3
+        (6, 3, 5, Fraction(-2)),      # k'=q=5: 1 - 4 + 1 = -2
+        (6, 3, 25, Fraction(-3)),     # k'=q^2=25: 1 - 6 + 2 = -3
+        (6, 3, 35, Fraction(-4)),     # k'=qr=5*7: 1 - 8 + 3 = -4
+
+        # Squarefree multi-prime n=10 at h=3, (0,0) overlap
+        # (k coprime to 10).
+        (10, 3, 1, Fraction(-2, 3)),
+        (10, 3, 3, Fraction(-2)),     # k'=q=3
+        (10, 3, 9, Fraction(-3)),     # k'=q^2=9
+        (10, 3, 21, Fraction(-4)),    # k'=qr=3*7
+    ]
+    fails = 0
+    for n, h, k, want in cases:
+        got = q_general(n, h, k)
+        if got != want:
+            print(f'A6 FAIL  n={n} h={h} k={k}: q_general = {got}, '
+                  f'displayed table says {want}')
+            fails += 1
+    if fails == 0:
+        print(f'A6 PASS  Q-FORMULAS.md h=3 displayed tables match q_general '
+              f'({len(cases)} cells across prime / prime-power / squarefree)')
+    return fails
+
+
 def main():
     fails = 0
     fails += anchor_prime_row_one_over_h()
     fails += anchor_matrix_h5()
     fails += anchor_h2_cliff()
     fails += anchor_q_general_vs_class()
+    fails += anchor_h3_displayed_tables()
     fails += anchor_csv_match()
 
     print()

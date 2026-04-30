@@ -3,8 +3,8 @@
 First closed-form deliverable for `algebra/`. Translates the
 substrate-side observation that the (n, k) Q-lattice has structured
 autocorrelation along its k-axis into an exact decomposition that
-rides on top of the master expansion (`Q-FORMULAS.md`) and the rank
-lemma (`FINITE-RANK-EXPANSION.md`).
+rides on top of the master expansion (`algebra/Q-FORMULAS.md`) and
+the rank lemma (`algebra/FINITE-RANK-EXPANSION.md`).
 
 ## Object
 
@@ -38,6 +38,40 @@ about the specific primes of `k'` enters, only their exponent profile.
 
 For non-prime `n`, the analog is `cls(k) = (overlap_tuple, tau_sig(k'))`
 where `overlap_tuple` is aligned with `n`'s prime list.
+
+
+### BQN annotation
+
+The prime-row class signature, mirroring
+`predict_correlation.class_of` for prime `n`. Implementation
+mirror, exact-math.
+
+```bqn
+# t = ν_p(k), the p-adic height of k.
+# Mirrors algebra/predict_q.py:n_adic_height.
+NuP ← {0=𝕨|𝕩 ? 1+𝕨 𝕊 ⌊𝕩÷𝕨 ; 0}    # same as Rank in algebra/FINITE-RANK-EXPANSION.md
+
+# k' = k / p^t, the coprime part.
+CoprimePart ← {𝕩 ÷ 𝕨 ⋆ 𝕨 NuP 𝕩}
+
+# Class of k relative to prime p: (t, tau_sig(k')).
+# tau_sig is the sorted-descending exponent tuple; we omit it here
+# because BQN doesn't have a one-line prime factoriser worth writing.
+# In Python: predict_q.tau_sig_of(k_prime).
+Cls ← {(𝕨 NuP 𝕩) ‿ (𝕨 CoprimePart 𝕩)}
+```
+
+Reference values:
+
+- `2 NuP 12` = `2`  (`12 = 2² · 3`, so `ν_2(12) = 2`).
+- `2 CoprimePart 12` = `3`  (`12 / 2² = 3`).
+- `2 Cls 12` = `⟨2, 3⟩`  (the second slot would be `tau_sig(3) =
+  ⟨1⟩` in Python; here we leave it as `k'` for the one-liner).
+
+The full class structure (sorted exponent tuple of `k'`) requires
+prime factorisation, which is intrinsically Python-shaped here.
+`algebra/predict_correlation.py:class_of` and
+`algebra/predict_q.py:tau_sig_of` are the canonical implementations.
 
 ## Decomposition
 
@@ -103,9 +137,10 @@ row mismatch is the algebraic origin of the L-parity gap.
 
 ## Empirical readout
 
-`test_within_row_lattice.py` enumerates `(h, n) in {5, 6, 7, 8} x {2, 3, 5, 7, 11, 13}`
-at `K = 4000` and reports the lag-`L` autocorrelation profile for
-`L = 1..20`. Aggregated parity statistics:
+`algebra/test_within_row_lattice.py` enumerates
+`(h, n) in {5, 6, 7, 8} x {2, 3, 5, 7, 11, 13}` at `K = 4000` and
+reports the lag-`L` autocorrelation profile for `L = 1..20`.
+Aggregated parity statistics:
 
 ```
 h = 5
@@ -172,22 +207,27 @@ h = 8
 
 ## Validation
 
-`test_within_row_lattice.py` (`PASS`):
+`algebra/test_within_row_lattice.py` (`PASS`):
 
 - 24 spot-checks confirm `q_general(n, h, k) == lattice[n - 2, k - 1]`
   (within float precision) for `(h, n) in {5,6,7,8} x {2,3,5,7,11,13}`
   at 11 sample `k` values per slice.
-- 24 autocorrelation profiles computed independently from `predict_q`
-  and from the lattice file agree to `< 1e-7` at every lag in
-  `L = 1..20`.
+- 24 autocorrelation profiles computed independently from
+  `algebra/predict_q.py` and from the lattice file agree to
+  `< 1e-7` at every lag in `L = 1..20`.
 
-`test_anchors.py` (`PASS`):
+`algebra/test_anchors.py` (`PASS`):
 
 - `Q_p(p^h * 1) = 1/h` for `h = 1..12` (A1).
 - The 8x6 (shape, tau-signature) matrix at `h = 5` matches at every
   cell, including all kernel zeros (A2).
 - `Q_n(n^2 k) = 1 - d(k)/2` across 347 (n, k) pairs at `h = 2` (A3).
 - `q_general` and `q_value_by_class` agree on 4120 coprime cases (A5).
+- The 24 displayed `h = 3` cells from `algebra/Q-FORMULAS.md`
+  (prime / prime-power / squarefree multi-prime) match `q_general`
+  exactly (A6) — freezes the formula sheet's tabulated values
+  against the implementation, catching any typo that would slip
+  past A4.
 - `predict_q.q_general` matches `payload_q_scan.csv` on all 24,203
   rows (A4) — every previous Phase-2.2 verification at zero
   Fraction-equality mismatches.
@@ -225,8 +265,8 @@ In rough order of cost:
    high-Ω payload pairs that carry the even-L mass at `L = 12, 18, 20`.
    The conjecture is that the even-L tail at `n = 2, h = 5` comes
    from a finite list of resonant `(k, k + L)` pairs with both sides
-   carrying high `tau_5` weight; predict_q gives the exact `Q` at
-   each such pair, and we can isolate the resonances.
+   carrying high `tau_5` weight; `algebra/predict_q.py` gives the
+   exact `Q` at each such pair, and we can isolate the resonances.
 
 2. **Try the column-axis analog** (varying `n` at fixed `k`). The
    substrate-side observation in ATTRACTOR-AND-MIRAGE was 2D — both

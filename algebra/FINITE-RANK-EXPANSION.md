@@ -73,16 +73,19 @@ whether it is mechanically settled by reading the formula.
 
 This is exact-math annotation, not a third implementation. `Rank` is
 `ν_n(m)`, `Tau` is the ordered divisor count `τ_j`, and `Qn` is the
-finite stack above. The block mirrors the exact formula used in
-`experiments/acm-flow/payload_q_scan.py` and expanded in
-`algebra/Q-FORMULAS.md`; it is intentionally small and divisor-enumerating.
+finite stack above. The block mirrors the master expansion as
+implemented in `algebra/predict_q.py` and tabulated in
+`algebra/Q-FORMULAS.md`; it is intentionally small and
+divisor-enumerating.
 
 ```bqn
-Divs ← {(0=𝕩|·)⊸/ 1+↕𝕩}
+Divs ← {ks ← 1+↕𝕩 ⋄ (0=ks|𝕩)/ks}
 
 Tau ← {
   j ← 𝕨
-  j=1 ? 1 ; +´ { (j-1) Tau 𝕩 }¨ ⌊𝕩÷Divs 𝕩
+  j=1 ? 1 ;
+  ds ← Divs 𝕩
+  +´ (j-1) Tau¨ 𝕩÷ds
 }
 
 Rank ← {0=𝕨|𝕩 ? 1+𝕨 𝕊 ⌊𝕩÷𝕨 ; 0}
@@ -97,9 +100,31 @@ Qn ← {
 ```
 
 Read `Qn` from right to left: find the finite rank `h`; build
-`j = 1..h`; evaluate `τ_j(m/n^j)`; weight by
-`(-1)^(j-1)/j`; sum. The `n = 1` ordinary-prime branch is outside
-this monoid-rank formula.
+`j = 1..h`; evaluate `τ_j(m/n^j)`; weight by `(-1)^(j-1)/j`; sum.
+
+Status:
+
+- `Divs`, `Tau`, `Rank` mirror their integer-arithmetic
+  counterparts in `algebra/predict_q.py`. They are
+  *implementation mirrors*, not abstract-math sketches.
+- `Qn` is the master expansion at a single `m`. It returns a
+  rational; in BQN this is a float, in `algebra/predict_q.py` it
+  is a `Fraction`. The exact-rational claim in the `.md` is the
+  Python value; the BQN block is the same algorithm at lower
+  arithmetic precision.
+- The `n = 1` ordinary-prime branch is outside this monoid-rank
+  formula — `Rank` would not terminate (`1|𝕩 = 0` always). Use
+  Python with `acm_n_primes(1, ...)` for that case.
+
+Reference values (verify against `algebra/predict_q.py` or the
+matrix anchors in `algebra/test_anchors.py`):
+
+- `2 Qn 4` = `0.5` (universal cliff `Q_n(n²k) = 1 - d(k)/2`
+  with `n=2, k=1`: `1 - d(1)/2 = 1 - 1/2 = 1/2`).
+- `2 Qn 12` = `0` (same cliff with `n=2, k=3`:
+  `1 - d(3)/2 = 1 - 2/2 = 0`).
+- `3 Qn 27` = `0.33...` (prime-row identity
+  `Q_p(p^h · 1) = 1/h` with `p=3, h=3`).
 
 
 ## Rank Reading
@@ -243,12 +268,13 @@ substrate envelope was anticipated to be approximate and turned out
 exact to `O(b^{−(k−1)})`. The same shape should bind whatever
 closed forms govern the Q lattice at `h = 6, 7, 8`: the leading
 piece — likely dominated by the smooth-block factor
-`(b−1) b^{d−1} (n−1)/n²` and its companions in `Q-FORMULAS.md`'s
-master expansion — should match observation tightly, with residuals
-that decay geometrically as `h` grows, not at constant scale. If
-residuals do not decay geometrically, that is the signal worth
-chasing; the construction is telling us that the closed form is
-incomplete rather than approximate.
+`(b−1) b^{d−1} (n−1)/n²` and its companions in
+`algebra/Q-FORMULAS.md`'s master expansion — should match
+observation tightly, with residuals that decay geometrically as
+`h` grows, not at constant scale. If residuals do not decay
+geometrically, that is the signal worth chasing; the construction
+is telling us that the closed form is incomplete rather than
+approximate.
 
 **Expect a three-layer decomposition, not a single law.** The CF
 result was not one statistic — it was three populations:
