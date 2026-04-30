@@ -127,7 +127,7 @@ concatenation.
   denominator process, not through C–E.
 
 - **Substrate-specific structure.** The work in `arguments/*`,
-  `core/Q-FORMULAS.md`, `core/BLOCK-UNIFORMITY.md`, and the
+  `algebra/Q-FORMULAS.md`, `core/BLOCK-UNIFORMITY.md`, and the
   empirical phases addresses the n-prime substrate's internal
   structure. C–E proves a digit-frequency claim about the
   concatenated real but does not characterise the substrate.

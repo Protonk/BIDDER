@@ -67,7 +67,7 @@ altitude split that makes closure refusal coherent. Bidder's
 three pillars all break in that single move. The triad below is
 pedagogical decoration; the algebra is one move.
 
-- **Closure: refused.** `core/FINITE-RANK-EXPANSION.md` enforces
+- **Closure: refused.** `algebra/FINITE-RANK-EXPANSION.md` enforces
   the refusal at the right altitude. Each `Q_n(m)` is an exact
   rational with denominator dividing `h!`, the Mercator series
   truncating at `j = ν_n(m)`:

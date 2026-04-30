@@ -221,7 +221,7 @@ Three statements stand:
    Koukoulopoulos 2010 §4-5 (downloaded). Effort: 1-2 days of careful
    analytic work.
 
-## What survives for `core/FINITE-RANK-EXPANSION.md`
+## What survives for `algebra/FINITE-RANK-EXPANSION.md`
 
 The cell-resolved + ratio test investigations have established:
 

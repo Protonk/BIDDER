@@ -4,7 +4,7 @@ q_n_verify.py -- Phase 2.2 exact Q_n formula verifier
 
 Reads payload_q_scan.csv and verifies:
 
-1. The master expansion from core/Q-FORMULAS.md against every row.
+1. The master expansion from algebra/Q-FORMULAS.md against every row.
 2. The displayed specialisations in their declared scope:
    - prime n, all h in the CSV;
    - n = 4 rows through h = 4;
@@ -99,7 +99,7 @@ def tau(j, x):
 
 
 def master_q(n, h, k):
-    """Master expansion from core/Q-FORMULAS.md for m = n^h * k."""
+    """Master expansion from algebra/Q-FORMULAS.md for m = n^h * k."""
     factors, overlaps, k_prime = decompose_payload(n, k)
     total = Fraction(0)
     for j in range(1, h + 1):

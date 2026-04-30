@@ -1,0 +1,20 @@
+n = 2, digits available = 272223
+  prec =   80000b: 1500 PQs in   1.1s
+  prec =  200000b: 1500 PQs in   3.1s
+  prec =  400000b: 1500 PQs in   7.2s
+  prec =  800000b: 1500 PQs in  16.2s
+
+Pairwise stable_prefix_len:
+                80000b    200000b    400000b    800000b
+    80000b      1500       406       406       406 
+   200000b       406      1500       407       407 
+   400000b       406       407      1500       407 
+   800000b       406       407       407      1500 
+
+First-divergence diagnostics for prec_lo vs prec_hi:
+  prec_lo=80000, prec_hi=200000: agree 406 PQs; a_lo[407]=4, a_hi[407]=5
+  prec_lo=80000, prec_hi=400000: agree 406 PQs; a_lo[407]=4, a_hi[407]=5
+  prec_lo=200000, prec_hi=400000: agree 407 PQs; a_lo[408]=20992046...(40750 digits), a_hi[408]=14215394...(100956 digits)
+  prec_lo=80000, prec_hi=800000: agree 406 PQs; a_lo[407]=4, a_hi[407]=5
+  prec_lo=200000, prec_hi=800000: agree 407 PQs; a_lo[408]=20992046...(40750 digits), a_hi[408]=44444844...(102766 digits)
+  prec_lo=400000, prec_hi=800000: agree 407 PQs; a_lo[408]=14215394...(100956 digits), a_hi[408]=44444844...(102766 digits)

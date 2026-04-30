@@ -133,7 +133,7 @@ but via the *distribution* of d(k) that drives both Q_n and Ford's
 deficit.
 
 This is exactly the "shadow of rank-h structure under a global
-projection" speculation in `core/FINITE-RANK-EXPANSION.md`. Phase 4
+projection" speculation in `algebra/FINITE-RANK-EXPANSION.md`. Phase 4
 (A) provides empirical evidence for it at h = 2 for prime n.
 
 ## What this is, in the affordances frame

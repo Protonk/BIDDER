@@ -11,7 +11,7 @@ historical:
   anatomy applies" / "Λ_n goes negative ⇒ structural direction" decision
   table below was written before the local algebra was understood. The
   finite-rank closed form `Q_n(m) = Σ_{j=1}^{ν_n(m)} (-1)^(j-1) τ_j(m/n^j)/j`
-  (`core/Q-FORMULAS.md`) shows the sign locus is determined by ordered
+  (`algebra/Q-FORMULAS.md`) shows the sign locus is determined by ordered
   divisor counts on the payload `k = m/n^h`, not by anything
   flow-certified or UF-related at the level Brief 4's anatomy lives.
 - **The h=2 empirical work** found `M_n(K) / M_Ford(K) → α_n = (n−1)/n`
@@ -27,7 +27,7 @@ historical:
   live gating decision for Brief 4.
 
 For the current state of the local algebra see
-`core/Q-FORMULAS.md` and `core/FINITE-RANK-EXPANSION.md`. For the h=2
+`algebra/Q-FORMULAS.md` and `algebra/FINITE-RANK-EXPANSION.md`. For the h=2
 multiplication-table empirics see `experiments/acm-flow/mult-table/`.
 
 ---

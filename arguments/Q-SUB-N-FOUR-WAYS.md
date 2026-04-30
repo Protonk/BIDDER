@@ -1,6 +1,6 @@
 # Q_n Four Ways
 
-A critique of `core/Q-FORMULAS.md`. The question is not "are the formulas
+A critique of `algebra/Q-FORMULAS.md`. The question is not "are the formulas
 correct" — they are. The question is what the formulas actually *are*,
 read literally, as a statement about a generating function and integer
 divisibility.
@@ -38,7 +38,7 @@ So
 
 That is the master statement. Q_n is the `M_n`-monoid analog of the
 classical fact `Λ(n) / log n = [n^{-s}] log ζ(s)`. Everything else in
-`core/Q-FORMULAS.md` is bookkeeping for evaluating that one coefficient
+`algebra/Q-FORMULAS.md` is bookkeeping for evaluating that one coefficient
 at specific `m`.
 
 The same statement has a clean integer-language reading. `τ_j(m / n^j)`
@@ -53,7 +53,7 @@ multiple of `n`. So:
 
 `Q_n(m)` is a signed Möbius-style count of ordered factorisations of
 `m` into multiples of `n`, alternating by tuple length, weighted
-`1/j`. The master expansion in `core/Q-FORMULAS.md` is just this
+`1/j`. The master expansion in `algebra/Q-FORMULAS.md` is just this
 count reorganised by sorting `m` into `(h, t_1, ..., t_r, k')` and
 using multiplicativity of `τ_j`. The two readings — generating-function
 log-coefficient, and signed factorisation count — are the same fact in
@@ -110,7 +110,7 @@ from `Q_n` requires individual translation work, not free analogy.
 
 ## Mundane
 
-Given the master statement, the rest of `core/Q-FORMULAS.md` is forced.
+Given the master statement, the rest of `algebra/Q-FORMULAS.md` is forced.
 Nothing in it requires a theorem deeper than the multiplicativity of
 `τ_j` and the binomial identity `τ_j(p^e) = C(e + j - 1, j - 1)`.
 
@@ -258,7 +258,7 @@ calculation.
 
 ## One-Line Summary
 
-`core/Q-FORMULAS.md` is the rank-`h` Mercator expansion of
+`algebra/Q-FORMULAS.md` is the rank-`h` Mercator expansion of
 `log(1 + n^{-s} ζ(s))`, evaluated coefficient-wise, with `τ_j`
 factored multiplicatively at the primes of `n`. The grand part is
 that `1 + n^{-s} ζ(s)` is a real arithmetic generating function. The

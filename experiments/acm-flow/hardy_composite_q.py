@@ -19,14 +19,14 @@ directly from the prime factorisation of m.
 We then evaluate Q_n(m) by two structurally independent paths and
 assert exact `Fraction` equality:
 
-  master path : factor-aware master expansion from `core/Q-FORMULAS.md`,
+  master path : factor-aware master expansion from `algebra/Q-FORMULAS.md`,
                 with overlap-shifted binomials × τ_j(k');
 
   direct path : Σ_{j=1..h} (−1)^(j−1) τ_j(m/n^j) / j with τ_j evaluated
                 directly on the raw prime factorisation of m/n^j, with
                 no overlap split.
 
-Where the displayed-formula scope of `core/Q-FORMULAS.md` applies, the
+Where the displayed-formula scope of `algebra/Q-FORMULAS.md` applies, the
 displayed specialisation is evaluated as a third independent path.
 
 This is not a new proof of the formula. It is a deep-access sanity loop
@@ -177,7 +177,7 @@ def n_kind(n_facs):
 
 
 def q_displayed(n_facs, m_facs, h):
-    """Displayed specialisation from `core/Q-FORMULAS.md` if (n_kind, h)
+    """Displayed specialisation from `algebra/Q-FORMULAS.md` if (n_kind, h)
     is in declared scope. Returns (kind_label, value_or_None)."""
     kind = n_kind(n_facs)
     k_facs = divide_n_power(m_facs, n_facs, h)

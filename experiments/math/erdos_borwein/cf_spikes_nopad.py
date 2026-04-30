@@ -123,19 +123,25 @@ def main():
         counts = spike_counts(log2a, thresholds)
         results.append((label, base, log2a, log2q, counts))
 
-    print("\n=== spike density (40K steps) ===")
+    n_steps_by_run = [len(log2a) for _, _, log2a, _, _ in results]
+    n_canon = n_steps_by_run[0]  # canonical baseline = true run's CF length
+    lengths_line = "n_steps per run: " + ", ".join(
+        f"{lbl}={n}" for (lbl, *_), n in zip(results, n_steps_by_run)
+    )
+    print(f"\n=== spike density ({lengths_line}) ===")
     header = f"{'T':>3}  " + "  ".join(f"{lbl:>20}" for lbl, *_ in results) \
-             + "  " + f"{'Khinchin expect':>16}"
+             + "  " + f"{f'Khinchin({n_canon})':>18}"
     print(header)
     rows = []
     for T in thresholds:
         row = f"{T:>3}  " + "  ".join(
             f"{counts[T]:>20d}" for _, _, _, _, counts in results
-        ) + "  " + f"{khinchin_expected(MAX_CF_STEPS, T):>16.1f}"
+        ) + "  " + f"{khinchin_expected(n_canon, T):>18.1f}"
         print(row)
         rows.append(row)
 
     summary = ["# Erdős–Borwein brief #3 — base-65 (padding-free)", "",
+               lengths_line, "",
                header, *rows, ""]
     for label, base, log2a, log2q, _ in results:
         summary.append(f"## {label} — top 10 by log2(a+1)")

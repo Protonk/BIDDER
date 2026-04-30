@@ -1,7 +1,7 @@
 # Q Distillery
 
 `q_distillery.py` renders the master expansion from
-`core/Q-FORMULAS.md` as a finite-rank distillation.
+`algebra/Q-FORMULAS.md` as a finite-rank distillation.
 
 For each sampled exact-height payload `m = n^h k`, the script evaluates
 

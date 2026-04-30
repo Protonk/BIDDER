@@ -100,7 +100,7 @@ earlier framing in `H2-CELL-RESULT.md` overclaimed.
 
 ## Where this leaves Phase 4 / FINITE-RANK-EXPANSION
 
-The `core/FINITE-RANK-EXPANSION.md` speculation — "shadows of rank
+The `algebra/FINITE-RANK-EXPANSION.md` speculation — "shadows of rank
 layers under different global projections" — has empirical support
 at h=2 only in a refined sense:
 

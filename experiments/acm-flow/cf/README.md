@@ -62,7 +62,7 @@ constant) used to validate the CF runner.
 
 ## Cross-references
 
-- `core/Q-FORMULAS.md`, `core/FINITE-RANK-EXPANSION.md` — local Q_n
+- `algebra/Q-FORMULAS.md`, `algebra/FINITE-RANK-EXPANSION.md` — local Q_n
   algebra; coupling-layer empirics live here.
 - `core/BLOCK-UNIFORMITY.md` — closed-form n-prime block counts that
   give `T_k`.

@@ -147,9 +147,11 @@ Khinchin-typical. The corrected verdict (above) preserves the
 "encoding does the work" mechanism (because there is nothing to
 explain — the CF behaviour is just generic). The `khinchin_expected`
 function in `cf_spikes_controls.py` and `cf_spikes_nopad.py` was
-fixed (now uses `log2(1 + 1/2^T)` survival), and the corresponding
-summary files were regenerated. `cf_spikes_shuffle_band.py` does
-not reference Khinchin and was unchanged.
+fixed (now uses `log2(1 + 1/2^T)` survival), and the call sites
+were updated to use each run's actual CF length rather than the
+fixed `MAX_CF_STEPS` cap. Summary files regenerated.
+`cf_spikes_shuffle_band.py` does not reference Khinchin and was
+unchanged.
 
 
 ## Files

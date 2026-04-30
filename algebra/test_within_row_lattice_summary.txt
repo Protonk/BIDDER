@@ -1,0 +1,174 @@
+test_within_row_lattice.py
+======================================================================
+
+h = 5
+----------------------------------------------------------------------
+  lattice shape: (3999, 4000)  (rows = n-1, n in 2..4000;  cols = k, k in 1..4000)
+  spot-check predict_q vs lattice at k = (1, 2, 3, 4, 5, 7, 11, 31, 100, 999, 3999):
+    OK  h=5 n=2: predict_q matches lattice on all spot k-values
+    OK  h=5 n=3: predict_q matches lattice on all spot k-values
+    OK  h=5 n=5: predict_q matches lattice on all spot k-values
+    OK  h=5 n=7: predict_q matches lattice on all spot k-values
+    OK  h=5 n=11: predict_q matches lattice on all spot k-values
+    OK  h=5 n=13: predict_q matches lattice on all spot k-values
+
+  within-row autocorrelation, L = 1..20, K_max = 4000:
+      n    odd-L mean   even-L mean   gap (e - o)   ratio e/o   agree
+      2   +3.1180e-06   +1.7559e-03   +1.7528e-03     563.158      OK
+      3   +6.3257e-04   +1.2101e+00   +1.2095e+00    1913.034      OK
+      5   +2.4420e-01   +1.1113e+01   +1.0869e+01      45.507      OK
+      7   +4.9485e-01   +2.1769e+01   +2.1275e+01      43.992      OK
+     11   +1.1224e+00   +3.7752e+01   +3.6630e+01      33.636      OK
+     13   +1.4647e+00   +4.1050e+01   +3.9585e+01      28.026      OK
+
+  per-lag profile, n = 2 (illustrative):
+    L =  1  (odd)   A = +8.3354e-06
+    L =  2  (even)   A = +5.9554e-06
+    L =  3  (odd)   A = +7.1482e-06
+    L =  4  (even)   A = +4.4688e-06
+    L =  5  (odd)   A = +0.0000e+00
+    L =  6  (even)   A = +5.2162e-06
+    L =  7  (odd)   A = +6.2610e-06
+    L =  8  (even)   A = +3.4792e-06
+    L =  9  (odd)   A = +0.0000e+00
+    L = 10  (even)   A = +0.0000e+00
+    L = 11  (odd)   A = +0.0000e+00
+    L = 12  (even)   A = +2.5473e-04
+    L = 13  (odd)   A = +3.8587e-06
+    L = 14  (even)   A = +4.6459e-06
+    L = 15  (odd)   A = +5.5765e-06
+    L = 16  (even)   A = +2.7889e-06
+    L = 17  (odd)   A = +0.0000e+00
+    L = 18  (even)   A = +1.7077e-02
+    L = 19  (odd)   A = +0.0000e+00
+    L = 20  (even)   A = +2.0101e-04
+
+h = 6
+----------------------------------------------------------------------
+  lattice shape: (3999, 4000)  (rows = n-1, n in 2..4000;  cols = k, k in 1..4000)
+  spot-check predict_q vs lattice at k = (1, 2, 3, 4, 5, 7, 11, 31, 100, 999, 3999):
+    OK  h=6 n=2: predict_q matches lattice on all spot k-values
+    OK  h=6 n=3: predict_q matches lattice on all spot k-values
+    OK  h=6 n=5: predict_q matches lattice on all spot k-values
+    OK  h=6 n=7: predict_q matches lattice on all spot k-values
+    OK  h=6 n=11: predict_q matches lattice on all spot k-values
+    OK  h=6 n=13: predict_q matches lattice on all spot k-values
+
+  within-row autocorrelation, L = 1..20, K_max = 4000:
+      n    odd-L mean   even-L mean   gap (e - o)   ratio e/o   agree
+      2   +1.9986e-06   +2.3700e-06   +3.7138e-07       1.186      OK
+      3   -7.2559e-05   +2.0569e-01   +2.0576e-01   -2834.809      OK
+      5   +1.7435e-02   +1.9192e+00   +1.9018e+00     110.076      OK
+      7   +2.7970e-02   +3.5410e+00   +3.5130e+00     126.598      OK
+     11   +8.8382e-02   +8.4407e+00   +8.3523e+00      95.502      OK
+     13   +1.1514e-01   +9.0915e+00   +8.9764e+00      78.962      OK
+
+  per-lag profile, n = 2 (illustrative):
+    L =  1  (odd)   A = +5.9539e-06
+    L =  2  (even)   A = +4.4665e-06
+    L =  3  (odd)   A = +5.2122e-06
+    L =  4  (even)   A = +3.4757e-06
+    L =  5  (odd)   A = +0.0000e+00
+    L =  6  (even)   A = +3.9742e-06
+    L =  7  (odd)   A = +4.6377e-06
+    L =  8  (even)   A = +2.7833e-06
+    L =  9  (odd)   A = +0.0000e+00
+    L = 10  (even)   A = +0.0000e+00
+    L = 11  (odd)   A = +0.0000e+00
+    L = 12  (even)   A = +3.1344e-06
+    L = 13  (odd)   A = +0.0000e+00
+    L = 14  (even)   A = +3.5840e-06
+    L = 15  (odd)   A = +4.1824e-06
+    L = 16  (even)   A = +2.2819e-06
+    L = 17  (odd)   A = +0.0000e+00
+    L = 18  (even)   A = +0.0000e+00
+    L = 19  (odd)   A = +0.0000e+00
+    L = 20  (even)   A = +0.0000e+00
+
+h = 7
+----------------------------------------------------------------------
+  lattice shape: (3999, 4000)  (rows = n-1, n in 2..4000;  cols = k, k in 1..4000)
+  spot-check predict_q vs lattice at k = (1, 2, 3, 4, 5, 7, 11, 31, 100, 999, 3999):
+    OK  h=7 n=2: predict_q matches lattice on all spot k-values
+    OK  h=7 n=3: predict_q matches lattice on all spot k-values
+    OK  h=7 n=5: predict_q matches lattice on all spot k-values
+    OK  h=7 n=7: predict_q matches lattice on all spot k-values
+    OK  h=7 n=11: predict_q matches lattice on all spot k-values
+    OK  h=7 n=13: predict_q matches lattice on all spot k-values
+
+  within-row autocorrelation, L = 1..20, K_max = 4000:
+      n    odd-L mean   even-L mean   gap (e - o)   ratio e/o   agree
+      2   +1.5273e-06   +1.8947e-06   +3.6735e-07       1.241      OK
+      3   +1.4625e-05   +1.1046e-02   +1.1031e-02     755.279      OK
+      5   +7.1386e-05   +1.0952e-01   +1.0945e-01    1534.232      OK
+      7   +1.3669e-03   +1.6802e-01   +1.6666e-01     122.927      OK
+     11   +1.2091e-03   +9.3344e-01   +9.3223e-01     772.000      OK
+     13   +1.1159e-03   +1.0194e+00   +1.0183e+00     913.547      OK
+
+  per-lag profile, n = 2 (illustrative):
+    L =  1  (odd)   A = +4.4654e-06
+    L =  2  (even)   A = +3.4740e-06
+    L =  3  (odd)   A = +3.9712e-06
+    L =  4  (even)   A = +2.7806e-06
+    L =  5  (odd)   A = +0.0000e+00
+    L =  6  (even)   A = +3.1297e-06
+    L =  7  (odd)   A = +3.5777e-06
+    L =  8  (even)   A = +2.2773e-06
+    L =  9  (odd)   A = +0.0000e+00
+    L = 10  (even)   A = +0.0000e+00
+    L = 11  (odd)   A = +0.0000e+00
+    L = 12  (even)   A = +2.5329e-06
+    L = 13  (odd)   A = +0.0000e+00
+    L = 14  (even)   A = +2.8509e-06
+    L = 15  (odd)   A = +3.2590e-06
+    L = 16  (even)   A = +1.9015e-06
+    L = 17  (odd)   A = +0.0000e+00
+    L = 18  (even)   A = +0.0000e+00
+    L = 19  (odd)   A = +0.0000e+00
+    L = 20  (even)   A = +0.0000e+00
+
+h = 8
+----------------------------------------------------------------------
+  lattice shape: (3999, 4000)  (rows = n-1, n in 2..4000;  cols = k, k in 1..4000)
+  spot-check predict_q vs lattice at k = (1, 2, 3, 4, 5, 7, 11, 31, 100, 999, 3999):
+    OK  h=8 n=2: predict_q matches lattice on all spot k-values
+    OK  h=8 n=3: predict_q matches lattice on all spot k-values
+    OK  h=8 n=5: predict_q matches lattice on all spot k-values
+    OK  h=8 n=7: predict_q matches lattice on all spot k-values
+    OK  h=8 n=11: predict_q matches lattice on all spot k-values
+    OK  h=8 n=13: predict_q matches lattice on all spot k-values
+
+  within-row autocorrelation, L = 1..20, K_max = 4000:
+      n    odd-L mean   even-L mean   gap (e - o)   ratio e/o   agree
+      2   +1.2060e-06   +1.5502e-06   +3.4422e-07       1.285      OK
+      3   -1.9124e-06   +1.1670e-06   +3.0794e-06      -0.610      OK
+      5   -6.7493e-06   +6.2674e-07   +7.3761e-06      -0.093      OK
+      7   -4.3761e-05   +2.4895e-03   +2.5332e-03     -56.888      OK
+     11   -1.5961e-05   +5.0076e-02   +5.0092e-02   -3137.383      OK
+     13   +0.0000e+00   +5.0076e-02   +5.0076e-02         inf      OK
+
+  per-lag profile, n = 2 (illustrative):
+    L =  1  (odd)   A = +3.4731e-06
+    L =  2  (even)   A = +2.7792e-06
+    L =  3  (odd)   A = +3.1273e-06
+    L =  4  (even)   A = +2.2750e-06
+    L =  5  (odd)   A = +0.0000e+00
+    L =  6  (even)   A = +2.5290e-06
+    L =  7  (odd)   A = +2.8459e-06
+    L =  8  (even)   A = +1.8977e-06
+    L =  9  (odd)   A = +0.0000e+00
+    L = 10  (even)   A = +0.0000e+00
+    L = 11  (odd)   A = +0.0000e+00
+    L = 12  (even)   A = +2.0896e-06
+    L = 13  (odd)   A = +0.0000e+00
+    L = 14  (even)   A = +2.3229e-06
+    L = 15  (odd)   A = +2.6140e-06
+    L = 16  (even)   A = +1.6090e-06
+    L = 17  (odd)   A = +0.0000e+00
+    L = 18  (even)   A = +0.0000e+00
+    L = 19  (odd)   A = +0.0000e+00
+    L = 20  (even)   A = +0.0000e+00
+
+======================================================================
+total disagreements: 0
+PASS

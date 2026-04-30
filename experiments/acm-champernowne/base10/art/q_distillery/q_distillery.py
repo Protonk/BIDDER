@@ -1,7 +1,7 @@
 """
 Q Distillery - finite-rank Q_n as structure plus residue.
 
-For m = n^h k with exact height h, core/Q-FORMULAS.md writes
+For m = n^h k with exact height h, algebra/Q-FORMULAS.md writes
 
     Q_n(m) = sum_j sign(j) * structure(n, h, t, j) * tau_j(k') / j.
 

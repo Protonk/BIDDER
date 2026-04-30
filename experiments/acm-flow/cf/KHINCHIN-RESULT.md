@@ -74,29 +74,44 @@ Khinchin's at every panel cell — see
 ## Reading
 
 The result is **consistent with — but does not confirm — the
-foothold reading** for the off-spike CF process. At the resolution
+foothold reading** at the marginal level. At the resolution
 where the test has power (T ≤ 8), the off-spike marginal
 distribution looks like Gauss–Kuzmin. At higher T the test is null
-because Khinchin itself predicts almost no events; we cannot tell
-whether the absence of observations matches Khinchin's tail or
-masks a real deviation that would only emerge at much larger
-sample sizes.
+because Khinchin itself predicts almost no events.
 
-The compatible foothold story is: the CF expansion of `C_b(n)`
-decomposes as boundary spikes (substrate-transparent closed form
-per `MEGA-SPIKE.md`) plus Gauss–Kuzmin everywhere else. The
-present probe is consistent with this picture. It is *also*
-consistent with a perimeter story where the off-spike process has
-high-tail structure invisible at 400–840 PQs per cell. To
-discriminate the two, the validated prefix has to be longer; that
-needs higher mpmath precision (currently 80k–160k bits) and more
-n-primes feeding the digit stream.
+The marginal-only result is refined at the block-aggregate level
+in `DENOMINATOR-PROCESS.md`, which tests the substrate prediction
+`Δ_k = D_{k-1} + (n − 1) + O(b^{−(k-1)})` for canonical-to-canonical
+log-q growth directly. That test passes to the spike formula's
+intrinsic precision floor across three layers (k = 2 → 3 residuals
+~`10⁻²`, k = 3 → 4 ~`10⁻³`, k = 4 → 5 ~`10⁻⁴`) over 17 canonical
+blocks across the panel. The block-level test does not depend on
+having Khinchin-typical tail events; it tests substrate envelope
+plus Khinchin interior and finds the substrate–Khinchin
+decomposition holds.
 
-Per the symmetric foothold/perimeter framing in
-`experiments/math/hardy/SURPRISING-DEEP-KEY.md`, neither outcome
-is yet established. What is established is that *gross* deviation
-from Khinchin in the off-spike marginal is ruled out at this
-resolution.
+The XXL probe (`cf_khinchin_probe_xxl.py` at LO 1.5M / HI 3M bits)
+extended the validated CF prefix from 400–840 PQs per cell to
+1193–2000 PQs, capturing k = 5 canonical boundary spikes for all
+six panel cells. With the larger sample, the marginal Khinchin
+test now has cleanly-powered results at T ∈ {4, 6, 8} (max
+|z| ≈ 2.16), with T ≥ 10 still bounded by an interaction between
+the survival threshold (`a ≥ 1024` at T = 10) and the spike mask
+(`a > 1000`): off-spike tail observations at T ≥ 10 are
+artificially zeroed by the mask, so survival counts at high T are
+not informative under the current cutoff. Lifting that requires a
+higher `LOG10_SPIKE` threshold (so the mask sits above the survival
+range tested) and more validated PQs.
+
+So the foothold reading is established at the block-aggregate
+level across k = 2 → 5 (substrate predicts Δ exactly) and at the
+small-PQ marginal level for T ≤ 8. The high-T marginal tail
+remains masked-out at the current cutoff. Per the symmetric
+foothold/perimeter framing in
+`experiments/math/hardy/SURPRISING-DEEP-KEY.md`, the
+`DENOMINATOR-PROCESS.md` result extends the foothold reading two
+layers deeper than the boundary spikes (the boundary-to-boundary
+substrate envelope at k = 5 was the immediate target).
 
 
 ## What this rules out and what it doesn't
@@ -110,26 +125,38 @@ resolution.
   off-spike distribution at low T — there isn't one with effect
   size large enough to push the |z| > 2 over the panel.
 
-**Does not resolve.**
+**Does not resolve at the marginal level (this probe).**
 
-- **Sample size.** Validated CF prefixes are short (400–840 PQs per
-  cell). Khinchin survival expected count drops below 1 at `T = 10`
-  across the panel, so the probe has no power to detect deviation
-  at high thresholds. The most extreme partial quotients above the
-  boundary-spike threshold could carry structure not visible at
-  this resolution.
+- **Sample size at the original 80k/160k bit precision.** Validated
+  CF prefixes are short (400–840 PQs per cell). The XXL probe at
+  LO 1.5M / HI 3M bits extends them to 1193–2000 PQs, but T ≥ 10
+  observations are forced to zero by the interaction between
+  the survival threshold (`a ≥ 1024` at T = 10) and the spike mask
+  (`a > 1000`); see "Reading" above. The high-T marginal tail
+  remains open, and would need either a raised `LOG10_SPIKE`
+  threshold or a different test statistic to interrogate.
 - **Marginal vs joint distribution.** The probe checks marginal
   partial-quotient distribution. A process can have Gauss–Kuzmin
   marginals and non-trivial autocorrelation, recurrence, or spectral
   structure. The off-spike process *between* consecutive spikes is
   Gauss-typical in distribution; whether it has hidden joint
   structure (e.g. recurrence between consecutive PQs or correlation
-  with substrate residue class) is open.
+  with substrate residue class) is open. The block-aggregate test
+  in `DENOMINATOR-PROCESS.md` constrains the *block totals*; joint
+  *positions* of large PQs within a block are unprobed.
 - **Intermediate-ord primes** (`n ∈ {13, 23, 31}`) not in the
   panel; the probe should be extended to confirm.
-- **Higher k.** All boundary spikes captured were at low k (the
-  validated CF prefix barely reaches `k = 4` for some panel cells).
-  The off-spike behaviour at high k is unprobed.
+- **Higher k.** At the original 80k/160k bit precision, the
+  validated CF prefix barely reaches `k = 4`. The XXL probe extends
+  this to `k = 5` for five of six panel cells (n = 4 still
+  transient at k = 5). The k ≥ 6 region needs a further precision
+  step (LO ≥ ~3.5M / HI ≥ ~7M bits); not pursued here.
+
+- **Sub-canonical spike rate.** The XXL block-aggregate analysis
+  in `DENOMINATOR-PROCESS.md` shows `≈ 3×` Khinchin-expected rate
+  of intermediate-magnitude (`a > 1000`) excursions that are not
+  at canonical L. This is a real perimeter signal, not addressed
+  by the marginal probe.
 
 
 ## Files

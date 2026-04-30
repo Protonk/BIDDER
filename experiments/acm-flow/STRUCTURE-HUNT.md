@@ -16,7 +16,7 @@ The hunt is now two-layered:
     local algebra closes by finite rank;
     global stream claims are checked by Hardy deep access.
 
-`core/Q-FORMULAS.md` and `core/FINITE-RANK-EXPANSION.md` are the local
+`algebra/Q-FORMULAS.md` and `algebra/FINITE-RANK-EXPANSION.md` are the local
 side. `experiments/math/hardy/DEEP-TROUBLE-No-4.md` is the global
 sampling side.
 
@@ -48,7 +48,7 @@ form.
 | payload overlap with `n` | for composite `n`, exact height gives `n ∤ k`, not `gcd(n,k)=1` |
 
 The composite case must use the overlap vector from
-`core/Q-FORMULAS.md`: write
+`algebra/Q-FORMULAS.md`: write
 
     n = ∏ p_i^{a_i},        m = n^h k,
     k = ∏ p_i^{t_i} k',     gcd(k', n) = 1,
@@ -63,9 +63,9 @@ Goal: turn the Phase 1 sign patterns into formula consequences.
 
 ### 2.1 — Closed Forms
 
-Status: complete in `core/Q-FORMULAS.md`.
+Status: complete in `algebra/Q-FORMULAS.md`.
 
-Use `core/Q-FORMULAS.md` as the working formula sheet. For the current
+Use `algebra/Q-FORMULAS.md` as the working formula sheet. For the current
 panel `n ∈ {2,3,4,5,6,10}`:
 
 - use the master expansion with overlap vector `(t_i)`;
@@ -276,7 +276,7 @@ functional form has not yet been pinned (three live shapes:
 finite-K bare-count data is a slowly-vanishing prefactor transient,
 not a real exponent shift.
 
-**Implication for `core/FINITE-RANK-EXPANSION.md`.** The "shadow of
+**Implication for `algebra/FINITE-RANK-EXPANSION.md`.** The "shadow of
 rank layers" speculation lives at the prefactor / sub-leading level,
 not at the leading-exponent level. Rank-2 Q_n cell structure does not
 predict the deficit exponent of `M_n(N)`; it informs the d-distribution
@@ -353,7 +353,7 @@ fitting.
 
 | file | role | phase |
 |---|---|---|
-| `core/Q-FORMULAS.md` | master expansion and specialisations | 2.1 |
+| `algebra/Q-FORMULAS.md` | master expansion and specialisations | 2.1 |
 | `q_n_verify.py` | exact row-wise formula check | 2.2 |
 | `payload_q_scan.py` | Q scan and held-out scans | 2.2, 5 |
 | `hardy_composite_q.py` | deep product Q witnesses | 2.4 |
@@ -375,8 +375,8 @@ fitting.
 - `ACM-MANGOLDT.md` should point to Q and finite rank, not `ρ`, as the
   local arithmetic object.
 - `PHASE1-RESULTS.md` is the destroyer record.
-- `core/FINITE-RANK-EXPANSION.md` gives the short conjectural spine.
-- `core/Q-FORMULAS.md` is the local formula sheet.
+- `algebra/FINITE-RANK-EXPANSION.md` gives the short conjectural spine.
+- `algebra/Q-FORMULAS.md` is the local formula sheet.
 - `experiments/math/hardy/DEEP-TROUBLE-No-4.md` and
   `HARDY-ECHO-RESULTS.md` give the deep validation instrument.
 

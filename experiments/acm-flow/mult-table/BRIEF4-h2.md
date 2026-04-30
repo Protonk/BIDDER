@@ -1,6 +1,6 @@
 # Brief 4 / Phase 4 — h = 2 predictor
 
-The first step in pushing `core/FINITE-RANK-EXPANSION.md` rank-by-rank
+The first step in pushing `algebra/FINITE-RANK-EXPANSION.md` rank-by-rank
 through the multiplication-table coupling. We derive the rank-2
 contribution to `M_n(N)·Φ(N)/N` for prime `n` from Ford's anatomy +
 coprime-to-n density, then state where (and where not) `Q_n`'s rank-2

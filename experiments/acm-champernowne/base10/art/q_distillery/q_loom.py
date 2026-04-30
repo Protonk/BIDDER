@@ -1,7 +1,7 @@
 """
 n-Multiples Loom - the integer-language reading of Q_n.
 
-Per core/Q-FORMULAS.md (and the integer-language section there),
+Per algebra/Q-FORMULAS.md (and the integer-language section there),
 
     Q_n(m) = sum_{j = 1}^{ν_n(m)}
              (-1)^(j-1) · #{ordered j-tuples (n d_1, …, n d_j) with product m} / j .

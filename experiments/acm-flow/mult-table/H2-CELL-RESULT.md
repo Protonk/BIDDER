@@ -94,7 +94,7 @@ What IS tested empirically: **the n-dependence of the d(k)
 distribution on the multiplication-table image**. This is the
 rank-2 cell distribution, and it varies non-trivially with n —
 exactly the "shadow of rank layers seen through different global
-projections" speculation in `core/FINITE-RANK-EXPANSION.md`.
+projections" speculation in `algebra/FINITE-RANK-EXPANSION.md`.
 
 The per-bin numbers say:
 - **rank-2 cell #4 (k = pq or p³)** holds 13.5 % of M_2 but only
@@ -141,7 +141,7 @@ does: cell-resolve, exposing per-bin behavior.
 
 ## Connection to FINITE-RANK-EXPANSION
 
-The conjecture in `core/FINITE-RANK-EXPANSION.md`: visual residuals,
+The conjecture in `algebra/FINITE-RANK-EXPANSION.md`: visual residuals,
 local Λ_n, finite-rank Q_n form a tower; the global picture comes
 from coupling. The cell-resolved data says, at rank 2:
 

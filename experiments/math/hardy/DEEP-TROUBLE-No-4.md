@@ -31,8 +31,8 @@ deep-field instrument. The atoms-only caveat at the end of this doc
 already flags that nontrivial-rank Q-tests need composite m and
 recommends the right deep-Q sanity loop.
 
-For the local algebra see `core/Q-FORMULAS.md` and
-`core/FINITE-RANK-EXPANSION.md`.
+For the local algebra see `algebra/Q-FORMULAS.md` and
+`algebra/FINITE-RANK-EXPANSION.md`.
 
 ---
 
@@ -225,8 +225,8 @@ Use it for:
 This mode is where Hardy Sidestep touches the base-10 spike work
 most directly. It is the verification harness that
 `experiments/acm-flow/STRUCTURE-HUNT.md` Phase 3.1 needs: derive
-the CF-spike formula from `Q_n` (`core/Q-FORMULAS.md`,
-`core/FINITE-RANK-EXPANSION.md`) at small `d`, then check the
+the CF-spike formula from `Q_n` (`algebra/Q-FORMULAS.md`,
+`algebra/FINITE-RANK-EXPANSION.md`) at small `d`, then check the
 prediction at `d = 50` or `d = 100` via Mode 3 without
 materializing the Champernowne real to that depth.
 
@@ -321,7 +321,7 @@ two-part near-closure:
 The first tells us what the local object is. The second tells us
 whether the object keeps echoing after the origin is gone.
 
-`core/FINITE-RANK-EXPANSION.md` gives the local side; `core/Q-FORMULAS.md`
+`algebra/FINITE-RANK-EXPANSION.md` gives the local side; `algebra/Q-FORMULAS.md`
 specialises it into explicit closed forms per `(h, n_type)`. Hardy
 echo gives the global side.
 
@@ -335,7 +335,7 @@ sanity loop is:
 1. choose `(K_1, K_2)` deep (or any tuple);
 2. compute `m = ∏ p_{K_i}(n)` and `h = ν_n(m)` (here equals the
    tuple length);
-3. evaluate the closed form from `core/Q-FORMULAS.md` and assert
+3. evaluate the closed form from `algebra/Q-FORMULAS.md` and assert
    exact `Fraction` agreement with the master expansion's direct
    evaluation.
 

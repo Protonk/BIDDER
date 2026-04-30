@@ -9,7 +9,7 @@ For m = n^h k with gcd(k, n) = 1 and h = ν_n(m), the formal series
 contributes to [m^{-s}] only at j <= h, because the j-th term carries
 n^{-js} and the coefficient of m^{-s} in n^{-js} ζ(s)^j is tau_j(m/n^j)
 exactly when n^j | m, and zero otherwise. The truncation is by integer
-divisibility — see core/FINITE-RANK-EXPANSION.md (Rank Lemma).
+divisibility — see algebra/FINITE-RANK-EXPANSION.md (Rank Lemma).
 
 Each panel is one n. Columns are sampled m's, sorted by h then by k, so
 the height ν_n(m) ascends in clean steps across the panel. Rows are

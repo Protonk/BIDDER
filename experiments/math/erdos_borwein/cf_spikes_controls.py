@@ -138,26 +138,43 @@ def main():
         counts = spike_counts(log2a, thresholds)
         results.append((label, w, log2a, log2q, counts))
 
-    # Spike-count comparison table
-    print("\n=== spike density: # steps with log2(a+1) > T (40K steps) ===")
-    header = f"{'T':>3}  " + "  ".join(f"{lbl:>16}" for lbl, *_ in results) \
-             + "  " + f"{'Khinchin expect':>16}"
+    # Spike-count comparison table.
+    # Each run has its own CF length, so each gets its own Khinchin baseline.
+    n_steps_by_run = [len(log2a) for _, _, log2a, _, _ in results]
+    print("\n=== spike density: # steps with log2(a+1) > T ===")
+    print("n_steps per run: " + ", ".join(
+        f"{lbl}={n}" for (lbl, *_), n in zip(results, n_steps_by_run)
+    ))
+    khinchin_labels = [f"Khin({n})" for n in n_steps_by_run]
+    header = f"{'T':>3}  " + "  ".join(
+        f"{lbl:>16}" for lbl, *_ in results
+    ) + "  " + "  ".join(f"{kl:>14}" for kl in khinchin_labels)
     print(header)
     for T in thresholds:
-        row = f"{T:>3}  " + "  ".join(
+        obs_cells = "  ".join(
             f"{counts[T]:>16d}" for _, _, _, _, counts in results
-        ) + "  " + f"{khinchin_expected(MAX_CF_STEPS, T):>16.1f}"
-        print(row)
+        )
+        khin_cells = "  ".join(
+            f"{khinchin_expected(n, T):>14.1f}" for n in n_steps_by_run
+        )
+        print(f"{T:>3}  " + obs_cells + "  " + khin_cells)
 
     # Top-10 spike loci (in bit-position space) for each run
     print("\n=== top 10 spikes per run (bit-position space) ===")
     summary_lines = ["# Erdős–Borwein brief #3 controls", ""]
+    summary_lines.append("n_steps per run: " + ", ".join(
+        f"{lbl}={n}" for (lbl, *_), n in zip(results, n_steps_by_run)
+    ))
+    summary_lines.append("")
     summary_lines.append(header)
     for T in thresholds:
-        row = f"{T:>3}  " + "  ".join(
+        obs_cells = "  ".join(
             f"{counts[T]:>16d}" for _, _, _, _, counts in results
-        ) + "  " + f"{khinchin_expected(MAX_CF_STEPS, T):>16.1f}"
-        summary_lines.append(row)
+        )
+        khin_cells = "  ".join(
+            f"{khinchin_expected(n, T):>14.1f}" for n in n_steps_by_run
+        )
+        summary_lines.append(f"{T:>3}  " + obs_cells + "  " + khin_cells)
     summary_lines.append("")
     for label, w, log2a, log2q, _ in results:
         summary_lines.append(f"## {label} (w={w}) — top 10 by log2(a+1)")

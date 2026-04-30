@@ -392,18 +392,23 @@ The leaky parameterization is *productively trivial*. It is also
 a knife-edge, and we should record where the edge is so we do not
 forget.
 
-Triviality of a structural fact can mean two opposite things. It
+Triviality of a structural fact can mean two things. It
 can mean **the construction has rich consequences that follow from
 a trivial surface presentation** — the way `(AB)^T = B^T · A^T` is
 one symbol-pushing line and underlies most of matrix theory. The
 trivial presentation is then a **foothold**: results that depend
 on it are real, the elementary fact is doing real work, and we
 should expect more uses to emerge. Or it can mean **the trivial
-presentation is the entire surface area and there is nothing
-beneath it** — every "result" derived from the parameterization is
-the parameterization in costume. The trivial presentation is then
-a **perimeter**: results that depend on it are relabelings, and
-we are progressing by writing the same fact in new sentences.
+presentation is precisely where the substrate's transparency
+stops** — the parameterization captures what the construction has
+to say, and results that depend on it locate a particular
+arithmetic object rather than uncover further structure. The
+trivial presentation is then a **perimeter**: not a relabeling
+exercise but a localisation, identifying where genuine arithmetic
+content begins. Both readings are real findings. ζ's perimeter sits
+at the zeros, and locating that perimeter has been a century of
+work; a perimeter on the n-prime construction would be informative
+in the same shape, even at a smaller scale.
 
 The danger is sharper in this project than in most settings,
 because **we constructed the n-prime table on purpose**. In
@@ -447,10 +452,10 @@ whatever inversion you can write down in one line, and the
 experiment is moot. Write the trivial extraction down honestly and
 move on. This rewrite is vocabulary-independent: it lands the same
 way whether the question comes wearing tables, patches, multi-sets,
-walks, or whatever framing the next surprise wears. When in doubt,
-prefer the perimeter reading. We are operating in a constructed
-space and the costs of false confidence are higher than the costs
-of honest doubt.
+walks, or whatever framing the next surprise wears. Foothold and
+perimeter are symmetric outcomes — both are findings, both locate
+something real about the construction. The discipline is to identify
+which one a given result is, not to default to either.
 
 **The operational shape: recovery, dynamics, and transport.** The
 discipline above has a sharper version that classifies questions in

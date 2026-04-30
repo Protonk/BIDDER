@@ -4,6 +4,100 @@ A methodology note from the `experiments/acm-champernowne/base10/art/q_distiller
 FFT-iteration experiments. Two findings, one substrate-side, one
 rendering-side. Both required deliberate testing to disentangle.
 
+## Standing Findings (consolidated)
+
+The body of the document below is a chronological narrative of
+what was tried during one session, what got refuted, and what
+the surviving claims rest on. This section is the TL;DR after
+the audits the body records.
+
+### Substrate-side findings (currently surviving)
+
+1. **The lattice value `Q_n(n^h · k)` is determined by
+   `(shape(n), τ-signature(k), ν_n(k))`.** Algebraic from the
+   master expansion. Verified empirically: σ-relabeling (random
+   permutation of primes acting through prime factorisation)
+   leaves the lattice bit-for-bit identical, since shape,
+   τ-signature, and ν depend on prime exponent multisets, not
+   on which specific primes realise them.
+
+2. **The lattice has measurable spatial-correlation structure
+   ~700× the random-input baseline at h = 5.** Direct angular
+   probe (no FFT iteration): 16-angle `sum|corr|` is 6.77 for
+   the original lattice vs 0.0094 for constgauss baseline. The
+   substrate's spatial signal is real and large.
+
+3. **Substrate spatial correlations decompose into two 1D
+   structures, one per axis.** The visually striking 2D
+   patterns (checkerboard at odd h, horizontal stripes at even h)
+   are *cross-products* of two 1D correlation profiles on the
+   consecutive-integer-indexed lattice. Verified by row/column
+   shuffle test: shuffling rows preserves the k-direction
+   profile only; shuffling columns preserves the n-direction
+   profile only. The 1D pieces are real; the 2D geometric
+   richness is partly coordinate artifact.
+
+4. **The 1D profiles show parity-of-lag modulation depending on
+   h-parity:**
+   - **Odd h (h=5, h=7)**: axial-balanced. Both horizontal and
+     vertical 1D correlations have a parity sawtooth (even-lag
+     correlation noticeably higher than odd-lag, both positive).
+   - **Even h (h=6, h=8)**: horizontal becomes parity-flat at
+     high value (~0.6–0.78); vertical becomes parity-flipped —
+     even-dy positive, odd-dy *negative* (~−0.13).
+
+5. **Parity modulation persists at lag 1500 (37% of lattice
+   size), with no decay to zero, no sign crossing, no
+   decoherence.** Substrate-wide parity-of-(n, k) organisation,
+   not a local coupling.
+
+6. **Diagonals (45°, 135°) are the weakest near-axial directions
+   at every h tested.** Mechanically: diagonal motion changes
+   both shape(n) AND τ-signature(k); axial motion changes only
+   one.
+
+7. **For prime n at h, the master-expansion coefficient pattern
+   has kernel structure that grows with h.** At h, prime-n rows
+   are exactly zero for k whose τ-polynomial degree lies in
+   `[1, h−1]`. By h = 8, most k ∈ [1, 4000] give Q = 0 at prime
+   n; lattice signal at high h comes from composite-n rows.
+
+### Methodological findings
+
+A. **The FFT-magnitude-log iteration is a high-self-signature
+   probe.** Random-input pair correlations between iter_5
+   angular spectra have median ~+0.48 — the operator's intrinsic
+   angular bias. Any "partial closure" claim under iteration
+   must clear that bar; most don't.
+
+B. **Direct lag correlation on the raw lattice (no iteration)
+   is the right primitive for substrate signal.** It bypasses
+   the operator's intrinsic angular biases.
+
+C. **Single-seed comparisons cannot ground claims.** The seed
+   std on `sum|corr|` is ~0.001, comparable to differences that
+   were briefly called "structural conservation." Multi-seed
+   bracketing is required.
+
+D. **Bulk-dominated distributions need different rendering than
+   structured ones.** Percentile-clipped colormaps create
+   phantom patterns when applied to peaked distributions;
+   full-range rendering is honest.
+
+### Refuted en route (preserved as record)
+
+- "Conservation of structural budget across information-discarding
+  transforms." Most of the apparent conservation was the
+  iteration's intrinsic correlation floor, not substrate content.
+- "Anti-diagonal partial closure at iter_5 = 2.3σ." At 16-angle
+  resolution, several other angles carry similar excess; the
+  4-direction probe was sampling artifact.
+- "2D checkerboard / stripes ARE the substrate." Refined: 2D
+  patterns are cross-products of 1D structures on consecutive-
+  integer adjacency.
+- "Möbius preservation of angular shape (+0.703) is informative."
+  Within range of random-input seed pairs at +0.48 ± 0.17.
+
 ## The Setup
 
 The `(n, k)` Q-lattice at `h = 5` is a 2D arithmetic-multiplicative
@@ -268,10 +362,392 @@ random-input field.
 
 The total-budget redistribution claim — `y` rises while `-diag`
 falls — does not survive multi-seed analysis. Different τ-rand
-seeds give different per-direction concentrations. The substrate's
-contribution to the iter_5 correlation budget is concentrated in
-the anti-diagonal direction specifically, not distributed across a
-fixed-budget set of modes that trade.
+seeds give different per-direction concentrations.
+
+### Further deflation: 16-angle sampling refutes the sharp-peak reading
+
+The "anti-diagonal partial closure at 2.3σ" interpretation
+implicitly assumed the 4-direction probe was sampling near *the*
+substrate-signal peak. A 16-angle spectrum at iter_5 (lag pairs
+covering 0°–180° in increments of ~10–20°, summed over L = 1, 2, 4)
+disconfirms that. Excess of original over single-seed constgauss
+baseline by angle:
+
+```
+135.0°  +0.00079    (anti-diagonal — supposedly the peak)
+ 33.7°  +0.00077    (essentially identical magnitude)
+ 26.6°  +0.00050
+  0.0°  +0.00041
+146.3°  +0.00029
+ 56.3°  +0.00026
+ ... (other angles within ±0.0004 of zero, mixed signs)
+ 90.0°  -0.00040    (vertical: actually depressed)
+108.4°  -0.00038
+```
+
+The 135° excess is the largest, but **33.7° is essentially
+indistinguishable in magnitude**, and `26.6°, 0°, 146.3°, 56.3°`
+all show meaningful excess too. The cluster within ±25° of 135°
+has mean excess +0.00011 with only 2 of 5 angles above zero. The
+far cluster has mean +0.00004 with 4 of 11 above zero. The
+"partial closure at the anti-diagonal" interpretation is a
+4-direction-sampling artifact: the probe happened to land at one
+of several similar-magnitude excess points, and 33.7° (which the
+4-direction probe didn't sample) carries indistinguishable signal.
+
+Worse, the 4-direction probe's `y` direction at 90° comes back as
+*depressed* (-0.00040) below baseline at 16-angle resolution. The
+original 4-direction reading "y is elevated at 2.4×" was an
+artifact of the wrong (non-iterated) Gaussian baseline.
+
+What survives after the angular interrogation: the original
+lattice's iter_5 angular spectrum is qualitatively distinguishable
+from constgauss's (some angles positive excess, some negative),
+but no single direction carries an unambiguous substrate signal
+at this probe and resolution. The single-angle excess magnitudes
+(~0.0008) are comparable to single-seed std of the constgauss
+baseline (~0.001), so even the largest excesses need multi-seed
+across 16 angles before any directional claim survives the
+standard the document calls for elsewhere.
+
+This is the harness pattern recurring inside our own audit: the
+angular sampling was itself a probe choice that wasn't interrogated
+until committed to. The 4-direction result, which seemed clean at
+the time, was sampling artifact.
+
+## Möbius Inversion Along k: A Different Probe (Exploratory)
+
+A complementary test, named in the web agent's third proposal
+several iterations ago and finally run: apply Möbius inversion
+along the k-axis to each row of the lattice, then run iter_5 and
+the 16-angle spectrum. Möbius is the Dirichlet inverse of the
+all-ones function; the master expansion's `τ_j(m / n^j)` is a
+j-fold Dirichlet self-convolution of `1`, so one Möbius application
+along k peels one layer of that stack. The mechanical question:
+does the angular structure we see at iter_5 trace to τ-stack
+content?
+
+Result, single-seed and exploratory:
+
+| | total `sum|corr|` |
+|---|---|
+| original lattice iter_5 | 0.01415 |
+| Möbius-along-k iter_5 | 0.01436 |
+| constgauss baseline (seed 1729) | 0.01239 |
+
+Total budget unchanged (Möbius did not deflate the iteration's
+correlation budget). The angular *shape*, however, shifted
+non-trivially:
+
+```
+Correlation between (orig − cg) and (mu − cg) angular excess vectors:
+  +0.703
+```
+
+`+1.0` would mean Möbius did nothing to the spectrum's shape;
+`0.0` would mean Möbius produced unrelated structure; `+0.703`
+means partial overlap. Möbius preserved ~half the angular
+variance and changed the other half. The sharpest individual
+shifts were sign-flips at 90° and 153° and elevations at 71.6°
+and 108.4° — angles that weren't notable before Möbius become
+prominent after, and vice versa.
+
+**Tentative reading**: the angular structure at iter_5 isn't
+purely τ-stack content (Möbius didn't flatten it) and isn't
+fully independent of τ-stack content (Möbius did change which
+angles carry excess). It's partly Dirichlet-stacking, partly
+something else.
+
+**The control: constgauss-vs-constgauss seed-pair correlations.**
+Run iter_5 on 12 different constgauss seeds. Compute each one's
+16-angle excess vector against a fixed reference constgauss
+(seed 1729, the same baseline used in the Möbius test). Compute
+the 66 pairwise Pearson correlations among those 12 excess
+vectors. The result:
+
+| | value |
+|---|---|
+| mean | +0.467 |
+| median | +0.484 |
+| std | 0.166 |
+| min / max | +0.079 / +0.810 |
+| IQR | +0.351 / +0.564 |
+
+**The Möbius `+0.703` sits at the ~80th percentile, ~+1.3σ above
+median, but well within the random-input distribution.** Two
+random constgauss inputs produce iter_5 angular spectra correlated
+at this level routinely. The Möbius result does not clear the
+random-input bar.
+
+**What this calibrates**: the FFT-mag-log iteration imposes about
+half the angular variation from its own stationary-distribution
+shape, regardless of input. The operator has a strong angular
+self-signature (median pair correlation +0.48). Substrate
+contributions above this construct floor are difficult to detect
+with this probe at moderate magnitude.
+
+**What this does not refute**: that the substrate has angular
+structure. It refutes that *the FFT-mag-log iteration's iter_5
+angular spectrum* is a clean enough probe to isolate it. The
+operator's intrinsic correlation between any two random-input
+runs is high enough (~0.5 median) that moderate-magnitude
+substrate contributions are masked. A different probe with lower
+intrinsic angular self-correlation might separate substrate from
+operator more cleanly. The session has not yet found such a
+probe; the next experiment after this section drops FFT
+iteration entirely and computes the angular spectrum of the raw
+lattice directly.
+
+The Möbius experiment is recorded here as **uninformative at this
+resolution**, not as a finding. Multi-seed bracketing of Möbius
+itself, or a probe with smaller operator self-bias, would be
+needed to revisit.
+
+## Direct Angular Spectrum: Backing Off FFT Entirely
+
+The right move — once we recognised the FFT-mag-log iteration as a
+high-self-signature probe — was to drop FFT and look at spatial
+correlations of the raw lattice directly. We should have run this
+first. The result:
+
+```
+                          16-angle sum|corr| over L = 1, 2, 4
+original lattice (slog)   6.77211
+constgauss (12 seeds)     0.00944 ± 0.00098
+                          ----
+z(original vs constgauss) +6896
+```
+
+The raw lattice's spatial-correlation budget is **three orders of
+magnitude above the random-input baseline**. Every single angle is
+above z ≈ 800. The peak is z ≈ 3870 at 0° (horizontal lag) and
+z ≈ 3800 at 90° (vertical lag).
+
+The dominant directions in the raw lattice are *axial* — 0° and
+90°. The diagonals (45° and 135°) are the *weakest* near-axial
+directions: sum |corr| ≈ 0.28 vs ≈ 0.90–1.00 for horizontal /
+vertical. Off-axial angles (18°, 26°, 56°, 71°, etc.) sit
+between, with sum |corr| roughly 0.21–0.46.
+
+### What this implies for the rest of the session
+
+**The FFT-mag-log iteration was destroying the signal it was
+trying to detect.** All the analyses based on iter_5 — the
+"partial closure at 135°", the multi-seed bracketing, the 16-angle
+spectrum on iter_5, the Möbius peeling — were measuring a few
+percent of structure that survived an enormously
+information-discarding probe.
+
+**The substrate's preferred directions are axial, not diagonal.**
+Mechanically reasonable: adjacent k at fixed n share τ-signature
+context; adjacent n often share shape class. Diagonal motion
+requires both n and k to vary in correlated ways, a less natural
+constraint.
+
+**The iter_5 "anti-diagonal partial closure" was an inversion.**
+At raw-lattice level, 135° is among the *weakest* angles. The
+iter_5 spectrum saw it as elevated — meaning the FFT iteration
+not only loses information but appears to *invert* directional
+preferences. The mechanism is conjectural (FFT rotates real-space
+horizontal/vertical structure into frequency-space
+horizontal/vertical, then magnitude-log nonlinearity blends them);
+the empirical fact is that **iter_5 directional preference and
+raw-lattice directional preference disagree about which angles
+are elevated**.
+
+### The methodological self-check this raises
+
+The session went straight to FFT iteration as the probe of choice
+without first establishing that the raw lattice has measurable
+spatial structure at all. The right opening move would have been
+the experiment in this section: compute lag correlations on the
+raw lattice, see the substrate's signal directly, and only then
+ask which iterations or transformations preserve / destroy it.
+
+I did not propose this experiment until prompted by the user.
+The justifications I gave for going through FFT first ("Mandelbrot
+analog", "what does the FFT look like") were aesthetically
+appealing but methodologically backwards: they prioritised an
+interesting probe over a *calibrating* one. The harness section
+above lists "the probe was assumed clean" as a harness error
+caught only late; this experiment is the calibration that should
+have come first and didn't.
+
+The raw-lattice direct angular spectrum is the closest thing the
+session has to a clean substrate signal. It does not say anything
+about absolute normality; it says the substrate has measurable
+spatial-correlation structure at small lags, with a known angular
+profile (axial-dominant, diagonal-weakest), three orders of
+magnitude above random-input baseline.
+
+### h-parity alternation in the angular shape
+
+Running the same direct-angular probe at h = 5, 6, 7, 8 revealed
+an h-parity dependence in the substrate's spatial-correlation
+structure. Numbers (sum |corr| over L = 1, 2, 4):
+
+```
+                  total    0° (horiz)   90° (vert)   45°    135°
+h = 5  (odd)       6.77       0.90       1.01       0.28    0.28
+h = 6  (even)     10.60       2.01       0.66       0.55    0.55
+h = 7  (odd)       5.97       1.02       0.93       0.27    0.27
+h = 8  (even)      8.61       1.87       0.54       0.41    0.41
+```
+
+**Three patterns survive at the magnitude where single-seed
+constgauss baselines (~0.009) are negligible noise relative to the
+signal:**
+
+1. **Total budget alternates with h-parity.** Even h gives
+   ~10.6 / 8.6; odd h gives ~6.8 / 6.0. Even h is consistently
+   ~1.5–1.7× larger than the adjacent odd h. Not a monotone climb
+   with rank.
+
+2. **The dominant axis flips between odd and even h.** Even h is
+   strongly horizontal-dominant: 0° at 1.87–2.01, 90° at
+   0.54–0.66. Odd h is roughly axial-balanced: 0° at 0.9–1.0,
+   90° at 0.93–1.01. The substrate's preferred direction in the
+   (n, k) lattice rotates with h-parity.
+
+3. **L = 1 vertical correlation flips sign at even h.** Adjacent
+   rows in (n, k) at even h are *slightly anti-correlated*
+   (vertical L=1 ≈ −0.14 at h=6 and h=8); at odd h they are
+   positively correlated (vertical L=1 ≈ +0.25 at h=5 and h=7).
+   The L = 4 vertical correlation is positive at all h. So at
+   even h, vertical correlation rises *from negative* with lag.
+
+**Mechanism — first-order reading**: the master expansion has
+`(-1)^(j-1)` alternating signs. The deepest-rank term `j = h` has
+sign `(-1)^(h-1)` — positive at odd h, negative at even h. When
+the alternating sum redistributes its content into spatial
+correlations after slog compression, the parity of the deepest
+contribution apparently selects which axis carries the dominant
+spatial coherence. Complete mechanistic accounting would require
+tracking which specific terms of the expansion produce
+correlations along which axes; the empirical fact stands ahead of
+that accounting.
+
+**What survives universally across h tested**: substrate signal
+is 685×–1125× the constgauss baseline at every h; the diagonal
+directions (45°, 135°) remain the weakest near-axial angles at
+every h (substantially weaker than the four cardinal directions);
+the L=1<L=4 lag-anomaly persists at every h, with magnitude
+varying by parity but the sign-of-rise consistent.
+
+This is the rank-tower coherence the Grand Program section asked
+for, in specific quantitative form. Coherence isn't the same
+shape at every h; it's the same *kind of shape* (octagonal,
+axial-dominant, diagonal-weakest) modulated by an h-parity
+alternation that traces back to the master expansion's
+alternating signs.
+
+### The 2D autocorrelation, and what we created with our coordinate
+choice
+
+A 2D autocorrelation map of slog(lattice) at h ∈ {5, 6, 7, 8}
+showed two visually striking pattern types: a clean Z/2 × Z/2
+**checkerboard** at odd h, and **horizontal stripes** at even h.
+Initial reading: the substrate has rich 2D spatial structure,
+qualitatively different by parity.
+
+A shuffle test asks the harness-vs-system question on this
+finding directly. For each h, randomise either the row order
+(n-axis) or the column order (k-axis) of the lattice, recompute
+2D autocorrelation. Result:
+
+- **Even h (h=6, h=8)**: row-shuffle collapses the pattern
+  almost completely — only a single bright horizontal line at
+  `dy = 0` survives, with all other `dy` rows going dark.
+  Column-shuffle barely touches the pattern. The "horizontal
+  stripes" were *almost entirely n-direction structure*; the
+  k-direction (dx) content was nearly uniform.
+- **Odd h (h=5, h=7)**: row-shuffle leaves a single bright
+  horizontal line at `dy = 0` (carrying the k-direction
+  structure); column-shuffle leaves a single bright vertical
+  line at `dx = 0` (carrying the n-direction structure). Either
+  shuffle removes most of the 2D pattern. The 2D checkerboard
+  was the *cross-product* of two 1D correlation structures, one
+  along each axis.
+
+The parity story refined:
+
+- **Substrate has 1D correlation structure along each axis**,
+  decomposable. Each survives the shuffle of the perpendicular
+  axis.
+- **At odd h, both 1D structures are substantial**. At even h,
+  the n-direction structure dominates and the k-direction
+  structure is small.
+- **The 2D pattern (checkerboard / stripes) is the cross-product
+  of those 1D structures**, presented on the integer-indexed
+  (n, k) lattice. The "checkerboard appearance" at odd h is a
+  visual cross-product of the two 1D structures landing on
+  consecutive-integer parity adjacencies. Strip the second axis
+  and what's left is one strong 1D structure.
+
+This is the harness-vs-system audit applied to the 2D
+finding. The 1D substrate structures are real; the 2D pattern's
+geometric richness is partly an artifact of (consecutive-integer
+adjacency) × (cross-product of 1D content). We had been
+calling the 2D pattern itself the substrate finding; what
+survives the audit is the 1D-decomposition with parity-dependent
+emphasis between axes.
+
+The Methodological self-check applies again, less severe than
+the iter_5 partial-closure debacle but in the same shape: I had
+been treating the 2D autocorrelation map as the substrate's
+content. The user pushed back ("are we huffing farts"); a
+shuffle test resolved which parts were real versus artifact;
+the document now records the refined claim. None of the
+attractive geometric pattern would have been corrected without
+the user's intervention.
+
+### Long-range persistence: parity modulation is not local
+
+The 1D autocorrelation profiles per axis, parity-split, were then
+extended to lag = 1500 (37% of the 4000 lattice size, with
+proper FFT zero-padding to avoid wrap-around). The user's
+explicit framing: this *did not have to* persist. Three patterns
+that could have refuted "global parity-coupling" but didn't:
+
+1. **Decay to zero**: the parity gap could have closed at some
+   characteristic lag. It didn't.
+2. **Sign flip**: the negative odd-dy correlation at even h could
+   have crossed zero at long lags. It didn't.
+3. **Decoherence**: at long lags, autocorrelations could have
+   become small noise. They didn't — they stayed at clearly-
+   separated levels.
+
+Specific lag-1500 values:
+
+```
+                  horiz[1]  horiz[100]  horiz[500]  horiz[1500]    vert[1]   vert[1500]
+h = 5 (odd)        +0.16     +0.48       +0.43       +0.41        +0.25      +0.37
+h = 6 (even)       +0.59     +0.72       +0.65       +0.51        −0.14      +0.39
+h = 7 (odd)        +0.20     +0.51       +0.46       +0.41        +0.30      +0.29
+h = 8 (even)       +0.57     +0.67       +0.60       +0.47        −0.14      +0.34
+```
+
+Especially clean: at all four h values, **odd-dx horizontal
+correlation at odd h sits ≈ +0.18 from L=1 to L=1500**, holding
+the factor-of-3 gap below the even-h horizontal value (≈ +0.5).
+At even h vertical, **odd-dy stays negative at every L tested**,
+hovering near −0.13 with small variation.
+
+This means the substrate's parity-coupling is a **substrate-wide
+organising principle**, not a short-range correlation that
+happens to look striking at small lags. Two cells at parity-
+coupled positions correlate (or anti-correlate, at even h
+vertical) regardless of lattice distance, all the way out to a
+substantial fraction of lattice size.
+
+Mechanically: the lattice value at (n, k) depends on the
+parity of n and parity of k through shape × τ-signature × gcd
+content, in a way that is consistent across the whole integer
+range we sampled. The parity organisation is not a local
+arithmetic accident; it's a feature of how the master
+expansion's content distributes itself globally.
+
+
 
 ## What This Adds to the Undecidable Heart
 
@@ -318,18 +794,21 @@ These FFT-iteration experiments add empirical bounds to that claim:
    This is a strong constraint on what counts as a *probing*
    instrument vs. a *null* instrument for this object.
 
-5. **Partial closure at the anti-diagonal observable, iter_5.**
-   The original lattice's anti-diagonal directional sum at iter_5
-   sits 2.2–2.5σ above the distributions produced by three
-   different random-input baselines (τ-randomisation, per-row
-   Gaussianisation, global Gaussianisation), each measured across
-   20 seeds. Other directions sit within ±1σ of those baselines.
-   Total `sum|corr|` is also within ±1σ. This is the manifesto's
-   "almost perfect structure" with a *narrow* empirical handle: a
-   single directional observable carrying substrate signal,
-   reproducible across baselines, modest in magnitude. Not a
-   conserved quantum; a *located* one. Other observables at this
-   probe sit at the iteration's noise floor.
+5. **Angular structure at iter_5 distinguishable from constgauss
+   baseline by qualitative shape, but not concentrated at any
+   single mode.** The 16-angle spectrum on the original lattice's
+   iter_5 versus single-seed constgauss baseline shows several
+   non-axial angles (135°, 33.7°, 26.6°, 0°, 146.3°, 56.3°) with
+   positive excess, several others (90°, 108°) with negative
+   excess. The "anti-diagonal partial closure at 2.3σ" claim from
+   earlier in the session was a 4-direction-sampling artifact: the
+   probe landed near one of multiple similar-magnitude excess
+   points. At 16-angle resolution, the partial closure isn't a
+   single mode — and individual-angle excess magnitudes (~0.0008)
+   are comparable to single-seed baseline std (~0.001), so even
+   the qualitative-shape claim needs multi-seed across all angles
+   to survive the document's own standards. The substrate is doing
+   something angular at iter_5; we have not yet localised it.
 
 The category-error worry the user named while looking at the disk
 image — *is the moiré real or aliasing or category error?* —
@@ -338,9 +817,11 @@ generality. The structure question splits into:
 
 - real-as-substrate-arithmetic-residue (substrate structure):
   tested, gone by iter 2
-- real-as-anti-diagonal-partial-closure: tested at 2.3σ above
-  random-input baselines across 20 seeds, observable-specific,
-  reproducible
+- real-as-anti-diagonal-partial-closure: refuted on probe
+  interrogation — at 16-angle resolution, the 135° excess is
+  matched by 33.7° excess, with several other angles also
+  elevated; the 4-direction probe's "single mode" reading was
+  sampling artifact
 - real-as-class-functional-dependence: tested via σ-relabeling
   (identity, lattice unchanged) and τ-randomisation (anti-diag
   collapses for any single seed)
@@ -417,14 +898,17 @@ Three findings worth keeping:
    structured data and creates phantom patterns for bulk-dominated
    data. Use full-range rendering when the histogram is peaked.
 
-3. **Partial closure at the anti-diagonal observable.** The original
-   lattice's anti-diagonal directional `sum|corr|` at iter_5 sits
-   2.2–2.5σ above the distributions produced by τ-randomisation,
-   per-row Gaussianisation, and global Gaussianisation (20 seeds
-   each). Other directions and the total budget sit within ±1σ of
-   the random-input baselines. The substrate signal at this probe is
-   *located*, not distributed: one mode carries it; the rest are at
-   the iteration's noise floor.
+3. **Angular structure at iter_5 is qualitatively distinguishable
+   from constgauss baseline, but not localised.** The 16-angle
+   spectrum on the original lattice's iter_5 shows several
+   non-axial angles with positive excess and several with
+   negative excess; magnitudes are comparable to single-seed
+   baseline std. The earlier "partial closure at the anti-diagonal"
+   reading was a 4-direction sampling artifact. The substrate is
+   doing something angular at iter_5 — we have not localised it.
+   Whether multi-seed-bracketed comparison at 16+ angles preserves
+   any signal as "real substrate content" is an open empirical
+   question, not a settled one.
 
 The deeper note in line with `THE-UNDECIDABLE-HEART`: each
 instrument is a deliberate choice, and the substrate's persistence
@@ -435,13 +919,27 @@ to instrument-stacking.
 
 The session's headline collapse-in-two iteration was correct. The
 hierarchy of relaxation timescales was the surprise. The
-partial closure at the anti-diagonal observable is the project's
-shape applied at this specific probe: like the master expansion
-having stable content at h = 2, 3, 4, 5 while aggregate
-observables stay open, this iteration has a stable directional
-observable above the iteration's noise while broader summaries do
-not. Partial closure where it's measurable; openness where it's
-not.
+"anti-diagonal partial closure" claim that briefly stood as the
+positive finding was itself refuted by 16-angle probe interrogation:
+several non-axial angles carry similar-magnitude excess, the
+4-direction probe was sampling artifact, and earlier revisions of
+this document made a localisation claim that the data does not
+support. What the substrate is doing angularly at iter_5 is
+detectable but not localised; whether it survives multi-seed
+bracketing across a fine-angle spectrum is open.
+
+This is the document's own enactment of the manifesto's stance.
+We render because we cannot close. We deflate as we look. Each
+positive claim has had an audit step; each audit so far has
+narrowed the claim further. The substrate-shaped partial closures
+named in the next section are *targets*, not findings — proposed
+locations where stable observables might exist if the next
+construct or rank or probe finds them. The session's findings
+proper are the algebraic ones (lattice IS its classification, σ is
+null, the kernel-zero structure of the matrix), the negative ones
+(no probe-survived spatial-correlation localisation in this
+session), and the methodological one (the audits matter, and the
+audits we have not run probably matter too).
 
 ## On the Harness, and What We Didn't Audit Until Prompted
 
@@ -552,13 +1050,18 @@ failure during this session, not adopted in advance.
 
 **Harness-conditional, surviving the audits we did run**:
 
-- Anti-diagonal partial closure at iter_5 (2.3σ across 3
-  random-input baselines, 20 seeds each — conditional on:
-  FFT-mag-log probe, 4-direction lag test, h = 5, n_max = k_max
-  = 4000).
 - Colormap-mirage explanation (verified by full-range re-render
   — conditional on inferno; a perceptually uniform colormap might
   behave differently).
+
+**Harness-conditional, refuted on probe interrogation**:
+
+- Anti-diagonal partial closure at iter_5 (refuted by 16-angle
+  sampling; the 135° "peak" is matched by similar-magnitude
+  excess at 33.7° and several other non-axial angles; the
+  4-direction probe was sampling artifact, and earlier revisions
+  of this document claimed substrate localisation that cannot be
+  defended at finer angular resolution).
 
 **Harness-conditional, not yet audited for harness independence**:
 
@@ -566,6 +1069,10 @@ failure during this session, not adopted in advance.
 - The iter_10 attractor's specific shape (one realisation).
 - The hierarchy of "what dies under which transform" (most
   comparisons single-seed).
+- The qualitative-angular-shape claim that *survives* after the
+  16-angle deflation (excess at multiple non-axial angles, deficit
+  at 90°/108°) is itself single-seed and at magnitudes comparable
+  to baseline std.
 
 ### What this implies for the Grand Program
 
@@ -600,6 +1107,75 @@ investigation tools port to other problems; that commitment
 requires the tools to be calibrated, not just used. The session
 calibrated them only when prompted. Future work should calibrate
 first.
+
+## Closed-Form Work To Be Done Before More Empirics
+
+The session has been heavy on rendering and empirical probes,
+light on closed-form algebra. The Standing Findings are
+empirical patterns; tightening them into algebraic statements
+would (a) make the rank-tower extension more useful as a
+structure-destruction probe and (b) give us specific predictions
+to test against new lattices rather than re-discovering patterns
+each round.
+
+Tractable items, ordered by how directly each would tighten an
+existing finding:
+
+1. **Closed form for the within-row 1D parity profile.** Pick
+   prime n. Compute, as a function of h, the within-row
+   autocorrelation profile `corr(Q(n, k), Q(n, k + L))` averaged
+   over k. The empirical observation is: at odd h, even-L gives
+   ≈ +0.4, odd-L gives ≈ +0.18 (factor of 3 gap); at even h,
+   parity-flat near +0.7. The closed form should reveal *which
+   τ-signature-class pairs* dominate the average, and why their
+   contribution differs by L parity.
+
+2. **Closed form for adjacent-row covariance at even h.** Why
+   does `<Q(n, k) Q(n+1, k)>_k` come out negative at even h and
+   positive at odd h? Compute for n = 2, 3 (both prime, simple
+   case); generalise to (composite, composite) row pairs which
+   dominate the lattice signal. Track which (j, shape) terms
+   contribute the negative covariance and why h-parity flips
+   the sign.
+
+3. **Composite-shape kernel structure.** We have prime-n kernel
+   ([1, h−1] τ-polynomial degree). What's the analogous kernel
+   for shape p²? pq? p²q? Each has a coefficient pattern with
+   its own annihilation properties. A `(shape, h, killed-degree
+   set)` table would generalise the prime-n kernel result.
+
+4. **The L = 1 < L = 4 monotone rise.** Pure curiosity: most
+   natural signals decay with lag; ours rises in axial
+   directions. Mechanism likely involves alternating-sign τ_j
+   contributions whose phases align constructively at L = 4 and
+   destructively at L = 1. Concrete: compute `Σ_k τ_j(k) τ_j(k +
+   L)` for small L, see how it varies with L, propagate through
+   the master expansion's signed sum.
+
+5. **Why even-h horizontal becomes parity-flat while vertical
+   becomes parity-flipped.** Asymmetric effect on the two axes
+   — they're not transformed identically by the parity flip.
+   Track which terms produce the parity-flat horizontal and
+   which produce the parity-flipped vertical. The asymmetry is
+   the mechanistic puzzle.
+
+The standing findings together suggest a candidate organising
+frame: **the lattice carries substrate-wide parity-of-(n, k)
+coupling whose direction-by-direction expression depends on h's
+parity through the master expansion's deepest-term sign**.
+Closed-form work would either substantiate this organising
+claim or expose it as too coarse — and the rank tower extension
+afterwards would test the predictions either gives.
+
+The user's instinct (consolidate > closed-form > rank tower)
+makes sense for this reason: rank-tower extension is a powerful
+structure-destruction probe (each h is its own object, and
+differences across h destroy whatever is h-specific while
+preserving what is rank-universal). Using it without algebraic
+handles wastes its power. Each h we add without closed-form
+context is more empirical surface area to render and audit; with
+closed-form context, each h becomes a *test* of what the algebra
+predicted.
 
 ## The Grand Program — Partial Closures at h > 5
 

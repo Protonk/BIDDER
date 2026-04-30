@@ -1,0 +1,27 @@
+[smoke] PASS — pipeline matches OEIS A030167.
+
+--- n = 2 ---
+  digits available: 1172223  (0.1s prime-gen)
+  PQs at LO (400000b): 30000  (160.8s)
+  PQs at HI (800000b): 30000  (371.6s)
+  validated prefix: 407
+  total PQs: 407;  spikes (log10 a > 3.0): 6
+
+--- n = 3 ---
+  digits available: 1175310  (0.1s prime-gen)
+  PQs at LO (400000b): 30000  (143.7s)
+  PQs at HI (800000b): 30000  (378.3s)
+  validated prefix: 487
+  total PQs: 487;  spikes (log10 a > 3.0): 4
+
+--- n = 4 ---
+  digits available: 1191668  (0.1s prime-gen)
+  PQs at LO (400000b): 30000  (145.9s)
+  PQs at HI (800000b): 30000  (369.8s)
+  validated prefix: 515
+  total PQs: 515;  spikes (log10 a > 3.0): 5
+
+--- n = 5 ---
+  digits available: 1222223  (0.1s prime-gen)
+  PQs at LO (400000b): 30000  (157.4s)
+/usr/local/bin/sage: line 39: 72107 Terminated: 15          /usr/bin/env PYTHONUSERBASE="$USERBASE" SSL_CERT_FILE="$SSL_CERT_FILE" "$SYMLINK"/venv/bin/sage "$@"
