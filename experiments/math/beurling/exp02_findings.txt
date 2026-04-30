@@ -1,0 +1,85 @@
+exp02 — zeros of zeta_{M_n} and the psi residual
+==================================================================
+
+=== Phase A: zero search ===
+
+Scanning |zeta_{M_n}(σ + it)| in the strip σ ∈ [0.4, 1.05], t ∈ [0.1, 50].
+
+-- n = 2 --
+  grid minimum: 0.0166 at σ=0.512, t=22.919
+  1 candidates below 0.1 threshold; refining:
+    candidate (0.512, 22.919, |zeta|=0.0166) → ρ = 0.5149+22.9065j
+  1 unique zeros found.
+
+-- n = 3 --
+  grid minimum: 0.0083 at σ=0.602, t=36.459
+  2 candidates below 0.1 threshold; refining:
+    candidate (0.602, 26.429, |zeta|=0.0918) → ρ = 0.5939+26.4793j
+    candidate (0.602, 36.459, |zeta|=0.0083) → ρ = 0.6004+36.4554j
+  2 unique zeros found.
+
+-- n = 5 --
+  grid minimum: 0.0400 at σ=0.512, t=17.653
+  1 candidates below 0.1 threshold; refining:
+    candidate (0.512, 17.653, |zeta|=0.0400) → ρ = 0.5182+17.6351j
+  1 unique zeros found.
+
+-- n = 6 --
+  grid minimum: 0.0594 at σ=0.512, t=46.740
+  4 candidates below 0.1 threshold; refining:
+    candidate (0.422, 18.907, |zeta|=0.0914) → ρ = 0.4199+18.9447j
+    candidate (0.467, 26.680, |zeta|=0.0604) → ρ = 0.4738+26.7024j
+    candidate (0.490, 44.483, |zeta|=0.0649) → ρ = 0.4885+44.4612j
+    candidate (0.512, 46.740, |zeta|=0.0594) → ρ = 0.5145+46.7196j
+  4 unique zeros found.
+
+-- n = 10 --
+  grid minimum: 0.0937 at σ=0.445, t=28.435
+  1 candidates below 0.1 threshold; refining:
+    candidate (0.445, 28.435, |zeta|=0.0937) → ρ = 0.4366+28.4055j
+  1 unique zeros found.
+
+
+Zero search summary:
+  n = 2: 1 zeros, lowest at ρ = 0.5149+22.9065j
+  n = 3: 2 zeros, lowest at ρ = 0.5939+26.4793j
+  n = 5: 1 zeros, lowest at ρ = 0.5182+17.6351j
+  n = 6: 4 zeros, lowest at ρ = 0.4199+18.9447j
+  n = 10: 1 zeros, lowest at ρ = 0.4366+28.4055j
+
+=== Phase B: psi_{M_n}(x) to x = 5e6 ===
+
+-- n = 2 --
+  computed in 28.4s; psi/x at x=5000000 = 0.99934
+-- n = 3 --
+  computed in 11.1s; psi/x at x=5000000 = 0.99592
+-- n = 5 --
+  computed in 3.8s; psi/x at x=5000000 = 0.97616
+-- n = 6 --
+  computed in 2.7s; psi/x at x=5000000 = 0.95433
+-- n = 10 --
+  computed in 1.6s; psi/x at x=5000000 = 0.83063
+
+Long-x psi/x ratios:
+  n = 2: psi/x at x=5000000 = 0.99934, residual = -3289.9
+  n = 3: psi/x at x=5000000 = 0.99592, residual = -20391.7
+  n = 5: psi/x at x=5000000 = 0.97616, residual = -119200.4
+  n = 6: psi/x at x=5000000 = 0.95433, residual = -228361.9
+  n = 10: psi/x at x=5000000 = 0.83063, residual = -846825.4
+
+=== Phase C: plotting ===
+  -> /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/math/beurling/exp02_zero_landscape.png  (zero landscape, n=10 as representative)
+  -> /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/math/beurling/exp02_psi_convergence_long.png  (long psi/x convergence)
+  -> /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/math/beurling/exp02_residual_log.png  (residual decay diagnostics)
+
+=== Phase D: rate analysis ===
+
+Test: does residual scale like x/log x? (i.e., |psi - x| log x / x ≈ const?)
+  n        1000        5492       30170      165722      910282     5000000
+  2       0.3941     0.1546     0.1154     0.0411     0.0229     0.0101
+  3       0.6421     0.4057     0.2463     0.1204     0.0937     0.0629
+  5       1.5873     1.2387     0.9593     0.7054     0.5070     0.3677
+  6       1.9606     1.7088     1.4048     1.1557     0.9032     0.7045
+ 10       3.3201     3.3786     3.2814     3.1139     2.8729     2.6124
+
+If this column-ratio approaches a constant per-row, residual is ~ x/log x.

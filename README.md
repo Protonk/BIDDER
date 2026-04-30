@@ -10,7 +10,7 @@ George Bidder's logarithms, which everyone seems to forget about.
 
 ## What this is
 
-For each positive integer n, the multiplicative monoid nZ+ has irreducible elements, which we call n-primes (numbers which would be prime were (n-1) factorization not available). Concatenating these into a decimal real produces a signal whose leading-digit distribution is exactly uniform — not approximately uniform, exactly uniform.
+For each positive integer n, the multiplicative monoid nZ+ has irreducible elements — n-primes (multiples of n not divisible by n²). Concatenating these into a decimal real produces a signal whose leading-digit distribution is exactly uniform — not approximately uniform, exactly uniform.
 
 The first few n-primes for small `n`:
 
@@ -32,15 +32,10 @@ Concatenating those digits [as a sequence in order](https://en.wikipedia.org/wik
 | 5  | `0.5101520303540455…` |
 | 10 | `0.1020304050607080…` |
 
-The mathematical definitions shown in this README and the core theory
-docs are written in [BQN](https://mlochbaum.github.io/BQN/), used here
-as executable mathematical notation: dense enough to fit a construction
-on one line, unambiguous enough to actually run, and structurally
-close to the array-and-index style the math itself uses. The full
-vocabulary lives in [guidance/BQN-AGENT.md](guidance/BQN-AGENT.md).
-Reading BQN is not required to follow this README — the prose carries
-the meaning, the tables above show the result, and the block below is
-the precise form for anyone who wants to run it.
+Mathematical definitions in this README and the core theory docs are
+written in [BQN](https://mlochbaum.github.io/BQN/) as executable
+notation. Vocabulary at [guidance/BQN-AGENT.md](guidance/BQN-AGENT.md);
+the prose carries the meaning if you skip the block.
 
 ```bqn
 NPn2         ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}       # n-primes for n >= 2
@@ -52,9 +47,6 @@ ChamDigits10 (5↑ 3 NPn2 5)   # ⟨3,6,1,2,1,5,2,1⟩ — digits of C(3)
 LeadingInt10 3                # 3 — the leading digit of n is the
                               #     leading digit of C(n)
 ```
-
-Leading base-`b` digits of an ACM-Champernowne real are uniform — not
-approximately, *exactly* — over every full digit block in base `b`.
 
 - [ACM-CHAMPERNOWNE.md](core/ACM-CHAMPERNOWNE.md) — the construction and proofs
 - [BLOCK-UNIFORMITY.md](core/BLOCK-UNIFORMITY.md) — exact leading-digit uniformity, integer and sieved
@@ -96,10 +88,9 @@ expose those residues as algebra in the way this substrate does.
 The open commitment is *absolute* normality of every `C_b(n)`
 across every base, not just the base of concatenation that
 Copeland–Erdős (1946) settles. We submit it will remain open. The
-algebra of residuals is what would close it, or what would record
-exactly where closing fails. That distinction is the project's
-potentially most important contribution — independent of whether
-absolute normality itself ever falls.
+algebra of residuals would either close it or record exactly where
+closing fails — independent of whether absolute normality itself
+ever falls.
 
 - [THE-OPEN-HEART.md](THE-OPEN-HEART.md) — the manifesto: closure refused, log identity recovered at higher altitude, UFD traded for K-indexed access
 - [algebra/THE-WHOLE-MACHINE.md](algebra/THE-WHOLE-MACHINE.md) — the eleven parts of the BIDDER UTM, named once each
@@ -162,8 +153,6 @@ Not claimed:
   the finite-population correction formula, but the Feistel-keyed
   permutations run roughly `1.5×` to `2.5×` worse. This is a backend
   property, not an algebra failure.
-- The warning at the top of this file is literal: BIDDER is not a
-  secret-generation tool.
 
 - [BIDDER.md](BIDDER.md) — root API reference: `bidder.cipher` and `bidder.sawtooth` in three layers (natural language, Python, BQN)
 - [core/API.md](core/API.md) — detailed cipher-path reference
