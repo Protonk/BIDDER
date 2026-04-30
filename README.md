@@ -53,58 +53,60 @@ LeadingInt10 3                # 3 — the leading digit of n is the
                               #     leading digit of C(n)
 ```
 
-## Quick examples
-
-Python:
-
-```python
-import bidder
-
-list(bidder.sawtooth(n=3, count=10))
-# [3, 6, 12, 15, 21, 24, 30, 33, 39, 42]
-
-B = bidder.cipher(period=10, key=b'doc')
-list(B)
-# [0, 4, 8, 1, 7, 6, 9, 3, 2, 5]
-```
-
-## Construction, generator, art
-
-This repo is now best read in three passes: the exact construction,
-the keyed generator that sits on top of it, and the art that falls
-out when you give exact data enough room to move.
-
-### Construction
-
-> The construction is small but exact, and the consequences keep getting larger.
-
-![The Champernowne real C(n) plotted against n on a log scale. A sawtooth wave: each tooth spans one digit class, and the running mean (blue curve) converges to the exact value 31/20 = 1.55 (red dashed line). The wave is the exact uniformity; the convergence is the proof.](experiments/acm-champernowne/base10/sawtooth/sawtooth.png)
-
 Leading base-`b` digits of an ACM-Champernowne real are uniform — not
 approximately, *exactly* — over every full digit block in base `b`.
-That exact count now supports a compact stable core:
 
 - [ACM-CHAMPERNOWNE.md](core/ACM-CHAMPERNOWNE.md) — the construction and proofs
 - [BLOCK-UNIFORMITY.md](core/BLOCK-UNIFORMITY.md) — exact leading-digit uniformity, integer and sieved
-- [HARDY-SIDESTEP.md](core/HARDY-SIDESTEP.md) — closed form for the `K`-th n-prime
-- [RIEMANN-SUM.md](core/RIEMANN-SUM.md) — permutation-invariance, quadrature rates, and the FPC benchmark
 
-Around that core sit the block sawtooth, the epsilon function that
-controls its phase, and the rolling-shutter relationship between
-addition and multiplication that the sawtooth makes visible.
+## Consequences
 
-The base-2 side is the active frontier. Bit-balance of an n-prime
-stream has a closed form that depends only on `v_2(n)`. The
-Walsh-Hadamard spectrum carries 44 robust higher-order coefficients
-that all collapse under entry-order shuffle and that the `v_2(n)` story
-explains only a minority of. The current working conjecture is that no
-finite automaton can generate or recognize a binary ACM stream at all.
+The construction is the deletion rule. The consequences are larger
+than the construction. Below: a bilingual algebra that organises
+the substrate's residuals (the open heart, potentially the most
+important feature); a keyed permutation that mates with the
+substrate as a block-structured generator; and the art that falls
+out when exact data has room to move.
 
-- [BINARY.md](experiments/acm-champernowne/base2/BINARY.md) — what changes in base 2
-- [HAMMING-BOOKKEEPING.md](experiments/acm-champernowne/base2/HAMMING-BOOKKEEPING.md) — closed-form bit balance
-- [WALSH.md](experiments/acm-champernowne/base2/forest/walsh/WALSH.md) — the Walsh signature
-- [FINITE-RECURRENCE.md](experiments/acm-champernowne/base2/FINITE-RECURRENCE.md) — the finite-state boundary condition
-- [MALLORN-SEED.md](experiments/acm-champernowne/base2/forest/MALLORN-SEED.md) — the binary expeditions in flight
+### Algebra (the open heart)
+
+> Our constructive normals leave algebra in their residue.
+
+![A circular disk filling most of a square frame on a black background. The disk's interior is rendered in deep magenta and purple tones overlaid with a network of bright orange-yellow lines. Two prominent perpendicular bright bars cross through the disk's centre forming an orange cross — one horizontal diameter, one vertical diameter. Beyond the central cross, the disk is filled with a curvilinear orthogonal grid: arcs that bend along the disk's curvature, growing denser and finer toward the disk's circumference. The grid is regular near the centre and compresses tightly at the rim, where the structure thickens into a fine textured band along the disk's boundary.](experiments/acm-champernowne/base10/art/q_distillery/q_lattice_4000_fft_poincare.png)
+
+The single deletion rule `M_n = {1} ∪ nZ_{>0}` does three things at
+once: it discards unique factorisation, exposes the arithmetic
+progression Hardy inverts, and supplies the generating function
+`ζ_{M_n}(s) = 1 + n^{-s} ζ(s)` whose Mercator log is a bilingual
+program. *Bilingual* because the `K`-index it runs on positions an
+atom in the substrate lattice and a position in the base-`b` digit
+stream of `C_b(n)` simultaneously, polylog-bignum work to convert
+in either direction.
+
+What that buys: the substrate organises its own residuals as
+algebra. `offset(n)` indexed by `ord(b, n)`, `β(n)` for the
+`O(b^{-k})` tails, the off-spike denominator process between
+consecutive boundary spikes, the `(n−1)/n²` smooth-block density,
+the `α_n = (n−1)/n` mult-table asymptote, the lucky-cancellation
+locus — distinct objects, all referring back to the same deletion
+rule. Other constructive normals — classical Champernowne (1933),
+Stoneham (1973), Becher–Figueira — have residues. None of them
+expose those residues as algebra in the way this substrate does.
+
+The open commitment is *absolute* normality of every `C_b(n)`
+across every base, not just the base of concatenation that
+Copeland–Erdős (1946) settles. We submit it will remain open. The
+algebra of residuals is what would close it, or what would record
+exactly where closing fails. That distinction is the project's
+potentially most important contribution — independent of whether
+absolute normality itself ever falls.
+
+- [THE-OPEN-HEART.md](THE-OPEN-HEART.md) — the manifesto: closure refused, log identity recovered at higher altitude, UFD traded for K-indexed access
+- [algebra/THE-WHOLE-MACHINE.md](algebra/THE-WHOLE-MACHINE.md) — the eleven parts of the BIDDER UTM, named once each
+- [algebra/Q-FORMULAS.md](algebra/Q-FORMULAS.md) — the master expansion `Q_n(m) = Σ_{j=1}^{ν_n(m)} (−1)^{j−1} τ_j(m/n^j) / j` and its row specialisations
+- [algebra/FINITE-RANK-EXPANSION.md](algebra/FINITE-RANK-EXPANSION.md) — the rank lemma: Mercator truncates at `j = ν_n(m)` by integer divisibility
+- [algebra/WITHIN-ROW-PARITY.md](algebra/WITHIN-ROW-PARITY.md) — first closed-form deliverable: autocorrelation factored as algebraic `V` × combinatorial `D`
+- [experiments/acm-flow/cf/DENOMINATOR-PROCESS.md](experiments/acm-flow/cf/DENOMINATOR-PROCESS.md) — the CF coordinate of the cost ledger; three-population decomposition
 
 ### Generator
 
@@ -165,14 +167,7 @@ Not claimed:
 
 - [BIDDER.md](BIDDER.md) — root API reference: `bidder.cipher` and `bidder.sawtooth` in three layers (natural language, Python, BQN)
 - [core/API.md](core/API.md) — detailed cipher-path reference
-- [core/RIEMANN-SUM.md](core/RIEMANN-SUM.md) — the permutation-invariance theorem and finite-population correction
 - [generator/BIDDER.md](generator/BIDDER.md) — cipher design doc, observed properties, known limitations, open questions
-- [coupler.py](generator/coupler.py) / [bidder.c](generator/bidder.c) — alphabet-pinned Python and C implementations, byte-identical output
-- [bidder.py](bidder.py) / [bidder_root.c](bidder_root.c) — root entry points in Python and C; same two-path surface, with one explicit range limit on the C side: sawtooth values that exceed `uint64_t` report overflow instead of returning Python-style bignums
-- [speck.py](generator/speck.py) — full Speck family reference (all 10 variants, all Appendix C vectors)
-- [experiments/bidder/unified/](experiments/bidder/unified/) — dither, period anatomy, MC diagnostics, Riemann proof, adversarial integrands
-- [experiments/bidder/stratified/](experiments/bidder/stratified/) — the totalizing demonstration
-- [experiments/bidder/reseed/](experiments/bidder/reseed/) — the rekeying experiment
 
 ### Art
 
@@ -187,39 +182,3 @@ Art folders coordinate experiments on exact data. The next time someone says som
 - [`escalating_bidder_mul.png`](experiments/bidder/art/contamination/escalating_bidder_mul.png) — 1, then 5, then 10 multiplications in a sea of additions. Each burst deepens the Benford scar. The additive staircase is the Champernowne sawtooth; the multiplicative kick is ε doing its work.
 - [`art_groove.png`](experiments/math/benford/art_groove.png) — four Benford demos rendered as vinyl records. Groove eccentricity is mantissa non-uniformity; a perfect circle is Benford equilibrium. The BS(1,2) walk's record has one bright scratch (the initial delta) and then a machined surface.
 - [`butterfly.png`](experiments/bidder/bidderize/butterfly.png) — a keyed permutation of 20,000 integers, rotated 45 degrees and cropped to an oval. Colored by output mod 9 on a CMB scale. The density variations are the Feistel round function's fingerprint, almost but not quite uniform.
-
-## Building
-
-Python core tests (requires sage for numpy):
-
-    sage -python tests/test_acm_core.py
-    sage -python tests/test_sawtooth.py
-
-Python generator and cipher tests (plain python3):
-
-    python3 tests/test_bidder.py
-    python3 tests/test_speck.py
-    python3 tests/test_bidder_block.py
-    python3 tests/test_api.py
-    python3 tests/test_bidder_root.py
-
-Theory red-team tests (plain python3):
-
-    python3 tests/theory/test_riemann_property.py
-    python3 tests/theory/test_quadrature_rates.py
-    python3 tests/theory/test_fpc_shape.py
-
-Doc verifier (plain python3):
-
-    python3 core/api_doc_examples.py
-
-C:
-
-    gcc -O2 -o test_acm_core_c tests/test_acm_core_c.c core/acm_core.c -lm
-    ./test_acm_core_c
-
-    gcc -O2 -o test_bidder_c tests/test_bidder_c.c generator/bidder.c -lm
-    ./test_bidder_c
-
-    gcc -O2 -o test_bidder_root_c tests/test_bidder_root_c.c bidder_root.c generator/bidder.c core/acm_core.c -lm
-    ./test_bidder_root_c

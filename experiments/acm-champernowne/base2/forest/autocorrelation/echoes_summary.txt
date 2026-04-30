@@ -1,0 +1,23 @@
+# echoes_analysis — binary autocorrelation, three-population test
+# panel = (2, 3, 4, 7, 8, 16), N_PRIMES = 4000, MAX_LAG = 400
+# spike loci: τ = k·d for d ∈ {d_dom−1, d_dom, d_dom+1}, k ≥ 1
+
+    n   ν2  d_dom   avg_d   R_dpred    R_dobs  spike_mean  interior_mean  interior_sd   #anomalous
+    2    1     14   12.98   +0.7151   +0.3480     +0.1389       -0.0097       0.0468           23
+    3    0     14   13.18   +0.5722   +0.2827     +0.1031       +0.0030       0.0081           19
+    4    2     14   13.46   +0.7152   +0.2660     +0.1453       -0.0100       0.0308           20
+    7    0     15   14.00   +0.5341   +0.2844     +0.0933       +0.0022       0.0084           20
+    8    3     15   14.21   +0.7341   +0.3705     +0.1599       +0.0064       0.0289           23
+   16    4     16   15.08   +0.7507   +0.4303     +0.1752       +0.0264       0.0359           48
+
+## Population means
+  spike_mean = mean R over substrate-predicted spike loci
+  interior_mean = mean R over off-spike lags
+  interior_sd = std R over off-spike lags
+  #anomalous = #{interior lags with |R| > 1.96 · interior_sd}
+
+## Headline
+  panel size                       = 6
+  mean spike-loci R across panel   = +0.1360
+  mean interior R across panel     = +0.0031
+  spike/interior ratio             = 44.42

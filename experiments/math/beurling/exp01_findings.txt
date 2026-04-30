@@ -1,0 +1,39 @@
+=== Phase A: literal Olofsson transplant ===
+
+Olofsson Prop 3.3 needs a pole of zeta_P at s=0.
+For M_n, zeta_{M_n}(0) = 1 + n^0 * zeta(0) = 1 + (-1/2) = 1/2.
+This is regular: no pole at s = 0. Template input absent.
+
+Set-count deviation:
+  N_{M_n}(x) = 1 + floor(x/n)
+  R(x) := N_{M_n}(x) - x/n - 1 + 1/n  is bounded in [0, 1].
+Template output absent (R is trivially o(1), let alone o((log x)^k)).
+
+Spot-checks:
+  n=  2  zeta_{M_n}(0) = 0.500000   max |R(x)| over x in 10..10000 = 1.0000
+  n=  3  zeta_{M_n}(0) = 0.500000   max |R(x)| over x in 10..10000 = 0.6667
+  n=  5  zeta_{M_n}(0) = 0.500000   max |R(x)| over x in 10..10000 = 1.0000
+  n=  6  zeta_{M_n}(0) = 0.500000   max |R(x)| over x in 10..10000 = 0.3333
+  n= 10  zeta_{M_n}(0) = 0.500000   max |R(x)| over x in 10..10000 = 1.0000
+
+Conclusion: literal transplant null, as expected from BEURLING.md.
+Move to Phase B.
+
+=== Phase B: signed Mangoldt analog ===
+
+Predicted leading rate: psi_{M_n}(x) ~ x, since the residue
+of -zeta'_{M_n}(s)/zeta_{M_n}(s) at s=1 is +1 (independent of n).
+
+Computing psi_{M_n}(x) for x in [..50000], n in (2, 3, 5, 6, 10).
+
+Final psi/x ratios (closer to 1 = better PNT-analog):
+  n=  2  psi/x at x= 50000 = +0.9922   (0.2s)
+  n=  3  psi/x at x= 50000 = +0.9782   (0.1s)
+  n=  5  psi/x at x= 50000 = +0.9210   (0.0s)
+  n=  6  psi/x at x= 50000 = +0.8772   (0.0s)
+  n= 10  psi/x at x= 50000 = +0.7008   (0.0s)
+
+=== Plots ===
+  /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/math/beurling/exp01_zeta_boundary_re0.png
+  /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/math/beurling/exp01_psi_convergence.png
+  /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/math/beurling/exp01_psi_residual.png
