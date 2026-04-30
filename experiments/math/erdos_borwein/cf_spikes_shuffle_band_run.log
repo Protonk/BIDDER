@@ -1,0 +1,24 @@
+sieving d(n) for n=1..10000
+
+=== R_d^65 (true sequence) ===
+  CF: 35185 steps in 0.45s
+  spike counts: {4: 3114, 6: 767, 8: 204, 10: 57, 12: 16, 14: 6, 16: 1}
+
+=== 32 shuffles of d(n) ===
+  done 8/32 (3.6s elapsed)
+  done 16/32 (6.5s elapsed)
+  done 24/32 (9.5s elapsed)
+  done 32/32 (12.4s elapsed)
+
+=== summary ===
+  T    true   shuf mean    shuf sd   shuf min   shuf max   rank of true   z-score
+  4    3114     3088.91      42.42       2982       3164     23/32          0.59
+  6     767      786.16      26.13        736        835      8/32         -0.73
+  8     204      198.09      18.83        160        240     20/32          0.31
+ 10      57       50.75       6.91         35         65     28/32          0.90
+ 12      16       13.47       3.76          8         24     25/32          0.67
+ 14       6        3.25       1.48          1          6     31/32          1.86
+ 16       1        0.78       0.93          0          3     15/32          0.24
+
+wrote cf_spikes_shuffle_band.png
+wrote cf_spikes_shuffle_band_summary.txt

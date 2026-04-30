@@ -266,9 +266,9 @@ consequences from a trivial surface. Perimeter: no structure
 beneath. After three instances the prior was uncertain. After six
 observations — three recovery collapses, the Hardy bijection
 collapse, the CF mega-spike collapse, and the cross-thread CF
-rederivation — the prior is visibly *foothold*.
-Each collapse has revealed a specific upper layer where genuine
-work lives. None has revealed empty space.
+rederivation — the empirical prior leans *foothold*. Each collapse
+has revealed a specific upper layer where genuine work lives. None
+so far has revealed empty space.
 
 The fifth instance also broadens the pattern beyond recovery: the
 CF mega-spike was not a recovery question, it was a generative
@@ -278,12 +278,29 @@ question framed in instrument-language is that the dominant term
 will be substrate-transparent, leaving one scalar correction at
 the coupling layer.
 
-This forecast is testable. It will fail eventually — perimeters do
-exist, and the substrate's transparency does run out somewhere.
-The interesting question is *where*. The off-spike CF denominator
-process is the current frontier of the foothold conjecture: if it
+The forecast is testable, and the two outcomes are *symmetric
+findings*, not asymmetric in value. Foothold confirmation extends
+the substrate-transparency catalogue and reinforces the prior.
+Perimeter discovery localises precisely where the substrate's
+transparency stops — and "where it stops" is a precisely-shaped
+arithmetic object in its own right. ζ's perimeter is at the zeros
+and locating that perimeter is a century of mathematics; if our
+construct's perimeter is at, say, the off-spike CF dynamics on
+ACM-Champernowne reals, that is a sharper localisation than most
+arithmetic constructions ever achieve. Treating perimeter as the
+"failure mode" of the foothold prior is the wrong frame; it is the
+*alternative reading*, equally informative, of where to direct
+subsequent attention.
+
+The off-spike CF denominator process is the current test. If it
 turns out to be substrate-driven through some recurrence, the
-substrate has reached one layer deeper than we thought it could.
+substrate has reached one layer deeper than we thought it could
+(foothold extended). If the off-spike process has genuine
+structure that isn't substrate-reducible — Khinchin-typical
+distribution masking a deeper invariant, or an arithmetic
+recurrence that doesn't factor through the substrate — that is the
+perimeter, and it is the locus of genuine arithmetic content in
+the construction.
 
 
 ## Practical residue
@@ -303,10 +320,13 @@ For an agent picking up work in this repo:
 - The hard work is at the coupling layer. Phase 3, the off-spike CF
   process, and the substrate-to-real-number map are
   where research effort earns its keep.
-- Believe the foothold prior, but watch for its limit. The fifth
-  instance broadened the pattern; the cross-thread sixth sharpened
-  the documentation failure mode. The next one may break it. Either
-  outcome is information.
+- Hold the foothold prior loosely. Foothold confirmation and
+  perimeter discovery are symmetric findings; the value of the next
+  test is in *localising* where the substrate's transparency stops,
+  whether that's "one layer deeper than expected" or "right here."
+  The fifth instance broadened the pattern; the cross-thread sixth
+  sharpened the documentation failure mode. The next probe of the
+  off-spike CF process resolves either way.
 
 
 ## Cross-references

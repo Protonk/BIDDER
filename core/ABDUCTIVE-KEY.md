@@ -265,12 +265,14 @@ check whether it already works. The same document's
 immediately-following "The knife-edge: productive triviality" section
 adds the cautious response — the leaky parameterization is either a
 *foothold* (rich consequences from a trivial surface) or a *perimeter*
-(no structure beneath the surface), and we are operating in a
-constructed space where the perimeter risk is sharper than usual. We
-do not yet know whether this pattern is a *principle* (every recovery
-question collapses) or a *coincidence* (we have found three
-accidents). Three is too small a number to choose between those, but
-it is large enough to expect a fourth — and large enough that we
-should ask, before leaning on any future result that depends on the
-parameterization, whether the result gives us a quantity not already
-in the definition.
+(the precisely-shaped object where the substrate's transparency
+stops). Both outcomes are real findings; the perimeter reading
+locates the genuine arithmetic content in the construction, and
+locating a perimeter is itself a major mathematical move (ζ's at the
+zeros, a century of work). We do not yet know whether this pattern
+is a *principle* (every recovery question collapses) or a
+*coincidence* (we have found three accidents). Three is too small a
+number to choose between those, but it is large enough to expect a
+fourth — and large enough that we should ask, before leaning on any
+future result that depends on the parameterization, whether the
+result gives us a quantity not already in the definition.

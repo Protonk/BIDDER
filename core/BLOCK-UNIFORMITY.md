@@ -401,6 +401,271 @@ all collapse to angles on this one doc — three on the sieved lemma,
 one on its parent integer lemma.
 
 
+## Literature placement
+
+`EXPERIMENTAL.md` brief #1 asks whether the smooth-block lemma above
+is a strict refinement of Copeland–Erdős for ACM-Champernowne reals,
+and where it sits in the equidistribution literature. This section
+records the placement.
+
+
+### The relevant external literature
+
+#### Copeland–Erdős 1946 — `sources/COPELAND-ERDOS.md`
+
+For any increasing integer sequence with density `> N^{1−ε}`, the
+base-`b` concatenation is normal in base `b`. Asymptotic frequency
+statement; covers ACM n-primes (density `(n−1)/n²` is linear,
+trivially clears the hypothesis).
+
+#### Davenport–Erdős 1952 — `sources/champ-cf/Davenport-Erdos.pdf`
+
+Theorem 1: for any polynomial `f(x)` with positive-integer values at
+positive integers, `0.f(1)f(2)f(3)…` is normal in base 10. Method:
+Weyl + Besicovitch (ε,k)-normality of individual integers. Companion
+Theorem 2 gives an averaged (ε,k)-normality statement. Asymptotic
+frequency; not a block-boundary exact count.
+
+#### Schiffer 1986 — `sources/champ-cf/aa4726.pdf`
+
+*Acta Arithmetica* **47** (1986), 175–186. Submitted 5 June 1985;
+originally a doctoral thesis under J. Schoissengeier. Bibliography
+is five entries: Champernowne 1935, Davenport–Erdős 1953, Kuipers–
+Niederreiter 1973, Schoissengeier 1978 (Schiffer's immediate
+predecessor for the precise estimation), Vaughan 1981 (the
+Hardy–Littlewood method, used for the trigonometric sum bound).
+
+Four theorems. Verbatim:
+
+- **Theorem 1.** "Let `f(n)` be a polynomial in `n` with rational
+  coefficients, `f` not constant and let `(d_n)` be a bounded
+  sequence of rational numbers, such that `f(n) + d_n` is a positive
+  integer for all `n ≥ 1`. Then `D(N, ω) = O(1/log N)` for
+  `ω = 0.(f(1)+d_1)(f(2)+d_2)…`."
+- **Theorem 2.** Same `O(1/log N)` upper bound under a stronger
+  differentiability hypothesis on `f`, allowing real-coefficient `f`
+  and bounded real `(d_n)`.
+- **Theorem 3.** "Let `f(n)` be a linear polynomial with rational
+  coefficients, `f(n) ≥ 1` for `n = 1, 2, …` and
+  `ω = 0.[f(1)][f(2)]…`. Then `D(N, ω) > K · 1/log N` for **all**
+  `N` and a constant `K > 0`."
+- **Theorem 4.** Same `D > K / log N` lower bound under Theorem 2's
+  hypotheses, but only "for an **infinite number** of `N`'s."
+
+For Champernowne-type constants the discrepancy is `Θ(1/log N)` —
+Theorem 1 (upper) plus Theorem 3 (lower) when there is no shift, or
+Theorem 2 plus Theorem 4 (infinitely-often) under shifts.
+
+Method: trigonometric sums (Weyl) for the upper bounds; combinatorial
+sub-block-occurrence counting (Lemma 2: difference of `N(B_1)` and
+`N(B_2)` for two specific blocks) for the lower bounds.
+
+#### Nakai–Shiokawa — extension to real-coefficient polynomials
+
+Generalises Schiffer to non-constant `f` with real coefficients,
+`f(t) > 0` for all `t > 0`. Same `Θ(1/log N)` discrepancy. (Per
+Becher–Graus 2024.)
+
+#### Schmidt 1972 — universal discrepancy floor
+
+For *all* sequences `(x_n) ⊂ [0,1)`, infinitely many `N` have
+`D(N) > K · log(N) / N`. Universal lower bound for any sequence; van
+der Corput sequences attain it.
+
+#### Gál–Gál, Philipp, Fukuyama — almost-everywhere law
+
+For every base `b ≥ 2` and almost every real `α`,
+
+    D((b^n α mod 1), N)  =  O( √(log log N) / √N )
+
+(law of iterated logarithm scale). Champernowne-type constants are
+much worse than this — they decay only at `1/log N`.
+
+#### Bugeaud 2012 (Cambridge Tract 193) — `sources/champ-cf/Bugeaud2012.pdf`
+
+§4 "Normal numbers" surveys the field. §4.2 covers Champernowne
+1933 and a Theorem 4.10 generalising Copeland–Erdős with allowed
+repetition (new in Bugeaud — "for `m > 1` has not been published
+previously"); proof goes through (ε,k)-normality of integers, not
+block-boundary counts. §4.5 covers Mahler's transcendence proof and
+the lacunary-sum representation `Σ c_n / 10^{f(n)}` of the
+Champernowne constant. §4.7 Notes co-cite Schiffer with two other
+references for the lower bound `D_N ≥ c / log N`. Bugeaud's notes do
+not record any block-boundary exact-count result.
+
+#### Becher–Graus 2024 — `arXiv:2407.13114` / *Amer. Math. Monthly* 131:1
+
+Discrete elementary proof of Schiffer's bound for the Champernowne
+constant (no exponential sums). Modern restatement; proof by careful
+counting, closer in spirit to Champernowne's own 1933 method.
+
+
+### Hierarchy summary
+
+For a sequence in `[0,1)` viewed through the discrepancy `D(N)`:
+
+| class | `D(N)` rate | reference |
+|---|---|---|
+| universal floor (any sequence) | `Ω(log N / N)` | Schmidt 1972 |
+| van der Corput / low-discrepancy | `O(log N / N)` | classical |
+| almost every real (LIL scale) | `O(√(log log N) / √N)` | Gál–Gál; Philipp; Fukuyama |
+| Champernowne-type concatenations | `Θ(1/log N)` | Schiffer 1986; Nakai–Shiokawa |
+
+`Θ(1/log N)` is far above the LIL scale. Champernowne-type constants
+"are normal but approach normality slowly."
+
+
+### Schiffer Theorem 1 directly covers ACM-Champernowne (upper bound)
+
+For prime `n`, the K-th n-prime is
+
+    p_K = n · c_K,    c_K = q n + r + 1,
+                      (q, r) = divmod(K − 1, n − 1).
+
+Take the linear rational polynomial
+
+    f(K) = n² K / (n − 1).
+
+Then `d_K := p_K − f(K)` is a function only of
+`r = (K − 1) mod (n − 1) ∈ {0, …, n − 2}`, so `(d_K)` is a bounded
+sequence of rational numbers and `f(K) + d_K = p_K ∈ ℕ` for all
+`K ≥ 1`. Schiffer Theorem 1 applies and gives
+
+    D(C_b(n), N) = O(1 / log N)
+
+for prime `n` in base 10. (The proof is essentially base-agnostic
+modulo the analogous Weyl bounds; Schiffer states the result in
+base 10.)
+
+
+### Schiffer Theorem 3 does NOT directly cover ACM (matching lower)
+
+Theorem 3's `D > K / log N` for **all** `N` is stated for *pure*
+linear `f` with no shift. The shifted version is Theorem 4, which
+only gives "infinitely many N." So for ACM-Champernowne we have:
+
+- upper bound `O(1/log N)` for all `N` — directly Schiffer Thm 1.
+- lower bound `> K / log N` for **infinitely many** `N` — via
+  Schiffer Thm 4 (under Thm 2's differentiability hypotheses, which
+  are satisfied trivially by a linear `f`).
+
+The matching all-N lower bound for ACM is not stated by Schiffer.
+Plausibly available by adapting Theorem 3's combinatorial argument,
+but the adaptation is not in the literature reached.
+
+
+### What Schiffer does not have
+
+Schiffer's Lemma 1 (the core counting lemma, p. 178) aggregates
+sub-block occurrences integer-by-integer:
+
+    Σ_{u ≤ x ≤ v} Σ_{0 ≤ t < 10^{n−k}} 1{f(x) ≡ b + t · 10^n}
+        = 10^{−k}(v − u) + O(…)
+
+and his Theorem 1 proof composes this over the entire range
+`1 ≤ x ≤ T`. **There is no isolation of digit-class boundaries**
+(transitions where `f(x)` first reaches `n + 1` digits). The proof
+is structurally an integer-aggregation argument, not a block-by-block
+exact-count argument.
+
+This document's smooth-block lemma is the opposite. It computes
+`N_d(n, b) = (b − 1) b^{d−1} (n − 1) / n²` exactly whenever
+`n² | b^{d−1}` — a finite, position-specific exact statement at
+radix-block boundaries, the very thing Schiffer's method does not
+surface.
+
+
+### Net comparison
+
+|  | Schiffer 1986 | this document |
+|---|---|---|
+| altitude | asymptotic, integrated over `N` | finite, at specific `T_k` |
+| object | `D(α, N) = O(1/log N)` (and `Ω`) | exact `N_d(n, b)` at smooth block |
+| method | Weyl trig sums + combinatorial diffs | residue counting on `M_n` monoid |
+| hypothesis | polynomial `f` with bounded shift | smooth `n² \| b^{d−1}` plus spread ≤ 2 |
+| coverage | all `N` (Thm 1, 3) or infinitely many `N` (Thm 2, 4) | every smooth d-block |
+
+The two are **compatible** — Schiffer's `Θ(1/log N)` average is what
+the substrate decomposition (zero contribution at smooth boundaries,
+spread ≤ 2 at non-smooth, plus within-block residual) integrates to
+— but they are **structurally orthogonal**. Schiffer does not have a
+block-boundary exact-count lemma anywhere in the proof; if he did,
+the `(b − 1)/n²` density factor would appear, and it does not.
+
+
+### Verdict for brief #1
+
+**Strict refinement of Copeland–Erdős for ACM-Champernowne reals?**
+Yes. The smooth-block lemma gives exact closed-form boundary counts
+whereas CE gives only asymptotic frequency. Relationship:
+"exact-finite refines asymptotic-aggregate."
+
+**Strict refinement of Schiffer 1986 for ACM-Champernowne reals?**
+Different altitude, not strictly above or below. Schiffer Theorem 1
+directly proves `D(C_b(n), N) = O(1/log N)` for ACM via the rational-
+shift construction above. The smooth-block lemma does not contradict
+this and is not subsumed by it: Schiffer does not isolate radix-block
+boundaries anywhere in his proof, and the smooth-block exact-count
+form is structurally orthogonal to his integer-aggregation method.
+
+**Where it sits.**
+
+- *Below* Schiffer 1986 in altitude (Schiffer is asymptotic, the
+  smooth-block lemma is finite/position-specific).
+- *Compatible with* Schiffer's `Θ(1/log N)` rate — the smooth-block
+  exact count is part of what averages out to the asymptotic.
+- *Without precedent* in the pre-2000 discrepancy-theory line.
+  Schiffer cites only Champernowne, Davenport–Erdős, Kuipers–
+  Niederreiter, Schoissengeier 1978, Vaughan 1981 — none of these
+  contains a smooth-block exact-count statement. The combinatorial
+  counting tradition (Niven–Zuckerman, Maxfield) similarly treats
+  blocks via averaged frequencies.
+
+**"Probably nothing" signal.** Not triggered. The smooth-block
+exact-count form is genuinely sharper than the literature reached.
+
+**Reach goal.** A clean theorem of the form "for sequences `A`
+satisfying [strengthened counting condition], the base-`b`
+Champernowne real has zero discrepancy at every digit-class
+boundary, with the smooth and Family E lemmas as instances." This
+is conjecturally available — the smooth-block lemma is the
+`M_n`-monoid instance — but the *general* statement (for arbitrary
+CE sequences) has not been formulated here and is not on the page
+in any of the sources reached. Worth pursuing.
+
+
+### Caveats and gaps
+
+The placement rests on the actual Schiffer 1986 paper
+(`sources/champ-cf/aa4726.pdf`). What remains uncertain:
+
+- **Nakai–Shiokawa.** Quoted by Becher–Graus 2024 as extending
+  Schiffer to non-constant `f` with real coefficients, `f(t) > 0`.
+  Not on file. Probably does not change anything for ACM-Champernowne
+  — the rational-shift route through Schiffer Theorem 1 already
+  covers it.
+- **Schoissengeier 1978** (Sitzungsber. Öst. Akad. Wiss.,
+  Math.-Natur. Kl., Abt. II, **187**, 225–235). Schiffer's named
+  predecessor for "a more precise estimation" of Davenport–Erdős's
+  `D(N, ω(f)) → 0`. Not on file. The likely closest pre-1986
+  reference for Champernowne-type discrepancy.
+- **Bugeaud's [232], [536].** Co-cited with Schiffer [621] for the
+  lower bound `D_N ≥ c / log N`. Now that Schiffer himself proves
+  this (Thm 3 for pure linear, Thm 4 for infinitely many N), [232]
+  and [536] are likely Schoissengeier and Nakai–Shiokawa.
+- **Niederreiter's discrepancy work** (cited by Schiffer via the
+  Kuipers–Niederreiter textbook). Niederreiter's primary discrepancy
+  contributions are on quasi-Monte Carlo / `(t, m, s)`-nets and
+  general equidistribution, not Champernowne-type concatenations.
+  The textbook is the relevant reference, not standalone papers.
+- **Pre-2000 exact-block-uniformity lemma.** Schiffer's paper
+  confirms there is none in his line. The combinatorial counting
+  tradition (Champernowne 1933, Niven–Zuckerman 1951, Maxfield,
+  Pillai) treats blocks via averaged frequencies, not boundary-
+  position exact counts. The smooth-block lemma is structurally
+  novel relative to this tradition.
+
+
 ## What depends on this
 
 - **ACM-CHAMPERNOWNE.md**, "What Is Possible Now": the claim that
