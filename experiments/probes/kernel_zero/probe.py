@@ -33,6 +33,9 @@ from functools import lru_cache
 from typing import Callable, Dict, List, Tuple
 
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PROBES_DIR = os.path.dirname(HERE)
@@ -250,6 +253,11 @@ def run_probe(config: dict, output_dir: str) -> Dict:
     # Write report.
     write_report(os.path.join(output_dir, 'report.md'), config, cells, results)
 
+    # Write figures.
+    figures_dir = os.path.join(output_dir, 'figures')
+    os.makedirs(figures_dir, exist_ok=True)
+    make_figures(figures_dir, config, cells, results, rows_post)
+
     return {'cells': cells, 'results': results}
 
 
@@ -341,6 +349,153 @@ def expected_verdicts(config: dict) -> Dict[str, str] | None:
     if sub == 'synth_uniform' and trans == 'identity':
         return {ch: 'absent' for ch in CHANNEL_ORDER}
     return None
+
+
+# --------------------------------------------------------------------------
+# figures
+# --------------------------------------------------------------------------
+
+def _strength_grid(cells: List[Tuple[int, int]],
+                   results: dict) -> np.ndarray:
+    """24 x 4 array of channel strengths (cell-major, channel-minor)."""
+    grid = np.zeros((len(cells), len(CHANNEL_ORDER)), dtype=np.float64)
+    for i, c in enumerate(cells):
+        for j, ch in enumerate(CHANNEL_ORDER):
+            grid[i, j] = results[c][ch]['strength']
+    return grid
+
+
+def figure_verdict_matrix(figures_dir: str, cells: List[Tuple[int, int]],
+                           results: dict, run_name: str) -> None:
+    """24 x 4 heatmap of channel strengths. Proves the run's verdicts."""
+    grid = _strength_grid(cells, results)
+    n_cells, n_channels = grid.shape
+
+    fig, ax = plt.subplots(figsize=(6, 8), dpi=150, facecolor='white')
+    im = ax.imshow(grid, aspect='auto', cmap='viridis',
+                   vmin=0.0, vmax=1.0, interpolation='nearest')
+    ax.set_xticks(range(n_channels))
+    ax.set_xticklabels(CHANNEL_ORDER, rotation=45, ha='right', fontsize=8)
+    ax.set_yticks(range(n_cells))
+    ax.set_yticklabels([f'({p},{h})' for p, h in cells], fontsize=7)
+    ax.set_xlabel('channel')
+    ax.set_ylabel('(p, h)')
+    for i in range(n_cells):
+        for j in range(n_channels):
+            s = grid[i, j]
+            txt = f'{s:.3f}' if s not in (0.0, 1.0) else f'{s:.0f}'
+            color = 'white' if s < 0.5 else 'black'
+            ax.text(j, i, txt, ha='center', va='center',
+                    fontsize=6, color=color)
+    cbar = fig.colorbar(im, ax=ax, fraction=0.04, pad=0.02)
+    cbar.set_label('strength', fontsize=9)
+    ax.set_title(f'{run_name}: channel × cell verdicts', fontsize=10)
+    fig.tight_layout()
+    fig.savefig(os.path.join(figures_dir, 'verdict_matrix.png'),
+                bbox_inches='tight')
+    plt.close(fig)
+
+
+def figure_lattice_diff(figures_dir: str, cells: List[Tuple[int, int]],
+                         rows_post: Dict[Tuple[int, int], np.ndarray],
+                         run_name: str, K: int) -> None:
+    """Heatmap of |row_post - predicted_post|, log10 scale, per (p, h, k).
+
+    For substrate=lattice + transducer=identity, this proves the
+    lattice-vs-algebra exact-match contract: every cell black.
+    For lattice + reverse: post-transducer cell at k holds value
+    originally at K+1-k; we compare that against algebra predictions
+    for the original (pre-transducer) row, since those are what the
+    channels also use. Mismatch heatmap shows where reversal moved
+    things.
+    """
+    n_cells = len(cells)
+    diff = np.zeros((n_cells, K), dtype=np.float64)
+    for i, (p, h) in enumerate(cells):
+        pred = np.array([float(q_general(p, h, k)) for k in range(1, K + 1)],
+                        dtype=np.float64)
+        diff[i, :] = np.abs(rows_post[(p, h)] - pred)
+
+    floor = max(diff.max() * 1e-30, 1e-30)
+    log_diff = np.log10(np.maximum(diff, floor))
+    vmax = max(float(log_diff.max()), -12.0)
+    vmin = -16.0
+
+    fig, ax = plt.subplots(figsize=(14, 5), dpi=150, facecolor='white')
+    im = ax.imshow(log_diff, aspect='auto', cmap='inferno',
+                   vmin=vmin, vmax=vmax, interpolation='nearest')
+    ax.set_yticks(range(n_cells))
+    ax.set_yticklabels([f'({p},{h})' for p, h in cells], fontsize=7)
+    ax.set_xlabel('k')
+    ax.set_ylabel('(p, h)')
+    cbar = fig.colorbar(im, ax=ax, fraction=0.02, pad=0.01)
+    cbar.set_label('log10 |row_post - algebra(p, h, k)|', fontsize=9)
+    pct_exact = float(100.0 * (diff == 0).sum() / diff.size)
+    pct_at_tol = float(100.0 * (diff < 1e-12).sum() / diff.size)
+    ax.set_title(f'{run_name}: lattice vs algebra '
+                 f'({pct_exact:.2f}% exact, {pct_at_tol:.2f}% < TOL)',
+                 fontsize=10)
+    fig.tight_layout()
+    fig.savefig(os.path.join(figures_dir, 'lattice_diff.png'),
+                bbox_inches='tight')
+    plt.close(fig)
+
+
+def figure_reversal_symmetry(figures_dir: str,
+                              cells: List[Tuple[int, int]],
+                              results: dict, K: int,
+                              run_name: str) -> None:
+    """Predicted reversal-symmetry of the algebra-zero set vs measured
+    no_op strength under reversal. Should land on the diagonal."""
+    measured = np.array([results[c]['no_op']['strength'] for c in cells])
+    predicted = np.zeros(len(cells), dtype=np.float64)
+    for i, (p, h) in enumerate(cells):
+        Z = predicted_zero_indices(p, h, K)
+        if Z.size == 0:
+            predicted[i] = 1.0
+            continue
+        Z_set = set(int(z) for z in Z)
+        sigma_Z = set(K - 1 - z for z in Z_set)
+        predicted[i] = len(Z_set & sigma_Z) / len(Z_set)
+
+    fig, ax = plt.subplots(figsize=(6, 6), dpi=150, facecolor='white')
+    ax.plot([0, 1], [0, 1], '-', color='gray', lw=1, label='y = x')
+    for (p, h), pr, me in zip(cells, predicted, measured):
+        ax.plot(pr, me, 'o', ms=8, color='C0')
+        ax.annotate(f'({p},{h})', (pr, me), fontsize=6,
+                    xytext=(4, 4), textcoords='offset points')
+    ax.set_xlim(0.7, 1.02)
+    ax.set_ylim(0.7, 1.02)
+    ax.set_xlabel('predicted: |Z ∩ σ(Z)| / |Z|')
+    ax.set_ylabel('measured: no_op strength under reversal')
+    ax.set_title(f'{run_name}: reversal-symmetry vs no_op strength',
+                 fontsize=10)
+    ax.legend(loc='lower right', fontsize=8)
+    ax.grid(True, alpha=0.3)
+    fig.tight_layout()
+    fig.savefig(os.path.join(figures_dir, 'reversal_symmetry.png'),
+                bbox_inches='tight')
+    plt.close(fig)
+
+
+def make_figures(figures_dir: str, config: dict,
+                  cells: List[Tuple[int, int]], results: dict,
+                  rows_post: Dict[Tuple[int, int], np.ndarray]) -> None:
+    """Write per-run figures. Always writes verdict_matrix.png. Writes
+    lattice_diff.png when substrate has algebra-defined predictions
+    (lattice or algebra). Writes reversal_symmetry.png when transducer
+    is reverse on a substrate with algebra-defined predictions."""
+    K = int(config.get('K', DEFAULT_K))
+    run_name = os.path.basename(os.path.dirname(figures_dir))
+    sub = config.get('substrate')
+    trans = config.get('transducer')
+
+    figure_verdict_matrix(figures_dir, cells, results, run_name)
+
+    if sub in ('lattice', 'algebra'):
+        figure_lattice_diff(figures_dir, cells, rows_post, run_name, K)
+        if trans == 'reverse':
+            figure_reversal_symmetry(figures_dir, cells, results, K, run_name)
 
 
 # --------------------------------------------------------------------------
