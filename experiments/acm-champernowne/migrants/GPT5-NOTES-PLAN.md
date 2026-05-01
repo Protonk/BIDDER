@@ -40,10 +40,10 @@ by base relation, and by depth. Not a single "randomness" verdict.
 - [`experiments/acm-champernowne/base10/survivors/l1_grid.py`](experiments/acm-champernowne/base10/survivors/l1_grid.py)
   — leading-digit L1-deviation gap as a heatmap on the `(n_0, K)` square.
   A direct digit-frequency surface over `(n, K)`.
-- [`experiments/acm-champernowne/base10/art/q_distillery/q_lattice_4000.py`](experiments/acm-champernowne/base10/art/q_distillery/q_lattice_4000.py)
+- [`experiments/acm-champernowne/base10/q_distillery/q_lattice_4000.py`](experiments/acm-champernowne/base10/q_distillery/q_lattice_4000.py)
   — 4000×4000 `(n, k)` rendering of `Q_n` at `h = 5`. The rank-algebra
   observable plotted as a literal `(n, k)` surface.
-- [`experiments/acm-champernowne/base10/art/q_distillery/q_h5_full_scan.py`](experiments/acm-champernowne/base10/art/q_distillery/q_h5_full_scan.py)
+- [`experiments/acm-champernowne/base10/q_distillery/q_h5_full_scan.py`](experiments/acm-champernowne/base10/q_distillery/q_h5_full_scan.py)
   — `Q_n` at `h = 5` swept across `n ∈ [2, 30]` and ordered by `n`-shape.
   Phase-diagram-by-`n` with the factorization-type sort the next branch
   asks for.
@@ -63,10 +63,10 @@ by base relation, and by depth. Not a single "randomness" verdict.
   — first-digit-frequency surface across an addition-depth axis. Same
   observable as `survivors/l1_grid` but with depth-of-stream substituted
   for `K`.
-- [`experiments/acm-flow/cutoff_ray_scan.py`](experiments/acm-flow/cutoff_ray_scan.py)
+- [`experiments/acm/flow/cutoff_ray_scan.py`](experiments/acm/flow/cutoff_ray_scan.py)
   — controlled sweep of the truncation coordinate `Y` at fixed `(n, m)`.
   The `K`-axis version of the program, with `n, m` held still.
-- [`experiments/acm-flow/payload_scan.py`](experiments/acm-flow/payload_scan.py)
+- [`experiments/acm/flow/payload_scan.py`](experiments/acm/flow/payload_scan.py)
   — fixed-cutoff sweep over payload `m` at fixed `(n, h)`. The dual
   scan: holds `K` saturated and varies the local `n`-coordinate.
 
@@ -100,7 +100,7 @@ coincidences, which persist under deeper windows?
 - [`experiments/acm-champernowne/base2/forest/valuation/`](experiments/acm-champernowne/base2/forest/valuation/)
   — `v_2(n)` as the organizing axis for binary stream signatures.
   Forest grid, polar fan, and residual-after-depth-prediction views.
-- [`experiments/acm-flow/residual_ablation_grid.py`](experiments/acm-flow/residual_ablation_grid.py)
+- [`experiments/acm/flow/residual_ablation_grid.py`](experiments/acm/flow/residual_ablation_grid.py)
   — bins residuals by `BLOCK_ORDER = ['smooth', 'family_E', 'uncertified']`,
   the exact three-bucket classification the branch names.
 - [`experiments/math/benford/base_fingerprint.py`](experiments/math/benford/base_fingerprint.py)
@@ -137,35 +137,35 @@ or finite cutoff?
   [`algebra/test_anchors.py`](algebra/test_anchors.py) — exact-rational
   Q_n machinery plus anchor tests (prime-row identity `Q_p(p^h) = 1/h`,
   the 8×6 shape×tau matrix at `h = 5`, the universal h=2 cliff).
-- [`experiments/acm-flow/q_n_verify.py`](experiments/acm-flow/q_n_verify.py)
+- [`experiments/acm/flow/q_n_verify.py`](experiments/acm/flow/q_n_verify.py)
   — empirically verifies the master expansion against every row of
   `payload_q_scan.csv`. The Q_n closure as a continuously-tested fact.
-- [`experiments/acm-flow/payload_q_scan.py`](experiments/acm-flow/payload_q_scan.py)
+- [`experiments/acm/flow/payload_q_scan.py`](experiments/acm/flow/payload_q_scan.py)
   — switches the local observable from `Λ_n` to `Q_n` directly,
   declaring "the structure lives in `Q_n`; `log(m)` is just scale."
   The branch question answered, in the small.
-- [`experiments/acm-flow/hardy_composite_q.py`](experiments/acm-flow/hardy_composite_q.py)
+- [`experiments/acm/flow/hardy_composite_q.py`](experiments/acm/flow/hardy_composite_q.py)
   — deep composite-Q witnesses: builds `m` of arbitrary rank `h` by
   multiplying atoms, then evaluates Q_n by two structurally
   independent paths and asserts exact `Fraction` equality.
-- [`experiments/acm-champernowne/base10/art/q_distillery/q_rank_lemma_skylight.py`](experiments/acm-champernowne/base10/art/q_distillery/q_rank_lemma_skylight.py)
+- [`experiments/acm-champernowne/base10/q_distillery/q_rank_lemma_skylight.py`](experiments/acm-champernowne/base10/q_distillery/q_rank_lemma_skylight.py)
   — the integer staircase `ν_n(m)` made literal. Rows beyond `h`
   hang as ghost panes; the bright staircase IS the rank lemma.
-- [`experiments/acm-champernowne/base10/art/q_distillery/q_distillery.py`](experiments/acm-champernowne/base10/art/q_distillery/q_distillery.py)
-  + [`Q_DISTILLERY.md`](experiments/acm-champernowne/base10/art/q_distillery/Q_DISTILLERY.md)
+- [`experiments/acm-champernowne/base10/q_distillery/q_distillery.py`](experiments/acm-champernowne/base10/q_distillery/q_distillery.py)
+  + [`Q_DISTILLERY.md`](experiments/acm-champernowne/base10/q_distillery/Q_DISTILLERY.md)
   — master expansion as visual distillation across the four
   factorisation types (prime, prime power, squarefree, mixed).
-- [`experiments/acm-champernowne/base10/art/q_distillery/q_towers.py`](experiments/acm-champernowne/base10/art/q_distillery/q_towers.py)
-  + [`q_cancellation_furnace_h3_ns.py`](experiments/acm-champernowne/base10/art/q_distillery/q_cancellation_furnace_h3_ns.py)
+- [`experiments/acm-champernowne/base10/q_distillery/q_towers.py`](experiments/acm-champernowne/base10/q_distillery/q_towers.py)
+  + [`q_cancellation_furnace_h3_ns.py`](experiments/acm-champernowne/base10/q_distillery/q_cancellation_furnace_h3_ns.py)
   — pre-cancellation positive vs negative mass. The branch's "signed
   stack" rendered as opposing streams; complexity sits in the
   cancellation, not in the survivor.
-- [`experiments/acm-champernowne/base10/art/q_distillery/q_h5_shape_tau_matrix.py`](experiments/acm-champernowne/base10/art/q_distillery/q_h5_shape_tau_matrix.py)
+- [`experiments/acm-champernowne/base10/q_distillery/q_h5_shape_tau_matrix.py`](experiments/acm-champernowne/base10/q_distillery/q_h5_shape_tau_matrix.py)
   — the (shape × tau-signature) condensation at `h = 5`, with
   kernel-zero cells gold-ringed. The cleanest classification view
   of the local algebra.
-- [`experiments/acm-champernowne/base10/art/q_distillery/q_lattice_h_parity_viz.py`](experiments/acm-champernowne/base10/art/q_distillery/q_lattice_h_parity_viz.py)
-  + [`HIGHER-H-EXPECTATIONS.md`](experiments/acm-champernowne/base10/art/q_distillery/HIGHER-H-EXPECTATIONS.md)
+- [`experiments/acm-champernowne/base10/q_distillery/q_lattice_h_parity_viz.py`](experiments/acm-champernowne/base10/q_distillery/q_lattice_h_parity_viz.py)
+  + [`HIGHER-H-EXPECTATIONS.md`](experiments/acm-champernowne/base10/q_distillery/HIGHER-H-EXPECTATIONS.md)
   — h-parity of the Q-lattice angular spectrum, with predictions for
   `h = 6, 7, 8` reads. A live test of whether higher-rank algebraic
   structure leaks into a global geometric readout.
@@ -181,18 +181,18 @@ order.
 
 #### Examples
 
-- [`experiments/acm-champernowne/base10/art/q_distillery/q_h5_full_scan.py`](experiments/acm-champernowne/base10/art/q_distillery/q_h5_full_scan.py)
+- [`experiments/acm-champernowne/base10/q_distillery/q_h5_full_scan.py`](experiments/acm-champernowne/base10/q_distillery/q_h5_full_scan.py)
   — `Q_n` at `h = 5` swept across `n ∈ [2, 30]` and **sorted by shape
   class** (sorted tuple of prime exponents). The within-class plateaus
   are dead flat *by construction*; flatness IS the structural identity,
   rendered visible by the layout.
-- [`experiments/acm-champernowne/base10/art/q_distillery/q_h5_shape_tau_matrix.py`](experiments/acm-champernowne/base10/art/q_distillery/q_h5_shape_tau_matrix.py)
+- [`experiments/acm-champernowne/base10/q_distillery/q_h5_shape_tau_matrix.py`](experiments/acm-champernowne/base10/q_distillery/q_h5_shape_tau_matrix.py)
   — condensation: 8 rows (shapes) × 6 columns (tau-signatures). The
   full universality-class table at `h = 5` on a single canvas, with
   kernel-zero cells gold-ringed.
-- [`experiments/acm-champernowne/base10/art/q_distillery/q_distillery.py`](experiments/acm-champernowne/base10/art/q_distillery/q_distillery.py)
-  + [`q_merger_345.py`](experiments/acm-champernowne/base10/art/q_distillery/q_merger_345.py)
-  + [`q_merger_h5.py`](experiments/acm-champernowne/base10/art/q_distillery/q_merger_h5.py)
+- [`experiments/acm-champernowne/base10/q_distillery/q_distillery.py`](experiments/acm-champernowne/base10/q_distillery/q_distillery.py)
+  + [`q_merger_345.py`](experiments/acm-champernowne/base10/q_distillery/q_merger_345.py)
+  + [`q_merger_h5.py`](experiments/acm-champernowne/base10/q_distillery/q_merger_h5.py)
   — four canonical vessels in parallel: `n = 2` (prime), `n = 4`
   (prime power), `n = 6` (squarefree), `n = 12` (mixed). The four
   shape classes the branch enumerates, each with its own column.
@@ -201,12 +201,12 @@ order.
   expansion's coefficient is `∏_i C(a_i (h - j) + t_i + j - 1, j - 1)`,
   a **product over prime exponents of `n`**. Shape-classification is
   the algebraic substrate, not a presentation choice.
-- [`experiments/acm-flow/payload_q_scan.py`](experiments/acm-flow/payload_q_scan.py)
-  + [`PHASE1-RESULTS.md`](experiments/acm-flow/PHASE1-RESULTS.md) —
+- [`experiments/acm/flow/payload_q_scan.py`](experiments/acm/flow/payload_q_scan.py)
+  + [`PHASE1-RESULTS.md`](experiments/acm/flow/PHASE1-RESULTS.md) —
   panel pushed to `h ∈ {2, 3, 4, 5}` to ask: do prime / prime-power /
   multi-prime have explicit divisor-function formulas at each `h`?
   The branch question, run as a phase.
-- [`experiments/acm-flow/hardy_composite_q.py`](experiments/acm-flow/hardy_composite_q.py)
+- [`experiments/acm/flow/hardy_composite_q.py`](experiments/acm/flow/hardy_composite_q.py)
   — explicitly distinguishes prime, prime-power, and squarefree-
   multi-prime `n`, because atom cofactors can re-introduce primes
   dividing `n` only in the latter classes. Class-aware deep-rank
@@ -224,7 +224,7 @@ order.
   reproducible from `v_2(n)` + length, from length alone, or from
   neither. A native universality-class result for the binary
   Walsh substrate.
-- [`experiments/acm-flow/mult-table/`](experiments/acm-flow/mult-table/)
+- [`experiments/acm/mult-table/`](experiments/acm/mult-table/)
   — `α_n = (n − 1)/n` and `α_n² = ((n − 1)/n)²` enter the h=2 cell
   predictions, so prime vs composite `n` (via density and cofactor
   geometry) sort the empirical ratios at fixed `K`.
@@ -281,12 +281,12 @@ Turn the spectroscope around. Instead of "what does `n` produce?", ask
 
 #### Examples
 
-- [`experiments/acm-flow/cf/PRIMITIVE-ROOT-FINDING.md`](experiments/acm-flow/cf/PRIMITIVE-ROOT-FINDING.md)
+- [`experiments/acm/cf/PRIMITIVE-ROOT-FINDING.md`](experiments/acm/cf/PRIMITIVE-ROOT-FINDING.md)
   — direct hit on the third sub-question: classifies the off-spike
   denominator offset `offset(n)` by `ord(b, n)` and `gcd(n, b)`.
   Given a CF feature, recover the multiplicative-order family.
-- [`experiments/acm-flow/cf/MU-CONDITIONAL.md`](experiments/acm-flow/cf/MU-CONDITIONAL.md)
-  + [`MEGA-SPIKE.md`](experiments/acm-flow/cf/MEGA-SPIKE.md) —
+- [`experiments/acm/cf/MU-CONDITIONAL.md`](experiments/acm/cf/MU-CONDITIONAL.md)
+  + [`MEGA-SPIKE.md`](experiments/acm/cf/MEGA-SPIKE.md) —
   inverts the boundary-spike subsequence into a closed-form
   irrationality measure `μ(C_b(n)) = 2 + (b − 1)(b − 2)/b`. CF
   feature → algebraic invariant of the digit stream.
@@ -315,7 +315,7 @@ Turn the spectroscope around. Instead of "what does `n` produce?", ask
   — synthesis: which observables in the binary stream carry stable
   signal traceable to which algebraic property of `n`. The base-2
   inverse-problem map.
-- [`experiments/acm-flow/phase1_destroyers.py`](experiments/acm-flow/phase1_destroyers.py)
+- [`experiments/acm/flow/phase1_destroyers.py`](experiments/acm/flow/phase1_destroyers.py)
   + [`experiments/VISUAL-REDUCTION-DISCIPLINE.md`](experiments/VISUAL-REDUCTION-DISCIPLINE.md)
   — destroyer / shuffle / family-geometry-subtraction protocol. Tells
   you which apparent feature of the readout is actually invertible
@@ -327,8 +327,8 @@ Turn the spectroscope around. Instead of "what does `n` produce?", ask
   substrate computation seen from a particular angle, plus at most
   one local correction." The pattern this branch is asking us to
   mechanise.
-- [`experiments/acm-flow/cf/cf_spikes_extended.py`](experiments/acm-flow/cf/cf_spikes_extended.py)
-  + [`CROSS-BASE-RESULT.md`](experiments/acm-flow/cf/CROSS-BASE-RESULT.md)
+- [`experiments/acm/cf/cf_spikes_extended.py`](experiments/acm/cf/cf_spikes_extended.py)
+  + [`CROSS-BASE-RESULT.md`](experiments/acm/cf/CROSS-BASE-RESULT.md)
   — measures CF spike scales across `(b, n, d)` and inverts to the
   closed form `(n − 1)/n²` factor; given a spike-scale measurement,
   recover the algebraic prefactor (and so distinguish prime vs
@@ -375,8 +375,8 @@ convergence.
   — `Q_n` is the master-expansion coefficient of `log ζ_{M_n}`, so the
   signed weight `Λ_{M_n} = Q_n · log m` is forced by these formulas.
   The local algebra that the global cumulant is integrating over.
-- [`experiments/acm-flow/acm_mangoldt_tomography.py`](experiments/acm-flow/acm_mangoldt_tomography.py)
-  + [`ACM-MANGOLDT.md`](experiments/acm-flow/ACM-MANGOLDT.md) — the
+- [`experiments/acm/flow/acm_mangoldt_tomography.py`](experiments/acm/flow/acm_mangoldt_tomography.py)
+  + [`ACM-MANGOLDT.md`](experiments/acm/flow/ACM-MANGOLDT.md) — the
   flow-tomography apparatus that produced `Λ_n` per-`m` data and
   framed `Δ_n(m; X)` as the truncated cumulant. Predecessor of the
   Beurling ψ work.

@@ -67,7 +67,7 @@ constant) used to validate the CF runner.
 - `core/BLOCK-UNIFORMITY.md` — closed-form n-prime block counts that
   give `T_k`.
 - `arguments/MEGA-SPIKE-FOUR-WAYS.md` — structural critique.
-- `experiments/acm-flow/STRUCTURE-HUNT.md` Phase 3.1 — overall
+- `experiments/acm/flow/STRUCTURE-HUNT.md` Phase 3.1 — overall
   position of this work in the project flow.
 - `experiments/math/hardy/SURPRISING-DEEP-KEY.md` — instance list
   including the CF mega-spike collapse.

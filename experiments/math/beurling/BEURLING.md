@@ -75,7 +75,7 @@ that must be kept separate.
   its coefficient sequence (`algebra/Q-FORMULAS.md`), and the
   resulting measure is **signed**. Signed cancellation between
   ordered factorisations is the visible empirical content in
-  `experiments/acm-flow/ACM-MANGOLDT.md`.
+  `experiments/acm/flow/ACM-MANGOLDT.md`.
 
 The Beurling extended-sense framework requires `dPi`
 non-negative and non-decreasing. The atom-power candidate is
@@ -86,7 +86,7 @@ measures, so a `dPi` compatible with `zeta_{M_n}` is determined
 uniquely by `log zeta_{M_n} = integral x^{-s} dPi`. Since
 `log zeta_{M_n}` has a signed Mellin coefficient sequence — the
 sequence is `Q_n` (`algebra/Q-FORMULAS.md`), and explicit
-negative mass is recorded in `experiments/acm-flow/ACM-MANGOLDT.md` —
+negative mass is recorded in `experiments/acm/flow/ACM-MANGOLDT.md` —
 **no non-negative `dPi` exists whose convolution-exponential is
 `dN_{M_n}`**. The extended-sense Beurling framework therefore
 does not accommodate `M_n` directly. Any Beurling-style theorem
@@ -493,7 +493,7 @@ H2. *Heuristic.* Olofsson's `log x` rigidity threshold for
     `|N - [.]|` (slide-deck reading) and the Malliavin
     `beta*(alpha) = alpha/(alpha+1)` law together suggest that
     `M_n`'s next-order corrections beyond the leading
-    `(n - 1) k`-term observed in `experiments/acm-flow/mult-table/`
+    `(n - 1) k`-term observed in `experiments/acm/mult-table/`
     might be governed by a similar transfer law from prime-side
     asymptotics to integer-side asymptotics. **This is an
     analogy, not a derivation.**

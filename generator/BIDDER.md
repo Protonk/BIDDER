@@ -149,7 +149,7 @@ contaminates toward Benford irreversibly; addition cycles forever
 leaves a permanent scar. These characterize uniform distributions
 generally, not BIDDER specifically. See
 [EARLY-FINDINGS.md](../sources/EARLY-FINDINGS.md), sections 4-5.
-Experiments: `experiments/acm-champernowne/base10/shutter/`, `experiments/bidder/art/contamination/`.
+Experiments: `experiments/acm-champernowne/base10/shutter/`, `experiments/acm-champernowne/base10/art/contamination/`.
 
 ### Stratified sampling
 

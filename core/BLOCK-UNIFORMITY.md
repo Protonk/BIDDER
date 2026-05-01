@@ -93,7 +93,7 @@ factor of `n² / (n−1)`.
 
 **Scope.** The smooth condition `n² | b^(d-1)` requires `n` to be
 *b*-smooth (every prime factor of `n` divides `b`). For prime `n`
-coprime to `b` — most of the n-panel in `experiments/acm-flow/cf/`
+coprime to `b` — most of the n-panel in `experiments/acm/cf/`
 — no `d` satisfies smooth, and the closed-form count is then
 asymptotic with `O(1)` per-block correction (bounded by the spread
 bound below). What's "exact" is restricted to smooth, Family E, and
@@ -368,21 +368,21 @@ several otherwise-distinct observables. See
 
 The **sieved lemma**'s residue-counting fact reaches three:
 
-- **CF spike formula `T_k`** (`experiments/acm-flow/cf/MEGA-SPIKE.md`).
+- **CF spike formula `T_k`** (`experiments/acm/cf/MEGA-SPIKE.md`).
   The cumulative digit count `T_k = Σ_{d=1}^{k} d · N_d(n, b)` is this
   count integrated by digit weight. The closed-form spike scale
   `S_k = D_k − C_{k−1} = (n − 1)/n² · (b^{k−1}(k(b−2) + b/(b−1))
   − 1/(b−1))` is a smooth-family sum.
 
 - **Multiplication-table asymptote**
-  (`experiments/acm-flow/mult-table/`). `M_n(K)/M_Ford(K) → α_n =
+  (`experiments/acm/mult-table/`). `M_n(K)/M_Ford(K) → α_n =
   (n − 1)/n` is the density of integers not divisible by n. M_n's
   atoms have the form `n · c` with `n ∤ c`; their distinct products
   land in residues not divisible by n, and Ford's image-counting
   anatomy applied under that residue restriction gives `α_n`.
 
 - **Off-spike cofactor cycle slope**
-  (`experiments/acm-flow/cf/OFFSPIKE-RESULT.md`). The slope `(n − 1)`
+  (`experiments/acm/cf/OFFSPIKE-RESULT.md`). The slope `(n − 1)`
   in `δ_k(n) = (n − 1)k + offset(n)` is the cofactor cycle length —
   the numerator of the smooth-block density `(n − 1)/n²`.
 

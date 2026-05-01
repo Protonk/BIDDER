@@ -94,7 +94,7 @@ def _partitions(n, max_part=None):
             yield (first,) + rest
 
 
-CSV_PATH = os.path.join(REPO, 'experiments', 'acm-flow', 'payload_q_scan.csv')
+CSV_PATH = os.path.join(REPO, 'experiments', 'acm', 'flow', 'payload_q_scan.csv')
 
 
 # --------------------------------------------------------------------------

@@ -48,7 +48,7 @@ DEFAULT_PRIMES = (2, 3, 5, 7, 11, 13)
 DEFAULT_HEIGHTS = (5, 6, 7, 8)
 DEFAULT_K = 4000
 DEFAULT_LATTICE_DIR = os.path.join(
-    EXPERIMENTS_DIR, 'acm-champernowne', 'base10', 'art', 'q_distillery')
+    EXPERIMENTS_DIR, 'acm-champernowne', 'base10', 'q_distillery')
 
 
 # --------------------------------------------------------------------------

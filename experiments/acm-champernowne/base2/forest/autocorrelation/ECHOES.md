@@ -9,7 +9,7 @@ the dominant entry length `d_dom`, with magnitudes set by within-
 d-block structure.
 
 This document revives the experiment with the methodology developed
-in `experiments/acm-flow/cf/DENOMINATOR-PROCESS.md`: a substrate-
+in `experiments/acm/cf/DENOMINATOR-PROCESS.md`: a substrate-
 predicted envelope (computable in closed form by direct enumeration
 of d-bit n-primes), a three-population decomposition (spike loci /
 interior / anomalous), and an anchor harness verifying the predictor
@@ -225,12 +225,12 @@ slow-varying regime.
 
 ## Cross-references
 
-- `experiments/acm-flow/cf/DENOMINATOR-PROCESS.md` — methodology
+- `experiments/acm/cf/DENOMINATOR-PROCESS.md` — methodology
   source: substrate envelope + interior + perimeter, anchor
   harness, three-population decomposition. The CF result was
   `z ≈ +4.9` for sub-canonical excursions; the binary analog here
   is `n = 16`'s anomalous-count excess, of similar shape.
-- `experiments/acm-flow/cf/MEGA-SPIKE.md` — analogue boundary
+- `experiments/acm/cf/MEGA-SPIKE.md` — analogue boundary
   spike formula (CF spike at radix-block boundaries; binary spike
   at multiples of d_dom).
 - `core/BLOCK-UNIFORMITY.md` — `(b−1) b^{d−1} (n−1)/n²` smooth

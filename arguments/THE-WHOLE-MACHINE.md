@@ -111,8 +111,8 @@ Submitted to remain open.
 - `algebra/WITHIN-ROW-PARITY.md` — autocorrelation decomposition.
 - `core/HARDY-SIDESTEP.md` — c_K derivation.
 - `core/BLOCK-UNIFORMITY.md` — digit-frequency cost ledger.
-- `experiments/acm-flow/cf/MEGA-SPIKE.md` — boundary-spike formula.
-- `experiments/acm-flow/cf/DENOMINATOR-PROCESS.md` — CF cost
+- `experiments/acm/cf/MEGA-SPIKE.md` — boundary-spike formula.
+- `experiments/acm/cf/DENOMINATOR-PROCESS.md` — CF cost
   ledger.
-- `experiments/acm-flow/mult-table/` — mult-table cost ledger.
+- `experiments/acm/mult-table/` — mult-table cost ledger.
 - `guidance/BQN-AGENT.md` — naming.

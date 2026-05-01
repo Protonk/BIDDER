@@ -18,7 +18,7 @@ K = 4
 N_VALUES = (2, 3, 4, 5, 6, 10)
 
 # Rounded source values from:
-# experiments/acm-flow/cf/the original CF panel (cf_spikes.py output)
+# experiments/acm/cf/the original CF panel (cf_spikes.py output)
 LOG10_Q_BEFORE = {
     2: 727.7,
     3: 650.0,

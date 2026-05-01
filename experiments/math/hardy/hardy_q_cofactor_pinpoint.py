@@ -54,7 +54,7 @@ ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 sys.path.insert(0, HERE)
 from hardy_echo import nth_n_prime  # noqa: E402
 
-sys.path.insert(0, os.path.join(ROOT, 'experiments', 'acm-flow'))
+sys.path.insert(0, os.path.join(ROOT, 'experiments', 'acm', 'flow'))
 from hardy_composite_q import (  # noqa: E402
     factor_dict, factor_small, mul_facs, tau_j,
 )

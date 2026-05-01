@@ -222,7 +222,7 @@ generating-function objects.
 Two coupling-layer observables this project has explored:
 
 - **Continued fractions of the ACM-Champernowne real**
-  (`experiments/acm-flow/cf/`). The CF expansion of
+  (`experiments/acm/cf/`). The CF expansion of
   `0 . p_1 p_2 p_3 …` is a feature of the digit concatenation, not
   of `Q_n` at single atoms. The mega-spike formula
   `log_b(a) ≈ T_k − 2 L_{k−1} + log_b(b/(b−1))` involves substrate
@@ -232,7 +232,7 @@ Two coupling-layer observables this project has explored:
   via the `M_n` digit-block geometry, not via `Q_n` itself.
 
 - **Multiplication-table count on `M_n`**
-  (`experiments/acm-flow/mult-table/`). `M_n(N)` counts distinct
+  (`experiments/acm/mult-table/`). `M_n(N)` counts distinct
   products `c_1 · c_2` for cofactors coprime to `n`. The relevant
   generating function is Ford's multiplication-table theorem on
   `Z_{>0}` restricted to a residue class — *not* `log ζ_{M_n}(s)`.

@@ -2,7 +2,7 @@
 hardy_composite_q.py — Phase 2.4 deep composite-Q witnesses
 ============================================================
 
-Per `experiments/acm-flow/STRUCTURE-HUNT.md` Phase 2.4 and the closing
+Per `experiments/acm/flow/STRUCTURE-HUNT.md` Phase 2.4 and the closing
 caveat of `experiments/math/hardy/DEEP-TROUBLE-No-4.md`.
 
 Hardy random access returns *atoms* of M_n (n-primes), all of which have
@@ -46,7 +46,7 @@ from math import comb
 from sage.all import factor as sage_factor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 sys.path.insert(0, os.path.join(ROOT, 'experiments', 'math', 'hardy'))
 
 from hardy_echo import nth_n_prime  # noqa: E402

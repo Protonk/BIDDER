@@ -94,7 +94,7 @@ gives 23 (computable by inclusion-exclusion: multiples of 2 in
 [10, 99] minus multiples of 4 = 45 − 22 = 23).
 
 This is the verification harness Phase 3.1 of
-`experiments/acm-flow/STRUCTURE-HUNT.md` needs. Pushing `d` to
+`experiments/acm/flow/STRUCTURE-HUNT.md` needs. Pushing `d` to
 50 or 100 is one parameter change.
 
 

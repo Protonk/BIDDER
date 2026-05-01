@@ -56,7 +56,7 @@ from predict_correlation import autocorr_profile_from_row
 
 
 LATTICE_DIR = os.path.join(REPO, 'experiments', 'acm-champernowne', 'base10',
-                           'art', 'q_distillery')
+                           'q_distillery')
 
 PRIMES = (2, 3, 5, 7, 11, 13)
 LAGS = list(range(1, 21))

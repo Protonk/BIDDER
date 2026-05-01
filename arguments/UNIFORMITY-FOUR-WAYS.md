@@ -54,18 +54,18 @@ The grand part is reach, not depth. The *sieved* lemma's
 residue-counting fact powers three structurally distinct observables:
 
 - **Spike formula `T_k`.** The cumulative digit count
-  `T_k = Σ_{d=1}^{k} d · N_d(n, b)` in `experiments/acm-flow/cf/MEGA-SPIKE.md`
+  `T_k = Σ_{d=1}^{k} d · N_d(n, b)` in `experiments/acm/cf/MEGA-SPIKE.md`
   is `BLOCK-UNIFORMITY` integrated by digit count. The closed-form
   spike scale `S_k = D_k − C_{k−1} = (n − 1)/n² · (b^{k−1}(k(b−2) +
   b/(b−1)) − 1/(b − 1))` is a smooth-family sum.
 - **Multiplication-table asymptote.** `M_n(K)/M_Ford(K) → α_n = (n − 1)/n`
-  in `experiments/acm-flow/mult-table/`. The factor `(n − 1)/n` is
+  in `experiments/acm/mult-table/`. The factor `(n − 1)/n` is
   the density of integers not divisible by `n`. M_n's atoms have the
   form `n · c` with `n ∤ c`; their distinct products land in residues
   not divisible by `n`, and Ford's image-counting anatomy applied
   under that residue restriction gives `α_n`.
 - **Off-spike cofactor cycle slope.** `δ_k(n) = (n − 1)k + offset(n)`
-  in `experiments/acm-flow/cf/OFFSPIKE-RESULT.md`. The slope `(n − 1)`
+  in `experiments/acm/cf/OFFSPIKE-RESULT.md`. The slope `(n − 1)`
   is the cycle length of cofactors of n-primes, which is the
   numerator of the `BLOCK-UNIFORMITY` density.
 

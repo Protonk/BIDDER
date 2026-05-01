@@ -30,7 +30,7 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 # HERE = .../q_distillery; walk up to BIDDER root.
 REPO = HERE
-for _ in range(5):  # q_distillery -> art -> base10 -> acm-champernowne -> experiments -> BIDDER
+for _ in range(4):  # q_distillery -> base10 -> acm-champernowne -> experiments -> BIDDER
     REPO = os.path.dirname(REPO)
 sys.path.insert(0, os.path.join(REPO, 'algebra'))
 

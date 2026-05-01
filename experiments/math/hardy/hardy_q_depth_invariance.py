@@ -2,7 +2,7 @@
 hardy_q_depth_invariance.py — does Hardy sample M_n fairly by Q?
 =================================================================
 
-`experiments/acm-flow/hardy_composite_q.py` (Phase 2.4) verified the
+`experiments/acm/flow/hardy_composite_q.py` (Phase 2.4) verified the
 Q-formula at depth — it tested the *algebra*. This script tests the
 *sampler*: when we draw composite m via Hardy r = 2 atom pairs at
 depth K = 10^12, is the resulting Q_n distribution the same as when we
@@ -53,7 +53,7 @@ ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
 sys.path.insert(0, HERE)
 from hardy_echo import nth_n_prime  # noqa: E402
 
-sys.path.insert(0, os.path.join(ROOT, 'experiments', 'acm-flow'))
+sys.path.insert(0, os.path.join(ROOT, 'experiments', 'acm', 'flow'))
 from hardy_composite_q import (  # noqa: E402
     factor_dict, factor_small, mul_facs, height_n, q_master,
 )

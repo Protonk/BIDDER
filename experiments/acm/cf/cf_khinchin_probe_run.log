@@ -42,8 +42,8 @@
   stable prefix: 843
   total PQs: 843;  spikes (log10 a > 3.0): 3
 
-wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-flow/cf/cf_khinchin_probe.csv
-wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-flow/cf/cf_khinchin_probe_summary.txt
+wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm/cf/cf_khinchin_probe.csv
+wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm/cf/cf_khinchin_probe_summary.txt
 
 # cf_khinchin_probe — off-spike CF distribution vs Khinchin
 # K_PRIMES=20000  MAX_PQ=5000  LOG10_SPIKE=3.0
@@ -133,4 +133,4 @@ wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-flow/c
    14       0       0.07        0.000    -0.27
    16       0       0.02        0.000    -0.14
 
-wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-flow/cf/cf_khinchin_probe_survival.png
+wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm/cf/cf_khinchin_probe_survival.png

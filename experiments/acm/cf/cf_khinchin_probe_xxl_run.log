@@ -42,8 +42,8 @@
   validated prefix: 2000
   total PQs: 2000;  spikes (log10 a > 3.0): 6
 
-wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-flow/cf/cf_khinchin_probe_xxl.csv
-wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-flow/cf/cf_khinchin_probe_xxl_summary.txt
+wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm/cf/cf_khinchin_probe_xxl.csv
+wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm/cf/cf_khinchin_probe_xxl_summary.txt
 
 # cf_khinchin_probe_xxl — past-k=5 validation probe
 # K_PRIMES=100000  MAX_PQ=2000  LOG10_SPIKE=3.0
@@ -146,4 +146,4 @@ wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-flow/c
    18       0       0.011        0.000    -0.10
    20       0       0.003        0.000    -0.05
 
-wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-flow/cf/cf_khinchin_probe_xxl_survival.png
+wrote /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm/cf/cf_khinchin_probe_xxl_survival.png

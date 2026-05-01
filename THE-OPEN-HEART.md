@@ -193,9 +193,9 @@ What C–E does *not* settle:
   scales. Beyond the `b^{−k}`-frequency claim of C–E.
 
 - **CF behaviour and irrationality measure.** Conditional in
-  `experiments/acm-flow/cf/MU-CONDITIONAL.md`; the "spikes
+  `experiments/acm/cf/MU-CONDITIONAL.md`; the "spikes
   dominate" premise is supported at the marginal level by
-  `experiments/acm-flow/cf/KHINCHIN-RESULT.md`. C–E does not address.
+  `experiments/acm/cf/KHINCHIN-RESULT.md`. C–E does not address.
 
 - **Substrate-specific structure.** The work in `arguments/*` and
   the empirical phases. C–E does not address.
@@ -238,7 +238,7 @@ would mean.
 
 ## The Open Heart
 
-![A circular disk filling most of a square frame on a black background. The disk's interior is rendered in deep magenta and purple tones overlaid with a network of bright orange-yellow lines. Two prominent perpendicular bright bars cross through the disk's centre forming an orange cross — one horizontal diameter, one vertical diameter. Beyond the central cross, the disk is filled with a curvilinear orthogonal grid: arcs that bend along the disk's curvature, growing denser and finer toward the disk's circumference. The grid is regular near the centre and compresses tightly at the rim, where the structure thickens into a fine textured band along the disk's boundary. No clear empty regions are visible; lines and intersections appear at every scale across the disk's interior. The four corners of the square frame outside the disk are pure black.](experiments/acm-champernowne/base10/art/q_distillery/q_lattice_4000_fft_poincare.png)
+![A circular disk filling most of a square frame on a black background. The disk's interior is rendered in deep magenta and purple tones overlaid with a network of bright orange-yellow lines. Two prominent perpendicular bright bars cross through the disk's centre forming an orange cross — one horizontal diameter, one vertical diameter. Beyond the central cross, the disk is filled with a curvilinear orthogonal grid: arcs that bend along the disk's curvature, growing denser and finer toward the disk's circumference. The grid is regular near the centre and compresses tightly at the rim, where the structure thickens into a fine textured band along the disk's boundary. No clear empty regions are visible; lines and intersections appear at every scale across the disk's interior. The four corners of the square frame outside the disk are pure black.](experiments/acm-champernowne/base10/q_distillery/q_lattice_4000_fft_poincare.png)
 
 What got destroyed: linear scale (slog), spatial location (2D
 FFT), phase information (magnitude only), and Euclidean geometry
@@ -269,12 +269,12 @@ The catalog of residuals — what the algebra has not finished
 closing — runs:
 
 - `offset(n)` by `ord(b, n)` (intermediate `ord` open in
-  `experiments/acm-flow/cf/PRIMITIVE-ROOT-FINDING.md`),
+  `experiments/acm/cf/PRIMITIVE-ROOT-FINDING.md`),
 - `β(n)` for the `O(b^{−k})` tails (per-`n`, currently
   uncharacterised),
 - the intermediate-magnitude excess in the off-spike CF (substrate
   envelope and small-PQ marginal closed via
-  `experiments/acm-flow/cf/DENOMINATOR-PROCESS.md` and
+  `experiments/acm/cf/DENOMINATOR-PROCESS.md` and
   `KHINCHIN-RESULT.md`; the `≈3×` Khinchin renewal-rate excess open),
 - the lucky-cancellation locus in `core/BLOCK-UNIFORMITY.md`
   (22 205 triples in `b ≤ 12, d ≤ 5`, no rule known).
@@ -316,7 +316,7 @@ inversion. Each is a place the substrate exposes structure we
 don't see how to close.
 
 - **Off-spike intermediate-magnitude excess**
-  (`experiments/acm-flow/cf/DENOMINATOR-PROCESS.md` Test C).
+  (`experiments/acm/cf/DENOMINATOR-PROCESS.md` Test C).
   Bidder's "no nearby landmark" case in CF coordinates. The
   substrate envelope (Test A) and the small-PQ Gauss–Kuzmin
   interior (Test B + `KHINCHIN-RESULT.md`) are now closed; the

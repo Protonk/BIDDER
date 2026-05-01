@@ -122,7 +122,7 @@ concatenation.
   The irrationality measure of classical Champernowne (Mahler
   1937, `μ = 10`) is a separate result. The ACM analog —
   conditional `μ = 2 + (b − 1)(b − 2)/b` in
-  `experiments/acm-flow/cf/MU-CONDITIONAL.md` — is a separate
+  `experiments/acm/cf/MU-CONDITIONAL.md` — is a separate
   thread, addressed via the spike formula and the off-spike
   denominator process, not through C–E.
 
@@ -169,7 +169,7 @@ real. ACM-Champernowne is one entry in this family.
   as the precedent for what's settled vs what's open. The
   manifesto's commitment is to *absolute* normality, the
   refinement C–E does not address.
-- `experiments/acm-flow/cf/` — CF and irrationality-measure
+- `experiments/acm/cf/` — CF and irrationality-measure
   work, conditional and not addressed by C–E.
 - `sources/BIDDER-AND-SON.md` — the historical lattice of
   multiplicative anatomy that the project inverts; ACM-Champernowne's

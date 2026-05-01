@@ -224,7 +224,7 @@ Use it for:
 
 This mode is where Hardy Sidestep touches the base-10 spike work
 most directly. It is the verification harness that
-`experiments/acm-flow/STRUCTURE-HUNT.md` Phase 3.1 needs: derive
+`experiments/acm/flow/STRUCTURE-HUNT.md` Phase 3.1 needs: derive
 the CF-spike formula from `Q_n` (`algebra/Q-FORMULAS.md`,
 `algebra/FINITE-RANK-EXPANSION.md`) at small `d`, then check the
 prediction at `d = 50` or `d = 100` via Mode 3 without
@@ -257,7 +257,7 @@ were origin effects and which are stream laws.
 
 This mode is the "destroyer" half of
 `experiments/VISUAL-REDUCTION-DISCIPLINE.md`. The Phase 1 destroyers
-in `experiments/acm-flow/phase1_destroyers.py` shuffled prefix data
+in `experiments/acm/flow/phase1_destroyers.py` shuffled prefix data
 within fixed-size cells; Mode 4 generalises that to arbitrary
 prefix-era visuals re-run at arbitrary depth, with the same
 shuffle-null discipline.

@@ -12,6 +12,6 @@ material goes in the canonical files below.
 | Rank lemma (one-line proof)             | `RANK-LEMMA.md`              |
 | BQN Annotation (Divs, Tau, Rank, Qn)    | `OBJECTS.md` (Divs, Tau, NuP) and `MASTER-EXPANSION.md` (Qn) |
 | Rank Reading (h = 1, 2, 3 prime row)    | `TABLES.md` §"Prime n"       |
-| Evidence So Far                         | `experiments/acm-flow/cf/` and `experiments/acm-flow/mult-table/` (CF / mult-table empirical state lives there) |
-| What It Would Buy / coupling discussion | `experiments/acm-flow/cf/`   |
-| What CF empirics imply for higher-h reads | `experiments/acm-champernowne/base10/art/q_distillery/HIGHER-H-EXPECTATIONS.md` |
+| Evidence So Far                         | `experiments/acm/cf/` and `experiments/acm/mult-table/` (CF / mult-table empirical state lives there) |
+| What It Would Buy / coupling discussion | `experiments/acm/cf/`   |
+| What CF empirics imply for higher-h reads | `experiments/acm-champernowne/base10/q_distillery/HIGHER-H-EXPECTATIONS.md` |

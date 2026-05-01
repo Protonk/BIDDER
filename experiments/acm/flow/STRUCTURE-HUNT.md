@@ -171,7 +171,7 @@ Hardy Echo is the validation layer.
 
 ### 3.1 — CF Spike Derivation
 
-`experiments/acm-flow/cf/MEGA-SPIKE.md` gives the closed-form
+`experiments/acm/cf/MEGA-SPIKE.md` gives the closed-form
 spike scale and derivation. The exact part is radix-block geometry:
 smooth k-blocks contribute `D_k`, preceding blocks contribute
 `C_{k-1}`, and the naive spike height is `D_k - C_{k-1}`. This

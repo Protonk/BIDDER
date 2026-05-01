@@ -19,7 +19,7 @@ within-block R for the dominant d-block, weighted by that block's
 share of the bit stream.
 
 This is the binary-stream analog of `algebra/predict_q.py` and
-`experiments/acm-flow/cf/offspike_dynamics.py`: an algebraic
+`experiments/acm/cf/offspike_dynamics.py`: an algebraic
 predictor verified against the empirical signal.
 
 BQN (per `guidance/BQN-AGENT.md`):

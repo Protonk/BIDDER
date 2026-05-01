@@ -1,7 +1,7 @@
 """
 echoes_analysis.py — three-population decomposition of the binary
 autocorrelation, modelled on the off-spike CF analysis in
-experiments/acm-flow/cf/offspike_dynamics.py.
+experiments/acm/cf/offspike_dynamics.py.
 
 For each monoid n in the panel, compute the streaming binary
 autocorrelation R(τ) for τ = 1..MAX_LAG, then partition the lag

@@ -1,6 +1,6 @@
 # Mega-Spike Four Ways
 
-A critique of `experiments/acm-flow/cf/MECHANISTIC-DERIVATION.md`
+A critique of `experiments/acm/cf/MECHANISTIC-DERIVATION.md`
 and the surrounding `cf/` documentation. The question is not
 "is the formula correct" — within its window of validity, it is. The
 question is what the formula actually *is*, read literally, as a
@@ -303,7 +303,7 @@ Three places, in increasing order of difficulty:
    divisibility argument *fails* empirically and the right replacement
    is open. Step 3 is the missing analytic link.
    A parallel Mahler-style derivation in
-   `experiments/acm-flow/cf/` has independently
+   `experiments/acm/cf/` has independently
    named the same gap at looser `O(d · n)` resolution; cross-thread
    convergence on this step strengthens its identification as
    *the* load-bearing open problem of the spike-formula thread,

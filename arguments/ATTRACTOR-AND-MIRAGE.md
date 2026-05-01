@@ -1,6 +1,6 @@
 # Attractor and Mirage
 
-A methodology note from the `experiments/acm-champernowne/base10/art/q_distillery/`
+A methodology note from the `experiments/acm-champernowne/base10/q_distillery/`
 FFT-iteration experiments. Two findings, one substrate-side, one
 rendering-side. Both required deliberate testing to disentangle.
 
@@ -104,7 +104,7 @@ The `(n, k)` Q-lattice at `h = 5` is a 2D arithmetic-multiplicative
 image: shape × τ-signature blocks, gcd-vein periodicities, prime-row
 structural zeros. One FFT preserves this structure dramatically — a
 discrete prime-harmonic grid we already documented in
-`experiments/acm-champernowne/base10/art/q_distillery/`.
+`experiments/acm-champernowne/base10/q_distillery/`.
 
 The question: what happens if we keep iterating
 
@@ -842,7 +842,7 @@ proof.
 
 ## Reproducibility
 
-Scripts in `experiments/acm-champernowne/base10/art/q_distillery/`:
+Scripts in `experiments/acm-champernowne/base10/q_distillery/`:
 
 - `q_lattice_fft_iterate.py` — runs the iteration to `N_ITER = 10`,
   saves PNG at each step, prints percentile statistics.

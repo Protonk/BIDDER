@@ -159,7 +159,7 @@ This document adds two more:
   questions (Mode 2/3, boundary stitch).
 - **The CF mega-spike is closed-form modulo one scalar.**
   The Phase 3.1 derivation
-  (`experiments/acm-flow/cf/MEGA-SPIKE.md`)
+  (`experiments/acm/cf/MEGA-SPIKE.md`)
   finds
 
       log_b(a) ≈ T_k − 2 · L_{k−1}
@@ -184,16 +184,15 @@ A sixth instance has the same shape but a different mode of
 visibility — *cross-thread*, not *cross-frame*. In April 2026 an
 agent in a parallel CF thread independently rederived the
 closed-form spike scale `S_k = D_k − C_{k−1}` already on the page
-in `experiments/acm-flow/cf/MEGA-SPIKE.md`, plus produced parallel
+in `experiments/acm/cf/MEGA-SPIKE.md`, plus produced parallel
 panel and Mahler-style derivation docs duplicating canonical work.
 The agent self-caught via `arguments/MEGA-SPIKE-FOUR-WAYS.md` and
 the four duplicate docs were retired (preserved in git history,
 commit `8f39d00` and earlier). The variant is: the elementary
 fact (the closed form) wasn't being missed in the formula being
 read, it was being missed in a *sibling thread's* documentation.
-Disparate doc locations — `acm-flow/mega-spike/` and
-`acm-champernowne/base10/cf/` — magnified the blindness.
-Consolidation into `experiments/acm-flow/cf/` removed the
+Disparate CF documentation locations magnified the blindness.
+Consolidation into `experiments/acm/cf/` removed the
 structural cause.
 
 
@@ -346,8 +345,8 @@ For an agent picking up work in this repo:
 - `experiments/math/hardy/hardy_q_cofactor_pinpoint.py` — the
   cofactor-pair overlay that, in retrospect, is the bijection
   becoming visible.
-- `experiments/acm-flow/hardy_composite_q.py` — the Phase 2.4
+- `experiments/acm/flow/hardy_composite_q.py` — the Phase 2.4
   panel; reread as implementation-sanity rather than
   depth-validation.
-- `experiments/acm-flow/cf/MEGA-SPIKE.md` —
+- `experiments/acm/cf/MEGA-SPIKE.md` —
   the CF mega-spike collapse: `log_b(a) ≈ T_k − 2 · L_{k−1}`.

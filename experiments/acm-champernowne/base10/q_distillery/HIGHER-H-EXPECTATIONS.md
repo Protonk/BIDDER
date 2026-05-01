@@ -5,7 +5,7 @@ complete read of the local rank stack at low h. The cached
 `q_lattice_4000_h{6,7,8}.npy` arrays are the natural next reads.
 This doc records concrete predictions for those reads, derived from
 the CF off-spike denominator analysis
-(`experiments/acm-flow/cf/DENOMINATOR-PROCESS.md`).
+(`experiments/acm/cf/DENOMINATOR-PROCESS.md`).
 
 The high-level theoretical justification lives in
 `algebra/FINITE-RANK-EXPANSION.md` ("What CF empirics imply for
@@ -160,9 +160,9 @@ lattice.
   closed-form leading prediction in P1.
 - `core/BLOCK-UNIFORMITY.md` — the smooth-block atom count
   `(b−1)b^{d−1}(n−1)/n²` that anchors the leading-form bet.
-- `experiments/acm-flow/cf/DENOMINATOR-PROCESS.md` — the CF result
+- `experiments/acm/cf/DENOMINATOR-PROCESS.md` — the CF result
   these predictions extrapolate from.
-- `experiments/acm-flow/cf/PRIMITIVE-ROOT-FINDING.md` — the
+- `experiments/acm/cf/PRIMITIVE-ROOT-FINDING.md` — the
   `ord(b, n)` classification that P3 hypothesises governs
   transient stabilisation.
 - `Q_DISTILLERY.md` (this folder) — rendering style for the Q

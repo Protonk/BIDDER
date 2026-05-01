@@ -11,7 +11,7 @@
     7,
     8
   ],
-  "lattice_dir": "/Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-champernowne/base10/art/q_distillery",
+  "lattice_dir": "/Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-champernowne/base10/q_distillery",
   "primes": [
     2,
     3,
@@ -33,7 +33,7 @@ Tolerance TOL = 1e-12.
 |---|---|---|---|---|---|---|
 | `no_op` | 0 | 24 | 0 | 0.946763 | 0.824225 | 0.996991 |
 | `zero_count` | 24 | 0 | 0 | 1.000000 | 1.000000 | 1.000000 |
-| `value_multiset` | 21 | 3 | 0 | 0.999969 | 0.999750 | 1.000000 |
+| `value_multiset` | 24 | 0 | 0 | 1.000000 | 1.000000 | 1.000000 |
 | `prime_row_identity_at_k1` | 0 | 0 | 24 | 0.000000 | 0.000000 | 0.000000 |
 
 ## Per-cell verdicts
@@ -47,15 +47,15 @@ Tolerance TOL = 1e-12.
 | (3, 5) | partial (0.9141) | present (1.0000) | present (1.0000) | absent (0.0000) |
 | (3, 6) | partial (0.9621) | present (1.0000) | present (1.0000) | absent (0.0000) |
 | (3, 7) | partial (0.9829) | present (1.0000) | present (1.0000) | absent (0.0000) |
-| (3, 8) | partial (0.9914) | present (1.0000) | partial (0.9998) | absent (0.0000) |
+| (3, 8) | partial (0.9914) | present (1.0000) | present (1.0000) | absent (0.0000) |
 | (5, 5) | partial (0.8637) | present (1.0000) | present (1.0000) | absent (0.0000) |
 | (5, 6) | partial (0.9398) | present (1.0000) | present (1.0000) | absent (0.0000) |
 | (5, 7) | partial (0.9725) | present (1.0000) | present (1.0000) | absent (0.0000) |
-| (5, 8) | partial (0.9873) | present (1.0000) | partial (0.9998) | absent (0.0000) |
+| (5, 8) | partial (0.9873) | present (1.0000) | present (1.0000) | absent (0.0000) |
 | (7, 5) | partial (0.8458) | present (1.0000) | present (1.0000) | absent (0.0000) |
 | (7, 6) | partial (0.9318) | present (1.0000) | present (1.0000) | absent (0.0000) |
 | (7, 7) | partial (0.9701) | present (1.0000) | present (1.0000) | absent (0.0000) |
-| (7, 8) | partial (0.9868) | present (1.0000) | partial (0.9998) | absent (0.0000) |
+| (7, 8) | partial (0.9868) | present (1.0000) | present (1.0000) | absent (0.0000) |
 | (11, 5) | partial (0.8290) | present (1.0000) | present (1.0000) | absent (0.0000) |
 | (11, 6) | partial (0.9235) | present (1.0000) | present (1.0000) | absent (0.0000) |
 | (11, 7) | partial (0.9669) | present (1.0000) | present (1.0000) | absent (0.0000) |
@@ -67,6 +67,4 @@ Tolerance TOL = 1e-12.
 
 ## Anomalies
 
-- (3, 8) `value_multiset`: got `partial` (strength 0.999750), expected `present`
-- (5, 8) `value_multiset`: got `partial` (strength 0.999750), expected `present`
-- (7, 8) `value_multiset`: got `partial` (strength 0.999750), expected `present`
+None.

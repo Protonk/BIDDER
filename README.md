@@ -64,7 +64,7 @@ out when exact data has room to move.
 
 > Our constructive normals leave algebra in their residue.
 
-![A circular disk filling most of a square frame on a black background. The disk's interior is rendered in deep magenta and purple tones overlaid with a network of bright orange-yellow lines. Two prominent perpendicular bright bars cross through the disk's centre forming an orange cross — one horizontal diameter, one vertical diameter. Beyond the central cross, the disk is filled with a curvilinear orthogonal grid: arcs that bend along the disk's curvature, growing denser and finer toward the disk's circumference. The grid is regular near the centre and compresses tightly at the rim, where the structure thickens into a fine textured band along the disk's boundary.](experiments/acm-champernowne/base10/art/q_distillery/q_lattice_4000_fft_poincare.png)
+![A circular disk filling most of a square frame on a black background. The disk's interior is rendered in deep magenta and purple tones overlaid with a network of bright orange-yellow lines. Two prominent perpendicular bright bars cross through the disk's centre forming an orange cross — one horizontal diameter, one vertical diameter. Beyond the central cross, the disk is filled with a curvilinear orthogonal grid: arcs that bend along the disk's curvature, growing denser and finer toward the disk's circumference. The grid is regular near the centre and compresses tightly at the rim, where the structure thickens into a fine textured band along the disk's boundary.](experiments/acm-champernowne/base10/q_distillery/q_lattice_4000_fft_poincare.png)
 
 The single deletion rule `M_n = {1} ∪ nZ_{>0}` does three things at
 once: it discards unique factorisation, exposes the arithmetic
@@ -93,11 +93,11 @@ closing fails — independent of whether absolute normality itself
 ever falls.
 
 - [THE-OPEN-HEART.md](THE-OPEN-HEART.md) — the manifesto: closure refused, log identity recovered at higher altitude, UFD traded for K-indexed access
-- [algebra/THE-WHOLE-MACHINE.md](algebra/THE-WHOLE-MACHINE.md) — the eleven parts of the BIDDER UTM, named once each
+- [arguments/THE-WHOLE-MACHINE.md](arguments/THE-WHOLE-MACHINE.md) — the eleven parts of the BIDDER UTM, named once each
 - [algebra/Q-FORMULAS.md](algebra/Q-FORMULAS.md) — the master expansion `Q_n(m) = Σ_{j=1}^{ν_n(m)} (−1)^{j−1} τ_j(m/n^j) / j` and its row specialisations
 - [algebra/FINITE-RANK-EXPANSION.md](algebra/FINITE-RANK-EXPANSION.md) — the rank lemma: Mercator truncates at `j = ν_n(m)` by integer divisibility
 - [algebra/WITHIN-ROW-PARITY.md](algebra/WITHIN-ROW-PARITY.md) — first closed-form deliverable: autocorrelation factored as algebraic `V` × combinatorial `D`
-- [experiments/acm-flow/cf/DENOMINATOR-PROCESS.md](experiments/acm-flow/cf/DENOMINATOR-PROCESS.md) — the CF coordinate of the cost ledger; three-population decomposition
+- [experiments/acm/cf/DENOMINATOR-PROCESS.md](experiments/acm/cf/DENOMINATOR-PROCESS.md) — the CF coordinate of the cost ledger; three-population decomposition
 
 ### Generator
 
@@ -168,6 +168,6 @@ Art folders coordinate experiments on exact data. The next time someone says som
 
 - [`corona_attempt.png`](experiments/acm-champernowne/base2/art/rle/corona_attempt.png) — the sun above. An instructive failure: binary run lengths on polar axes collapse toward the center because short runs dominate exponentially. The "sun" is a failure mode caused by structure of structure.
 - [`dense_bloom.png`](experiments/acm-champernowne/base10/art/sunflower/dense_bloom.png) — decimal block structure rendered as a bloom.
-- [`escalating_bidder_mul.png`](experiments/bidder/art/contamination/escalating_bidder_mul.png) — 1, then 5, then 10 multiplications in a sea of additions. Each burst deepens the Benford scar. The additive staircase is the Champernowne sawtooth; the multiplicative kick is ε doing its work.
+- [`escalating_bidder_mul.png`](experiments/acm-champernowne/base10/art/contamination/escalating_bidder_mul.png) — 1, then 5, then 10 multiplications in a sea of additions. Each burst deepens the Benford scar. The additive staircase is the Champernowne sawtooth; the multiplicative kick is ε doing its work.
 - [`art_groove.png`](experiments/math/benford/art_groove.png) — four Benford demos rendered as vinyl records. Groove eccentricity is mantissa non-uniformity; a perfect circle is Benford equilibrium. The BS(1,2) walk's record has one bright scratch (the initial delta) and then a machined surface.
 - [`butterfly.png`](experiments/bidder/bidderize/butterfly.png) — a keyed permutation of 20,000 integers, rotated 45 degrees and cropped to an oval. Colored by output mod 9 on a CMB scale. The density variations are the Feistel round function's fingerprint, almost but not quite uniform.

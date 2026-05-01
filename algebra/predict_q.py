@@ -42,7 +42,7 @@ All values are exact (Python's fractions.Fraction; no SymPy, no floats).
 
 Sanity anchors are in algebra/test_anchors.py (A1..A10). The canonical
 h=5 (shape, tau_sig) matrix is rendered in
-experiments/acm-champernowne/base10/art/q_distillery/q_h5_shape_tau_matrix.png
+experiments/acm-champernowne/base10/q_distillery/q_h5_shape_tau_matrix.png
 and frozen as anchor A2.
 """
 

@@ -7,7 +7,7 @@ Brief 4 (multiplication-table-on-M_n). That gating role is now
 historical:
 
 - **Brief 4 (h=2) has been executed empirically** in
-  `experiments/acm-flow/mult-table/`. The "Λ_n stays nonneg ⇒ standard
+  `experiments/acm/mult-table/`. The "Λ_n stays nonneg ⇒ standard
   anatomy applies" / "Λ_n goes negative ⇒ structural direction" decision
   table below was written before the local algebra was understood. The
   finite-rank closed form `Q_n(m) = Σ_{j=1}^{ν_n(m)} (-1)^(j-1) τ_j(m/n^j)/j`
@@ -28,7 +28,7 @@ historical:
 
 For the current state of the local algebra see
 `algebra/Q-FORMULAS.md` and `algebra/FINITE-RANK-EXPANSION.md`. For the h=2
-multiplication-table empirics see `experiments/acm-flow/mult-table/`.
+multiplication-table empirics see `experiments/acm/mult-table/`.
 
 ---
 
@@ -172,7 +172,7 @@ be visible.
 ## What this is not
 
 - Not Brief 4 itself. Brief 4 is the BPPW Monte Carlo on `M_n(N)`.
-- Not the CF spike work in `experiments/acm-flow/cf/`
+- Not the CF spike work in `experiments/acm/cf/`
   (that's Brief 2).
 - Not the composite-lattice work in `experiments/acm/diagonal/`
   (that counts witness pairs per composite N — adjacent object,

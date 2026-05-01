@@ -432,5 +432,5 @@ bottleneck and scales like `X · log² X`.
 
 - Not Brief 4 itself. Brief 4 is the BPPW Monte Carlo on `M_n(N)`.
 - Not Brief 2. CF-spike work lives in
-  `experiments/acm-flow/cf/`.
+  `experiments/acm/cf/`.
 - Not the composite-lattice work of `experiments/acm/diagonal/`.
