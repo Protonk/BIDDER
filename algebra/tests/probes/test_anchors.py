@@ -30,6 +30,8 @@ REPO = os.path.dirname(ALGEBRA)
 PROBES = [
     ('kernel_zero',
      os.path.join(REPO, 'experiments', 'probes', 'kernel_zero', 'anchors.py')),
+    ('row_ogf_cliff',
+     os.path.join(REPO, 'experiments', 'probes', 'row_ogf_cliff', 'anchors.py')),
 ]
 
 

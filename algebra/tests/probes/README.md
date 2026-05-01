@@ -13,7 +13,8 @@ differently, and is read differently. Mirrors that suite's idiom; see
 | `test_primitives.py` | 2 — primitives | A channel, transducer, or predicted-set helper has a bug. | `experiments/probes/<probe>/probe.py` primitives section |
 | `test_anchors.py` | 1 — anchors (the contract) | A probe's `anchors.py` no longer passes. The probe's contract drifted. | the probe's `PROBE.md` § "Anchor" |
 | `test_consistency.py` | 3 — cross-form | Two paths to the same quantity disagree (algebra-row vs `q_row`, lattice-vs-algebra substrate, reverse² vs identity, predicted reversal-symmetry vs measured `no_op` strength). | the two functions named in the failure |
-| `integration/test_kernel_zero_calibrations.py` | 6 — integration | The full calibration pipeline (lattice substrate × three transducers × four channels) reports an unexpected verdict pattern. | the run's `report.md` and `figures/` |
+| `integration/test_kernel_zero_calibrations.py` | 6 — integration | The full kernel_zero calibration pipeline (lattice substrate × three transducers × four channels) reports an unexpected verdict pattern. | the run's `report.md` and `figures/` |
+| `integration/test_row_ogf_cliff_calibrations.py` | 6 — integration | The full row_ogf_cliff calibration pipeline (algebra substrate × three transducers × five channels) reports an unexpected verdict pattern. | the run's `report.md` and `figures/` |
 
 ## Running
 
@@ -41,13 +42,16 @@ Slow mode (separate gate, on demand):
 
 ```
 sage -python algebra/tests/probes/integration/test_kernel_zero_calibrations.py
+sage -python algebra/tests/probes/integration/test_row_ogf_cliff_calibrations.py
 ```
 
-The integration test runs the three full kernel_zero calibrations at
-K = 4000 across 24 (p, h) cells. Requires
+The kernel_zero integration test runs three calibrations at K = 4000
+across 24 (p, h) cells. Requires
 `experiments/acm-champernowne/base10/q_distillery/q_lattice_4000_h6.npy`
 (the only committed height; others regenerable via the regen script in
-that directory).
+that directory). The row_ogf_cliff integration test runs three
+calibrations at H_max = 9 across 16 (p, q, e) cells; the substrate is
+algebra-side, so no lattice file is needed.
 
 ## What this suite is not
 

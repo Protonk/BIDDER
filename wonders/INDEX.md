@@ -1,9 +1,10 @@
 # The Cabinet, First Vitrine
 
-Four specimens. The cabinet is filling unevenly: two wonders, no
-sport, no curiosity, no monster yet. The categories are not a
-partition; multiple wonders is the natural shape when the substrate
-keeps offering more than one open frontier.
+Six specimens. Marvel, prodigy, sport, monster — one each. Two
+wonders. Curiosity shelf still empty; it will fill when the first
+real curiosity earns its slot. The categories are not a partition;
+multiple wonders is the natural shape when the substrate keeps
+offering more than one open frontier.
 
 ## Marvels
 
@@ -22,6 +23,25 @@ keeps offering more than one open frontier.
   contribution doing exactly what the master expansion forces it to
   do.
 
+## Sports
+
+- [The N=P Riemann-Sum Identity](sport-riemann-sum-identity.md) —
+  `bidder.cipher`'s prefix-mean Monte Carlo estimate equals the
+  Riemann sum exactly at `N = P`, independent of key, integrand, or
+  cipher internals. The cipher's whole crypto apparatus is irrelevant
+  at this one sample size; the result falls out of "π is a bijection"
+  in a one-line proof. *"There's no reason that should work."*
+
+## Monsters
+
+- [The lcm-not-Factorial Denominator](monster-lcm-not-factorial.md) —
+  `denom(Q_n(m))` divides `lcm(1, …, ν_n(m))`, not `h!`. The lcm
+  form is uglier in every conventional sense — does not factor
+  cleanly, no combinatorial reading, sub-factorial growth rate via
+  Chebyshev's `ψ` — and it is the denominator the construction
+  forces. The substrate is constitutively unable to be `h!`-pretty,
+  and the offence traces back to why the bound is sharp.
+
 ## Wonders
 
 - [The Cost Ladder](wonder-cost-ladder.md) — working at successive
@@ -39,7 +59,7 @@ keeps offering more than one open frontier.
 
 ---
 
-Sport, Curiosity, and Monster are not yet populated. They will be
-when their first specimens earn their slots. A reassignment log, a
+Curiosity is the only category not yet populated. It will fill when
+the first real curiosity earns its slot. A reassignment log, a
 glossary, a cross-reference index, a graveyard for aged-out
 curiosities: each one comes when an entry forces it, not before.
