@@ -1,10 +1,13 @@
 """
 test_within_row_lattice.py — verify predict_correlation against the
-empirical lattices q_lattice_4000_h{5,6,7,8}.npy.
+empirical lattice q_lattice_4000_h6.npy (the height kept live by
+the Tier B prune; h={5,7,8} are regenerable from
+experiments/acm-champernowne/base10/q_distillery/q_lattice_4000_h_regen.py
+and not committed).
 
 What this checks.
 
-The cached lattices are evaluations of the master expansion over the
+The cached lattice is an evaluation of the master expansion over the
 (n, k) grid. predict_q.q_general is also an evaluation of the master
 expansion. So row-by-row, lattice[n - 2, k - 1] should equal
 float(q_general(n, h, k)) up to float precision. The first check is a
@@ -18,7 +21,7 @@ indexing conventions and on the class decomposition.
 
 What this also surfaces.
 
-For each h in {5, 6, 7, 8} and each prime n in {2, 3, 5, 7, 11, 13},
+For each h in LIVE_HEIGHTS and each prime n in {2, 3, 5, 7, 11, 13},
 we record the lag-L autocorrelation profile for L = 1..20 and compute:
 
   - mean over odd L
@@ -30,14 +33,22 @@ finding from arguments/ATTRACTOR-AND-MIRAGE.md. The values are exact
 in the sense that they come from the master expansion; their structure
 across (h, n) is open to interpretation.
 
+Contract. Every height in LIVE_HEIGHTS must have its lattice file
+present; missing-but-declared lattices are a FAIL, not a SKIP. To run
+against additional heights, regenerate the lattice via
+q_lattice_4000_h_regen.py and add the height here.
+
 Run:
 
-    python3 algebra/test_within_row_lattice.py
+    sage -python algebra/tests/integration/test_within_row_lattice.py
+
+(numpy is required; per AGENTS.md it ships with sage.)
 
 Outputs:
 
     - stdout: agreement summary, parity-of-L profile per (h, n)
-    - algebra/test_within_row_lattice_summary.txt: the same, captured
+    - algebra/tests/integration/test_within_row_lattice_summary.txt:
+      the same, captured
 """
 
 from __future__ import annotations
@@ -48,8 +59,10 @@ import sys
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-REPO = os.path.dirname(HERE)
-sys.path.insert(0, HERE)
+TESTS = os.path.dirname(HERE)
+ALGEBRA = os.path.dirname(TESTS)
+REPO = os.path.dirname(ALGEBRA)
+sys.path.insert(0, ALGEBRA)
 
 from predict_q import q_general
 from predict_correlation import autocorr_profile_from_row
@@ -63,6 +76,7 @@ LAGS = list(range(1, 21))
 K_MAX_TEST = 4000  # full lattice width
 SPOT_K_VALUES = (1, 2, 3, 4, 5, 7, 11, 31, 100, 999, 3999)
 SUMMARY_PATH = os.path.join(HERE, 'test_within_row_lattice_summary.txt')
+LIVE_HEIGHTS = (6,)  # see Tier B (.gitignore: lattice arrays regenerable)
 
 
 def lattice_path(h: int) -> str:
@@ -131,13 +145,16 @@ def main():
 
     total_fails = 0
 
-    for h in (5, 6, 7, 8):
+    for h in LIVE_HEIGHTS:
         log(f'h = {h}')
         log('-' * 70)
         try:
             lat = load_lattice(h)
         except FileNotFoundError as e:
-            log(f'  lattice missing: {e}')
+            log(f'  FAIL  declared-live lattice missing: {e}')
+            log(f'  regenerate via experiments/acm-champernowne/base10/'
+                f'q_distillery/q_lattice_4000_h_regen.py')
+            total_fails += 1
             continue
 
         log(f'  lattice shape: {lat.shape}  '

@@ -5,7 +5,7 @@ Runs the probe under the identity transducer on the cached lattice
 rows and asserts every channel reports PRESENT at strength 1.0
 across the 4 x 6 (h, p) anchor grid.
 
-Source: PROBE.md §"Anchor". Leans on algebra/test_anchors.py
+Source: PROBE.md §"Anchor". Leans on algebra/tests/test_anchors.py
 A2 (h=5 matrix), A7 (kernel-zero classifier), A8 (h=6,7,8 matrices).
 
 Usage:

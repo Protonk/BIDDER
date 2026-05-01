@@ -105,7 +105,7 @@ The probe must reproduce the following on the cached lattice files
 - `value_multiset`: PRESENT, strength 1.0.
 - `prime_row_identity_at_k1`: PRESENT, strength 1.0.
 
-The anchor leans on `algebra/test_anchors.py` A2 (h=5 matrix), A7
+The anchor leans on `algebra/tests/test_anchors.py` A2 (h=5 matrix), A7
 (kernel-zero classifier), A8 (h=6,7,8 matrices). If A1..A10 pass and
 the lattice files match the master expansion at machine precision
 (`< 1e-9` per `test_within_row_lattice.py`), the anchor here must

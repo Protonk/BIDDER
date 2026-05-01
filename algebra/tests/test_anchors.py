@@ -61,8 +61,9 @@ from fractions import Fraction
 from math import factorial, gcd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-REPO = os.path.dirname(HERE)
-sys.path.insert(0, HERE)
+ALGEBRA = os.path.dirname(HERE)
+REPO = os.path.dirname(ALGEBRA)
+sys.path.insert(0, ALGEBRA)
 
 from predict_q import (
     big_omega, factor_tuple, little_omega, q_general, q_value_by_class,
@@ -237,8 +238,12 @@ def anchor_h2_cliff(n_max: int = 20, k_max: int = 30) -> int:
 
 def anchor_csv_match() -> int:
     if not os.path.exists(CSV_PATH):
-        print(f'A4 SKIP  payload_q_scan.csv not present at {CSV_PATH}')
-        return 0
+        if os.environ.get('ALGEBRA_TESTS_ALLOW_MISSING_CSV') == '1':
+            print(f'A4 SKIP  payload_q_scan.csv absent (opt-in) at {CSV_PATH}')
+            return 0
+        print(f'A4 FAIL  payload_q_scan.csv missing at {CSV_PATH}; '
+              f'set ALGEBRA_TESTS_ALLOW_MISSING_CSV=1 to opt out')
+        return 1
     fails = 0
     rows = 0
     with open(CSV_PATH, newline='') as f:

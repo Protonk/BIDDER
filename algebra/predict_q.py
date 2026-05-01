@@ -40,7 +40,7 @@ Public entry points for the prime-row OGF (algebra/ROW-OGF.md):
 
 All values are exact (Python's fractions.Fraction; no SymPy, no floats).
 
-Sanity anchors are in algebra/test_anchors.py (A1..A10). The canonical
+Sanity anchors are in algebra/tests/test_anchors.py (A1..A10). The canonical
 h=5 (shape, tau_sig) matrix is rendered in
 experiments/acm-champernowne/base10/q_distillery/q_h5_shape_tau_matrix.png
 and frozen as anchor A2.
@@ -121,6 +121,10 @@ def decompose(n: int, k: int) -> Tuple[Tuple[Tuple[int, int], ...],
                                        Tuple[int, ...], int]:
     """Return (n_factors, t_tuple, k_prime) where k = prod p_i^{t_i} * k_prime
     with gcd(k_prime, n) = 1 and t_tuple aligned with n's prime list."""
+    if n < 2:
+        raise ValueError(f'decompose needs n >= 2, got {n}')
+    if k < 1:
+        raise ValueError(f'decompose needs k >= 1, got {k}')
     n_factors = factor_tuple(n)
     t_list = []
     k_prime = k
@@ -323,9 +327,16 @@ def row_sum(p: int, k_prime: int) -> Fraction:
         raise ValueError(
             f'row_sum diverges at k_prime = {k_prime} '
             f'(harmonic series); requires k_prime >= 2')
-    if p < 2 or gcd(p, k_prime) != 1:
+    if p < 2:
+        raise ValueError(f'row_sum requires p >= 2, got {p}')
+    if len(factor_tuple(p)) != 1 or factor_tuple(p)[0][1] != 1:
         raise ValueError(
-            f'row_sum requires p >= 2 coprime to k_prime; got '
+            f'row_sum requires p prime; got p={p} '
+            f'(ROW-OGF.md is prime-row only; composite p has '
+            f'cyclotomic-denominator OGF, not the closed form here)')
+    if gcd(p, k_prime) != 1:
+        raise ValueError(
+            f'row_sum requires gcd(p, k_prime) = 1; got '
             f'p={p}, k_prime={k_prime}')
     factors = factor_tuple(k_prime)
     if len(factors) == 1:
@@ -335,15 +346,68 @@ def row_sum(p: int, k_prime: int) -> Fraction:
 
 
 # --------------------------------------------------------------------------
+# C4 enumerator — ordered j-fold factorisations into multiples of n
+# --------------------------------------------------------------------------
+#
+# C4 of MASTER-EXPANSION.md states:
+#
+#     Q_n(m) = sum_{j=1}^{nu_n(m)} (-1)^(j-1) N_j(m) / j,
+#     N_j(m) = #{ordered factorisations of m into j multiples of n}
+#            = tau_j(m / n^j)  when n^j | m, else 0.
+#
+# This enumerator counts N_j(m) by direct iteration over ordered tuples,
+# without going through the master expansion (no Mercator manipulation)
+# and without going through tau (no multiplicative kernel). The cross
+# check in test_consistency.py asserts that the alternating sum
+# Sigma (-1)^(j-1) N_j(m) / j reproduces q_general(n, h, k) — agreement
+# is independent evidence that the master expansion is correct, since
+# the two paths share no algebraic infrastructure beyond the integers.
+
+@lru_cache(maxsize=None)
+def count_ordered_factorizations_into_multiples(n: int, m: int, j: int) -> int:
+    """N_j(n, m) = number of ordered j-tuples (d_1, ..., d_j) of positive
+    integers with each d_i a multiple of n and prod d_i = m.
+
+    Direct enumeration: at each level, iterate d in {n, 2n, 3n, ...} that
+    divide m, and recurse on (m / d, j - 1). Independent of tau and of
+    the master expansion. By C4 of MASTER-EXPANSION.md this also equals
+    tau(j, m // n**j) when n**j | m (and 0 otherwise); the consistency
+    test exploits the algebraic identity, this function exploits the
+    combinatorial definition.
+
+    Memoised on (n, m, j); call sites with small grids hit the cache.
+    """
+    if j < 1:
+        raise ValueError(f'count_ordered_factorizations needs j >= 1, got {j}')
+    if n < 2:
+        raise ValueError(f'count_ordered_factorizations needs n >= 2, got {n}')
+    if m < 1:
+        raise ValueError(f'count_ordered_factorizations needs m >= 1, got {m}')
+    if j == 1:
+        return 1 if (m % n == 0) else 0
+    total = 0
+    d = n
+    while d <= m:
+        if m % d == 0:
+            total += count_ordered_factorizations_into_multiples(n, m // d, j - 1)
+        d += n
+    return total
+
+
+# --------------------------------------------------------------------------
 # Verification entry point
 # --------------------------------------------------------------------------
-# The canonical anchor harness lives in test_anchors.py, which checks
-# this module against the prime-row 1/h identity, the 8x6 matrix at
-# h = 5, the universal h = 2 cliff, the master/class-form consistency,
-# and the full payload_q_scan.csv. To avoid duplicate frozen tables
-# drifting apart, running predict_q.py as a script delegates to that
-# harness rather than maintaining a parallel expected-values dict.
+# The canonical anchor harness lives in algebra/tests/test_anchors.py, which
+# checks this module against the prime-row 1/h identity, the 8x6 matrix at
+# h = 5, the universal h = 2 cliff, the master/class-form consistency, and
+# the full payload_q_scan.csv. To avoid duplicate frozen tables drifting
+# apart, running predict_q.py as a script delegates to that harness rather
+# than maintaining a parallel expected-values dict.
 
 if __name__ == '__main__':
+    import os
+    import sys
+    _HERE = os.path.dirname(os.path.abspath(__file__))
+    sys.path.insert(0, os.path.join(_HERE, 'tests'))
     import test_anchors
     raise SystemExit(test_anchors.main())

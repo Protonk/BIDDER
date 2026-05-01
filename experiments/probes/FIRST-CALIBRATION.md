@@ -129,7 +129,7 @@ After regen, max `|lattice - algebra|` is `0.000e+00` across all
 - Null: clean.
 
 `anchors.py` reports `ANCHOR PASS  all 96 (cell, channel)
-verdicts PRESENT at strength 1.0`. `algebra/test_anchors.py`
+verdicts PRESENT at strength 1.0`. `algebra/tests/test_anchors.py`
 A1..A10 unchanged after the lattice swap.
 
 ## What the framework caught
@@ -167,7 +167,7 @@ A1..A10 unchanged after the lattice swap.
   `.npy` was supposed to match `q_general` at machine tolerance.
   The probe made the contract explicit; the contract failed at
   h=8 boundary cells; the regen fixed it. A pre-existing
-  invariant in `algebra/test_anchors.py` cross-checking the
+  invariant in `algebra/tests/test_anchors.py` cross-checking the
   lattice would have caught this earlier.
 - **Numpy's availability via sage.** The hand-rolled `.npy`
   reader in cycle 1 was technical debt the framework didn't
@@ -229,4 +229,4 @@ A1..A10 unchanged after the lattice swap.
   `experiments/acm-champernowne/base10/q_distillery/q_lattice_4000_h_regen.py`
 - Old buggy lattice files preserved alongside the new ones as
   `q_lattice_4000_h{5,6,7,8}.float_buggy.bak.npy`
-- Algebra-side anchors: `algebra/test_anchors.py` A1..A10
+- Algebra-side anchors: `algebra/tests/test_anchors.py` A1..A10

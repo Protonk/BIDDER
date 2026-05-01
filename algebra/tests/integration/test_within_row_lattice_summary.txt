@@ -1,0 +1,48 @@
+test_within_row_lattice.py
+======================================================================
+
+h = 6
+----------------------------------------------------------------------
+  lattice shape: (3999, 4000)  (rows = n-1, n in 2..4000;  cols = k, k in 1..4000)
+  spot-check predict_q vs lattice at k = (1, 2, 3, 4, 5, 7, 11, 31, 100, 999, 3999):
+    OK  h=6 n=2: predict_q matches lattice on all spot k-values
+    OK  h=6 n=3: predict_q matches lattice on all spot k-values
+    OK  h=6 n=5: predict_q matches lattice on all spot k-values
+    OK  h=6 n=7: predict_q matches lattice on all spot k-values
+    OK  h=6 n=11: predict_q matches lattice on all spot k-values
+    OK  h=6 n=13: predict_q matches lattice on all spot k-values
+
+  within-row autocorrelation, L = 1..20, K_max = 4000:
+      n    odd-L mean   even-L mean   gap (e - o)   ratio e/o   agree
+      2   +1.9986e-06   +2.3700e-06   +3.7138e-07       1.186      OK
+      3   -7.2559e-05   +2.0569e-01   +2.0576e-01   -2834.809      OK
+      5   +1.7435e-02   +1.9192e+00   +1.9018e+00     110.076      OK
+      7   +2.7970e-02   +3.5410e+00   +3.5130e+00     126.598      OK
+     11   +8.8382e-02   +8.4407e+00   +8.3523e+00      95.502      OK
+     13   +1.1514e-01   +9.0915e+00   +8.9764e+00      78.962      OK
+
+  per-lag profile, n = 2 (illustrative):
+    L =  1  (odd)   A = +5.9539e-06
+    L =  2  (even)   A = +4.4665e-06
+    L =  3  (odd)   A = +5.2122e-06
+    L =  4  (even)   A = +3.4757e-06
+    L =  5  (odd)   A = +0.0000e+00
+    L =  6  (even)   A = +3.9742e-06
+    L =  7  (odd)   A = +4.6377e-06
+    L =  8  (even)   A = +2.7833e-06
+    L =  9  (odd)   A = +0.0000e+00
+    L = 10  (even)   A = +0.0000e+00
+    L = 11  (odd)   A = +0.0000e+00
+    L = 12  (even)   A = +3.1344e-06
+    L = 13  (odd)   A = +0.0000e+00
+    L = 14  (even)   A = +3.5840e-06
+    L = 15  (odd)   A = +4.1824e-06
+    L = 16  (even)   A = +2.2819e-06
+    L = 17  (odd)   A = +0.0000e+00
+    L = 18  (even)   A = +0.0000e+00
+    L = 19  (odd)   A = +0.0000e+00
+    L = 20  (even)   A = +0.0000e+00
+
+======================================================================
+total disagreements: 0
+PASS

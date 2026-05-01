@@ -134,7 +134,7 @@ or finite cutoff?
   — the algebraic substrate. Master expansion, Rank Lemma, the
   one-line theorem that `Q_n` closes at `h = ν_n(m)`.
 - [`algebra/predict_q.py`](algebra/predict_q.py) +
-  [`algebra/test_anchors.py`](algebra/test_anchors.py) — exact-rational
+  [`algebra/tests/test_anchors.py`](algebra/tests/test_anchors.py) — exact-rational
   Q_n machinery plus anchor tests (prime-row identity `Q_p(p^h) = 1/h`,
   the 8×6 shape×tau matrix at `h = 5`, the universal h=2 cliff).
 - [`experiments/acm/flow/q_n_verify.py`](experiments/acm/flow/q_n_verify.py)

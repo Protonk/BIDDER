@@ -31,7 +31,7 @@ the equivalent of a theorem's Statement / BQN / Proof / Anchor.
   without human inspection.
 - **Anchor.** At least one input where the expected outcome is
   known and the probe must reproduce it. Same role as `A1..A10` in
-  `algebra/test_anchors.py`. A probe that fails its anchor cannot
+  `algebra/tests/test_anchors.py`. A probe that fails its anchor cannot
   be cited.
 
 ## Channels
