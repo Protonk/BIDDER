@@ -1,0 +1,22 @@
+exp08 — closed-form lattice for K_pair
+============================================================
+
+Pointwise check: PASS (closed form matches direct on all sample pairs)
+
+--- Support comparison ---
+Cells where Λ_W(K, n_0) > 0  (predicted pair-events present):
+  |supp(Λ)| = 1919
+  |supp(COLL)| = 11760
+  |supp(Λ) ∩ supp(COLL)| = 1919
+  in Λ but not COLL: 0  (formula predicts non-event)
+  in COLL but not Λ: 9841  (subsequent-multiple collisions)
+
+SUPPORT CLAIM CONFIRMED: every K_pair value is empirically a collision-event K-step. Closed-form support is a subset of empirical support, with the difference being entirely subsequent-multiple-of-L collisions (K = pos of L·t for t ≥ 2).
+
+--- Multiplicity comparison: 2·Λ vs COLL ---
+  COLL == 2·Λ exactly: 89254 cells (89.25%)
+  COLL > 2·Λ:           10745 cells (subsequent-multiple events not in Λ's support)
+  COLL < 2·Λ:           1 cells (3+-stream-share over-count; expected to be rare)
+  short-cell examples:
+    n_0=20, K=8: COLL=1, 2Λ=2
+-> /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-champernowne/base10/survivors/exp08_lattice_closed_form.png
