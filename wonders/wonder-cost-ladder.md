@@ -83,7 +83,7 @@ at each rung.
 
 ## Aesthetic note
 
-TODO: aesthetic note (human)
+If this is real it's the most beautiful thing in all mathematics.
 
 ## Provocation
 

@@ -40,7 +40,7 @@ they all collapse to the Riemann sum. Alone in its neighbourhood.
 
 ## Evidence
 
-- `core/RIEMANN-SUM.md` — full statement, one-line proof, and the
+- `generator/RIEMANN-SUM.md` — full statement, one-line proof, and the
   three-layer breakdown (structural / quadrature / statistical) that
   separates this identity from its surrounding statistical claims.
 - `tests/theory/test_riemann_property.py` — structural-layer test:
@@ -63,7 +63,7 @@ Anchored. Structural claim has a one-line proof and a passing test.
 Quadrature behaviour follows Euler-Maclaurin with rates verified at
 `P = 50, 200, 1000, 2000, 20000` for `f = sin(πx)` (`P²·error → π/6 ≈ 0.5236`).
 Statistical-layer behaviour is also measured; the gap from FPC ideal
-is documented in `core/RIEMANN-SUM.md` and is the only layer that
+is documented in `generator/RIEMANN-SUM.md` and is the only layer that
 depends on the cipher's PRP quality.
 
 ## Aesthetic note
@@ -125,7 +125,7 @@ permutation of `[0, P)` with an opaque-by-construction reordering).
 The Monte Carlo application came as a use case; the realisation that
 the cipher's MC behaviour at `N = P` is exact, key-free, and
 independent of the cipher's careful design is what motivated
-`core/RIEMANN-SUM.md` as a separate document with its own
+`generator/RIEMANN-SUM.md` as a separate document with its own
 three-layer claim-types table. The companion experiments
 (`riemann_proof.py`, `adversarial_integrands.py`,
 `mc_diagnostic.py`) verify the property numerically across

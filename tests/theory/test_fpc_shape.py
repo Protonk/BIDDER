@@ -9,7 +9,7 @@ dependent gap.
 This is the only theory test that probes the coupling between the
 math and the cipher backend.
 
-Proof reference: core/RIEMANN-SUM.md §The finite-population correction.
+Proof reference: generator/RIEMANN-SUM.md §The finite-population correction.
 Source experiments: mc_diagnostic.py, stratified.py, reseed_test.py.
 
 Run: python3 tests/theory/test_fpc_shape.py

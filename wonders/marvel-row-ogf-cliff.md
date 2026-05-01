@@ -58,7 +58,7 @@ agree on every test cell (anchor A10a, 180 cases). No open dependencies.
 
 ## Aesthetic note
 
-TODO: aesthetic note (human)
+In a cabinet of impossible things, this seems the most impossible. 
 
 ## Provocation
 

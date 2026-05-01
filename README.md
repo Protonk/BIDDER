@@ -116,7 +116,7 @@ Proved:
 - At `N = period`, the MC estimate equals the left-endpoint Riemann
   sum `R` for any key and any integrand. This is the structural
   permutation-invariance theorem in
-  [core/RIEMANN-SUM.md](core/RIEMANN-SUM.md).
+  [generator/RIEMANN-SUM.md](generator/RIEMANN-SUM.md).
 - The root entry points are stable:
   [BIDDER.md](BIDDER.md) documents `bidder.cipher(period, key)` and
   `bidder.sawtooth(n, count)`, with

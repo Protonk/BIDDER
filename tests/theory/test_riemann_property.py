@@ -4,7 +4,7 @@ test_riemann_property.py — Red-team test for the structural layer.
 Claim: at N = P, the MC estimate from any permutation of [0, P) equals
 the Riemann sum R, regardless of key. This is E_P(key) = R.
 
-Proof reference: core/RIEMANN-SUM.md §Proof.
+Proof reference: generator/RIEMANN-SUM.md §Proof.
 Source experiments: riemann_proof.py, adversarial_integrands.py.
 
 Run: python3 tests/theory/test_riemann_property.py

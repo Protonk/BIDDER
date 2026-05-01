@@ -3,11 +3,11 @@ test_quadrature_rates.py — Red-team test for the quadrature layer.
 
 Claim: the Riemann-sum bias |R - I| follows the left-endpoint
 Euler-Maclaurin predictions. Each row of the convergence table in
-core/RIEMANN-SUM.md becomes an assertion.
+generator/RIEMANN-SUM.md becomes an assertion.
 
 No cipher, no key, no PRP. Pure math on direct grid sums.
 
-Proof reference: core/RIEMANN-SUM.md §What the Riemann sum costs.
+Proof reference: generator/RIEMANN-SUM.md §What the Riemann sum costs.
 Source experiments: adversarial_integrands.py, riemann_proof.py.
 
 Run: python3 tests/theory/test_quadrature_rates.py

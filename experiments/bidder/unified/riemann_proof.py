@@ -32,7 +32,7 @@ This script demonstrates the claim empirically:
 
     Panel 3: The Riemann sum vs the true integral as a function of P.
              For sin(pi*x) this shows O(1/P^2) convergence (special case
-             with endpoint cancellation). See core/RIEMANN-SUM.md for
+             with endpoint cancellation). See generator/RIEMANN-SUM.md for
              the Euler-Maclaurin analysis of the general case.
 
     Panel 4: Multiple integrands. Repeat the N = P test for several f:
@@ -320,7 +320,7 @@ Empirical confirmation:
 
 The Riemann-sum error is O(1/P) for generic f (left-endpoint rule).
 For sin(πx) it is O(1/P²) because f(0) = f(1) = 0 (endpoint
-cancellation; see Euler–Maclaurin in core/RIEMANN-SUM.md).
+cancellation; see Euler–Maclaurin in generator/RIEMANN-SUM.md).
 At P = {P} the error is {riemann_error:.2e}.
 At P = 20000 it would be {riemann_errors[-1]:.2e}.
 The floor is structural, not statistical — it does not depend

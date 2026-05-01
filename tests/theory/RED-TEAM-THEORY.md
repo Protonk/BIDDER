@@ -28,7 +28,7 @@ At `N = P`, every permutation of `↕ P` visits the same population once.
 The order disappears. The key disappears. The cipher quality disappears.
 
 This is the exact theorem in
-[core/RIEMANN-SUM.md](../../core/RIEMANN-SUM.md): at full period,
+[generator/RIEMANN-SUM.md](../../generator/RIEMANN-SUM.md): at full period,
 the estimate is not approximately equal to `R`; it is exactly `R`.
 
 What could fail:
@@ -172,10 +172,10 @@ Experiment ancestry:
 
 | Layer | Claim | What would falsify it | Proof doc | Theory test | Status |
 |---|---|---|---|---|---|
-| Structural | `E_P(key) = R` for any key, any integrand | key spread at `N = P`; non-permutation output; identity case failing | `core/RIEMANN-SUM.md §Proof` | `test_riemann_property.py` | active |
-| Quadrature | the left-rule rates and constants are the ones stated | wrong asymptotic constant; false generic smoothness claim; hostile examples breaking the table | `core/RIEMANN-SUM.md §What the Riemann sum costs` | `test_quadrature_rates.py` | active |
-| Statistical | the ideal without-replacement null obeys the FPC formula around `R` | shuffle baseline failing against FPC; endpoint mishandled | `core/RIEMANN-SUM.md §The finite-population correction` | `test_fpc_shape.py` | active |
-| Coupling | the backend tracks the FPC shape but need not match the ideal magnitude | large interior distortion; endpoint drift; no measurable relation to FPC | `core/RIEMANN-SUM.md §What the cipher actually achieves` | `test_fpc_shape.py` | active |
+| Structural | `E_P(key) = R` for any key, any integrand | key spread at `N = P`; non-permutation output; identity case failing | `generator/RIEMANN-SUM.md §Proof` | `test_riemann_property.py` | active |
+| Quadrature | the left-rule rates and constants are the ones stated | wrong asymptotic constant; false generic smoothness claim; hostile examples breaking the table | `generator/RIEMANN-SUM.md §What the Riemann sum costs` | `test_quadrature_rates.py` | active |
+| Statistical | the ideal without-replacement null obeys the FPC formula around `R` | shuffle baseline failing against FPC; endpoint mishandled | `generator/RIEMANN-SUM.md §The finite-population correction` | `test_fpc_shape.py` | active |
+| Coupling | the backend tracks the FPC shape but need not match the ideal magnitude | large interior distortion; endpoint drift; no measurable relation to FPC | `generator/RIEMANN-SUM.md §What the cipher actually achieves` | `test_fpc_shape.py` | active |
 
 
 ## Why these are red-team tests

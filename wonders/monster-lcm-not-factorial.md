@@ -32,13 +32,15 @@ it is the denominator the construction forces. The construction
 *will not give back* `h!`-shaped denominators. The substrate is
 constitutively unable to be that pretty.
 
-The ugliness is the data. A construction that produced
-`h!`-denominators would be loose at the boundary; the
-`lcm`-denominator is tight, in the sense that anchor A9 verifies
-the bound at 1650 cells with no slack at any of them. The Monster's
-shape is exactly: the construction is forced to a form that offends
-ordinary aesthetic expectations, *and* the offence traces back to
-why the form is correct rather than approximate.
+The ugliness is the data. The `lcm`-denominator is tighter than the
+`h!`-denominator that the master expansion's summation shape would
+naively predict — anchor A9 verifies the `lcm` bound holds at 1650
+cells. (A9 tests the divisibility, not equality of the denominator
+with the `lcm` at every cell; whether the bound is sharp cell-by-cell
+is a separate question.) The Monster's shape is exactly: the
+construction is forced to a form that offends ordinary aesthetic
+expectations, *and* the offence traces back to why the form is
+correct rather than approximate.
 
 ## Evidence
 
@@ -56,13 +58,14 @@ why the form is correct rather than approximate.
 
 ## Status
 
-Anchored. The bound is sharp at every cell A9 tests. No open
-dependencies; the `lcm` denominator is what the master expansion
-produces and what the implementation respects.
+Anchored. A9 verifies the bound `denom(Q_n(m)) | lcm(1, …, ν_n(m))`
+at 1650 cells. No open dependencies. Whether the bound is *sharp*
+cell-by-cell — i.e., whether equality holds at any/every/some cell —
+is not what A9 tests, and is open as a refinement of the bound.
 
 ## Aesthetic note
 
-TODO: aesthetic note (human)
+Structural obstructions come in all forms. They MUST, in this project. The infinite structure of the residual must take monstrous form, over and over again. 
 
 ## Provocation
 
@@ -75,13 +78,16 @@ Two questions worth writing down:
   rather than toward it. But the question is the natural one to ask
   when the form offends, and the negative answer (if it is negative)
   is itself a structural fact about what the substrate can be.
-- **`lcm(1, …, h)` connects to Chebyshev's `ψ` function and the prime
-  number theorem** (`log lcm(1..h) = ψ(h) ∼ h`). The denominator's
-  growth rate is therefore connected to the distribution of primes,
-  not just to the master expansion's summation shape. Is there a
-  reading where `Q_n`'s denominator structure is a fingerprint of
-  prime distribution? The connection is suggestive enough to name;
-  whether it pays out is open.
+- **The `lcm`-`ψ` identity is standard**: `log lcm(1..h) = ψ(h) ∼ h`
+  by the prime number theorem. The standard identity is *not* by
+  itself a reading of `Q_n`'s denominator structure as carrying any
+  particular information about prime distribution beyond what the
+  identity guarantees for any `lcm(1..h)`. But the identity sits
+  next to the master expansion in a way the bare bound `denom | h!`
+  would not, and asking whether `Q_n`'s denominator structure has a
+  meaningful connection to prime distribution beyond the identity
+  is the question worth writing down. The connection is suggestive
+  enough to name; whether it pays out is open.
 
 ## Cross-references
 
@@ -96,20 +102,22 @@ Two questions worth writing down:
   `lcm(1..8) = 840` and the integer numerators that compose against
   it; the denominator's growth shape is one ingredient of how
   expensive the height tower becomes.
-- `sport-riemann-sum-identity.md` — both are constructions where the
-  natural-looking form (`h!` denominator there; statistical estimate
-  here) is over-specified and the actual shape (`lcm` denominator;
-  exact Riemann sum) falls out of structural facts the form
-  predicts only obliquely.
+- `sport-riemann-sum-identity.md` — both are constructions where a
+  natural-looking expectation (the `h!` denominator here; a
+  statistical Monte Carlo estimate in the sport) is over-specified
+  and the actual shape (the `lcm` denominator here; an exact Riemann
+  sum in the sport) falls out of structural facts that the
+  expectation predicts only obliquely. The parallel is analogical,
+  not identity-of-mechanism; flag if the analogy reads as more than
+  that.
 
 ## Discovery context
 
-The bound was first noticed when the exact-rational implementation
-of `q_general` started producing denominators consistently smaller
-than `h!`. The empirical observation pattern was: `denominator of
-Q_n(m)` is a divisor of *something* smaller than the obvious
-`h!`-bound. `lcm(1, …, h)` was the first guess and it held; the
-proof followed and is one paragraph. Anchor A9 was added to gate the
+The order in which the bound was discovered — empirically observed
+first, then proven; or proven first from the master expansion's
+summation shape and then anchored — is not recorded in the docs and
+is unknown to this entry's author. Git history shows the proof and
+the A9 anchor arriving together. What is recorded: A9 gates the
 bound at 1650 cells across `n ∈ [2, 12]`, `h ∈ [1, 6]`,
 `k ∈ [1, 25]`, applied in the true `ν_n(m)` (the input `h` plus any
 overlap `k` carries against `n`'s primes). The anchor's framing —

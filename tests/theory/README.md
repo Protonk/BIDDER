@@ -21,10 +21,10 @@ Run all theory tests:
 
 | Result | Proof | Theory test | Experiment |
 |---|---|---|---|
-| `E_P = R` (permutation-invariance) | `core/RIEMANN-SUM.md §Proof` | `test_riemann_property.py` | `riemann_proof.py`, `adversarial_integrands.py` |
-| Left-rule rates (Euler–Maclaurin) | `core/RIEMANN-SUM.md §What the Riemann sum costs` | `test_quadrature_rates.py` | `adversarial_integrands.py`, `riemann_proof.py` |
-| FPC for ideal permutations | `core/RIEMANN-SUM.md §Finite-population correction` | `test_fpc_shape.py` (via `_helpers.py:shuffle_prefix_means`, the ideal null built here) | `mc_diagnostic.py` (background; does not encode the ideal null directly) |
-| Cipher coupling gap | `core/RIEMANN-SUM.md §What the cipher actually achieves` | `test_fpc_shape.py` | `mc_diagnostic.py`, `stratified.py` |
+| `E_P = R` (permutation-invariance) | `generator/RIEMANN-SUM.md §Proof` | `test_riemann_property.py` | `riemann_proof.py`, `adversarial_integrands.py` |
+| Left-rule rates (Euler–Maclaurin) | `generator/RIEMANN-SUM.md §What the Riemann sum costs` | `test_quadrature_rates.py` | `adversarial_integrands.py`, `riemann_proof.py` |
+| FPC for ideal permutations | `generator/RIEMANN-SUM.md §Finite-population correction` | `test_fpc_shape.py` (via `_helpers.py:shuffle_prefix_means`, the ideal null built here) | `mc_diagnostic.py` (background; does not encode the ideal null directly) |
+| Cipher coupling gap | `generator/RIEMANN-SUM.md §What the cipher actually achieves` | `test_fpc_shape.py` | `mc_diagnostic.py`, `stratified.py` |
 | Integer block uniformity | `core/BLOCK-UNIFORMITY.md §Lemma` | `tests/test_acm_core.py::test_block_boundary_*` | `uniformity_demo.py` |
 | Sieved block (smooth) | `core/BLOCK-UNIFORMITY.md §Sieved version` | `tests/test_acm_core.py::test_block_uniformity_sieved_sufficient` | — |
 | Sieved block (Family E) | `core/BLOCK-UNIFORMITY.md §A second sufficient family` | `tests/test_acm_core.py::test_block_uniformity_sieved_family_e` | — |

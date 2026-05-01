@@ -63,7 +63,7 @@ beyond the tested prime range.
 
 ## Aesthetic note
 
-TODO: aesthetic note (human)
+This will become a transient shape. As height increases, the pattern cannot calm.
 
 ## Provocation
 

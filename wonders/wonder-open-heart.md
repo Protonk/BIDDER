@@ -65,14 +65,11 @@ is not yet a theorem.
 ## Aesthetic note
 
 Look closely at the centre. There are two different asymmetries
-visible just by eyeballing. The image's main effect is symmetry —
-the perpendicular bars, the orthogonal arc grid, the regular rim —
-and the part that registers as wonder is exactly the place where, on
-close inspection, the symmetry breaks in two independent ways. The
-break is not in the gross shape (which is *almost* perfectly
-symmetric and reads as such at first glance); it is at the heart,
-where the eye finds two failures of the symmetry the rest of the
-image so insistently asserts.
+visible just by eyeballing. The image's first impression is
+symmetry — the perpendicular bars, the orthogonal arc grid, the
+regular rim — and the part that registers as wonder is the place
+where, on close inspection, the symmetry breaks in two independent
+ways. The break is at the heart, but once you notice the break...it's not a symmetrical image AT ALL, is it? The image admits no exact symmetry. None. 
 
 ## Provocation
 
@@ -125,7 +122,9 @@ duress.
 
 The image is the sole 32 MB asset deliberately preserved through the
 Tier C image-size prune. Other lattice renders were resized to ≤ 1500
-px on the longest axis; this one was kept at full resolution because
-the wonder lives in the visible detail. That choice is itself part of
-the wonder's discovery context: the project knew, before it could say
-why, that this image needed to survive at full fidelity.
+px on the longest axis; this one was kept at full resolution. The
+preservation was a practical decision (the wonder lives in the
+visible detail; degrading the image would have been a real loss), and
+the entry notes it because the practical decision and the wonder's
+locus point at the same thing without the project needing to claim it
+had seen the wonder in advance.
