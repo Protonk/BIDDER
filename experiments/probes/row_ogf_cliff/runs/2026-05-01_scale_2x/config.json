@@ -1,0 +1,17 @@
+{
+  "H_max": 9,
+  "exponents": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "primes": [
+    2,
+    3,
+    5,
+    7
+  ],
+  "substrate": "algebra",
+  "transducer": "scale_2x"
+}

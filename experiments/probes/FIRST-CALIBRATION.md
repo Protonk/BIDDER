@@ -218,6 +218,38 @@ A1..A10 unchanged after the lattice swap.
   A probe at TOL = machine ε only works on substrates generated
   in exact arithmetic.
 
+## Figures (cycle 4)
+
+Each calibration run writes three figures into
+`runs/<date>_<config>/figures/`. They are deterministic functions of
+the run's recorded results — picture-proofs of the verdicts, not
+interpretation.
+
+- **`identity/figures/verdict_matrix.png`** — 24 × 4 heatmap of
+  channel strengths. Uniform yellow at strength 1.0. The picture
+  the anchor passes against.
+- **`identity/figures/lattice_diff.png`** — log10
+  `|row_post - algebra(p, h, k)|` heatmap. Uniformly black; title
+  reads "100.00% exact, 100.00% < TOL". The lattice-vs-algebra
+  contract that (γ) re-established.
+- **`reverse/figures/verdict_matrix.png`** — `no_op` partial across
+  all 24 cells (strength 0.82–0.997, banded by prime), σ-invariants
+  at 1.0, adversarial at 0. The full predicted pattern.
+- **`reverse/figures/reversal_symmetry.png`** — measured `no_op`
+  strength vs predicted `|Z ∩ σ(Z)| / |Z|`. All 24 cells on y = x.
+  The algebra-side prediction is verified pointwise, not just on
+  average.
+- **`null/figures/verdict_matrix.png`** — uniform purple at strength
+  0. The picture the null calibration passes against.
+
+The lattice_diff for reverse and the verdict_matrix for null have
+the diagnostic property that *deviation* from the expected pattern
+would be immediately visible: a single bright cell in a "100% exact"
+heatmap, a single yellow patch in a "uniform purple" matrix, a
+single off-diagonal point in the y = x scatter. The framework's
+"failures go to the human with diagnostics" rule extends naturally
+to "failures look wrong in the figures."
+
 ## File pointers
 
 - Probe spec: `probes/kernel_zero/PROBE.md`
@@ -225,6 +257,8 @@ A1..A10 unchanged after the lattice swap.
   `probes/kernel_zero/anchors.py`
 - Calibration runs (latest):
   `probes/kernel_zero/runs/2026-05-01_{identity,reverse,null}/`
+- Per-run figures:
+  `probes/kernel_zero/runs/2026-05-01_{identity,reverse,null}/figures/`
 - Regen script:
   `experiments/acm-champernowne/base10/q_distillery/q_lattice_4000_h_regen.py`
 - Old buggy lattice files preserved alongside the new ones as

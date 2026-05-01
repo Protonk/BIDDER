@@ -111,6 +111,27 @@ the lattice files match the master expansion at machine precision
 (`< 1e-9` per `test_within_row_lattice.py`), the anchor here must
 pass at `< 1e-12` modulo lattice-side ULP.
 
+## Figures
+
+Each run writes three figures into `runs/<date>_<config>/figures/`,
+generated deterministically from the recorded results — no
+interpretation, just visualization of the verdicts and substrate
+contract.
+
+- **`verdict_matrix.png`** — 24 × 4 heatmap of channel strengths
+  per cell. Identity is uniform yellow (1.0), null uniform purple
+  (0.0), reverse shows the predicted partial+invariant+destroyed
+  pattern.
+- **`lattice_diff.png`** (lattice substrate only) — log10
+  `|row_post - algebra(p, h, k)|` heatmap, 24 rows × K columns. The
+  identity figure is uniformly black (substrate matches algebra at
+  exact zero); the reverse figure shows where σ moves cells away
+  from their algebra-predicted positions.
+- **`reversal_symmetry.png`** (reverse transducer on lattice or
+  algebra substrate only) — measured `no_op` strength vs the
+  predicted reversal-symmetry quantity `|Z ∩ σ(Z)| / |Z|`. All
+  cells should land on y = x.
+
 ## Calibrations
 
 - **Identity** (transducer = identity, substrate = cached lattice

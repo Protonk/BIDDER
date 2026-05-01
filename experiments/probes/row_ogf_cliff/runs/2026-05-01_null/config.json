@@ -1,0 +1,18 @@
+{
+  "H_max": 9,
+  "exponents": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "primes": [
+    2,
+    3,
+    5,
+    7
+  ],
+  "seed": 0,
+  "substrate": "synth_uniform",
+  "transducer": "identity"
+}
