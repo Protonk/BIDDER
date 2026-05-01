@@ -1,81 +1,119 @@
 # algebra/
 
-Closed-form algebraic work on `Q_n(m)` and the finite-rank
-expansion. Code and analyses in this directory are kept rigorous
-in the sense that:
-
-1. Every algebraic claim is implemented as a function that returns
-   an exact rational (or a numeric value derived from one).
-2. Every claim is validated against canonical inputs whose values
-   are independently known (the `q_h5_shape_tau_matrix` anchors,
-   `Q_p(p^h · 1) = 1/h`, etc.).
-3. Every claim that touches the empirical lattices is checked
-   against `experiments/acm-champernowne/base10/art/q_distillery/`
-   cached data (`q_lattice_4000_h{5,6,7,8}.npy`).
-4. Closed-form claims ride on top of two algebraic primitives —
-   the master expansion (`algebra/Q-FORMULAS.md`) and the rank
-   lemma (`algebra/FINITE-RANK-EXPANSION.md`) — and either reduce
-   to them or extend them.
+Closed-form algebraic work on `Q_n(m)` and the master expansion.
+Each piece of content (definition, theorem, evaluated table) lives in
+exactly one file; other files refer to it by path and theorem name
+without restating it. Every theorem either has a numbered entry in
+`test_anchors.py` (A1..A10) or names the in-tree self-check that
+exercises it (e.g. `predict_correlation._self_check` for the
+within-row decomposition, whose statement is a tautological partition
+of the autocorrelation sum).
 
 ## Files
 
-- `algebra/Q-FORMULAS.md` — formula sheet for `Q_n(m)`, the
-  rank-h Mercator expansion of `log(1 + n^{-s} ζ(s))`.
-- `algebra/FINITE-RANK-EXPANSION.md` — finite-rank truncation of
-  the expansion at `j = ν_n(m)`. The rank lemma's one-line
-  proof, the local-vs-aggregate split.
-- `algebra/predict_q.py` — exact-rational implementation of the
-  master expansion. `q_value_by_class(shape, h, tau_sig) ->
-  Fraction` returns the conditional Q value (gcd=1 case).
-  `q_general(n, h, k)` returns the general value as a
-  `Fraction`. SymPy-free (uses Python's `fractions.Fraction` for
-  exactness).
-- `algebra/predict_correlation.py` — decomposition of within-row
-  autocorrelation as a sum over τ-pair joint densities times
-  algebraic Q values. The algebraic part is exact; the joint
-  density is computed by direct enumeration.
-- `algebra/test_anchors.py` — verifies
-  `algebra/predict_q.py:q_value_by_class` against the 8 × 6
-  matrix anchors documented in `algebra/Q-FORMULAS.md` and
-  rendered in
-  `experiments/acm-champernowne/base10/art/q_distillery/q_h5_shape_tau_matrix.png`.
-- `algebra/test_within_row_lattice.py` — compares predicted
-  within-row autocorrelation against the empirical lattice at
-  h ∈ {5, 6, 7, 8}, for several primes n.
-- `algebra/WITHIN-ROW-PARITY.md` — first closed-form deliverable:
-  the decomposition of the within-row parity profile by τ-pair
-  joint density, the mechanism for the even-L vs odd-L gap, and
-  validation against the empirical lattice.
+### Definitions and primitives
+
+- `OBJECTS.md` — `M_n`, `ζ_{M_n}`, `Q_n`, `h = ν_n(m)`, `τ_j`, `Ω`,
+  `ω`, shape, τ-signature. Notation table cross-referencing
+  `predict_q.py` and `guidance/BQN-AGENT.md`.
+- `MASTER-EXPANSION.md` — the master expansion theorem and proof
+  (anchors A4, A5). BQN: `Qn`. Three corollaries (rank truncation,
+  prime-row `1/h` identity, integer-language reading).
+- `RANK-LEMMA.md` — truncation of the master expansion at
+  `j = ν_n(m)` (anchor A4 exercises it).
+
+### Theorems
+
+- `UNIVERSAL-CLIFF.md` — `Q_n(n² k) = 1 - d(k)/2` (anchor A3). BQN: `H2`.
+- `DENOMINATOR-BOUND.md` — `denom(Q_n(m)) | lcm(1, …, ν_n(m))`
+  (anchor A9).
+- `KERNEL-ZEROS.md` — prime-`n` classifier and `Ω(k) = h` boundary
+  formula (anchors A7, A8 with the (shape, τ-sig) matrices at
+  `h = 5, 6, 7, 8`).
+- `ROW-OGF.md` — prime-row generating function `F(x; p, k')`,
+  polynomial of degree `Ω(k')` for `k' ≥ 2`, with the
+  single-prime-power closed form `(1 - (1-x)^e)/e` and the row sum
+  `F(1; p, k') ∈ {1/e, 0}` (anchor A10).
+- `WITHIN-ROW-PARITY.md` — class-pair decomposition of the
+  within-row autocorrelation. Algebraic factor exact via
+  `predict_q.q_value_by_class`; combinatorial factor open
+  (`PROPOSED-CLOSED-FORMS.md` Proposal 6).
+
+### Tables
+
+- `TABLES.md` — evaluated specializations of the master expansion:
+  prime-`n` rows at low `h`; prime power `n = 4` at low `h`;
+  squarefree multi-prime `r = 2` at `h = 2, 3, 4`. The 8 × 6
+  (shape, τ-sig) matrices at `h = 5, 6, 7, 8` are tabulated in
+  `KERNEL-ZEROS.md` (anchors A2, A8).
+
+### Forward-looking
+
+- `PROPOSED-CLOSED-FORMS.md` — open proposals. Proposals 1–3 landed
+  (`ROW-OGF.md` and `KERNEL-ZEROS.md`); 4–7 are open.
+
+### Indexes (legacy redirects)
+
+- `Q-FORMULAS.md` — thin index pointing to successor files.
+- `FINITE-RANK-EXPANSION.md` — thin index pointing to successor files.
+
+### Code
+
+- `predict_q.py` — exact-rational implementation of the master
+  expansion (`q_value_by_class`, `q_general`) and the prime-row OGF
+  (`row_polynomial`, `row_polynomial_qe_closed`, `row_sum`).
+- `predict_correlation.py` — within-row autocorrelation by class-pair
+  decomposition; algebraic factor exact via `predict_q`, joint
+  density by enumeration.
+- `test_anchors.py` — anchor harness A1–A10; all PASS gates the
+  closed-form work in this directory.
+- `test_within_row_lattice.py` — cross-checks `predict_q` against
+  `q_lattice_4000_h{5,6,7,8}.npy`.
 
 ## Workflow standard
 
 For each closed-form claim:
 
-1. **State the claim** algebraically as a deterministic function
-   from (shape, h, lag, axis, ...) to a number.
-2. **Implement the function** in this directory using exact
-   `Fraction` arithmetic (Python's `fractions` module). No floats,
-   no `mpmath`, no `sympy` — exact rationals all the way through.
-3. **Anchor at canonical inputs (ground truth)** — `Q_p(p^h · 1) =
-   1/h`, the 8×6 `(shape, tau_sig)` matrix at h = 5, the universal
-   `Q_n(n²k) = 1 − d(k)/2` cliff, the master/class-form
-   consistency. These values are derived from the master expansion
-   and frozen in `test_anchors.py`. Functions that don't reproduce
-   anchors exactly do not get to claim agreement on harder inputs.
+1. **State** the claim algebraically as a deterministic function from
+   `(shape, h, …)` to a number.
+2. **Implement** in `predict_q.py` using exact `Fraction` arithmetic.
+   No floats, no `mpmath`, no `sympy`.
+3. **Anchor** at canonical inputs in `test_anchors.py`. Anchors are
+   the contract: a function that fails its anchor cannot claim
+   agreement on harder inputs.
 4. **Format-consistency check** against the cached
-   `q_lattice_4000_h{5,6,7,8}.npy` files. The lattice is produced
-   by `q_general` in
-   `experiments/acm-champernowne/base10/art/q_distillery/q_lattice_full_bleed.py`,
-   which implements the *same* master expansion as
-   `algebra/predict_q.py` (same `nu_n_k = min(t // a)`, same
-   `h_eff` handling, same outer `j` loop, same binomial-product
-   structure; the differences are float-vs-Fraction and one
-   inlined τ_j sum vs the `tau()` helper). Float-level agreement
-   (≤ 1e-7) catches indexing, convention, and overlap-case bugs
-   that show up as a different-shape array, but it is *not* an
-   independent ground truth. The ground truth is step 3 — the
-   matrix anchors at `h = 5`, the prime-row identity, and the
-   universal cliff, derived directly from the master expansion
-   and frozen.
-5. **Document** in a Markdown file: claim, derivation, validation
-   results, what it predicts, what it doesn't.
+   `q_lattice_4000_h{5,6,7,8}.npy` files where applicable
+   (`test_within_row_lattice.py`).
+5. **Document** in a single Markdown file using the template in this
+   README:
+
+   ```
+   # <Theorem name>
+   ## Statement
+   ## BQN
+   ## Proof
+   ## Anchor
+   ```
+
+   No "what this predicts," no "what this does not predict," no
+   "reading," no rhetorical commentary. Open questions go in
+   `PROPOSED-CLOSED-FORMS.md`. Empirical data tables (e.g. the
+   autocorrelation readout in `WITHIN-ROW-PARITY.md`) appear under
+   their own §"Empirical readout" heading and contain numbers, not
+   commentary.
+
+## Adding a new theorem
+
+1. Create `<NAME>.md` using the template above.
+2. Add an anchor `A<n+1>` to `test_anchors.py`. Update the docstring
+   anchor list there.
+3. Append the file to this README's file index (one line).
+4. If a row in `TABLES.md` is now subsumed, replace the row with a
+   pointer to the new theorem.
+5. If the new theorem closes an entry in `PROPOSED-CLOSED-FORMS.md`,
+   mark that proposal as resolved with a one-line pointer.
+
+## Adding a new table row
+
+A new evaluated specialisation (e.g. a higher-`h` entry, a new shape):
+add a row to `TABLES.md`. No new file needed.

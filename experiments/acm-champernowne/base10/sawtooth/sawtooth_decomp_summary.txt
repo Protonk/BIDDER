@@ -1,0 +1,8 @@
+sawtooth full decomposition, n ∈ [1, 30000]
+level          M_final      std(C)
+ORIG           1.31664     0.22786
+PERMUTE        1.42087     0.25650
+BENFORD        1.39462     0.24825
+BIN1           1.31667     0.22791
+ATOM           1.55304     0.26142
+UNIFORM        1.50158     0.28901

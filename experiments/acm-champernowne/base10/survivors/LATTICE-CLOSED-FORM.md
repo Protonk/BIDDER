@@ -392,7 +392,65 @@ W = 10`:
 
 ---
 
-## 6. Naming
+## 6. Consequence: structural composition of survivors at the natural K threshold
+
+The largest `K_pair` value in the window is
+
+> `K_nat := max_{(a, b) in window²} K_pair(a, b) = n_0 + W − 1`
+
+(achieved by any `r = 1` coprime pair `(a, a + 1)` with
+`a = n_0 + W − 2`). At `K = K_nat` every pair in the window has
+been hit by its first collision, and the survivor set decomposes
+structurally into five computable categories:
+
+| label | description | culling at `K_nat` |
+|---|---|---|
+| `P_W` | primes in `[n_0, n_0 + W − 1]` | always survive |
+| `C_W` | composites in `[n_0, n_0 + W − 1]` | always survive |
+| `T_A_part` | composites with ≥ 2 window-divisors but only one with position ≤ K | culled at higher K |
+| **`T_B_low`** | `c = d·m`, `d ∈ window`, `m ∈ [2, n_0 − 1]` | **never culled** |
+| `T_B_high` | `c = d·m`, `d ∈ window`, `m > n_0 + W − 1` | excluded from `B` (since `m > K`) |
+
+Categories `P_W`, `C_W` are intrinsic to the window. `T_A_part`
+shrinks as `K` rises towards `K_nat`; `T_B_high` enters as `K` rises
+beyond `K_nat`. So `K_nat` is the **structural Pareto floor**:
+larger `K` admits more `T_B_high`, smaller admits more `T_A_part`.
+
+**The `T_B_low` obstruction.** For `c ∈ T_B_low`, the only window
+divisor of `c` is `d`; the cofactor `m = c/d ∈ [2, n_0 − 1]` lives
+*below* the window, so no other window-stream emits `c`. The atom
+appears in `B` exactly once (in stream `d` at position `m`),
+making it a singleton. **No choice of `K` removes it**: collisions
+require two streams in the window to converge on the same atom,
+which is impossible when `m < n_0`.
+
+Asymptotic count: with `π_W = π(n_0+W−1) − π(n_0−1)` primes in
+window,
+
+> `|T_B_low|  ≈  π_W · (n_0 − 2)  ≈  W · n_0 / log n_0`.
+
+Compare to `|P_W| ≈ W / log n_0`. The prime fraction is therefore
+
+> `|P_W| / |Surv|  ~  log n_0 / n_0  →  0`     as `n_0 → ∞`.
+
+So **convergence of survivors to "primes-in-window" is impossible
+at any finite K, regardless of how K scales with W**. The
+obstruction is not the K-scaling but the construction's stream
+collection: a sliding *window* `{S_n : n ∈ [n_0, n_0 + W − 1]}`
+cannot detect cofactors below `n_0`. To force convergence, one
+would need a sliding *prefix* `{S_n : n ∈ [2, n_0 + W − 1]}` — a
+different object.
+
+EXP14 (`EXP14-FINDINGS.md`) confirms numerically: for `n_0 = 100,
+W = 397, K = K_nat = 496`, `|Surv| = 6904` of which `T_B_low =
+6254` (≈ 90%) and `P_W = 69` (≈ 1%). The decomposition is
+invariant in `T_B_low` across all tested K-scalings (`K = W`,
+`K = (n_0+W)/2`, `K = K_nat`, `K = 2(n_0+W)`); only `T_A_part` and
+`T_B_high` move.
+
+---
+
+## 7. Naming
 
 Call the structure the **`K_pair` lattice of the window** (or
 **collision lattice** when contrasting with the smooth survival
@@ -408,7 +466,7 @@ same `gcd(a, r)` data through the position formula in §5.1(b).
 
 ---
 
-## 7. Pseudo-code
+## 8. Pseudo-code
 
 ```
 K_pair(a, b)                   // window regime
@@ -437,7 +495,9 @@ K_event(a, b, t)               // t-th shared-atom position
 
 ---
 
-## 8. Files
+## 9. Files
+
+Lattice itself:
 
 - `exp07_kappa_derivative.py` — empirical lattice via incremental
   K-walk (heatmap; this is where the visible spike-support
@@ -451,3 +511,19 @@ K_event(a, b, t)               // t-th shared-atom position
   `Λ_W`, `2·Λ_W`, and empirical `COLL`.
 - `exp09_staircase.py` / `exp09_staircase.png` — `S(K)` staircase,
   three-prediction overlay, and zoom (proof figure for §5.4).
+- `exp10_full_resolution_lattice.py` / `.png` — full unit-resolution
+  render of `Λ_W` and the fan decomposition. See `EXP10-FINDINGS.md`.
+
+Downstream consequences (§6 and the leading-digit projection):
+
+- `exp11_leading_digit_projection.py` / `.png` — gap heatmap at
+  unit resolution, Benford excess of culled atoms, lattice
+  overlay. See `EXP11-FINDINGS.md`.
+- `exp12_gap_predictor.py` / `.png` — closed-form linear predictor
+  for GAP (corr = +0.87). See `EXP12-FINDINGS.md`.
+- `exp13_gap_exact_residue.py` / `.png` — exact decomposition
+  `GAP = GAP_LIN + R_TOTAL` to machine precision. See
+  `EXP13-FINDINGS.md`.
+- `exp14_prime_convergence_reframe.py` / `.png` — structural
+  decomposition of survivors at four K(W) scalings, confirming
+  the `T_B_low` obstruction (§6). See `EXP14-FINDINGS.md`.

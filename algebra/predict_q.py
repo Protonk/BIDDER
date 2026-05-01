@@ -1,16 +1,17 @@
 """
 predict_q.py — exact-rational implementation of the Q_n master expansion.
 
-The master expansion (algebra/Q-FORMULAS.md):
+The master expansion (algebra/MASTER-EXPANSION.md):
 
     Q_n(m) = sum_{j=1}^{h} (-1)^{j-1}
              [ prod_{i} C(a_i (h - j) + t_i + j - 1, j - 1) ]
              * tau_j(k') / j
 
 where m = n^h k, n = prod p_i^{a_i}, k = prod p_i^{t_i} k' with gcd(k', n) = 1,
-and h = nu_n(m) is the n-adic height of m.
+and h = nu_n(m) is the n-adic height of m. Definitions in
+algebra/OBJECTS.md.
 
-Two public entry points:
+Public entry points for Q values:
 
     q_value_by_class(shape, h, tau_sig)
         Conditional Q_n(n^h k) in the gcd(k, n) = 1 case. Depends only on
@@ -22,18 +23,35 @@ Two public entry points:
         Handles overlap: writes k = (prod p_i^{t_i}) k' and absorbs
         any excess powers of n into the effective height. Returns Fraction.
 
-Both are exact (Python's fractions.Fraction; no SymPy, no floats).
+Public entry points for the prime-row OGF (algebra/ROW-OGF.md):
 
-Sanity anchors come from algebra/Q-FORMULAS.md and the canonical
-matrix in q_h5_shape_tau_matrix; see test_anchors.py.
+    row_polynomial(p, k_prime)
+        Coefficients of F(x; p, k') = sum_{h>=1} Q_p(p^h k') x^h.
+        Polynomial of degree exactly Omega(k') for k_prime >= 2 coprime
+        to p. Returns list[Fraction] of length Omega.
+
+    row_polynomial_qe_closed(e)
+        Coefficients from the closed form F(x; p, q^e) = (1 - (1-x)^e)/e.
+        Independent of the master expansion; serves as cross-check.
+
+    row_sum(p, k_prime)
+        Closed form sum_{h>=1} Q_p(p^h k') = 1/e if k_prime = q^e for
+        some prime q != p (single prime cofactor), else 0.
+
+All values are exact (Python's fractions.Fraction; no SymPy, no floats).
+
+Sanity anchors are in algebra/test_anchors.py (A1..A10). The canonical
+h=5 (shape, tau_sig) matrix is rendered in
+experiments/acm-champernowne/base10/art/q_distillery/q_h5_shape_tau_matrix.png
+and frozen as anchor A2.
 """
 
 from __future__ import annotations
 
 from functools import lru_cache
 from fractions import Fraction
-from math import comb
-from typing import Tuple
+from math import comb, gcd
+from typing import List, Tuple
 
 
 # --------------------------------------------------------------------------
@@ -191,6 +209,129 @@ def q_row(n: int, h: int, k_max: int) -> list:
     Mirrors the row layout of q_lattice_4000_h{5,6,7,8}.npy column index.
     """
     return [float(q_general(n, h, k)) for k in range(1, k_max + 1)]
+
+
+# --------------------------------------------------------------------------
+# Prime-row OGF
+# --------------------------------------------------------------------------
+#
+# For prime p and k_prime >= 1 coprime to p, define
+#
+#     F(x; p, k') = sum_{h >= 1} Q_p(p^h k') * x^h.
+#
+# Theorem (algebra/ROW-OGF.md):
+# - If k' = 1: F(x; p, 1) = -log(1 - x), with [x^h] F = 1/h. NOT polynomial.
+# - If k' >= 2 coprime to p: F is a polynomial in x of degree exactly
+#   Omega(k') (number of prime factors with multiplicity). The leading
+#   coefficient is (-1)^(Omega-1) (Omega-1)! / prod e_i! (boundary value
+#   in KERNEL-ZEROS.md (ii)).
+#
+# Closed form (single-prime-power cofactor):
+#     F(x; p, q^e) = (1 - (1 - x)^e) / e,
+#     [x^h] F = (-1)^(h-1) C(e, h) / e for h = 1..e.
+#
+# Closed form for the row sum F(1; p, k'):
+#     F(1; p, k') = 1/e   if k' = q^e for some prime q != p (omega(k') = 1),
+#                 = 0     if omega(k') >= 2.
+# (Diverges for k' = 1; raises.)
+
+
+def big_omega(k: int) -> int:
+    """Number of prime factors of k with multiplicity (Big Omega)."""
+    if k < 1:
+        raise ValueError(f'big_omega expects k >= 1, got {k}')
+    return sum(e for _p, e in factor_tuple(k))
+
+
+def little_omega(k: int) -> int:
+    """Number of distinct prime factors of k (lowercase omega)."""
+    if k < 1:
+        raise ValueError(f'little_omega expects k >= 1, got {k}')
+    return len(factor_tuple(k))
+
+
+def row_polynomial(p: int, k_prime: int) -> List[Fraction]:
+    """Coefficients of F(x; p, k') = sum_{h>=1} Q_p(p^h k') x^h.
+
+    Returns [c_1, c_2, ..., c_Omega] of exact Fractions, where c_h =
+    Q_p(p^h k') and Omega = Omega(k_prime). The polynomial has degree
+    exactly Omega; no coefficient at h > Omega is needed (kernel-zero
+    band, KERNEL-ZEROS.md (i)).
+
+    Requirements:
+    - p prime (the OGF theorem in ROW-OGF.md is prime-n only;
+      composite p admits cyclotomic-denominator OGFs that are not
+      polynomial, see PROPOSED-CLOSED-FORMS.md Proposal 4)
+    - k_prime >= 2
+    - gcd(p, k_prime) = 1
+
+    The k_prime = 1 case is excluded because F is then -log(1 - x), not
+    polynomial. Use q_general(p, h, 1) directly for that case (returns 1/h).
+    """
+    if k_prime < 2:
+        raise ValueError(
+            f'row_polynomial requires k_prime >= 2 (k_prime=1 gives '
+            f'F = -log(1-x), not polynomial); got {k_prime}')
+    if p < 2:
+        raise ValueError(f'row_polynomial requires p >= 2, got {p}')
+    if len(factor_tuple(p)) != 1 or factor_tuple(p)[0][1] != 1:
+        raise ValueError(
+            f'row_polynomial requires p prime; got p={p} '
+            f'(composite p has cyclotomic-denominator OGF, not '
+            f'polynomial; see ROW-OGF.md and PROPOSED-CLOSED-FORMS.md '
+            f'Proposal 4)')
+    if gcd(p, k_prime) != 1:
+        raise ValueError(
+            f'row_polynomial requires gcd(p, k_prime) = 1; got '
+            f'p={p}, k_prime={k_prime}')
+    omega = big_omega(k_prime)
+    return [q_general(p, h, k_prime) for h in range(1, omega + 1)]
+
+
+def row_polynomial_qe_closed(e: int) -> List[Fraction]:
+    """Coefficients of F(x; p, q^e) = (1 - (1 - x)^e) / e.
+
+    Returns [c_1, ..., c_e] with c_h = (-1)^(h-1) C(e, h) / e.
+
+    Independent of the master expansion: this is a direct evaluation of
+    the closed form in algebra/ROW-OGF.md. Serves
+    as a cross-check on row_polynomial(p, q^e) for any prime q != p.
+    """
+    if e < 1:
+        raise ValueError(f'row_polynomial_qe_closed requires e >= 1, got {e}')
+    return [Fraction((-1)**(h - 1) * comb(e, h), e) for h in range(1, e + 1)]
+
+
+def row_sum(p: int, k_prime: int) -> Fraction:
+    """Closed form for F(1; p, k') = sum_{h>=1} Q_p(p^h k').
+
+    For k_prime >= 2 coprime to p:
+        - If omega(k_prime) = 1, i.e., k_prime = q^e for some prime q
+          (with q != p by coprimality), returns 1/e.
+        - If omega(k_prime) >= 2, returns 0.
+
+    The proof is direct from the master expansion plus the hockey-stick
+    identity and the Stirling-like vanishing
+    sum_{j=0}^Omega (-1)^j C(Omega, j) p(j) = 0 for any polynomial p of
+    degree <= Omega - 1; the residue is p(0), where p(j) = tau_j(k')/j.
+    The factor structure tau_j(k') = j^omega * (...) makes p(0) = 0
+    for omega >= 2 and 1/e for omega = 1 (k' = q^e).
+
+    Diverges for k_prime = 1 (sum is the harmonic series); raises.
+    """
+    if k_prime < 2:
+        raise ValueError(
+            f'row_sum diverges at k_prime = {k_prime} '
+            f'(harmonic series); requires k_prime >= 2')
+    if p < 2 or gcd(p, k_prime) != 1:
+        raise ValueError(
+            f'row_sum requires p >= 2 coprime to k_prime; got '
+            f'p={p}, k_prime={k_prime}')
+    factors = factor_tuple(k_prime)
+    if len(factors) == 1:
+        e = factors[0][1]
+        return Fraction(1, e)
+    return Fraction(0)
 
 
 # --------------------------------------------------------------------------

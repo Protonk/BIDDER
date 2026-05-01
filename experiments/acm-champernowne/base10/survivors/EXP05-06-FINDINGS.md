@@ -133,3 +133,16 @@ The two experiments together change the picture:
   appearances fall within `K`. For c = pq, the position is
   `q/gcd(p,q) ≈ q`. So `K ≥ max divisor in window` is required.
   Try `K = W` (one prediction) or `K = W · n_0 / 2` (another).
+
+  **→ Resolved in EXP14** (`EXP14-FINDINGS.md`): no scaling works.
+  The natural threshold `K = n_0 + W − 1` kills Type-A composites
+  but leaves a `T_B_low` residue (composites with one window-
+  divisor and a cofactor below `n_0`) that is **structurally
+  irremovable** — only one window-stream contains them, so they
+  cannot be culled by collision at any `K`. Asymptotically
+  `|T_B_low| ~ W · n_0 / log n_0`, dominating the survivor set
+  and forcing the prime fraction to `~ log n_0 / n_0 → 0`.
+  Convergence to primes-in-window is impossible at any finite
+  `K` with this construction; it would require expanding the
+  stream collection to `{S_n : n ∈ [2, n_0 + W − 1]}`, a
+  different (sliding-prefix, not sliding-window) object.

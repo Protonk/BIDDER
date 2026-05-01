@@ -1,0 +1,25 @@
+Building prime sieve up to 494018
+EXP14 — K = K(W) prime convergence reframe
+  n_0 ∈ [25, 50, 100], W ∈ [2, 397]
+
+--- Scaling: K = n_0 + W − 1   (Type-A threshold) ---
+  n_0 = 25: W = 397, K = 421, |Surv| = 1683, primes = 73, comp_in_window = 46, typeA_partial = 272, typeB_low = 1124, typeB_high = 31  (3.3s)
+  n_0 = 50: W = 397, K = 446, |Surv| = 3272, primes = 71, comp_in_window = 87, typeA_partial = 270, typeB_low = 2640, typeB_high = 86  (4.2s)
+  n_0 = 100: W = 397, K = 496, |Surv| = 6904, primes = 69, comp_in_window = 146, typeA_partial = 182, typeB_low = 6254, typeB_high = 157  (6.8s)
+
+--- Scaling: K = W              (EXP06 suggestion) ---
+  n_0 = 25: W = 397, K = 397, |Surv| = 5572, primes = 73, comp_in_window = 46, typeA_partial = 4192, typeB_low = 1124, typeB_high = 0  (4.6s)
+  n_0 = 50: W = 397, K = 397, |Surv| = 10924, primes = 71, comp_in_window = 87, typeA_partial = 8008, typeB_low = 2640, typeB_high = 0  (6.8s)
+  n_0 = 100: W = 397, K = 397, |Surv| = 20065, primes = 69, comp_in_window = 146, typeA_partial = 13500, typeB_low = 6254, typeB_high = 0  (11.0s)
+
+--- Scaling: K = (n_0 + W) / 2  (half natural) ---
+  n_0 = 25: W = 397, K = 211, |Surv| = 11910, primes = 73, comp_in_window = 46, typeA_partial = 10530, typeB_low = 1124, typeB_high = 0  (5.2s)
+  n_0 = 50: W = 397, K = 223, |Surv| = 13626, primes = 71, comp_in_window = 87, typeA_partial = 10710, typeB_low = 2640, typeB_high = 0  (6.2s)
+  n_0 = 100: W = 397, K = 248, |Surv| = 17501, primes = 69, comp_in_window = 146, typeA_partial = 10936, typeB_low = 6254, typeB_high = 0  (8.8s)
+
+--- Scaling: K = 2(n_0 + W)     (overshoot) ---
+  n_0 = 25: W = 397, K = 844, |Surv| = 42690, primes = 73, comp_in_window = 46, typeA_partial = 33225, typeB_low = 1124, typeB_high = 8085  (19.4s)
+  n_0 = 50: W = 397, K = 894, |Surv| = 47442, primes = 71, comp_in_window = 87, typeA_partial = 31775, typeB_low = 2640, typeB_high = 12751  (22.5s)
+  n_0 = 100: W = 397, K = 994, |Surv| = 57595, primes = 69, comp_in_window = 146, typeA_partial = 30950, typeB_low = 6254, typeB_high = 20080  (29.7s)
+
+-> /Users/achyland/Desktop/Math/Tokoyami/forays/BIDDER/experiments/acm-champernowne/base10/survivors/exp14_prime_convergence_reframe.png
