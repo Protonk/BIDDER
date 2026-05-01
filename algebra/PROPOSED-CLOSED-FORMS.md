@@ -431,7 +431,7 @@ moves through the partition lattice.
 ## Recommended order (post-audit)
 
 1. **Proposals 1–3 (prime-row OGF, sum, kernel-zero band)** —
-   ✓ landed (`Q-FORMULAS.md` §"Row generating function";
+   ✓ landed (`ROW-OGF.md`, `KERNEL-ZEROS.md`;
    `predict_q.row_polynomial`, `row_sum`; anchor A10).
 2. **Proposal 4 (prime-power OGF)** — open, harder than the
    earlier draft suggested. The `a = 2, t = 0, k' = 1` case has a
@@ -484,8 +484,7 @@ The shared structure across all these closed forms:
 > in `Q_p(p^h k')`) is constrained by integer divisibility to a
 > finite or rational expression in elementary arithmetic.
 
-This is the abductive-key pattern in
-`memory/abductive_surprise_pattern.md`: the surprise dissolves
-once the divisibility constraint is read explicitly. None of these
-proposals require new analytic ideas; they require careful
-expansion and bookkeeping.
+This is the abductive-key pattern in `core/ABDUCTIVE-KEY.md`: the
+surprise dissolves once the divisibility constraint is read
+explicitly. None of these proposals require new analytic ideas;
+they require careful expansion and bookkeeping.
