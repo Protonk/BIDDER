@@ -80,7 +80,7 @@ rank gives `{2, 3}`, not `{2, 2}`.
 
 ## In BQN
 
-The following uses canonical names from `guidance/BQN-AGENT.md`. It is
+The following uses canonical names from `BQN-AGENT.md`. It is
 an exact-math gloss for the `n >= 2` branch of `core/acm_core.py`; the
 special case `n = 1` remains prose.
 

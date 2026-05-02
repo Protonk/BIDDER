@@ -60,7 +60,7 @@ HardyCK ← {q ← ⌊ (𝕩 - 1) ÷ (𝕨 - 1)
 
     C_b(n) = 0.p_1(n) p_2(n) p_3(n) …    (in base b).
 
-`ChamDigits10` in `guidance/BQN-AGENT.md` for `b = 10`.
+`ChamDigits10` in `BQN-AGENT.md` for `b = 10`.
 
 
 ## 7. Program
@@ -115,4 +115,4 @@ Submitted to remain open.
 - `experiments/acm/cf/DENOMINATOR-PROCESS.md` — CF cost
   ledger.
 - `experiments/acm/mult-table/` — mult-table cost ledger.
-- `guidance/BQN-AGENT.md` — naming.
+- `BQN-AGENT.md` — naming.

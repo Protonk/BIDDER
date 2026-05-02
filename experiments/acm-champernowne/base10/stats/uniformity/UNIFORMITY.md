@@ -18,7 +18,7 @@ of n. So:
 
 Call the irreducibles the **n-primes**. They are exactly the multiples
 of n that are not multiples of n^2. In BQN (`NPn2` from
-`guidance/BQN-AGENT.md`; mirrors `core/acm_core.py`):
+`BQN-AGENT.md`; mirrors `core/acm_core.py`):
 
 ```bqn
 NPn2 ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}    # n-primes for n >= 2
@@ -60,7 +60,7 @@ number-theoretic content (which elements are irreducible) and the
 typographic cost (how many base-b digits each element requires).
 
 In base 10, the exact digit stream — before parsing to a float —
-is `ChamDigits10` (`guidance/BQN-AGENT.md`; the "10" in the name
+is `ChamDigits10` (`BQN-AGENT.md`; the "10" in the name
 marks it as base-10-specific):
 
 ```bqn
@@ -98,7 +98,7 @@ This is exact. It holds for any K >= 1 and any base b >= 2. See
 `core/BLOCK-UNIFORMITY.md` for the counting argument.
 
 In base 10, the integer leading-digit extractor and its Benford
-contrast (`guidance/BQN-AGENT.md`; base-10 instances):
+contrast (`BQN-AGENT.md`; base-10 instances):
 
 ```bqn
 LeadingInt10 ← {⊑ Digits10 𝕩}       # leading digit of a positive integer

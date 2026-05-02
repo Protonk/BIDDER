@@ -6,6 +6,8 @@
 
 ## Description
 
+![Cream background. A single panel with linear horizontal axis labelled "h (height)" from 1 to 12, and logarithmic vertical axis labelled "coordinate value (log)" ranging from about 3 to 10^9. Three curves rise from the lower-left, fanning apart as h increases. A red line with circular markers labelled "numerical: max(|num|, denom) of Q across cells" climbs steeply from about 30 at h=1 to about 5×10^8 at h=12 — roughly seven decades. A navy line with square markers labelled "combinatorial: μs per q_general call" climbs gently from 6 to 26 — less than one decade. A gold line with diamond markers labelled "cognitive: p(h) = partitions of h" climbs from 1 to 77 — about two decades. The combinatorial and cognitive lines are nearly parallel and intersect near h=7; the numerical line diverges far above both. A boxed italic note in the upper-left reads "three rates, or one?". Title: "Wonder: The Cost Ladder — three coordinates of climb".](../experiments/acm-champernowne/base10/q_distillery/wonder_cost_ladder.png)
+
 Working at successive heights of the height tower costs roughly an
 order of magnitude more per rung. Sometimes more. The growth rate is
 not constant; the rate's *rate* is not characterised. The estimate is
@@ -64,22 +66,40 @@ the height index climbs.
 - `arguments/ATTRACTOR-AND-MIRAGE.md` — references a 12-minute
   empirical chain at the heights it studies, which is a single point
   on the cost ladder.
+- `experiments/acm-champernowne/base10/q_distillery/wonder_cost_ladder.png`
+  — emblem and first measurement pass. Three coordinates plotted on
+  log-y over `h ∈ [1, 12]`: numerical (max bignum width across 560
+  sampled cells per h), combinatorial (median μs per `q_general`
+  call), cognitive (`p(h)`, partition count of h). Result at this
+  resolution: the three coordinates *fan apart* — numerical climbs
+  ~7 decades over the range, cognitive ~2 decades, combinatorial
+  <1 decade. The wonder's first answer to "three rates, or one?"
+  is *three rates*, with the numerical coordinate dominating.
+- `experiments/acm-champernowne/base10/q_distillery/wonder_cost_ladder.py`
+  — render script.
 
 The specific "one to four orders of magnitude per rung" articulation
 is not yet documented in the repo. This entry is the act of naming
-the wonder so it can be measured.
+the wonder so it can be measured — and the emblem above is the
+first measurement.
 
 ## Status
 
-Suggestive. The estimate is point-estimate at best; no instrumentation
-yet exists that would turn the lived experience into a measurable
-slope. There may not even be a single slope to measure — the three
-cost coordinates may diverge in growth rate, in which case the
-"ladder" is three ladders.
+Suggestive, with a first measurement pass complete (see emblem). The
+emblem's three-coordinate panel at `h ∈ [1, 12]` shows the three
+coordinates fan apart — numerical climbs ~7 decades, cognitive ~2,
+combinatorial <1 — so on this read the "ladder" *is* three ladders.
+The wonder is not closed: the measurement is single-machine and at
+modest h, the cell sample skews toward small composite k, and the
+combinatorial coordinate's wall-clock proxy is implementation- and
+hardware-bound. A portability cross-check and an extension to higher
+h are the obvious next moves.
 
-The wonder is open in the strong sense: not just unresolved but
-under-articulated. The first move is to name what we mean by *cost*
-at each rung.
+The wonder remains open in the strong sense for *why* the rates
+diverge in the way they do, and whether the divergence has a closed
+form (e.g., is the numerical climb provably exponential, the
+cognitive climb provably sub-exponential per Hardy-Ramanujan, the
+combinatorial climb provably polynomial in `h`?).
 
 ## Aesthetic note
 

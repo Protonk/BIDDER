@@ -23,7 +23,7 @@ exactly b^(d-1) members.
 
 ## In BQN
 
-The following uses canonical names from `guidance/BQN-AGENT.md`.
+The following uses canonical names from `BQN-AGENT.md`.
 These are exact-math specifications; the implementations in
 `core/acm_core.py` and `core/acm_core.c` approximate them where
 floating-point truncation is unavoidable.
@@ -339,7 +339,7 @@ the lemma. The encoding does not create the uniformity; positional
 notation creates it, and the encoding preserves it.
 
 In BQN, using the exact-concatenation specification `ChamDigits10`
-and the n-prime sieve `NPn2` (both from `guidance/BQN-AGENT.md`):
+and the n-prime sieve `NPn2` (both from `BQN-AGENT.md`):
 
 ```bqn
 NPn2         ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}

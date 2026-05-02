@@ -19,7 +19,7 @@ Its Dirichlet series is
 in `M_2`. There is no Euler product over the atoms of `M_n`.
 
 ```bqn
-# Atoms of M_n. Canonical form per guidance/BQN-AGENT.md §"NPn2":
+# Atoms of M_n. Canonical form per BQN-AGENT.md §"NPn2":
 # generate 𝕩×𝕨 candidate cofactors, scale by n, keep those whose
 # cofactor is not divisible by n.
 NPn2 ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}

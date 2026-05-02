@@ -12,7 +12,7 @@ Run: `sage -python sawtooth.py` and `sage -python residual.py`
 five `n`-primes are just `5↑ n NPn2 5` = `n, 2n, 3n, 4n, 5n`.
 
 So the plotted value is the float parsed from the exact digit stream
-`ChamDigits10 (5↑ n NPn2 5)` (`guidance/BQN-AGENT.md`), i.e.
+`ChamDigits10 (5↑ n NPn2 5)` (`BQN-AGENT.md`), i.e.
 
 `C(n) = 1.[n][2n][3n][4n][5n]`
 

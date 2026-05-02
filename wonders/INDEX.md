@@ -1,10 +1,11 @@
 # The Cabinet, First Vitrine
 
-Six specimens. Marvel, prodigy, sport, monster — one each. Two
-wonders. Curiosity shelf still empty; it will fill when the first
-real curiosity earns its slot. The categories are not a partition;
-multiple wonders is the natural shape when the substrate keeps
-offering more than one open frontier.
+Eight specimens. Marvel, prodigy, sport, monster — one each. Two
+wonders. Two curiosities (one live, one retired). The cabinet's six
+categories are all populated; the curiosity drawer also opened its
+retired sub-shelf, folded in from the proto-cabinet `nasties/`. The
+categories are not a partition; multiple wonders is the natural
+shape when the substrate keeps offering more than one open frontier.
 
 ## Marvels
 
@@ -42,6 +43,25 @@ offering more than one open frontier.
   forces. The substrate is constitutively unable to be `h!`-pretty,
   and the offence traces back to why the bound is sharp.
 
+## Curiosities
+
+- [The Two Tongues](curiosity-two-tongues.md) — the survivor
+  Champernowne real `C_Surv` tracks the bundle's running leading-
+  digit L1 deviation almost cell for cell, including through the
+  dramatic n=2 dip, despite throwing away 62.8% of atoms. The
+  `l1_grid` heatmap confirms the agreement is generic across
+  `(K, n_0) ∈ [10, 1000]²`, not a one-panel coincidence. The
+  mechanism — why a structured filter behaves like a uniform-random
+  thinning at the leading-digit level — is unprobed. *Deadline:
+  2026-Q3.*
+- [The first_digit Pothole](curiosity-retired-first-digit.md)
+  *(retired)* — `first_digit(8)` returned `7` because
+  `int(10**frac)` truncated `7.999999999999999`. Eleven integers in
+  `[1, 9999]` hit the trap, all with exact-integer base-10
+  mantissas — the bug fires exactly where the math is cleanest.
+  Folded in from the proto-cabinet `nasties/` as a retired
+  curiosity (`nasties/` has since been deleted).
+
 ## Wonders
 
 - [The Cost Ladder](wonder-cost-ladder.md) — working at successive
@@ -59,7 +79,8 @@ offering more than one open frontier.
 
 ---
 
-Curiosity is the only category not yet populated. It will fill when
-the first real curiosity earns its slot. A reassignment log, a
-glossary, a cross-reference index, a graveyard for aged-out
-curiosities: each one comes when an entry forces it, not before.
+All six categories are populated. A reassignment log, a glossary, a
+cross-reference index, a graveyard for aged-out curiosities: each
+one comes when an entry forces it, not before. The curiosity shelf
+in particular has its first deadline (2026-Q3); when it lands, the
+graveyard or the promotion log will earn its file.

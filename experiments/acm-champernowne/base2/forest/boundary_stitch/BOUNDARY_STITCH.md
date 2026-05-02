@@ -15,7 +15,7 @@ Do this for several values of n, side by side.
 
 **The v_2 barcode.** For n = 2^m, every n-prime is divisible by 2^m,
 so the last m bits of every entry are 0. The 2-adic valuation
-(`V2` from `guidance/BQN-AGENT.md`; exact math — local `v2` helpers
+(`V2` from `BQN-AGENT.md`; exact math — local `v2` helpers
 appear in the binary experiment scripts):
 
 ```bqn

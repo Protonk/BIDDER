@@ -15,7 +15,7 @@ Stream:   0.10|110|1010|1110|10010|10110|11010|11110|...
 Flat:     0.101101010111010010101101101011110...
 ```
 
-In BQN (`BinDigits`, `BStream` from `guidance/BQN-AGENT.md`; mirrors
+In BQN (`BinDigits`, `BStream` from `BQN-AGENT.md`; mirrors
 `experiments/acm-champernowne/base2/binary_core.py`):
 
 ```bqn
@@ -162,7 +162,7 @@ at every boundary (for n=2), or "001" (for n=4), or "0001" (for n=8).
 These are **invisible in base 10** but glaringly visible in RLE.
 
 The 2-adic valuation that drives this (`V2` from
-`guidance/BQN-AGENT.md`; exact math — local `v2` helpers appear in
+`BQN-AGENT.md`; exact math — local `v2` helpers appear in
 experiment scripts like `forest/rle_spectroscopy/rle_spectroscopy.py`):
 
 ```bqn

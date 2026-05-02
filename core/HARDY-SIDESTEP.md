@@ -120,7 +120,7 @@ prose.
 ## In BQN
 
 The closed form mirrors the canonical `NPn2` from
-`guidance/BQN-AGENT.md`, but evaluates one element instead of
+`BQN-AGENT.md`, but evaluates one element instead of
 generating a list. It is exact-math; the Python implementation in
 `core/hardy_sidestep.py` is a direct port.
 
@@ -135,7 +135,7 @@ NthNPn2 ← {𝕨 × 1 + ((𝕨-1)|𝕩-1) + 𝕨 × ⌊(𝕩-1)÷𝕨-1}
   the K-th n-prime
 
 Verification against the existing `NPn2` enumerator (also from
-`guidance/BQN-AGENT.md`):
+`BQN-AGENT.md`):
 
 ```bqn
 NPn2 ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}
@@ -315,6 +315,6 @@ arithmetic.
 - `core/ABDUCTIVE-KEY.md` — the rank-1 lemma and the
   leaky-parameterization theme
 - `core/hardy_sidestep.py` — companion script (verification + demos)
-- `guidance/BQN-AGENT.md` — `NPn2` and the BQN naming conventions
+- `BQN-AGENT.md` — `NPn2` and the BQN naming conventions
 - `generator/BIDDER.md` — independent construction; permutes consecutive
   integers, not n-primes. Listed here only to disambiguate from this note.

@@ -9,7 +9,7 @@ function appears in three layers:
 - **BQN** — a representation of what the call corresponds to in the
   ACM-Champernowne world. The BQN is documentation of the math layer
   the API sits on top of, not metadata returned by any call. The
-  cipher itself is out of scope for BQN per `guidance/BQN-AGENT.md`.
+  cipher itself is out of scope for BQN per `BQN-AGENT.md`.
 
 For the proofs that back the math, see
 `core/BLOCK-UNIFORMITY.md` and `core/HARDY-SIDESTEP.md`.
@@ -98,7 +98,7 @@ set being permuted is, externally,
 
 The keying picks one specific permutation of this set. BQN does not
 model which one; the cipher is out of scope per
-`guidance/BQN-AGENT.md`.
+`BQN-AGENT.md`.
 
 
 ### Random access: `at(i)`
@@ -143,7 +143,7 @@ i ⊑ L
 `at(i)` is exactly that operator applied to whichever permutation
 of `↕ P` the key selects. BQN does not represent the keyed
 permutation itself — the cipher is out of scope per
-`guidance/BQN-AGENT.md` — but the operator that the API exposes is
+`BQN-AGENT.md` — but the operator that the API exposes is
 just `⊑`.
 
 
@@ -372,7 +372,7 @@ permuted is
 
 **The permutation.** The keying picks one bijection from the
 symmetric group on `↕ P`. BQN does not represent which one — the
-cipher is out of scope per `guidance/BQN-AGENT.md`'s hard boundary.
+cipher is out of scope per `BQN-AGENT.md`'s hard boundary.
 For the BQN-side reader, the API's contract is purely "a
 permutation of `↕ P`."
 
@@ -510,6 +510,6 @@ elementary, sketched in earlier conversations).
   n-Champernowne reals.
 - `core/ABDUCTIVE-KEY.md` — the rank-1 lemma and the
   leaky-parameterization theme.
-- `guidance/BQN-AGENT.md` — canonical BQN names used in this doc.
+- `BQN-AGENT.md` — canonical BQN names used in this doc.
 - `generator/AGENTS.md` — cipher feature set and parity rules.
 - `generator/BIDDER.md` — cipher design notes and findings.

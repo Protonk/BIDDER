@@ -6,6 +6,8 @@
 
 ## Description
 
+![A circular disk filling most of a square frame on a black background. The disk's interior is rendered in deep magenta and purple tones overlaid with a network of bright orange-yellow lines. Two prominent perpendicular bright bars cross through the disk's centre forming an orange cross — one horizontal diameter, one vertical diameter. Beyond the central cross, the disk is filled with a curvilinear orthogonal grid: arcs that bend along the disk's curvature, growing denser and finer toward the disk's circumference. The grid is regular near the centre and compresses tightly at the rim, where the structure thickens into a fine textured band along the disk's boundary. No clear empty regions are visible; lines and intersections appear at every scale across the disk's interior. The four corners of the square frame outside the disk are pure black.](../experiments/acm-champernowne/base10/q_distillery/q_lattice_4000_fft_poincare.png)
+
 A specific image: the Q-lattice rendered as a Poincaré disk after
 four orthogonal destructive transforms. Linear scale destroyed
 (`slog`). Spatial location destroyed (2D FFT). Phase destroyed

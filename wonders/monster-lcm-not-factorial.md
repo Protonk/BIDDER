@@ -6,6 +6,8 @@
 
 ## Description
 
+![Cream background. A single panel with linear horizontal axis showing h values 1 through 20, and logarithmic vertical axis labelled "denominator (log)" ranging from about 1 to 10^18. Two curves rise from the lower-left: a red dashed line labelled "h! (naive expectation)" climbs steeply, reaching about 2.4×10^18 at h=20. A navy solid line labelled "lcm(1, …, h) (actual bound)" rises more slowly, reaching about 2.3×10^8 at h=20. The two curves coincide at h=1, 2, 3 and diverge from h=4 onward. The region between the two curves is shaded a warm desaturated tone, labelled "h!/lcm gap — constitutively unattainable". Many small dark gray dots scatter along the bottom of the plot at denominator values between 1 and 20, well below the lcm curve. Two annotation boxes point to the curves: at h=8, "lcm = 840, h! = 40,320, h!/lcm = 48× tighter"; at h=20, "h!/lcm ≈ 1.0e+10". Title: "Monster: The lcm-not-Factorial Denominator — the gap the construction forces".](../experiments/acm-champernowne/base10/q_distillery/monster_lcm_gap.png)
+
 For every `m ∈ M_n` with height `h = ν_n(m) ≥ 1`, the denominator of
 `Q_n(m)` divides `lcm(1, 2, …, h)`. Not `h!`. The proof is one
 paragraph: each term of the master expansion is an integer divided by
@@ -55,6 +57,19 @@ correct rather than approximate.
   requires.
 - `algebra/MASTER-EXPANSION.md` — the source of the `Σ (integer)_j / j`
   shape that makes the `lcm` denominator inevitable.
+- `experiments/acm-champernowne/base10/q_distillery/monster_lcm_gap.png`
+  — emblem. Two curves over `h ∈ [1, 20]`, log-y: `h!` (warm
+  crimson, dashed — the naive expectation) and `lcm(1, …, h)`
+  (navy, solid — the actual bound). The shaded region between
+  them is the "constitutively unattainable" gap. At `h = 8` the
+  ratio is 48×; at `h = 20` it reaches `10¹⁰`. 586 empirical Q
+  denominators scattered along the bottom — all sit far below
+  even the `lcm` curve, never in the gap. The bound is loose for
+  individual cells (the prime-row identity caps denominators at
+  `h`); tightness of the bound is collective across cells, not
+  per-cell.
+- `experiments/acm-champernowne/base10/q_distillery/monster_lcm_gap.py`
+  — render script.
 
 ## Status
 

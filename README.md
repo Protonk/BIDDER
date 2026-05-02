@@ -34,7 +34,7 @@ Concatenating those digits [as a sequence in order](https://en.wikipedia.org/wik
 
 Mathematical definitions in this README and the core theory docs are
 written in [BQN](https://mlochbaum.github.io/BQN/) as executable
-notation. Vocabulary at [guidance/BQN-AGENT.md](guidance/BQN-AGENT.md);
+notation. Vocabulary at [BQN-AGENT.md](BQN-AGENT.md);
 the prose carries the meaning if you skip the block.
 
 ```bqn

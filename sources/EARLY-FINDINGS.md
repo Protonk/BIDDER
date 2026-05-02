@@ -25,7 +25,7 @@ counting measure perfectly. This is the signature of the missing
 multiplicative structure — the monoid nℤ⁺ has non-unique factorization,
 so the multiplicative dynamics that produce Benford's law are absent.
 
-In BQN (`LeadingInt10` from `guidance/BQN-AGENT.md`; see
+In BQN (`LeadingInt10` from `BQN-AGENT.md`; see
 `core/BLOCK-UNIFORMITY.md` for the counting argument):
 
 ```bqn
@@ -47,7 +47,7 @@ The function f(n) = C(n) (the n-Champernowne real) traces a sawtooth with:
 - Drop at powers of 10: from ~2.0 to ~1.1
 
 The real C(n) is built from the exact digit stream `ChamDigits10`
-(`guidance/BQN-AGENT.md`), then parsed to a float:
+(`BQN-AGENT.md`), then parsed to a float:
 
 ```bqn
 ChamDigits10 ← {⥊ Digits10¨ 𝕩}
@@ -141,7 +141,7 @@ cousin of ε(m) = log₂(1+m) − m from the floating-point pseudo-logarithm.
 
 The sawtooth curve itself is `{10⋆⁼1+𝕩}` (i.e. log₁₀(1+m)) on the
 mantissa range m ∈ [0.1, 1]. The log-based leading-digit extractor
-`LD10` (`guidance/BQN-AGENT.md`; mirrors `acm_first_digit` in
+`LD10` (`BQN-AGENT.md`; mirrors `acm_first_digit` in
 `core/acm_core.py`) is related:
 
 ```bqn
@@ -150,7 +150,7 @@ LD10 ← {⌊𝕩÷10⋆⌊10⋆⁼𝕩}
 
 **Caveat:** in floating point, `⌊log₁₀(x)⌋` can undercount at exact
 powers of 10. The implementation adds `+1e-9`. See
-`nasties/FIRST-DIGIT.md`.
+`wonders/curiosity-retired-first-digit.md`.
 
 The maximum error ε₁₀(m*) ≈ 0.0445 per tooth. It does not grow with the
 digit class — it is scale-invariant.

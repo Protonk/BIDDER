@@ -328,7 +328,7 @@ def test_first_digit_boundaries():
 def test_first_digit_integer_accuracy():
     """first_digit must agree with string extraction on all integers 1..9999.
 
-    See nasties/FIRST-DIGIT.md for the truncation bug this catches.
+    See wonders/curiosity-retired-first-digit.md for the truncation bug this catches.
     """
     failures = []
     for n in range(1, 10000):

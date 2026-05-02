@@ -6,6 +6,8 @@
 
 ## Description
 
+![Dark near-black background. A single panel with a logarithmic horizontal axis labelled "sample size N" running from about 5 to 2300, and a linear vertical axis labelled "MC estimate of ∫ sin(πx) dx". 25 thin trajectories in a viridis-palette colour scheme (deep purple through teal to bright yellow) wiggle across the plot, varying widely at low N and progressively narrowing toward a single point at the right at N=2000. A yellow circular marker sits at that convergence point. A yellow dashed horizontal line passes through the marker, labelled "R = 0.636620, true ∫ = 2/π (gap = 1.3e-07)". A faint dotted gray vertical line at N=2000 is labelled "N = P = 2000". The top-left has a dark inset box reading "25 keys → one point / spread at N = P: 2.66e-15 / (machine ε; functionally zero)". Title: "Sport: The N=P Riemann-Sum Identity — 25 keys, one destination".](../experiments/bidder/unified/sport_riemann_emblem.png)
+
 `bidder.cipher(P, key)` is a keyed pseudorandom permutation of
 `{0, 1, …, P − 1}`. Used as a Monte Carlo sampler over `[0, 1)` via
 `f(π(i) / P)`, it produces a prefix mean
@@ -56,6 +58,16 @@ they all collapse to the Riemann sum. Alone in its neighbourhood.
   histogram showing zero spread; Riemann error vs `P`.
 - `experiments/bidder/unified/adversarial_integrands.py` — sin, x,
   √x, step. Quadrature bias varies by `f`; key-independence does not.
+- `experiments/bidder/unified/sport_riemann_emblem.png` — emblem.
+  Single panel, 25 keys producing running MC estimates of
+  `∫₀¹ sin(πx) dx` over `N` on log-x linear-y. The 25 trajectories
+  wiggle differently across `N < P` and all land on a single point
+  at `N = P = 2000` — the Riemann sum `R = 0.636620`. Spread across
+  the 25 keys at `N = P` is `2.66 × 10⁻¹⁵`, machine ε; functionally
+  zero. The true integral `2/π` differs from `R` by `1.31 × 10⁻⁷`
+  (the structural Riemann-sum bias the cipher does not address).
+- `experiments/bidder/unified/sport_riemann_emblem.py` — render
+  script.
 
 ## Status
 

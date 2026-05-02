@@ -460,4 +460,4 @@ See `tests/theory/README.md` for the full theorem index.
   the set `↕ P`.
 - `BIDDER.md` — the root API doc, including the `bidder.cipher`
   entry point.
-- `guidance/BQN-AGENT.md` — canonical BQN names.
+- `BQN-AGENT.md` — canonical BQN names.

@@ -22,7 +22,7 @@ This is the binary-stream analog of `algebra/predict_q.py` and
 `experiments/acm/cf/offspike_dynamics.py`: an algebraic
 predictor verified against the empirical signal.
 
-BQN (per `guidance/BQN-AGENT.md`):
+BQN (per `BQN-AGENT.md`):
     n_primes_in_dblock  -> mirrors NPn2 filtered by bit-length
     autocorr_dblock_at_d -> the closed-form-by-enumeration prediction
 """

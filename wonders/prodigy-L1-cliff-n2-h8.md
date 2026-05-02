@@ -6,6 +6,8 @@
 
 ## Description
 
+![Cream background. A single bar chart with horizontal axis showing seven labelled positions h=4 through h=10, and vertical axis labelled "vertical L=1 autocorrelation (mean Pearson over adjacent n-rows)" ranging from about −0.16 to +0.20. A horizontal zero line crosses the panel. Bars at h=4, h=6, h=8 are navy blue and dip below zero, with heights about −0.008, −0.054, −0.017 respectively. Bars at h=5, h=7, h=9, h=10 are red and rise above zero, with heights about +0.010, +0.172, +0.030, +0.016. The h=7 bar is by far the tallest. Numerical values are printed above or below each bar. Below the bars at the bottom margin, four small gray squares mark h=5, 6, 7, 8 with the legend text "marker: h-values cited in ATTRACTOR-AND-MIRAGE.md:612-615". A small italic footer reads "(n ∈ [2, 50], K = 200; analytic from algebra/predict_q.q_general — no lattice required)". Title: "Prodigy: The L=1 Sign-Flip Across h-Parity — vertical autocorrelation by height".](../experiments/acm-champernowne/base10/q_distillery/prodigy_L1_signflip.png)
+
 The within-row lag-1 vertical autocorrelation flips sign with the
 parity of the height `h`. At odd `h ∈ {5, 7}` the vertical L=1
 correlation across adjacent height-rows sits near `+0.25`; at even
@@ -52,6 +54,19 @@ figures from `ATTRACTOR-AND-MIRAGE.md`.
   requires regenerating them.
 - `algebra/predict_correlation.py` — `class_decomposition`,
   `autocorr_profile`, the `q_for_class` cache.
+- `experiments/acm-champernowne/base10/q_distillery/prodigy_L1_signflip.png`
+  — emblem. Single-panel bar chart of vertical L=1 autocorrelation
+  (mean Pearson over adjacent n-rows) at `h ∈ {4..10}`, computed
+  analytically from `q_general` on a smaller grid (`n ∈ [2, 50]`,
+  `K = 200`; no lattice required). At this resolution: clean
+  alternation `−, +, −, +, −, +` across `h ∈ {4..9}`; the
+  alternation *breaks* at `h = 10` (`+0.016` instead of negative).
+  Magnitudes are smaller than the published `~+0.25 / ~−0.14`
+  figures (which used the full `K = 4000` lattice), but the
+  sign-pattern survives. Published cells `h ∈ {5, 6, 7, 8}` are
+  marked.
+- `experiments/acm-champernowne/base10/q_distillery/prodigy_L1_signflip.py`
+  — render script.
 
 ## Status
 

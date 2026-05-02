@@ -11,7 +11,7 @@ For each positive integer k, the sieve density is:
 
 An integer k is an n-prime when n divides k but n² does not —
 that is, when k appears in the output of `n NPn2`
-(`guidance/BQN-AGENT.md`). So density(k) counts the divisors of
+(`BQN-AGENT.md`). So density(k) counts the divisors of
 k that appear exactly once in its factorization — divisors n
 where k/n is not itself divisible by n.
 

@@ -20,7 +20,7 @@ Everything else in this folder is a remapping of that object:
 - destruction tests under blur and scrambling
 
 For `n >= 2`, the raw row is a finite prefix of the exact `n`-prime
-digit stream. In the notation of `guidance/BQN-AGENT.md`, that source is
+digit stream. In the notation of `BQN-AGENT.md`, that source is
 `ChamDigits10 (K↑ n NPn2 K)` for sufficiently large `K`. The art starts
 there.
 

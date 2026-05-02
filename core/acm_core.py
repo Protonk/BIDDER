@@ -5,7 +5,7 @@ acm_core.py — Central definitions for the ACM-Champernowne process
 This module defines the n-prime construction and its derived objects.
 All other scripts import from here.
 
-BQN companions (see guidance/BQN-AGENT.md):
+BQN companions (see BQN-AGENT.md):
     acm_n_primes          -> NPn2 (n >= 2 only)
     acm_champernowne_real -> parse of "1." ++ ChamDigits10
     acm_digit_count       -> DigitCount10

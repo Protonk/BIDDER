@@ -15,7 +15,7 @@ of the autocorrelation sum).
 
 - `OBJECTS.md` — `M_n`, `ζ_{M_n}`, `Q_n`, `h = ν_n(m)`, `τ_j`, `Ω`,
   `ω`, shape, τ-signature. Notation table cross-referencing
-  `predict_q.py` and `guidance/BQN-AGENT.md`.
+  `predict_q.py` and `BQN-AGENT.md`.
 - `MASTER-EXPANSION.md` — the master expansion theorem and proof
   (anchors A4, A5). BQN: `Qn`. Three corollaries (rank truncation,
   prime-row `1/h` identity, integer-language reading).

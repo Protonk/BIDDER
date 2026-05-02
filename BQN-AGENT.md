@@ -227,9 +227,9 @@ LD10 ← {⌊𝕩÷10⋆⌊10⋆⁼𝕩}
 
 **Caveat:** This is the mathematical definition. In floating point,
 `⌊log10(x)⌋` can undercount at exact powers of 10 (the same class of
-bug documented in `nasties/FIRST-DIGIT.md`). The Python/C
-implementations carry a `+1e-9` guard. Treat `LD10` as exact math;
-note the guard when discussing the implementation.
+bug catalogued in `wonders/curiosity-retired-first-digit.md`). The
+Python/C implementations carry a `+1e-9` guard. Treat `LD10` as exact
+math; note the guard when discussing the implementation.
 
 Use this only when the repo is already discussing positive reals.
 
@@ -333,8 +333,8 @@ F←{((0≠𝕨|·)⊸/𝕨×1+↕𝕩×𝕨)∾...}
 
 Project docs the BQN mirrors:
 
-- [ACM-CHAMPERNOWNE.md](../core/ACM-CHAMPERNOWNE.md) — the math
-- [FIRST-DIGIT.md](../nasties/FIRST-DIGIT.md) — the truncation bug (`LD10` caveat)
+- [ACM-CHAMPERNOWNE.md](core/ACM-CHAMPERNOWNE.md) — the math
+- [curiosity-retired-first-digit.md](wonders/curiosity-retired-first-digit.md) — the truncation bug (`LD10` caveat)
 - `core/acm_core.py`, `core/acm_core.c` — implementations
 - `experiments/acm-champernowne/base2/binary_core.py` — binary constructions
 

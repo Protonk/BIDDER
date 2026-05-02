@@ -21,7 +21,7 @@ are called *n-primes*.
 not divide k. Equivalently, the n-primes are multiples of n that are not
 multiples of n².
 
-In BQN (`NPn2` from `guidance/BQN-AGENT.md`; mirrors `core/acm_core.py`):
+In BQN (`NPn2` from `BQN-AGENT.md`; mirrors `core/acm_core.py`):
 
 ```bqn
 NPn2 ← {(0≠𝕨|·)⊸/ 𝕨×1+↕𝕩×𝕨}
@@ -59,7 +59,7 @@ For n >= 2, each row's n-primes are `5↑ n NPn2 5`. The n = 1 row
 
 The exact digit stream — before parsing to a float — is the
 specification-level object (`ChamDigits10` from
-`guidance/BQN-AGENT.md`):
+`BQN-AGENT.md`):
 
 ```bqn
 Digits10     ← {𝕩<10 ? ⟨𝕩⟩ ; (𝕊⌊𝕩÷10)∾⟨10|𝕩⟩}
@@ -140,7 +140,7 @@ The Champernowne encoding is a bridge to:
 
 The uniformity in (1) rests on a counting argument over digit classes
 (see `core/BLOCK-UNIFORMITY.md`). The relevant BQN
-(`guidance/BQN-AGENT.md`):
+(`BQN-AGENT.md`):
 
 ```bqn
 LeadingInt10 ← {⊑ Digits10 𝕩}       # leading digit of a positive integer

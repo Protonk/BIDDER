@@ -6,6 +6,8 @@
 
 ## Description
 
+![Four stem-plot panels arranged in a 2×2 grid on a cream background. Each panel is titled with an exponent e ∈ {2, 3, 4, 6} and the closed-form expression F(x; 2, 3^e) = (1 − (1 − x)^e)/e. Each panel has a horizontal axis labelled h running from 1 to 10, a horizontal zero line, and a vertical dashed gray guide at h = e + 0.5. Stems extend from the zero line to filled circular markers at integer h positions. Panel e=2: one red stem reaches +1.0 at h=1, one blue stem reaches −0.5 at h=2; from h=3 onward the panel is faintly shaded gray with small gray dots on the zero line. Panel e=3: red stem at h=1 (+1.0), blue at h=2 (−1.0), red at h=3 (+0.33), then shaded zero zone. Panel e=4: alternating red, blue, red, blue at h=1 through h=4 (heights +1, −1.5, +1, −0.25), then shaded zero zone. Panel e=6: six alternating red and blue stems at h=1..6, magnitudes up to ±3.3, then shaded zero zone. Title: "Marvel: The Row-OGF Cliff — termination at degree exactly Ω(k′)".](../experiments/acm-champernowne/base10/q_distillery/marvel_row_ogf_cliff.png)
+
 For prime `p` and `k' ≥ 2` coprime to `p`, the prime-row generating
 function
 
@@ -48,6 +50,17 @@ to the closed form `(1 − (1 − x)^e)/e`.
   row-sum closed form (`A10d`: 901 cases).
 - `algebra/predict_q.py:253` — `row_polynomial`, `row_polynomial_qe_closed`,
   `row_sum`.
+- `experiments/acm-champernowne/base10/q_distillery/marvel_row_ogf_cliff.png`
+  — emblem. Small-multiples stem plot of `Q_p(p^h · q^e)` at
+  `p = 2`, `q = 3`, `e ∈ {2, 3, 4, 6}`. Each panel: `e` non-zero
+  stems then a shaded band of zero-coefficient absence-markers,
+  the cliff at `h = e + 0.5` marked as a vertical guide. The
+  repeated motif across four panels is the "found rather than
+  built" reading made visual: it terminates at `e = 2`, it
+  terminates at `e = 3`, it terminates at `e = 4`, it terminates
+  at `e = 6`, and the terminations don't look forced.
+- `experiments/acm-champernowne/base10/q_distillery/marvel_row_ogf_cliff.py`
+  — render script.
 
 ## Status
 
