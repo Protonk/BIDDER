@@ -17,3 +17,6 @@ paper's prose presupposes these; this file makes them explicit.
 4. **Every quantitative claim has a row in `paper/measurements/`
    produced by code in `bidder-stat/`. We do not write numbers we
    cannot regenerate. Where we cite, we cite the generator.**
+
+5. **The substrate is a counting theorem. We present its
+   exactness only.**

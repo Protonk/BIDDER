@@ -138,13 +138,21 @@ leading-digit stratum (the worked construction is in §6.1).
 The substrate's exact leading-digit counts on `B_{b,d}` are not
 invariants of existing FPE work; the cipher's stateless random-
 access shape is not a property of existing leading-digit-
-distribution work. The combination — keyed, reproducible,
-streaming + random-access, arbitrary `P ∈ [2, 2³² − 1]`, zero
-library dependencies, exact leading-digit on arbitrary `(b, d)`
-— is what no existing tool delivers simultaneously. The
+distribution work. The combination is:
+
+- **keyed** — same key produces the same permutation,
+- **reproducible** — across runs and machines,
+- **streaming + random-access** — no full-permutation
+  materialisation,
+- **arbitrary `P ∈ [2, 2³² − 1]`**,
+- **zero library dependencies** in the C kernel,
+
+plus the substrate's **exact leading-digit on arbitrary
+`(b, d)`** as a sixth property specific to BIDDER. The
 capability matrix in `paper/measurements/m3_results.md` walks
-the comparator field; BIDDER is the only row with all five
-axes.
+the comparator field on the first five cipher-side axes; BIDDER
+is the only row with all five, and the substrate axis is
+BIDDER's alone.
 
 The substrate's exactness claims survive any keyed bijection
 because they are statements about multisets and arithmetic
@@ -227,8 +235,13 @@ lies in `B_{b,d}`. The atoms `{n, 2n, …, (b−1)n}` are therefore
 n-primes (multiples of `n` not of `n²`) and exhaust the n-prime
 atoms in the block.
 
-*Clause 4.* The same divmod argument applied to a generic
-interval bounds the count difference by 2.
+*Clause 4.* The same divmod argument as clause 2 applied to a
+generic interval `[L, L + b^(d-1))` for `L` not necessarily a
+multiple of `n²`. The number of multiples of `n` in such an
+interval differs by at most 1 between adjacent strips, depending
+on where `L` falls modulo `n`; the analogous count for multiples
+of `n²` adds at most 1 more. Subtracting, per-strip n-prime
+counts differ from each other by at most 2.
 
 *Clause 5.* The n-primes are an arithmetic progression with one
 residue class deleted per period of `n`, so the inverse to
@@ -279,11 +292,16 @@ BIDDER realises this shape with a backend-dependent gap.
 `paper/measurements/m2_results.md` tabulates the ratio
 (BIDDER / ideal) across a `(P, N)` grid. Best ratio in the
 measured panel is ~1 at `P = 200`; worst is ~32× at
-`(P, N) = (10000, 5000)`. The realisation gap is the empirical
-price of the lightweight-cipher choice (Speck32 + 8-round minimal
-Feistel, no library deps). FF1 with AES lands at ratio ~0.92
-across the same two cells — sampling-consistent with the ideal —
-at ~19–29× higher per-call cost.
+`(P, N) = (10000, 5000)`. The gap is U-shaped in `N/P`, peaking
+near `N = P/2` and tapering toward both endpoints — applications
+that want tighter realisation should sample near `N = 0` or
+`N = P`. The realisation gap is the empirical price of the
+lightweight-cipher choice (Speck32 + 8-round minimal Feistel, no
+library deps): the lightweight backends achieve only partial
+PRP-quality at sub-period prefixes, and FF1's higher AES round
+count is what drives its tighter realisation. FF1 with AES lands
+at ratio ~0.92 across the same two cells — sampling-consistent
+with the ideal — at ~19–29× higher per-call cost.
 
 The substrate's exactness is unaffected by anything in this
 section: this is a statement about the cipher's PRP quality at
