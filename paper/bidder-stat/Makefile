@@ -30,7 +30,7 @@ TARGET = libbidder.so
 LDFLAGS = -shared
 endif
 
-.PHONY: venv build test replicate bench-c use-cases use_case_02 use_case_03 use_case_04 use_case_06 clean distclean
+.PHONY: venv build test replicate bench-c use-cases use_case_01 use_case_02 use_case_03 use_case_04 use_case_06 clean distclean
 
 $(VENV)/.installed.stamp: requirements.txt
 	@if [ ! -d $(VENV) ]; then \
@@ -73,6 +73,9 @@ test: venv build
 	$(PY) tests/theory/test_quadrature_rates.py
 	$(PY) tests/theory/test_fpc_shape.py
 
+use_case_01: venv build
+	$(PY) replication/use_case_01_stratified_survey.py
+
 use_case_02: venv build
 	$(PY) replication/use_case_02_benford_null.py
 
@@ -85,7 +88,7 @@ use_case_04: venv build
 use_case_06: venv build
 	$(PY) replication/use_case_06_variance_mc.py
 
-use-cases: use_case_02 use_case_03 use_case_04 use_case_06
+use-cases: use_case_01 use_case_02 use_case_03 use_case_04 use_case_06
 
 replicate: venv build test bench-c
 	@echo "=== Replication archive: measurements ==="

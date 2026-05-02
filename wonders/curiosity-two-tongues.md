@@ -4,7 +4,7 @@
 
 **Category.** Curiosity.
 
-**Deadline.** 2026-Q3.
+**Deadline.** 2026-Q4.
 
 ## Description
 
@@ -40,15 +40,22 @@ of the parameter space, with only faint structure near the diagonal
 is one cell in this grid; the heatmap shows the cell is not
 exceptional, the agreement is generic.
 
-There is a hand-wavy reason this might be expected: the survivors
-are a structured subset of the bundle, and leading-digit Benford-like
-statistics are robust under "uniform-random-ish" sub-sampling. The
-sharpness of the agreement — tracking through specific dips, holding
-across (K, n_0)-space — is not predicted by that hand-wave. The
-structured survivor filter, when read through the leading-digit
-observable, *behaves like* a uniform-random thinning. Or the
-leading-digit profile is robust enough that even highly-structured
-sub-sampling preserves it. Or both. The mechanism is not yet probed.
+The survivor filter is not a thinning. It is an
+information-theoretic *optimizer*: an atom is a survivor exactly when
+`H(stream | integer) = 0` — i.e., the integer's stream membership is
+uniquely determined. Higher multiplicities (`m ≥ 2`) have `H > 0`.
+Reading C_Surv as the output of this optimizer reframes the Two
+Tongues observation: the L1 *magnitude* of the leading-digit deviation
+is what survives the optimization, while finer features of the
+leading-digit *distribution* do not. The follow-on probe (`differences/`,
+seven experiments) confirms this magnitude-vs-shape split: bundle and
+survivors sit at similar L1 distances from uniform on the same
+trajectory, but their underlying leading-digit distributions disagree
+pointwise (survivors over-represent digit 3 at 20.4% vs the bundle's
+12.4%), and the disagreement decomposes cleanly by source stream and
+by multiplicity. The Two Tongues plot's tightness is a real magnitude-
+level property of the optimizer's output; the perpendicular richness
+that "tightness" might suggest lives at a different observable layer.
 
 ## Evidence
 
@@ -67,12 +74,18 @@ sub-sampling preserves it. Or both. The mechanism is not yet probed.
 
 ## Status
 
-Suggestive. Phenomenon observed in one Two Tongues panel and
-characterised quantitatively in the `l1_grid` heatmap; the
-agreement is robust across `(K, n_0) ∈ [10, 1000]²` at `W = 10`. No
-mechanism is given for the sharpness of agreement, and the
-parameter regime where the agreement breaks (if any) has not been
-mapped.
+Sharpened. The L1-magnitude tracking is robust: observed at the Two
+Tongues panel, generic across `(K, n_0) ∈ [10, 1000]²` at `W = 10` in
+the `l1_grid` heatmap, and now explained in part by reading C_Surv as
+an `H(stream | integer) = 0` optimizer. The seven-experiment
+`differences/` probe walked back stronger readings: there is no
+detectable structure in `δ = C_Bundle − C_Surv` past the digit
+transducer (EXP01–02); the leading-digit *shape* of survivors differs
+from the bundle's (EXP06); the digit-3 spike that distinguishes
+survivor from bundle localises to source streams `d ∈ {8, 9, 10}` and
+is partly a finite-k truncation artifact (EXP07). The remaining open
+question is whether the magnitude-level tracking persists at
+`k → ∞` and across panels under the optimizer reading.
 
 ## Aesthetic note
 
@@ -87,33 +100,47 @@ be *approximate* and seeing how tight *approximate* turns out to be.
 
 ## Provocation
 
-Three movements:
+Three movements, all under the optimizer reading:
 
-- **Multiset vs. sequence decomposition.** EXP04's
-  `placement_destroyer.py` decomposed the L1-gap heatmap into a
-  multiset-of-leading-digits component and a sequence-placement
-  component, and found the multiset component dominant (~95% of
-  signs, ~86% of linear structure). The same decomposition applied
-  to `C_Surv` vs. bundle would localise the agreement: if the
-  survivor filter preserves the *multiset* of leading digits at
-  each prefix, the tracking is mostly explained; if not, the
-  sequence structure carries the agreement and is the more
-  surprising fact.
-- **Map the disagreement.** The `l1_grid` heatmap's faint structure
-  near the diagonal `n_0 ≈ K` is the address. Zoom in: at
-  `(n_0, K)` with `n_0 ≈ K`, what does the C_Surv curve do that
-  the bundle doesn't? Specifying *where* the agreement weakens
-  would constrain the mechanism.
-- **Vary the window width.** `l1_grid` is at fixed `W = 10`. At
-  `W = 2` the survivor filter is at its most restrictive (half the
-  atoms maximally collide); at `W = 100` it relaxes. Whether the
-  tracking holds at both extremes, or sharpens at one and breaks
-  at the other, distinguishes "the survivor filter is benign by
-  construction" from "the survivor filter happens to be benign at
-  W = 10."
+- **Limit-survivor estimation (EXP08 candidate).** For each apparent
+  survivor `c` at finite `k`, check whether `c` is mathematically in
+  any other stream `n ∈ [n_0, n_1]` (ignoring rank truncation).
+  *True* limit-survivors — atoms with `H(stream | integer) = 0` in
+  the `k → ∞` sense — are the optimizer's actual output. Plot the
+  leading-digit distribution of just these. Prediction: the digit-3
+  spike shrinks; the magnitude-level L1 tracking of bundle vs.
+  limit-C_Surv persists. Confirmation would isolate which features
+  are intrinsic to the optimizer and which are k-truncation imprint.
+- **Closed-form for the high-d shape.** The d=10 cofactor band
+  `m ∈ (rank-bounds)` predicts the digit-3 share by simple
+  bandwidth (~40% by rough count, 49.3% empirically). Tighten the
+  argument across `d ∈ {7, 8, 9, 10}`: derive `P_d(leading digit)`
+  from the rank-truncation bands per stream and sum to predict the
+  aggregate survivor leading-digit distribution at finite `k`. If
+  this closes, the EXP06 shape is *fully* a k-truncation artifact
+  with a closed-form description; the optimizer's intrinsic shape is
+  whatever's left after the band-prediction is subtracted.
+- **Optimizer view across panels.** L1-magnitude tracking has been
+  observed at the Two Tongues panel and is generic on the `l1_grid`
+  heatmap. Does the *optimizer reading* extend? At `(n_0, n_1, k)`
+  with very different rank-truncation regimes (e.g., narrow window
+  with large `k`, vs. wide window with small `k`), does the
+  magnitude tracking hold while the shape varies, or does the
+  tracking itself break? The boundary, if it exists, is the
+  optimizer's footprint.
 
 ## Cross-references
 
+- `experiments/acm-champernowne/base10/differences/DIFFERENCES.md` —
+  the orientation note for the seven-experiment probe of the
+  bundle/survivor relation perpendicular to L1 magnitude.
+- `experiments/acm-champernowne/base10/differences/REFRAMING-CHAIN.md`
+  — meta-note on how the probe progressed: each null triggered an
+  external reframing (transducer → optimizer → source-stream).
+- `experiments/acm-champernowne/base10/differences/DIFFERENCING-AS-TRANSDUCER.md`
+  — the structural note explaining why direct `δ = C_Bundle − C_Surv`
+  experiments come back generic; argues for atom-aligned observables
+  instead.
 - `prodigy-L1-cliff-n2-h8.md` — also a within-row L1 phenomenon,
   also sharper-than-expected, also from the observable side. The
   L=1 sign-flip is autocorrelation-level; this is leading-digit
@@ -141,3 +168,10 @@ The user's articulation of the affect on entering this specimen:
 *"It approximates the bundle. It should, I suppose, but wow."* The
 hedge "It should, I suppose" is the hand-wavy expectation; the
 "wow" is the gap between the hedge and the observed sharpness.
+
+A subsequent seven-experiment probe (the `differences/` chain,
+EXP01–07 plus three meta-notes) refined the reading: the magnitude-
+level tracking is real and is the optimizer's footprint, while the
+perpendicular richness the tightness suggested turned out to live
+elsewhere — at multiplicity-stratified shape distinctions and
+finite-k truncation imprints in high-d source streams.

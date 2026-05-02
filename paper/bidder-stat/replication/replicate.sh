@@ -49,6 +49,10 @@ echo "=== D1: FF1 throughput + FPC tightness ==="
 $PY replication/d1_measure.py
 
 echo
+echo "=== §7.1 Stratified survey design (use_case_01) ==="
+$PY replication/use_case_01_stratified_survey.py
+
+echo
 echo "=== §7.2 Benford-test null (use_case_02) ==="
 $PY replication/use_case_02_benford_null.py
 
@@ -64,10 +68,7 @@ echo
 echo "=== §7.6 Variance-controlled MC (use_case_06) ==="
 $PY replication/use_case_06_variance_mc.py
 
-# §7.1 (stratified survey design) and §7.5 (deterministic test
-# corpora) are still gestures in the OUTLINE; their use_case_*.py
-# scripts will land when those §7 cases are expanded to draft-
-# paragraph granularity.
+# §7.5 was cut per audit Q4 (overlapped §7.2 / §7.4).
 
 echo
 echo "=== Replication complete ==="
