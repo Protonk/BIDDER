@@ -301,16 +301,26 @@ content has been folded into `PAPER.md` and which remains in
 the wings for later folding-in (target: 10–15 pages once the
 wings land).
 
-### Landed in `PAPER.md` (~3,520 words, 8 sections; round-4 audit + intro rework + signpost trim applied 2026-05-02)
+### Landed in `PAPER.md` (~3,900 words, 8 sections; round-4 audit + intro rework + signpost trim + hermeticity fold applied 2026-05-02)
 
 Signpost discipline: ~9 in-body §X cross-references plus the §7
-verification-table column, down from ~66 pointer instances (26
-§X refs + 16 M-N / D-N labels + 4 OUTLINE §7.X pointers + 2
-bare-§5 pointers + ~24 file-path mentions) before the trim. M-N
-/ D-N labels are work-tracking artifacts from `WORKSET.md` /
-`DEBTS.md`; they are gone from the paper text and live only in
-`paper/measurements/` filenames where they belong as
-identifiers.
+verification-table column, down from ~66 pointer instances
+before the trim. M-N / D-N labels are work-tracking artifacts
+from `WORKSET.md` / `DEBTS.md`; they are gone from the paper
+text.
+
+Hermeticity discipline: the paper's intellectual content is
+self-contained. The two outward-pointing intellectual-content
+gates that remained after the signpost trim — §4 capability
+matrix (was: "in `paper/measurements/m3_results.md`") and §5.4
+FPC ratio grid (was: "tabulates the ratio across a `(P, N)`
+grid") — are now folded inline as 6×5 markdown tables. Reader
+can verify "BIDDER is the only row with all five axes" and
+"U-shaped, peaking near N=P/2, P=1000 anomaly" directly from
+the paper text. Remaining `paper/measurements/` and
+`replication/` mentions are reproducibility pointers (test
+scripts, smoke-check report) — code, tests, vectors that
+support but do not gate the intellectual content.
 
 - [x] **§1 Abstract** ← OUTLINE §1; reworked 2026-05-02 to lead
       with the source question *"if we got rid of the odd

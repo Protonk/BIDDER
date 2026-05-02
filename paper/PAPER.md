@@ -59,14 +59,10 @@ smooth condition holds (`4 | 1000`) and the count is exactly
 of this paper is the bundle of these results into a single
 contract (§5.1).
 
-The substrate is not a deep theorem. It is the answer to a small
-concrete question, with a counting argument. The novelty of this
-paper is not the mathematics: Champernowne (1933) already
-considered digit-concatenation constructions; Copeland and
-Erdős (1946) generalised to integer subsequences of polynomial
-growth; Schiffer (1986) gives the discrepancy bound `Θ(1/log N)`
-for the asymptotic question. The novelty is the *contract* the
-substrate makes available, paired with a keyed cipher that
+The substrate is the answer to a small concrete question, 
+with a counting argument. The novelty of this
+paper is the *contract* the substrate makes available, 
+paired with a keyed cipher that
 delivers stateless random access on `[0, P)` for arbitrary `P`.
 The cipher is Speck32/64 (Beaulieu et al. 2013) in cycle-walking
 mode (Black & Rogaway 2002) for `P ≥ 2²⁶`, with an unbalanced
@@ -148,11 +144,19 @@ distribution work. The combination is:
 - **zero library dependencies** in the C kernel,
 
 plus the substrate's **exact leading-digit on arbitrary
-`(b, d)`** as a sixth property specific to BIDDER. The
-capability matrix in `paper/measurements/m3_results.md` walks
-the comparator field on the first five cipher-side axes; BIDDER
-is the only row with all five, and the substrate axis is
-BIDDER's alone.
+`(b, d)`** as a sixth property specific to BIDDER. The first
+five axes are walked across comparators below; BIDDER is the
+only row with all five, and the substrate axis is BIDDER's
+alone.
+
+| comparator | keyed | reproducible | streaming | arbitrary `P` | extra deps |
+|---|---|---|---|---|---|
+| **BIDDER (cipher)** | yes | yes | yes (random-access) | yes (`P ≤ 2³² − 1`) | none |
+| `numpy.random.permutation` | via seed | yes | no (in-memory) | yes | numpy |
+| `random.shuffle` | via seed | yes | no (in-memory) | yes | stdlib only |
+| sort-by-iid-key | via seed | yes | no (sort is global) | yes | numpy |
+| i.i.d. (replacement) | via seed | yes | yes | yes | numpy / stdlib |
+| FF1 / FF3-1 | yes | yes | yes (random-access) | yes | AES + FPE library |
 
 The substrate's exactness claims survive any keyed bijection
 because they are statements about multisets and arithmetic
@@ -288,20 +292,36 @@ variance for `N ≤ P` is
 σ²/N · (P − N)/(P − 1).
 ```
 
-BIDDER realises this shape with a backend-dependent gap.
-`paper/measurements/m2_results.md` tabulates the ratio
-(BIDDER / ideal) across a `(P, N)` grid. Best ratio in the
-measured panel is ~1 at `P = 200`; worst is ~32× at
+BIDDER realises this shape with a backend-dependent gap. The
+table below gives the measured ratio (BIDDER / ideal) across a
+`(P, N)` grid for `f = sin(πx)`, with each row a value of `P`
+and each column a fraction of `P`:
+
+| `P` \ `N` | `0.10·P` | `0.25·P` | `0.50·P` | `0.75·P` | `0.90·P` |
+|---|---|---|---|---|---|
+| `200` | 1.022 | 1.170 | 1.336 | 1.212 | 1.133 |
+| `500` | 1.257 | 1.839 | 2.242 | 1.884 | 1.407 |
+| `1000` | 0.106 | 0.116 | 0.171 | 0.209 | 0.184 |
+| `2000` | 3.260 | 5.452 | 6.754 | 5.617 | 3.353 |
+| `5000` | 7.482 | 13.330 | 16.984 | 13.588 | 8.025 |
+| `10000` | 13.982 | 25.274 | 31.995 | 25.773 | 14.677 |
+
+Best ratio in the panel is `~1` at `P = 200`; worst is `~32` at
 `(P, N) = (10000, 5000)`. The gap is U-shaped in `N/P`, peaking
-near `N = P/2` and tapering toward both endpoints — applications
-that want tighter realisation should sample near `N = 0` or
-`N = P`. The realisation gap is the empirical price of the
-lightweight-cipher choice (Speck32 + 8-round minimal Feistel, no
-library deps): the lightweight backends achieve only partial
-PRP-quality at sub-period prefixes, and FF1's higher AES round
-count is what drives its tighter realisation. FF1 with AES lands
-at ratio ~0.92 across the same two cells — sampling-consistent
-with the ideal — at ~19–29× higher per-call cost.
+near `N = P/2` and tapering toward both endpoints —
+applications that want tighter realisation should sample near
+`N = 0` or `N = P`. The `P = 1000` row reports ratios *below* 1
+on the chosen integrand, an anomaly where the cipher's
+backend-specific symmetries happen to align with `sin(πx)` on a
+period-1000 grid; the effect does not persist across
+neighbouring `P` values. The realisation gap is the empirical
+price of the lightweight-cipher choice (Speck32 + 8-round
+minimal Feistel, no library deps): the lightweight backends
+achieve only partial PRP-quality at sub-period prefixes, and
+FF1's higher AES round count is what drives its tighter
+realisation. FF1 with AES lands at ratio `~0.92` across the
+`(2000, 1000)` and `(10000, 5000)` cells — sampling-consistent
+with the ideal — at `~19–29×` higher per-call cost.
 
 The substrate's exactness is unaffected by anything in this
 section: this is a statement about the cipher's PRP quality at
