@@ -351,6 +351,25 @@ finite-K `D_N` values are comparable to known-normal baselines, so
 test is K-scaling — does `D_L*(K)` decrease as K grows the way
 ECHO-STRUCTURE's geometric decay predicts?
 
+**EXP-DSUBN-01 sharpens the bracketing structurally.** The K-shape
+experiment at `../../../../dsubn/residual_kshape.py` finds that the
+prime-cofactor and composite-cofactor sides of the bracketing are
+**structurally different**, not just different in amplitude:
+
+- Prime-cofactor survivors: residual shape is K-invariant
+  (mean Pearson ρ = 0.91 across K-pairs). The t-profile of
+  `F_N(t) − t` is a fixed fingerprint; only its amplitude moves
+  with K.
+- Composite-cofactor survivors: residual shape is K-dependent
+  (mean ρ = 0.24, min ρ = −0.79). The shape morphs and even
+  sign-flips between K values.
+
+The composite-cofactor side carries the K-decade echo cascade not
+just in amplitude but in t-profile. The prime-cofactor side does
+not. **For any future normality argument about the survivor
+construction, the prime-cofactor sub-population is the structurally
+cleaner target.**
+
 ## Connection to ECHO-STRUCTURE
 
 The high-d streams `{8, 9, 10}` that carry the digit-length echoes

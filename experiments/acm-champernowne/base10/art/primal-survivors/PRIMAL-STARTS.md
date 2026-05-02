@@ -115,3 +115,23 @@ goal is to find which artistic register the construction wants to
 sit in — a single elegant curve, an atmospheric painting, a
 diagrammatic atlas, an architectural rendering, or a linear
 inscription. Each will reveal something the others can't.
+
+## 6. THE SHELLS  (added)
+
+Concentric rings — `D_N*` mapped to ring fuzz.
+
+- **Substrate**: orbit `{10ⁿ α} ∈ [0, 1]` for each of the five
+  constructions, plus the star discrepancy `D_N*` of each.
+- **Aesthetic**: five concentric rings on a near-black field. Each
+  ring is the orbit projected onto the unit circle (angle = 2π α_n).
+  Radial spread σ proportional to `D_N*` — sharper rings for lower
+  discrepancy. Colour encodes construction; angular brightness/
+  sparsity shows the orbit's actual non-uniformity.
+- **Form**: dot cloud on five nested annuli. Innermost: prime-
+  cofactor survivors (sharpest). Outermost: composite-cofactor
+  survivors (fuzziest).
+- **The move**: makes star discrepancy a literal visual variable —
+  ring thickness IS `D_N*`. The bracketing finding (composite >
+  bundle > prime) becomes ring-quality, instantly legible.
+
+Files: `the_shells.py`, `the_shells.png`.

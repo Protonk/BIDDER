@@ -301,30 +301,68 @@ content has been folded into `PAPER.md` and which remains in
 the wings for later folding-in (target: 10–15 pages once the
 wings land).
 
-### Landed in `PAPER.md` (~3,260 words, 7 sections)
+### Landed in `PAPER.md` (~3,520 words, 8 sections; round-4 audit + intro rework + signpost trim applied 2026-05-02)
 
-- [x] **§1 Abstract** ← OUTLINE §1.
-- [x] **§2 What BIDDER is** ← OUTLINE §1 + §5.1 + §5.2 + §5.3
+Signpost discipline: ~9 in-body §X cross-references plus the §7
+verification-table column, down from ~66 pointer instances (26
+§X refs + 16 M-N / D-N labels + 4 OUTLINE §7.X pointers + 2
+bare-§5 pointers + ~24 file-path mentions) before the trim. M-N
+/ D-N labels are work-tracking artifacts from `WORKSET.md` /
+`DEBTS.md`; they are gone from the paper text and live only in
+`paper/measurements/` filenames where they belong as
+identifiers.
+
+- [x] **§1 Abstract** ← OUTLINE §1; reworked 2026-05-02 to lead
+      with the source question *"if we got rid of the odd
+      numbers, what numbers would be odd?"* and walk through to
+      the n-prime atoms of `M_n`. Gives the substrate's
+      mathematical content as the first thing the reader sees.
+- [x] **§2 Introduction** ← new section, drafted 2026-05-02 to
+      embody (not trumpet) the inspection / teaching benefit of
+      a substrate built from a counting argument. Three
+      paragraphs: (¶1) the question and the small-case answer
+      walked through to `2ℤ \ 4ℤ` and the multiplicative-monoid
+      atoms framing; (¶2) generalisation to `M_n`'s n-prime
+      atoms, the counting argument on digit-class blocks, the
+      Hardy random-access closed form, and a concrete worked
+      number at `(b, n, d) = (10, 2, 4)` (250 atoms per leading
+      digit on `[1000, 9999]`); (¶3) the framing earned ("not a
+      deep theorem; the answer to a small concrete question"),
+      the cipher half (Speck32/64, Black-Rogaway, Luby-Rackoff,
+      FF1/FF3 positioning), and the contribution. ~590 words.
+- [x] **§3 What BIDDER is** ← OUTLINE §1 + §5.1 + §5.2 + §5.3
       (substrate contract, cipher contract, five-function C
-      surface, composition pattern).
+      surface, composition pattern). Renumbered from §2 when
+      §2 Introduction landed.
 - [x] **§3 What the novelty is** ← OUTLINE §2 contribution
       paragraph + §7.4 capability-matrix headline.
-- [x] **§3 *Where BIDDER sits*** ← PRIOR-ART neighbour-paragraph
-      (Bailey-Crandall, QMC, ranged-int, VRF, Benford), folded
-      2026-05-02. One paragraph distilling the five
-      neighbour-sections of `PRIOR-ART.md` into a niche-against
-      situating passage.
+- [x] **§4 *Where BIDDER sits*** ← PRIOR-ART neighbour-paragraph,
+      folded 2026-05-02; trimmed by round-4 audit (Q1) to three
+      neighbours (Bailey-Crandall, QMC, ranged-int). VRF and
+      Benford lines dropped — VRF imported a cryptographic audit
+      frame the JStatSoft reader was not about to impose; Benford
+      defers to the use-case section once §7.2 lands. Audit Q5
+      reordered §3: substrate-vs-cipher closer now precedes
+      *Where BIDDER sits*, which sits as the final niche
+      paragraph.
 - [x] **§4.1 Theorem (Substrate contract)** ← OUTLINE §3.2.
 - [x] **§4.2 Proof sketches** ← OUTLINE §3.3.
 - [x] **§4.3 Cipher contract + endpoint-invariance corollary**
       ← OUTLINE §4.4.
 - [x] **§4.3 cipher provenance threading** ← PRIOR-ART
-      *Standing on (cipher provenance)*, folded 2026-05-02.
-      Two-sentence pointer to Beaulieu et al. 2013 / 2017,
-      Black & Rogaway 2002, Dinur 2014, Song-Huang-Yang 2016,
-      Luby-Rackoff 1988, Naor-Reingold 1999, Durak-Vaudenay
-      2017; one clause noting the substrate carries the
-      marginal regardless of fallback PRP advantage.
+      *Standing on (cipher provenance)*, folded 2026-05-02;
+      trimmed by round-4 audit (Q4) to three cites: Beaulieu
+      2013, Black & Rogaway 2002, Luby-Rackoff 1988. The
+      cryptanalysis citations (Dinur 2014, Song-Huang-Yang
+      2016) and the small-domain Feistel attack (Durak-Vaudenay
+      2017) were dropped from prose AND from §7 references —
+      their presence implied the paper was asking the reader to
+      evaluate Speck's security margin, which violates
+      METAPHYSICS commitment 3 (*"Speck is technology, present
+      our fit only"*). Beaulieu 2017 design notes and
+      Naor-Reingold 1999 also dropped from §7 references for the
+      same reason. All five remain staged in PRIOR-ART.md if
+      the limitations section later wants them.
 - [x] **§4.4 FPC shape at N < P** ← OUTLINE §4.5.
 - [x] **§5 What it does** ← new section, folded 2026-05-02.
       §5.1 stratified survey design with exact leading-digit
@@ -332,19 +370,40 @@ wings land).
       use_case_01_stratified_survey.py` numbers); §5.2 Monte
       Carlo with known endpoint and measured FPC realisation
       gap (← OUTLINE §7.6, with `replication/
-      use_case_06_variance_mc.py` numbers). The substrate-
-      headline + cipher-contract pair; remaining three §7
-      cases (§7.2, §7.3, §7.4) held in OUTLINE.
+      use_case_06_variance_mc.py` numbers). Round-4 audit (Q2)
+      added an opener sentence connecting §5 to §4's contracts;
+      audit (Q3) added a concrete audit-sampling motivation to
+      §5.1's first sentence (account IDs, invoice magnitudes,
+      registry blocks where leading digit is a mandated
+      reporting stratum).
 - [x] **§6 What the tests are** ← OUTLINE §6.3 (renumbered
-      from §5 when §5 *What it does* landed).
+      from §5 when §5 *What it does* landed). Round-4 audit
+      (Q8) corrected the verification-table ranges to match
+      the actual sweeps in `test_acm_core.py` and
+      `test_sawtooth.py` (clause 1: base 10, `d ∈ {1,…,9}`;
+      clauses 2 + 4: `b, n ∈ {2,…,10}, d ∈ {1,…,5}`; clause 3:
+      `b ∈ {2,…,10}, d ∈ {2,…,5}`; clause 5: oracle sweep
+      `n ∈ {2,…,12}` plus closed-form check `n ∈ {2,…,9999}`).
+      Added the framing sentence separating "proof covers all
+      valid parameters" from "tests cover this finite sweep."
 - [x] **§6 Appendix C test vectors line** ← PRIOR-ART
       audit-side move, folded 2026-05-02. One sentence noting
       that `test_speck.py` carries the published Beaulieu et
       al. Appendix C vectors as inline checks.
-- [x] **§7 References** ← OUTLINE §11 + PRIOR-ART (cipher
-      provenance + niche-against + substrate background +
-      comparator framework). Now grouped into four reference
-      blocks; 22 cites total. Renumbered from §6.
+- [x] **§7 References** ← OUTLINE §11 + PRIOR-ART. Round-4
+      audit (Q6) flattened the four-block grouping to a single
+      alphabetical list. After audit Q1 + Q4 cuts, 14 cites
+      remain in the paper (Bailey 2002 + 2004; Beaulieu 2013;
+      Black & Rogaway 2002; Copeland & Erdős 1946; Dick &
+      Pillichshammer 2010; Halton 1960; Lemire 2019;
+      Luby-Rackoff 1988; Niederreiter 1992; NIST SP 800-38G;
+      Owen 1995; Saad et al. 2020; Schiffer 1986; Sobol' 1967).
+      Cipher-cryptanalysis cites (Beaulieu 2017, Dinur 2014,
+      Song-Huang-Yang 2016, Naor-Reingold 1999, Durak-Vaudenay
+      2017), VRF cites (Micali-Rabin-Vadhan 1999, Gilad et al.
+      2017), and Benford cites (Lesperance et al. 2016, Cerioli
+      & Perrotta 2022) staged in PRIOR-ART.md but not in the
+      paper. Grouped form lives only in PRIOR-ART.md now.
 
 ### In the wings (OUTLINE sections held; fold in for the 10–15-page target)
 

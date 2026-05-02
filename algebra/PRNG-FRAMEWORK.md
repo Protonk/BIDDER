@@ -90,6 +90,34 @@ ways that need careful translation. Empirical inputs from
   `W = 15–20`. Suggests the conjecture is `W`-conditional, not
   uniform across windows.
 
+## K-scaling result (revises the conjecture)
+
+The K-scaling sweep at
+`experiments/acm-champernowne/dsubn/k_scaling.py` over
+K ∈ {100, 200, 400, 800, 1600, 3200, 6400} measured `D_L*`(K) for
+all five constructions at `[2, 10]`. Result:
+
+- `D_L*` does not decay smoothly with K. Values fluctuate in
+  `[0.05, 0.16]` across the entire K range, with non-monotone
+  oscillation suggestive of K-decade echo influence.
+- The Erdős–Copeland-rate benchmark `(log L)/√L` is being
+  outpaced at large K. By K = 6400 every construction (including
+  the *known* 10-normal `C_Bundle_sorted` Champernowne) sits at
+  > 2× the `(log L)/√L` benchmark.
+- Bracketing washes out — at K = 6400 the cofactor primality split
+  collapses to within 0.025 across all subsets, where at K = 400
+  it spanned 0.05.
+
+**Revised conjecture.** `D_L*(K) → 0` as K → ∞ holds (consistent
+with the data), but the rate is constrained from below by the
+K-decade echo amplitude (geometric ratio ~0.80 per decade per
+ECHO-STRUCTURE.md), not by `(log L)/√L`. The Erdős–Copeland-rate
+form of the conjecture is too strong; the echo cascade is the
+empirical obstruction.
+
+This restates the lesson in ECHO-STRUCTURE.md at the discrepancy
+level: a base-aware mechanism cannot have a base-blind decay.
+
 ## What the discrepancy probe should show
 
 For `C_Surv` at the Two Tongues panel `[2, 10], K = 400` and its

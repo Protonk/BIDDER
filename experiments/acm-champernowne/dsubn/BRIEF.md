@@ -44,6 +44,29 @@ directory is where we do that work directly.
   legible at the orbit-distribution level (rather than just as a
   scalar `D_N`).
 
+- `residual_kshape.py` / `residual_kshape.png` — EXP-DSUBN-01.
+  Tests whether the t-shape of `F_N(t) − t` is K-invariant per
+  construction. Result: **the prime-cofactor and composite-cofactor
+  sides of the bracketing are structurally different**. Prime-m
+  has K-invariant residual shape (mean Pearson ρ = 0.91); comp-m
+  has K-dependent shape that even sign-flips between some K pairs
+  (mean ρ = 0.24, min ρ = −0.79). This refines the bracketing
+  finding from "different amplitudes" to "different K-stability of
+  the entire t-profile" — the prime-cofactor sub-population is the
+  structurally cleaner target for any future normality proof.
+
+- `k_scaling.py` / `k_scaling.png` — sweeps K ∈ {100, …, 6400} and
+  measures `D_L*(K)` for the five constructions. Empirical result:
+  `D_L*` does not decay smoothly with K, fluctuates in [0.05,
+  0.16] across the K range, and is *outpaced* by `(log L)/√L` at
+  large K (every construction including the known-normal
+  `C_Bundle_sorted` Champernowne sits at 2-4× the benchmark by
+  K = 6400). The bracketing across cofactor-primality also washes
+  out as K → ∞. See `algebra/PRNG-FRAMEWORK.md` §"K-scaling result"
+  for the conjecture revision: the echo cascade obstructs Erdős–
+  Copeland-rate convergence and is the empirical lower bound on
+  `D_L*`'s decay.
+
 ## Cross-references
 
 - `algebra/PRNG-FRAMEWORK.md` — the framework memo. Conditional
