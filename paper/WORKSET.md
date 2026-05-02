@@ -115,26 +115,31 @@ needs these numbers to land.
       everything and reproduces every figure / table in the paper.
       *Done. Carved subtree at `paper/bidder-stat/`: contains
       `core/`, `generator/`, `tests/` + `tests/theory/`, the C
-      kernel, the Python wrapper, `replication/` (M1-M4 scripts +
-      use_case stubs to come), `BIDDER.md`, and a README. Use-case
-      stubs deferred to Phase 3 §7 work. To convert to a separate
-      git repo at submission: `git init bidder-stat && cp -r
+      kernel, the Python wrapper, `replication/` (M1-M4 scripts,
+      D1 + D4 measurement, five use-case scripts §7.1/§7.2/§7.3/
+      §7.4/§7.6, FF1 reference impl in `replication/comparators/`),
+      `BIDDER.md`, and a README. To convert to a separate git
+      repo at submission: `git init bidder-stat && cp -r
       paper/bidder-stat/* bidder-stat/`.*
 - [x] **E2. Replication `Makefile` (or `replicate.sh`)** in
       `bidder-stat/`. From a clean checkout: build the C kernel,
       run tests, run all six use cases, regenerate every figure.
       Single `make` target.
-      *Done. `paper/bidder-stat/Makefile` provides `make build`,
-      `make test`, `make replicate`, `make clean`. `replication/
-      replicate.sh` runs M1-M4 and (when use cases land) the use-
-      case scripts. Auto-detects `sage -python` when available.*
+      *Done. `paper/bidder-stat/Makefile` provides `make venv`
+      (idempotent venv bootstrap with pinned numpy + pycryptodome),
+      `make build`, `make test`, `make bench-c` (D4),
+      `make use_case_NN` per case + `make use-cases` group,
+      `make replicate`, `make clean`, `make distclean`.
+      `replication/replicate.sh` runs M1-M4 + D1 + D4 + the five
+      use cases. All Python through the locked `.venv/bin/python`;
+      sage auto-detect removed when the venv was locked.*
 - [x] **E3. API freeze.** Document the C API contract for
       `bidder.cipher` and `bidder.sawtooth` (C-primary per Phase 0)
       as the version this paper describes. Tag a release in
       `bidder-stat/`. The paper references the tag. Python wrapper
       stays in the same repo as a binding example.
       *API contract documented in `paper/bidder-stat/README.md`
-      (C-primary surface, six functions). The actual git tag
+      (C-primary surface, five functions). The actual git tag
       `bidder-stat-v1.0` will be applied when the carved tree is
       pushed to its own repo at submission time; paper references
       the tag.*
@@ -153,32 +158,63 @@ needs these numbers to land.
 These can be written in parallel as soon as Phase 0 decisions land.
 No measurement dependency.
 
-- [ ] **§3 Substrate.** Transcribe from `core/BLOCK-UNIFORMITY.md`
+- [x] **§3 Substrate.** Transcribe from `core/BLOCK-UNIFORMITY.md`
       and `core/HARDY-SIDESTEP.md`. Acceptance: theorems stated,
       proofs outlined, no rhetoric, every claim cited.
-- [ ] **§4 Cipher path** (parts §4.1, §4.2, §4.4, §4.5; §4.3 waits
+      *Done. §3.1 setup; §3.2 *Theorem (Substrate contract)* with
+      five clauses (integer / smooth-sieved / Family E / spread ≤2
+      / Hardy random-access); §3.3 proof sketches; §3.4
+      covers/doesn't. All anchors named (`tests/test_acm_core.py`,
+      `tests/theory/test_riemann_property.py`); sources cited
+      (`core/BLOCK-UNIFORMITY.md`, `core/HARDY-SIDESTEP.md`).*
+- [x] **§4 Cipher path** (parts §4.1, §4.2, §4.4, §4.5; §4.3 waits
       for M1). Transcribe from `generator/RIEMANN-SUM.md` and the
       cipher implementation. Acceptance: structural identity stated,
       one-line proof reproduced, FPC layer named.
-- [ ] **§5 API.** Two function signatures, contracts, and examples,
+      *Done. §4.1 role separation; §4.2 Speck32/64 cycle-walking;
+      §4.4 permutation contract + endpoint invariance corollary
+      (one-line proof of the multiset identity); §4.5 FPC shape
+      with M2 numbers and D1 FF1 ratio; §4.6 covers/doesn't. §4.3
+      tracked separately under Phase 3.*
+- [x] **§5 API.** Two function signatures, contracts, and examples,
       C-primary per Phase 0 (`bidder_root.h` declarations as the
       surface; Python wrapper as a binding example). Transcribe
       from `core/API.md` and `BIDDER.md`.
-- [ ] **§11 References.** Compile the bibliography:
+      *Done. §5.1 cipher path, §5.2 sawtooth path, §5.3
+      composition pattern with C and Python examples plus
+      prefix-not-exact caveat, §5.4 Python binding example, §5.5
+      stability promise, §5.6 what's not included.*
+- [x] **§11 References.** Compile the bibliography:
       Beaulieu et al. (Speck), Black & Rogaway 2002 (cycle-walking
       FPE), NIST SP 800-38G (FF1/FF3-1), Copeland & Erdős 1946,
       Schiffer 1986. Plus any methods refs the use cases pull in.
+      *Done. All five refs in OUTLINE §11.*
 
 ## Phase 3 — sections that depend on Phase 1
 
-- [ ] **§4.3 Feistel fallback.** Depends on M1.
-- [ ] **§6.4 Performance.** Depends on M4 and the §6.4 decision in
+- [x] **§4.3 Feistel fallback.** Depends on M1.
+      *Done. §4.3 in OUTLINE cites M1's tabulated output and the
+      empirically calibrated threshold (P = 2²⁶, conservative;
+      throughput-optimal near P ≈ 2³¹).*
+- [x] **§6.4 Performance.** Depends on M4 and the §6.4 decision in
       Phase 0.
-- [ ] **§7 Use cases.** One sub-task per case. Each is a worked
+      *Done. §6.4 has the workload taxonomy (single random-access
+      call, materialise full perm, C-direct kernel) plus tables
+      from M1 + M3 + M4 + D4 and a decision-boundary paragraph
+      from M1.*
+- [x] **§7 Use cases.** One sub-task per case. Each is a worked
       example: code → numerical result → exactness payoff vs
       asymptotic alternative.
-   - [ ] §7.1 Stratified survey design with leading-digit strata.
-         *Still a gesture; not yet implemented.*
+      *Done. Five cases (§7.1, §7.2, §7.3, §7.4, §7.6) drafted to
+      draft-paragraph granularity in OUTLINE and implemented as
+      `replication/use_case_*.py`. §7.5 cut per audit Q4. See
+      child entries below.*
+   - [x] §7.1 Stratified survey design with leading-digit strata.
+         *Done. `replication/use_case_01_stratified_survey.py`,
+         `paper/measurements/use_case_01_results.md`. BIDDER per-
+         stratum count is exact at every α (100, 500, 1000 across
+         the panel); i.i.d.-then-post-stratify 99th-percentile max
+         deviation grows 31 → 97 from N_total = 900 to 9000.*
    - [x] §7.2 Benford-test null distribution.
          *Done. `replication/use_case_02_benford_null.py`,
          `paper/measurements/use_case_02_results.md`. BIDDER χ² = 0
@@ -196,16 +232,23 @@ No measurement dependency.
          determinism verified at 6 small-P points; capability
          matrix and three-workload throughput row rendered from
          M3 + D1 + D4.*
-   - [ ] §7.5 Deterministic test corpora.
-         *Still a gesture; not yet implemented.*
+   - [x] §7.5 *Cut 2026-05-02 per audit Q4* (overlapped §7.2 /
+         §7.4; no independent load).
    - [x] §7.6 Variance-controlled Monte Carlo with known FPC.
          *Done. `replication/use_case_06_variance_mc.py`,
          `paper/measurements/use_case_06_results.md`. At P = 2000,
          BIDDER variance at N = P is 6.15e-31 (machine-ε); FPC
          shape verified at N < P with U-shaped realisation gap
          peaking at 7.17× at N = P/2.*
-- [ ] **§9 Limitations.** Mostly Phase 0 + the open items
+- [x] **§9 Limitations.** Mostly Phase 0 + the open items
       acknowledged out-of-scope.
+      *Done. Nine bullets in OUTLINE.md: not-for-crypto-secrets,
+      FPC realisation gap (with M2 + D1 numbers), bias-cancel
+      anomaly at P=1000, conservative cycle-walking threshold,
+      period cap 2³²−1, lucky-cancellation locus uncharacterised,
+      throughput workload-dependence, normality out of scope,
+      comparators not benchmarked. Each names magnitude and
+      DEBTS.md ID where applicable.*
 
 (§8 collapsed into §7.4 per Phase 0; M3's comparison table lives
 there. Subsequent §-numbers in `OUTLINE.md` keep their labels for
@@ -214,24 +257,104 @@ in Phase 5 when the LaTeX template lands.)
 
 ## Phase 4 — closing matter
 
-- [ ] **§10 Discussion.** Short. Written after §1–9 land.
-- [ ] **§1 Abstract.** Written last; needs the body to be stable.
-- [ ] **§2 Introduction.** Written last for the same reason.
-- [ ] **Pass for tone.** Strip any rhetoric / "what this means"
+- [x] **§10 Discussion.** *Drafted 2026-05-02.* One paragraph in
+      OUTLINE.md committing the substrate-and-cipher split as a
+      design principle; names the out-of-scope items handled in §9.
+- [x] **§1 Abstract.** *Drafted 2026-05-02.* One ~150-word
+      paragraph in OUTLINE.md, substrate-first per audit Q6.
+- [x] **§2 Introduction.** *Drafted 2026-05-02.* Three paragraphs
+      in OUTLINE.md: gap (Copeland-Erdős, Schiffer, FF1 / FF3-1),
+      construction (§3 substrate first, §4 cipher), contribution
+      (kernel + two contracts + measurements + use cases).
+- [x] **Pass for tone.** Strip any rhetoric / "what this means"
       sections that crept in. Same discipline as `algebra/`.
-- [ ] **§3 compression pass** *(audit Q1, 2026-05-02).* Retitle
-      §3 around the substrate contract. Compress §3.2–§3.5 from
-      OUTLINE-level expansion to proposition / proof-sketch form
-      (the proofs are short — positional-notation count, divmod,
-      one-line c_K — so the compressed form is the right granularity
-      for a 15-page paper). Move repeated exclusions from §3.6 into
-      §9 except the one substrate-coverage sentence (smooth +
-      Family E + spread bound regime).
+      *Done 2026-05-02. Stripped OUTLINE-level scaffolding (status
+      block, title commentary, discipline paragraph, Phase 0
+      decisions block, "expanded to draft-paragraph granularity"
+      preludes), explicit "Cards-face-up" labels, paragraph-meta
+      annotations ("(Headline payoff.)", "(One paragraph; the
+      X.)"), stale sage-python references. METAPHYSICS.md
+      codifies the discipline going forward.*
+- [x] **§3 compression pass** *(audit Q1, 2026-05-02).* Retitle
+      §3 around the substrate contract.
+      *Done 2026-05-02 (audit Q6). §3.2 is now a single
+      "*Theorem (Substrate contract)*" with five clauses
+      (integer / smooth-sieved / Family E / spread / Hardy random-
+      access); §3.3 holds the proof sketches; §3.4 is "What §3
+      covers and what it does not." The lucky-cancellation locus
+      and absolute-normality exclusions point at §9 / DEBTS.md.
+      Twelve downstream §3.X cross-references updated to §3.2
+      clause N form.*
 - [ ] **Cross-reference audit.** Every §X reference resolves;
       every cited file path exists; every theorem citation is
       live.
 - [ ] **Internal consistency check.** Numbers in §6.4 / §7 / §8
       agree with the replication archive's outputs.
+      *(Partial: audit Q2 caught throughput inconsistencies and
+      they were fixed; full pass still pending submission gate.)*
+
+## Phase 4.5 — paper drafting (`PAPER.md`)
+
+`OUTLINE.md` is paper-shaped material; `PAPER.md` is the actual
+draft we ship. Phase 4.5 tracks which OUTLINE sections have been
+transcribed into `PAPER.md` and which remain in the wings for
+later folding-in (target: 10–15 pages once the wings land).
+
+### Landed in `PAPER.md` (lean draft, ~1,580 words, 6 sections)
+
+- [x] **§1 Abstract** ← OUTLINE §1.
+- [x] **§2 What BIDDER is** ← OUTLINE §1 + §5.1 + §5.2 + §5.3
+      (substrate contract, cipher contract, six-function C
+      surface, composition pattern).
+- [x] **§3 What the novelty is** ← OUTLINE §2 contribution
+      paragraph + §7.4 capability-matrix headline.
+- [x] **§4.1 Theorem (Substrate contract)** ← OUTLINE §3.2.
+- [x] **§4.2 Proof sketches** ← OUTLINE §3.3.
+- [x] **§4.3 Cipher contract + endpoint-invariance corollary**
+      ← OUTLINE §4.4.
+- [x] **§4.4 FPC shape at N < P** ← OUTLINE §4.5.
+- [x] **§5 What the tests are** ← OUTLINE §6.3.
+- [x] **§6 References** ← OUTLINE §11.
+
+### In the wings (OUTLINE sections held; fold in for the 10–15-page target)
+
+- [ ] **Introduction body** ← OUTLINE §2 ¶1 (gap; Copeland-Erdős,
+      Schiffer, FF1/FF3-1) and ¶2 (construction with substrate
+      first). Currently only §2's contribution paragraph is in
+      `PAPER.md`'s §3.
+- [ ] **Substrate setup** ← OUTLINE §3.1 (notation: `M_n`,
+      n-prime atoms, `B_{b,d}`). Currently subsumed into the
+      `PAPER.md` §4.1 theorem statement.
+- [ ] **Substrate covers/doesn't** ← OUTLINE §3.4 (Schiffer
+      bound, lucky-cancellation locus, normality out of scope).
+      Will fold in next to §4.1 once paper expands.
+- [ ] **Role separation framing** ← OUTLINE §4.1 (substrate-and-
+      cipher split as a design principle). Currently present
+      only as the §3 novelty argument.
+- [ ] **Speck32/64 cycle-walking** ← OUTLINE §4.2 (what Speck is,
+      cycle-walking construction). Currently mentioned in
+      `PAPER.md` §2 in one phrase.
+- [ ] **Feistel fallback** ← OUTLINE §4.3 (depends on M1; the
+      decision rule and threshold). Currently mentioned in
+      `PAPER.md` §2 in one phrase.
+- [ ] **Cipher path covers/doesn't** ← OUTLINE §4.6.
+- [ ] **API expansions** ← OUTLINE §5.4 (Python binding example),
+      §5.5 (stability promise), §5.6 (what the API does not
+      include).
+- [ ] **Implementation chapter** ← OUTLINE §6.1 (source layout),
+      §6.2 (cipher wiring), §6.4 (performance / throughput
+      table), §6.5 (build and install), §6.6 (what §6 does not
+      include).
+- [ ] **Use cases (full)** ← OUTLINE §7.1, §7.2, §7.3, §7.4,
+      §7.6 (each at draft-paragraph granularity in OUTLINE; each
+      with a `replication/use_case_*.py` script and
+      `paper/measurements/use_case_*_results.md` row).
+- [ ] **§8 fold note** ← OUTLINE §8 (one line; Phase 0 fold of
+      §8 into §7.4 — meta, may not survive into PAPER.md at all).
+- [ ] **§9 Limitations** ← OUTLINE §9 (nine bullets; cards-face-
+      up gap inventory pointing at DEBTS.md IDs).
+- [ ] **§10 Discussion** ← OUTLINE §10 (substrate-and-cipher
+      design principle as one paragraph).
 
 ## Phase 5 — submission
 
