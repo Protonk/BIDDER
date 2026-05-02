@@ -296,25 +296,55 @@ in Phase 5 when the LaTeX template lands.)
 ## Phase 4.5 — paper drafting (`PAPER.md`)
 
 `OUTLINE.md` is paper-shaped material; `PAPER.md` is the actual
-draft we ship. Phase 4.5 tracks which OUTLINE sections have been
-transcribed into `PAPER.md` and which remain in the wings for
-later folding-in (target: 10–15 pages once the wings land).
+draft we ship. Phase 4.5 tracks which OUTLINE / PRIOR-ART
+content has been folded into `PAPER.md` and which remains in
+the wings for later folding-in (target: 10–15 pages once the
+wings land).
 
-### Landed in `PAPER.md` (lean draft, ~1,580 words, 6 sections)
+### Landed in `PAPER.md` (~3,260 words, 7 sections)
 
 - [x] **§1 Abstract** ← OUTLINE §1.
 - [x] **§2 What BIDDER is** ← OUTLINE §1 + §5.1 + §5.2 + §5.3
-      (substrate contract, cipher contract, six-function C
+      (substrate contract, cipher contract, five-function C
       surface, composition pattern).
 - [x] **§3 What the novelty is** ← OUTLINE §2 contribution
       paragraph + §7.4 capability-matrix headline.
+- [x] **§3 *Where BIDDER sits*** ← PRIOR-ART neighbour-paragraph
+      (Bailey-Crandall, QMC, ranged-int, VRF, Benford), folded
+      2026-05-02. One paragraph distilling the five
+      neighbour-sections of `PRIOR-ART.md` into a niche-against
+      situating passage.
 - [x] **§4.1 Theorem (Substrate contract)** ← OUTLINE §3.2.
 - [x] **§4.2 Proof sketches** ← OUTLINE §3.3.
 - [x] **§4.3 Cipher contract + endpoint-invariance corollary**
       ← OUTLINE §4.4.
+- [x] **§4.3 cipher provenance threading** ← PRIOR-ART
+      *Standing on (cipher provenance)*, folded 2026-05-02.
+      Two-sentence pointer to Beaulieu et al. 2013 / 2017,
+      Black & Rogaway 2002, Dinur 2014, Song-Huang-Yang 2016,
+      Luby-Rackoff 1988, Naor-Reingold 1999, Durak-Vaudenay
+      2017; one clause noting the substrate carries the
+      marginal regardless of fallback PRP advantage.
 - [x] **§4.4 FPC shape at N < P** ← OUTLINE §4.5.
-- [x] **§5 What the tests are** ← OUTLINE §6.3.
-- [x] **§6 References** ← OUTLINE §11.
+- [x] **§5 What it does** ← new section, folded 2026-05-02.
+      §5.1 stratified survey design with exact leading-digit
+      strata (← OUTLINE §7.1, with `replication/
+      use_case_01_stratified_survey.py` numbers); §5.2 Monte
+      Carlo with known endpoint and measured FPC realisation
+      gap (← OUTLINE §7.6, with `replication/
+      use_case_06_variance_mc.py` numbers). The substrate-
+      headline + cipher-contract pair; remaining three §7
+      cases (§7.2, §7.3, §7.4) held in OUTLINE.
+- [x] **§6 What the tests are** ← OUTLINE §6.3 (renumbered
+      from §5 when §5 *What it does* landed).
+- [x] **§6 Appendix C test vectors line** ← PRIOR-ART
+      audit-side move, folded 2026-05-02. One sentence noting
+      that `test_speck.py` carries the published Beaulieu et
+      al. Appendix C vectors as inline checks.
+- [x] **§7 References** ← OUTLINE §11 + PRIOR-ART (cipher
+      provenance + niche-against + substrate background +
+      comparator framework). Now grouped into four reference
+      blocks; 22 cites total. Renumbered from §6.
 
 ### In the wings (OUTLINE sections held; fold in for the 10–15-page target)
 
@@ -345,10 +375,13 @@ later folding-in (target: 10–15 pages once the wings land).
       §6.2 (cipher wiring), §6.4 (performance / throughput
       table), §6.5 (build and install), §6.6 (what §6 does not
       include).
-- [ ] **Use cases (full)** ← OUTLINE §7.1, §7.2, §7.3, §7.4,
-      §7.6 (each at draft-paragraph granularity in OUTLINE; each
-      with a `replication/use_case_*.py` script and
-      `paper/measurements/use_case_*_results.md` row).
+- [ ] **Remaining use cases** ← OUTLINE §7.2 (Benford-test
+      null), §7.3 (reproducible cross-validation), §7.4
+      (format-preserving permutation of small `P` domain).
+      §7.1 + §7.6 already landed in PAPER §5 above. Each held
+      §7 case has a draft-paragraph-granularity OUTLINE entry,
+      a `replication/use_case_*.py` script, and a
+      `paper/measurements/use_case_*_results.md` row.
 - [ ] **§8 fold note** ← OUTLINE §8 (one line; Phase 0 fold of
       §8 into §7.4 — meta, may not survive into PAPER.md at all).
 - [ ] **§9 Limitations** ← OUTLINE §9 (nine bullets; cards-face-

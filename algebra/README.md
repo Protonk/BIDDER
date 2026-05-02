@@ -51,6 +51,11 @@ of the autocorrelation sum).
 
 - `PROPOSED-CLOSED-FORMS.md` — open proposals. Proposals 1–3 landed
   (`ROW-OGF.md` and `KERNEL-ZEROS.md`); 4–7 are open.
+- `PRNG-FRAMEWORK.md` — what translates from Bailey–Crandall
+  "Random Generators and Normal Numbers" to `C_Bundle` / `C_Surv`.
+  Sets up a conditional theorem (growth condition on survivor
+  population → b-normality of `lim C_Surv`) and identifies star
+  discrepancy as the canonical observable to add alongside L1.
 
 ### Indexes (legacy redirects)
 

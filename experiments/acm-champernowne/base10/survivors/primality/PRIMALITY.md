@@ -293,6 +293,64 @@ Predictions for further W:
 - |z| at very large W: either keeps growing (divergent spiral)
   or oscillates (bounded spiral). Cheap to test.
 
+## EXP05 — discrepancy bracketing (Bailey-Crandall observable)
+
+The L1 leading-digit observable is a coarse projection of the
+canonical normality observable, the **star discrepancy**
+`D_N({10ⁿ α})` of the orbit of shifted tails. Computing `D_N` for
+the same five constructions at the Two Tongues panel:
+
+```
+                          D_N* at fixed N            D_L*       L
+                    N=500   N=1000   N=2000
+
+C_Bundle            0.1293  0.1123  0.0793   →    0.1435    12874
+C_Bundle_sorted     0.2043  0.1591  0.0370   →    0.1290     7859
+C_Surv              0.0711  0.0878  0.0859   →    0.1194     4894
+C_Surv_prime_m      0.1001  0.0901  0.0828   →    0.0954     2434
+C_Surv_comp_m       0.1119  0.1238  0.1133   →    0.1457     2460
+```
+
+Normalised to the `(log L)/√L` Erdős-Copeland-type benchmark:
+
+```
+                       D_L*    (log L)/√L    ratio
+  C_Surv_prime_m      0.0954    0.158        0.60   ← lowest
+  C_Surv              0.1194    0.122        0.98
+  C_Surv_comp_m       0.1457    0.157        0.93
+  C_Bundle_sorted     0.1290    0.101        1.28
+  C_Bundle            0.1435    0.083        1.73   ← highest
+```
+
+**Three readings:**
+
+1. **The bracketing carries.** Composite-cofactor has the highest
+   `D_N`, prime-cofactor the lowest, `C_Surv` between them — the
+   same ordering as the L1 bracketing, now at the sup-over-
+   intervals test instead of the leading-digit projection. The
+   primality stratification is structural, not an L1 artefact.
+
+2. **Prime-cofactor survivors are *more* uniform than baseline.**
+   Ratio 0.60× of `(log L)/√L`. The prime-cofactor population is
+   doing better than a generic Erdős-Copeland-class real at this
+   `L` — its discrepancy is structurally constrained downward by
+   the primality condition.
+
+3. **The multiset bundle is the worst.** Duplicates from cross-
+   stream collisions concentrate small-value digit patterns at
+   multiple orbit positions, inflating `D_N` to 1.73× baseline.
+   Switching to the unique-sorted bundle (Erdős-Copeland
+   Champernowne) drops it to 1.28×. The cleanest single-
+   construction normality result we have, `C_Bundle_sorted`, is
+   exactly the one already covered by [Copeland and Erdős 1946].
+
+**Connection to PRNG-FRAMEWORK.** This is the empirical foothold
+for the conditional theorem in `../../../../../algebra/PRNG-FRAMEWORK.md`:
+finite-K `D_N` values are comparable to known-normal baselines, so
+`lim_{K→∞} C_Surv^{(K)}` is *consistent with* b-normality. The next
+test is K-scaling — does `D_L*(K)` decrease as K grows the way
+ECHO-STRUCTURE's geometric decay predicts?
+
 ## Connection to ECHO-STRUCTURE
 
 The high-d streams `{8, 9, 10}` that carry the digit-length echoes
@@ -335,6 +393,10 @@ to the composite side.
 - `primality_surface.png` — four-panel: |z| heatmap, arg z
   heatmap, asymptotic z trajectory in complex plane, |z|/arg z
   curves vs W.
+- `discrepancy.py` — EXP05 star-discrepancy probe across the
+  bracketing stratification.
+- `discrepancy.png` — `D_N*` vs `N` on log-log for all five
+  constructions, with `1/√(2N)` and `(log N)/√N` reference lines.
 
 ## Cross-references
 

@@ -89,6 +89,29 @@ delivers simultaneously. The capability matrix in M3
 (`paper/measurements/m3_results.md`) walks the comparator field;
 BIDDER is the only row with all five axes.
 
+**Where BIDDER sits.** Five lines of work are adjacent.
+*PRNG-from-normal-numbers* (Bailey & Crandall 2002; Bailey 2004)
+gives random access to the digits of a fixed Stoneham-class
+constant via BBP-style extraction; BIDDER gives keyed random
+access where the key selects among permutations rather than
+indexing into a single fixed digit stream.
+*Quasi-Monte Carlo* (Halton 1960; Sobol' 1967; Niederreiter 1992;
+Owen 1995; Dick & Pillichshammer 2010) gives bounded star
+discrepancy `O((log N)^d / N)` asymptotically; BIDDER gives
+endpoint-exact at finite `N` with FPC-shaped interior at `N < P`.
+*Exact ranged-integer generation* (Lemire 2019; Saad et al. 2020)
+gives unbiased i.i.d. samplers over `[0, s)`; BIDDER is a
+bijection that visits each value exactly once.
+*Verifiable random functions* (Micali, Rabin & Vadhan 1999;
+Gilad et al. 2017) give non-interactive proofs of correctness
+from asymmetric keys; BIDDER's marginal is verifiable by
+inspecting the algebra of §4.1, not by an asymmetric-key proof.
+*Benford goodness-of-fit* (Lesperance et al. 2016; Cerioli &
+Perrotta 2022) uses uniform `1/(b−1)` as the trivial null;
+BIDDER provides a streaming addressable realisation of that
+null at arbitrary block parameters. Each neighbour does one of
+the things BIDDER does; none does all of them in the same object.
+
 The substrate's exactness claims survive any keyed bijection
 because they are statements about multisets and arithmetic
 progressions. The cipher's job is bijection-hood; the substrate's
@@ -172,6 +195,19 @@ does not require `at(0), …, at(i−1)` to have been called first.
 *Keyed* — identical key + period produce identical permutations
 across runs and machines.
 
+The cipher backend is Speck32/64 in cycle-walking mode for
+`period ≥ 2²⁶` (Beaulieu et al. 2013; design follow-up notes
+in Beaulieu et al. 2017; cycle-walking from Black & Rogaway
+2002), with an unbalanced 8-round Feistel network for smaller
+`period`. Speck32/64 has been the subject of public differential
+cryptanalysis (Dinur 2014; Song, Huang & Yang 2016); the
+unbalanced Feistel inherits the textbook PRF→PRP construction
+(Luby & Rackoff 1988; Naor & Reingold 1999) with the standard
+small-domain caveats (Durak & Vaudenay 2017). BIDDER's
+correctness claim does not route through the fallback's PRP
+advantage — the substrate's algebra in §4.1 gives the marginal
+regardless.
+
 *Corollary (endpoint invariance).* For any bijection
 `π : [0, P) → [0, P)` and any `f`,
 
@@ -208,7 +244,79 @@ The §3 substrate's exactness is unaffected by §4.4; §4.4 is a
 statement about the cipher's PRP quality at sub-period prefixes,
 not about leading-digit counts.
 
-## §5. What the tests are
+## §5. What it does
+
+Two worked examples land the substrate contract and the cipher
+contract in concrete statistical workflows. Three more cases
+(§7.2 Benford-test null, §7.3 reproducible cross-validation,
+§7.4 format-preserving permutation of small domains) are
+implemented in `replication/use_case_*.py` and held in OUTLINE
+for the expanded paper.
+
+### §5.1. Stratified survey design with exact leading-digit strata
+
+A survey designer drawing a sample of size `N_total` from a
+finite population indexed by the digit-class block `B_{b,d}`
+wants strata defined by leading digit. Standard practice draws
+i.i.d. samples and post-stratifies, accepting binomial deviation
+in realised stratum counts; the design weights then need post-
+hoc adjustment for the realised sizes. §4.1 clause 1 partitions
+`B_{b,d}` exactly into `b−1` leading-digit strata of size
+`b^(d-1)` each, and the cipher's keyed bijection of
+`[0, b^(d-1))` (one per stratum) gives a streaming reproducible
+prefix sample of any size `N_j ≤ b^(d-1)` per stratum. The full
+sample of size `Σ_j N_j` is the union of `b−1` keyed prefixes,
+one per stratum, with each per-stratum count exactly `N_j`.
+
+The comparator is proportional-allocation by post-stratify-after-
+i.i.d.: realised stratum sizes are `Binomial(N_total, 1/(b−1))`
+with standard deviation `√(N_total · (b−2)/(b−1)²)`. At
+`(b, d) = (10, 4)` and `α_j = 0.1` across nine strata,
+`replication/use_case_01_stratified_survey.py` reports the
+BIDDER per-stratum count exactly `N_j = ⌊α · 1000⌋` at every
+cell of the panel `α ∈ {0.1, 0.5, 1.0}` (100, 500, 1000 per
+stratum); the 99th-percentile maximum stratum deviation under
+i.i.d.-then-post-stratify across 1000 trials grows from 31
+(`α = 0.1, N_total = 900`) to 97
+(`α = 1.0, N_total = 9000`). Exact per-stratum counts mean
+stratified-sample variance estimators apply the design weights
+directly without post-hoc adjustment for realised sizes — the
+`O(√N_total)` correction the i.i.d. approach otherwise carries.
+
+### §5.2. Monte Carlo with known endpoint and measured FPC realisation gap
+
+An analyst running prefix-mean Monte Carlo on a finite
+population `[0, P)` wants the estimator's variance pinned at
+the endpoint (exactly zero at `N = P`), the shape at `N < P`
+known up to a measured gap from the ideal-permutation FPC,
+reproducibility across runs (same key → same sequence), and
+streaming (no materialised permutation of `[0, P)` in memory).
+No single existing tool delivers all four.
+
+§4.3's endpoint-invariance corollary gives the first: at
+`N = P`, BIDDER's prefix-mean equals the left-endpoint Riemann
+sum exactly, so variance across keys is machine-ε — no cipher-
+quality argument is required at the endpoint. §4.4 gives the
+second: at `N < P`, prefix-mean variance follows the FPC shape
+`σ²/N · (P−N)/(P−1)` up to BIDDER's realisation gap (M2). At
+`P = 2000`, `replication/use_case_06_variance_mc.py` reports
+BIDDER variance at `N = P` of `6.15 × 10⁻³¹` (machine-ε; floating-
+point round-off in the sum), ideal-FPC variance `0` exactly, and
+i.i.d.-with-replacement variance `σ²/P ≈ 4.7 × 10⁻⁵` (never
+zero). The realisation gap at `N < P` is U-shaped in `N/P`,
+peaking at ratio `7.17` at `N = P/2 = 1000` and tapering to
+ratio `1.00` at `N = P − 1` (sampling-consistent with the
+ideal). Comparators each lack one property: i.i.d.-with-
+replacement loses FPC (variance `σ²/N` at every `N`);
+`numpy.random.permutation` gives ideal FPC but materialises
+`[0, P)` in memory; FF1 / FF3 with AES is streaming and keyed
+but heavyweight (~19–29× higher per-call cost than BIDDER per
+D1); sort-by-i.i.d.-key needs `O(N log N)` extra memory and is
+not deterministic across implementations. BIDDER provides the
+four properties together at the cost of the measured FPC
+realisation gap.
+
+## §6. What the tests are
 
 Eleven test files in three layers; `make test` runs all eleven on
 a clean checkout (`paper/measurements/e4_smoke.md`).
@@ -218,7 +326,11 @@ a clean checkout (`paper/measurements/e4_smoke.md`).
 `test_bidder_root.py`, `test_sawtooth.py`, `test_speck.py`.
 These exercise the Python wrappers against the C kernel and the
 pure-Python oracle, plus property tests (bijection-hood at small
-`P`, Speck round-trip equality, sawtooth monotonicity).
+`P`, Speck round-trip equality, sawtooth monotonicity). The
+implementation includes the published Beaulieu et al. Appendix
+C test vectors as inline checks in `test_speck.py` and the
+corresponding C test, so a reviewer can run those vectors against
+the implementation independently of any of BIDDER's other code.
 
 **Layer 2 — substrate verification** (`tests/test_acm_core.py`):
 each clause of the §4.1 theorem has a verification test that
@@ -249,22 +361,93 @@ M3 (head-to-head comparison), M4 (wrapper throughput), D1
 (FF1 / AES comparator), D4 (C-direct kernel), and five worked
 use-case scripts (`replication/use_case_*.py`).
 
-## §6. References
+## §7. References
+
+### Cipher provenance (§4)
 
 - Beaulieu, R., Treatman-Clark, S., Shors, D., Weeks, B., Smith,
-  J., & Wingers, L. (2013). *The Simon and Speck Families of
+  J., & Wingers, L. (2013). *The SIMON and SPECK Families of
   Lightweight Block Ciphers.* IACR Cryptology ePrint Archive
-  2013/404. Cited from §2 (the cipher choice).
+  2013/404. The original specification; test vectors in
+  Appendix C.
+- Beaulieu, R., Shors, D., Smith, J., Treatman-Clark, S., Weeks,
+  B., & Wingers, L. (2017). *Notes on the Design and Analysis of
+  SIMON and SPECK.* IACR Cryptology ePrint Archive 2017/560.
+  Post-publication design-and-analysis follow-up.
 - Black, J., & Rogaway, P. (2002). *Ciphers with Arbitrary Finite
   Domains.* CT-RSA 2002, LNCS 2271, 114–130. The cycle-walking
-  construction for format-preserving encryption. Cited from §2
-  (cycle-walking) and §4 (Feistel fallback).
-- Copeland, A. H., & Erdős, P. (1946). The base-`b` normality of
-  `C_b(n)` (the integer-concatenation digit stream).
+  construction.
+- Dinur, I. (2014). *Improved Differential Cryptanalysis of
+  Round-Reduced Speck.* SAC 2014; IACR Cryptology ePrint Archive
+  2014/320.
+- Song, L., Huang, Z., & Yang, Q. (2016). *Automatic Differential
+  Analysis of ARX Block Ciphers with Application to SPECK and
+  LEA.* IACR Cryptology ePrint Archive 2016/209.
+- Luby, M., & Rackoff, C. (1988). *How to Construct Pseudorandom
+  Permutations from Pseudorandom Functions.* SIAM Journal on
+  Computing, 17(2), 373–386.
+- Naor, M., & Reingold, O. (1999). *On the Construction of
+  Pseudorandom Permutations: Luby–Rackoff Revisited.* Journal of
+  Cryptology, 12(1), 29–66.
+- Durak, F. B., & Vaudenay, S. (2017). *Breaking the FF3 Format-
+  Preserving Encryption Standard over Small Domains.* CRYPTO
+  2017.
+
+### Substrate and asymptotic background (§3, §4)
+
+- Copeland, A. H., & Erdős, P. (1946). *Note on Normal Numbers.*
+  Bulletin of the American Mathematical Society, 52, 857–860.
+  The base-`b` normality of `C_b(n)`.
+- Schiffer, J. (1986). Discrepancy of Champernowne-type
+  concatenations. Cited from §3 (the asymptotic state of the
+  art).
+
+### Comparator framework (§3)
+
 - NIST SP 800-38G (2016, errata 2019). *Recommendation for Block
   Cipher Modes of Operation: Methods for Format-Preserving
-  Encryption (FF1/FF3-1).* Cited from §3 (the comparator
-  framework).
-- Schiffer, J. (1986). Discrepancy of Champernowne-type
-  concatenations. Cited from §2 (the asymptotic state of the
-  art).
+  Encryption (FF1/FF3-1).*
+
+### Niche-against neighbours (§3 *Where BIDDER sits*)
+
+- Bailey, D. H., & Crandall, R. E. (2002). *Random Generators
+  and Normal Numbers.* Experimental Mathematics, 11(4), 527–546.
+- Bailey, D. H. (2004). *A Pseudo-Random Number Generator Based
+  on Normal Numbers.* LBNL-57489.
+- Halton, J. H. (1960). *On the efficiency of certain quasi-random
+  sequences of points in evaluating multi-dimensional integrals.*
+  Numerische Mathematik, 2, 84–90.
+- Sobol', I. M. (1967). *On the distribution of points in a cube
+  and the approximate evaluation of integrals.* USSR
+  Computational Mathematics and Mathematical Physics, 7(4),
+  86–112.
+- Niederreiter, H. (1992). *Random Number Generation and
+  Quasi-Monte Carlo Methods.* SIAM CBMS-NSF Regional Conference
+  Series in Applied Mathematics, vol. 63.
+- Owen, A. B. (1995). *Randomly Permuted (t,m,s)-Nets and
+  (t,s)-Sequences.* In Niederreiter, H. & Shiue, P. J.-S. (eds.),
+  Monte Carlo and Quasi-Monte Carlo Methods in Scientific
+  Computing. Springer Lecture Notes in Statistics, vol. 106,
+  pp. 299–317.
+- Dick, J., & Pillichshammer, F. (2010). *Digital Nets and
+  Sequences: Discrepancy Theory and Quasi-Monte Carlo
+  Integration.* Cambridge University Press.
+- Lemire, D. (2019). *Fast Random Integer Generation in an
+  Interval.* ACM Transactions on Modeling and Computer
+  Simulation, 29(1), Article 3.
+- Saad, F. A., Freer, C. E., Rinard, M. C., & Mansinghka, V. K.
+  (2020). *Optimal Approximate Sampling from Discrete
+  Probability Distributions.* Proceedings of the ACM on
+  Programming Languages, 4(POPL), Article 36.
+- Micali, S., Rabin, M., & Vadhan, S. (1999). *Verifiable Random
+  Functions.* FOCS 1999, pp. 120–130.
+- Gilad, Y., Hemo, R., Micali, S., Vlachos, G., & Zeldovich, N.
+  (2017). *Algorand: Scaling Byzantine Agreements for
+  Cryptocurrencies.* SOSP 2017, pp. 51–68.
+- Cerioli, A., & Perrotta, D. (2022). *On Characterizations and
+  Tests of Benford's Law.* Journal of the American Statistical
+  Association, 117(540), 1887–1903.
+- Lesperance, M., Reed, W. J., Stephens, M. A., Tsao, C., &
+  Wilton, B. (2016). *Assessing Conformance with Benford's Law:
+  Goodness-of-Fit Tests and Simultaneous Confidence Intervals.*
+  PLoS ONE, 11(3), e0151235.
