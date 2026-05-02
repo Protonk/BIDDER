@@ -11,7 +11,7 @@ The paper's *scope* is in `OUTLINE.md`. This file is the *to-do*.
 These block everything downstream. Settle them in one pass and don't
 revisit unless a phase 2 finding forces it.
 
-- [x] **Title.** *BIDDER: a keyed reproducible permutation with exact leading-digit uniformity over arbitrary `(b, d)` blocks.*
+- [x] **Title** (working). *BIDDER: Exact Leading-Digit Sampling with Keyed Random Access.* (Substrate-first; flipped 2026-05-02 per audit. Earlier: *a keyed reproducible permutation with exact leading-digit uniformity over arbitrary `(b, d)` blocks*.)
 - [x] **Length target.** 15-pages
 - [x] **Repo strategy.** carve `core/` + `generator/` + relevant `tests/` into a new
       `bidder-stat/` repo for the replication archive
@@ -81,6 +81,29 @@ needs these numbers to land.
       independent throughput through the wrapper: cipher ~940
       ns/elem, sawtooth ~1300 ns/elem. Cost is dominated by
       Python→C ctypes overhead; C kernel is sub-µs per call.*
+
+- [x] **D4. C-direct throughput** *(promoted from DEBTS to a
+      closed Phase 1 measurement, 2026-05-02).* Tight-loop C
+      benchmark calling `bidder_block_at` and `bidder_sawtooth_at`
+      directly against `libbidder.dylib`, no ctypes overhead.
+      *Done. See `paper/measurements/d4_results.md` and
+      `replication/bench_c.c`. Headline: cipher ~38 ns/call
+      (Feistel, P < 2^26), ~2112 ns/call (Speck32 cycle-walking
+      at P ≈ 10^8); sawtooth ~3 ns/call. Wrapper overhead
+      (M4 − D4) ≈ 900 ns/call (cipher) and ~1300 ns/call
+      (sawtooth). §6.4 grew a workload-(3) row.*
+
+- [x] **D1. FF1 / FF3-1 throughput + FPC tightness benchmark**
+      *(promoted from DEBTS to a closed Phase 1 measurement,
+      2026-05-02).* NIST SP 800-38G FF1 with AES-128, validated
+      against Appendix A.1 vectors. Measured against M3's
+      throughput panel and two cells from M2's FPC grid.
+      *Done. See `paper/measurements/d1_results.md` and
+      `replication/comparators/ff1.py`. Headline: FF1 throughput
+      ~100–147 µs/call through the Python wrapper (~19–29× slower
+      than BIDDER on workload 2); FF1 FPC ratio ~0.92 at both
+      cells (sampling-consistent with ideal 1.0); BIDDER 6.8× /
+      32× on the same cells. §7.4 / §4.5 / §9 / M3 prose updated.*
 
 ### Engineering
 
@@ -155,12 +178,32 @@ No measurement dependency.
       example: code → numerical result → exactness payoff vs
       asymptotic alternative.
    - [ ] §7.1 Stratified survey design with leading-digit strata.
-   - [ ] §7.2 Benford-test null distribution.
-   - [ ] §7.3 Reproducible cross-validation, exact fold sizes on
+         *Still a gesture; not yet implemented.*
+   - [x] §7.2 Benford-test null distribution.
+         *Done. `replication/use_case_02_benford_null.py`,
+         `paper/measurements/use_case_02_results.md`. BIDDER χ² = 0
+         exactly across 5 (b, d) cells; i.i.d. χ² ~ χ²(b-2) as
+         predicted; sieved n-prime level same.*
+   - [x] §7.3 Reproducible cross-validation, exact fold sizes on
          non-power-of-two `n`.
-   - [ ] §7.4 Format-preserving permutation of small-`P` domain.
+         *Done. `replication/use_case_03_cross_validation.py`,
+         `paper/measurements/use_case_03_results.md`. BIDDER fold
+         sizes ∈ {⌊n/k⌋, ⌈n/k⌉} at every (n, k) panel cell; SHA-256
+         hash-based deviation grows ~sqrt(n).*
+   - [x] §7.4 Format-preserving permutation of small-`P` domain.
+         *Done. `replication/use_case_04_fpe.py`,
+         `paper/measurements/use_case_04_results.md`. Bijection +
+         determinism verified at 6 small-P points; capability
+         matrix and three-workload throughput row rendered from
+         M3 + D1 + D4.*
    - [ ] §7.5 Deterministic test corpora.
-   - [ ] §7.6 Variance-controlled Monte Carlo with known FPC.
+         *Still a gesture; not yet implemented.*
+   - [x] §7.6 Variance-controlled Monte Carlo with known FPC.
+         *Done. `replication/use_case_06_variance_mc.py`,
+         `paper/measurements/use_case_06_results.md`. At P = 2000,
+         BIDDER variance at N = P is 6.15e-31 (machine-ε); FPC
+         shape verified at N < P with U-shaped realisation gap
+         peaking at 7.17× at N = P/2.*
 - [ ] **§9 Limitations.** Mostly Phase 0 + the open items
       acknowledged out-of-scope.
 
@@ -176,6 +219,14 @@ in Phase 5 when the LaTeX template lands.)
 - [ ] **§2 Introduction.** Written last for the same reason.
 - [ ] **Pass for tone.** Strip any rhetoric / "what this means"
       sections that crept in. Same discipline as `algebra/`.
+- [ ] **§3 compression pass** *(audit Q1, 2026-05-02).* Retitle
+      §3 around the substrate contract. Compress §3.2–§3.5 from
+      OUTLINE-level expansion to proposition / proof-sketch form
+      (the proofs are short — positional-notation count, divmod,
+      one-line c_K — so the compressed form is the right granularity
+      for a 15-page paper). Move repeated exclusions from §3.6 into
+      §9 except the one substrate-coverage sentence (smooth +
+      Family E + spread bound regime).
 - [ ] **Cross-reference audit.** Every §X reference resolves;
       every cited file path exists; every theorem citation is
       live.

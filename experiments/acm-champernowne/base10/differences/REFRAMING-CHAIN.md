@@ -147,6 +147,13 @@ truncation imprint.
    self-direct here will under-perform; designs that pair empirical
    capacity with external framing land much better.
 
+   *Editorial caveat:* the "came from outside the empirical loop"
+   claim is editorial — it reflects the conversational record but
+   isn't strictly verifiable from file timestamps and contents
+   alone. A future audit pass with access to the chat record could
+   verify; from artifacts alone, the chronology is consistent with
+   this reading but doesn't prove it.
+
 ## Cross-references
 
 - `EXP01-FINDINGS.md`, `EXP02-FINDINGS.md` — the initial nulls.

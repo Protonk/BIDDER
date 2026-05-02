@@ -82,7 +82,7 @@ The `(3, 9)` and `(5, 1)` pairs were *under*-represented in EXP03's
 digram analysis. That result is consistent with the per-digit
 suppression of 3 here.
 
-### 4. The cabinet curiosity gets sharpened
+### 4. The cabinet curiosity gets a tentative sharpening
 
 The cabinet's Two Tongues entry framed the open question as:
 
@@ -90,17 +90,20 @@ The cabinet's Two Tongues entry framed the open question as:
 > Or the leading-digit profile is robust enough that even
 > highly-structured sub-sampling preserves it. Or both.*
 
-The first option is now ruled out: the survivor filter is *not*
-equivalent to a uniform-random thinning at this observable. The
-second option — robustness — partially survives, in that random
-thinning ALSO produces a borrow signature; the survivor's signature
-is the random-thinning signature *plus* a survivor-specific component
-on top.
+At this one panel, the first option is mildly disfavoured: the
+survivor's δ-overlap signature differs from random's at z = +2.21 —
+notable but not overwhelming for a single-panel observation, and
+the test is on δ-overlap digits rather than the running L1 in the
+Two Tongues plot itself. The second option (robustness) partially
+survives: random thinning ALSO produces a borrow signature; the
+survivor's signature is the random-thinning signature *plus* a
+~2σ excess. EXP05 then tests whether this excess generalises across
+panels.
 
-So the answer is: the L1-tracking property is *partly* generic
-(random thinning matches the bundle's L1 too, modulo the random's
-own borrow-induced excess) and *partly* survivor-specific (the
-survivor's δ pushes further from uniform than random's does).
+So the tentative answer is: the L1-tracking property is *partly*
+generic (random thinning matches the bundle's L1 too, modulo the
+random's own borrow-induced excess) and *partly* survivor-specific
+at this panel — pending the panel-sweep test that follows.
 
 ## What this combines with EXP01–03
 

@@ -22,12 +22,17 @@ slightly *larger* as a real than the survivor's first-appearance
 concatenation).
 
 When we subtract these as reals on a common denominator `10^12,874`,
-`C_Surv` contributes zeros after digit `4,894`. So:
+`C_Surv` contributes zeros after digit `4,894`. At this panel `δ > 0`,
+so `|δ| = δ` and:
 
 - The **first 4,894 digits** of `|δ|`'s expansion = the substantive
   bundle-vs-survivor subtraction (with possible borrows).
 - The **last 7,980 digits** of `|δ|`'s expansion = bundle's last
   7,980 digits *unchanged* (since survivor contributes zero there).
+
+(If `δ < 0` at some other panel, `|δ| = −δ` and the tail-leak
+analysis would differ — the absolute value would invert the digit
+arithmetic. The split below is panel-specific to `δ > 0`.)
 
 The full δ is the concatenation of these two regions. Treating them
 as one observable mixes substantive content with bundle-tail

@@ -91,27 +91,43 @@ script flags `c` as a survivor with source `d = 10`.
 For `d = 10`, this happens when `c = 10m` with rank in stream 5
 exceeding 400. Stream 5's k-th 5-prime is approximately `5 · k · 5/4 =
 6.25k`, so `c` exceeds this when `c > 2500`, i.e., `m > 250`. And
-rank in stream 10 must remain ≤ 400, so `m ≲ 500`. The window
-`m ∈ (250, 500]` gives apparent d=10 survivors.
+rank in stream 10 must remain ≤ 400, so `m ≲ 500`. So apparent
+d=10 survivors live (broadly) in `m ∈ (250, 500]`.
 
-The leading digits of `c = 10m` are exactly the leading digits of `m`
-(multiplying by 10 just appends a zero). The range `(250, 500]`
-contains:
+The leading digits of `c = 10m` are exactly the leading digits of `m`.
+A first-cut count of integers in `(250, 500]` by leading digit gives
+about 50 with digit 2, 100 with digit 3, 100 with digit 4 — i.e., a
+~40% share for digit 3 by simple bandwidth. Empirically 49.3%. The
+remaining gap (~9 percentage points) comes from finer structure: the
+band edges aren't sharp (rank thresholds are approximate), and not
+every `m` in `(250, 500]` produces a true apparent survivor — some
+fall through other streams' truncation as well. The simple band
+argument predicts the *direction* and *order of magnitude* of the
+49% but not the exact value.
 
-- `m ∈ (250, 299]`: leading digit 2
-- `m ∈ [300, 399]`: leading digit 3
-- `m ∈ [400, 499]`: leading digit 4
+The same finite-k mechanism is plausible for `d = 8, 9` — apparent
+survivors there are also boosted by truncation in alternative streams
+— but the mechanisms are *not* parallel to `d = 10`'s structural
+impossibility:
 
-That's a 1:2:2 ratio for digits 2:3:4, with 49% on digit 3 (from the
-[300, 399] band weighted by coprimality-to-10 density). Empirically:
-49.3%. The arithmetic checks.
+- For `d = 9`: there *are* true `d=9`-only survivors. `c = 9` is one
+  (`9 ∤ 1`, so `c=9` is in stream 9; and `9 | 9` automatically
+  excludes stream 3). The stream-3 competitor that EXP07's earlier
+  framing invoked doesn't apply, because `9 | c` already removes `c`
+  from stream 3's primes. The d=9 spike likely combines true
+  d=9-survivors with truncation-induced apparent survivors via
+  *different* alternative-stream competitors.
+- For `d = 8`: the structural picture differs again. Stream 4 is a
+  competitor (since `8 | c` implies `4 | c`), but `c` not in
+  stream 4 requires `16 | c`, not impossible. True d=8-only
+  survivors plausibly exist; apparent ones via truncation likely
+  add to the count, but the impossibility argument used for d=10
+  does not transfer.
 
-The same mechanism applies to `d = 8, 9` with different constraints:
-
-- `d = 9`'s structural impossibilities are similar; apparent survivors
-  are `c = 9m` with rank in stream 3 (a non-trivial competitor)
-  exceeding 400. `m` lands in a band that biases digits 3 and 4.
-- `d = 8` similar with stream 4 as the truncated competitor.
+The d=10 impossibility is specific. The shared empirical pattern —
+high-d streams over-represent digit 3 — likely has a common
+explanation in finite-k truncation, but the precise mechanism per
+stream needs its own derivation.
 
 ## What this reframes
 

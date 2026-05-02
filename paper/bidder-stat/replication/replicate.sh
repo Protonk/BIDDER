@@ -11,15 +11,15 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(dirname "$HERE")"
 cd "$ROOT"
 
-# sage -python carries the numpy + matplotlib that the measurements
-# rely on (per AGENTS.md in the upstream repo). If sage is not on
-# the path, fall back to python3 and require numpy + matplotlib to
-# be importable.
-if command -v sage >/dev/null 2>&1; then
-    PY="sage -python"
-else
-    PY="python3"
+# All Python runs through the locked .venv. Run `make venv` first
+# to bootstrap it. Versions pinned in requirements.txt.
+VENV_PY="$ROOT/.venv/bin/python"
+if [ ! -x "$VENV_PY" ]; then
+    echo "error: $VENV_PY not found." >&2
+    echo "Run \`make venv\` first to bootstrap the locked environment." >&2
+    exit 1
 fi
+PY="$VENV_PY"
 
 echo "=== M1: cycle-walking decision rule ==="
 $PY replication/m1_cycle_walking.py
@@ -37,10 +37,37 @@ echo "=== M4: throughput at scale ==="
 $PY replication/m4_throughput.py
 
 echo
-echo "=== Use cases (§7.1-§7.6) ==="
-echo "(Pending: use_case_06 first, others to follow.)"
-# Each use case will land as `replication/use_case_<n>.py` per
-# WORKSET.md Phase 3 / OUTLINE.md §7.<n>.
+echo "=== D4: C-direct throughput ==="
+if [ -x replication/bench_c ]; then
+    ./replication/bench_c replication/d4_results.md
+else
+    echo "(bench_c not built; run \`make bench-c\` to build and run)"
+fi
+
+echo
+echo "=== D1: FF1 throughput + FPC tightness ==="
+$PY replication/d1_measure.py
+
+echo
+echo "=== §7.2 Benford-test null (use_case_02) ==="
+$PY replication/use_case_02_benford_null.py
+
+echo
+echo "=== §7.3 Cross-validation (use_case_03) ==="
+$PY replication/use_case_03_cross_validation.py
+
+echo
+echo "=== §7.4 Format-preserving permutation (use_case_04) ==="
+$PY replication/use_case_04_fpe.py
+
+echo
+echo "=== §7.6 Variance-controlled MC (use_case_06) ==="
+$PY replication/use_case_06_variance_mc.py
+
+# §7.1 (stratified survey design) and §7.5 (deterministic test
+# corpora) are still gestures in the OUTLINE; their use_case_*.py
+# scripts will land when those §7 cases are expanded to draft-
+# paragraph granularity.
 
 echo
 echo "=== Replication complete ==="

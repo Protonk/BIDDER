@@ -1,8 +1,7 @@
 # bidder-stat
 
-Replication archive for the JStatSoft submission *BIDDER: a keyed
-reproducible permutation with exact leading-digit uniformity over
-arbitrary `(b, d)` blocks*.
+Replication archive for the JStatSoft submission *BIDDER: Exact
+Leading-Digit Sampling with Keyed Random Access* (working title).
 
 This is the carved subset of the upstream BIDDER repo containing
 exactly what the paper needs: `core/` (substrate), `generator/`
@@ -15,13 +14,26 @@ scripts and use-case demonstrations).
 From a clean clone:
 
 ```
+make venv        # bootstrap .venv/ and install pinned requirements
 make build       # compile libbidder.dylib (or .so)
 make test        # run the full test suite (Python + theory)
-make replicate   # build, test, and run M1-M4 + use cases
+make replicate   # build, test, and run M1-M4 + D4 + use cases
 ```
 
 `make replicate` produces every figure and table referenced in the
 paper.
+
+### Python environment
+
+All Python work runs in `.venv/` against pinned versions in
+`requirements.txt`. The minimal set is small on purpose: `numpy`
+(measurement scripts and tests) and `pycryptodome` (AES primitive
+for the FF1 reference comparator in §7.4 / D1). The kernel itself
+has zero C dependencies; the Python wrappers depend only on the
+standard library.
+
+`make venv` is idempotent and only re-runs the install when
+`requirements.txt` changes. `make distclean` removes `.venv/`.
 
 ## C-primary API
 

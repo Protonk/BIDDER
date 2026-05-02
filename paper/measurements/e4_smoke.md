@@ -3,14 +3,19 @@
 End-to-end validation that the carved `bidder-stat/` tree builds,
 runs, and replicates from a fresh environment.
 
-## Procedure
+## Procedure (post-venv-lockdown, 2026-05-02)
 
 ```
 cd paper/bidder-stat
+make venv    # python3 -m venv .venv; pip install -r requirements.txt
 make build   # cc -O2 -fPIC -dynamiclib ... -> libbidder.dylib
-make test    # full Python + theory test suite
-sage -python replication/m1_cycle_walking.py   # one measurement runs
+make test    # full Python + theory test suite via .venv/bin/python
+make bench-c # D4 C-direct throughput benchmark
 ```
+
+All Python work runs in the locked `.venv/` (numpy 2.4.4,
+pycryptodome 3.23.0). The earlier sage-python auto-detect path is
+removed.
 
 ## Results
 

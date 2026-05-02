@@ -72,14 +72,15 @@ The optimizer reading predicted survivors would *match* bundle's
 shape; in fact they have a distinct, characteristic shape. The
 "preservation" reading is wrong at the shape level.
 
-### 2. The Two Tongues "tracking" is L1 *magnitude* tracking
+### 2. The Two Tongues "tracking" is at the same broad scale, not tight
 
 The bundle and survivors have similar L1 distances from uniform
-(0.80 vs 0.85). They are both Benford-shaped at similar magnitude,
-just with different *specific* distributions. The original Two
-Tongues plot's curves track each other on log-y because they both
-sit in the same order-of-magnitude band — but the underlying
-distributions are not equivalent.
+(0.80 vs 0.85) — same broad scale, same Benford-skewed character.
+Their underlying leading-digit distributions are *not* equivalent
+(survivor's 30/26/20 vs bundle's 38/22/12 on digits 1/2/3). The
+original Two Tongues plot's curves sit in the same order-of-
+magnitude band on log-y. "Tracking" here means same-scale
+similarity, not pointwise distribution equivalence.
 
 This explains why EXP01–05 found null results when probing for
 shape-level structure beyond L1: the L1 observable averages
@@ -87,29 +88,27 @@ shape-distinctions away. Higher-resolution observables (per-digit,
 pair-correlation, z-score-vs-random) recover those distinctions,
 which is what EXP04 saw before EXP05 walked back.
 
-### 3. The digit-3 spike is reproducible across observables
+### 3. Digit 3 is anomalous, but at a different observable than EXP04
 
-EXP04's per-digit z-score analysis identified **digit 3** as
-significantly suppressed in survivor relative to random thinning
-(z = −2.07).
+EXP06 finds: **survivor's leading-digit-3 frequency is 20.4%, vs
+bundle's 12.4%** — survivor over-represents digit 3 in its own
+integer population.
 
-EXP06 confirms it from the other direction: survivor's digit-3
-frequency is **20.4%, vs bundle's 12.4%** — survivor *over*-represents
-digit 3 within its own population. The interpretation:
+EXP04 found: digit 3 of δ's overlap-region expansion is *suppressed*
+in survivor relative to random thinning at z = −2.07.
 
-- Random thinning (EXP04) produces digit-3 frequency similar to
-  the bundle (~12%).
-- Survivor's digit 3 frequency is markedly higher (~20%).
-- Hence relative to random's ~12%, survivor's ~20% is a +
-  deviation; equivalently, relative to bundle's ~12%, survivor is
-  also +.
-- EXP04's `z = −2.07` for digit 3 came from a different framing
-  (deviation of survivor's δ digit 3 from random's δ digit 3); the
-  EXP06 finding is at the leading-digit-of-the-population level
-  rather than the digit-of-δ level.
+These are **different observables at different layers**. EXP04
+operates on the digits of `|δ|`'s decimal expansion (after
+subtraction-with-borrows). EXP06 operates on the leading digits of
+survivor *integers themselves* (before any subtraction). They
+should not be conflated as "the same digit-3 anomaly seen two
+ways" — they are two anomalies at different layers, both involving
+digit 3 but with different signs and different mechanisms.
 
-Both experiments find digit 3 as a survivor-specific signature.
-The mechanism is open but consistent across observables.
+The mechanism for the EXP06 spike (survivor integers cluster on
+digit 3) is the question EXP07 takes up. Whether and how it relates
+to the EXP04 spike (digit 3 of δ-overlap is suppressed) is open and
+not directly addressed by either experiment.
 
 ### 4. The multiplicity hierarchy isn't monotone in L1
 

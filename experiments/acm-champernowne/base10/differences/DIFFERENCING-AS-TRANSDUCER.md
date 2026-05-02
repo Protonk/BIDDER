@@ -38,8 +38,14 @@ are the direct readouts of this transduction.
 
 Differencing on digit-concatenated streams is a *transducer*: it
 converts one signal (atom-aligned structure) into another
-(digit-aligned noise). The transformation is deterministic, exact,
-and total when the input streams are misaligned at the atom level.
+(digit-aligned noise). The transformation is deterministic and exact
+when the input streams are misaligned at the atom level. "Total" is
+too strong: EXP03 and EXP04 show that at higher-resolution
+observables (digit-pair correlations, comparison against random
+controls), residual content survives. The transducer is mostly
+destructive but not entirely — content that the L1 magnitude view
+averages away can resurface in pair correlations and in
+random-baseline comparisons.
 
 - **Input**: two digit streams.
 - **Operation**: subtract on a common digit denominator.

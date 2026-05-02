@@ -4,8 +4,14 @@
 sections named, content gestured at, drafting items live in the
 workset.
 
-**Title.** *BIDDER: a keyed reproducible permutation with exact
-leading-digit uniformity over arbitrary `(b, d)` blocks.*
+**Title** (working). *BIDDER: Exact Leading-Digit Sampling with
+Keyed Random Access.* Substrate-first ordering: the contribution is
+exact leading-digit uniformity over arbitrary `(b, d)` digit-class
+blocks (the ACM substrate); the cipher's keyed random access is the
+delivery mechanism. Earlier working title (*a keyed reproducible
+permutation with exact leading-digit uniformity over arbitrary
+`(b, d)` blocks*) led with the cipher half and buried the substrate;
+flipped 2026-05-02 per audit.
 
 **Scope.** `core/` + `generator/` only. Algebra side, wonders,
 arguments, experiments — out. The paper is a tool paper, not the
@@ -18,14 +24,17 @@ folded into §7.4; benchmarks in a §6.4 table plus §6 paragraph.
 **Discipline.** No occlusive salesmanship. Every measure on BIDDER
 is turned inside out — the paper plays cards face up the whole way.
 Concretely: §3.6 / §4.6 close with "what this covers and what it
-does not"; §4.4 names the Riemann-sum identity as bijection-trivial
-(not BIDDER-special); §4.5 names the FPC realisation gap with its
-measured magnitude (~1× best, ~32× worst); §7.4 includes axes BIDDER
-loses on; §9 limitations expand to name every regime where BIDDER is
-the wrong tool; each §7 use case ends with "use something else when…";
-gaps the paper flags but doesn't fill numerically (FF1 / FF3-1,
-`secrets.SystemRandom`, etc.) live in `paper/DEBTS.md` and are named
-by ID in the prose.
+does not"; §4.4 names BIDDER's permutation contract and presents
+endpoint invariance as a bijection-trivial corollary (not
+BIDDER-special); §4.5 names the FPC realisation gap with its
+measured magnitude (~1× best, ~32× worst); §7.4 includes axes
+BIDDER loses on; §9 limitations expand to name every regime where
+BIDDER is the wrong tool; gaps the paper flags but doesn't fill
+numerically (FF1 / FF3-1, `secrets.SystemRandom`, etc.) live in
+`paper/DEBTS.md` and are named by ID in the prose. Where individual
+§7 use cases name a comparator, they name only the one whose
+presence changes the reader's decision — not a rote "use something
+else when…" hedge.
 
 ---
 
@@ -44,11 +53,17 @@ by ID in the prose.
 
 ## §1. Abstract
 
-One paragraph, ~150 words. Names the gap (exact uniform digit
-distribution on arbitrary `(b, d)`; reproducible without-replacement
-sampling on arbitrary `[0, P)`), the tool (substrate + cipher), the
-two structural guarantees (block uniformity, `N = P` Riemann-sum
-identity), and the use cases the tool unlocks.
+One paragraph, ~150 words. *First sentence — the gap, substrate-
+first:* exact leading-digit uniformity over arbitrary `(b, d)`
+digit-class blocks at any sample size, not asymptotic, not
+contingent on power-of-two periods. *Second sentence — the tool:*
+an ACM-Champernowne block substrate (counting argument) plus a
+Speck32/64 cycle-walking cipher with a Feistel fallback (keyed
+random access on arbitrary `[0, P)`). *Third sentence — the
+guarantees:* substrate counting (exact leading-digit counts under
+`n² | b^(d-1)` and Family E) plus the cipher's stateless keyed-
+bijection contract (with endpoint invariance as a corollary).
+*Closing — the use cases the tool unlocks.*
 
 ## §2. Introduction
 
@@ -61,10 +76,12 @@ Three paragraphs.
   cycle-walking. The substrate is exact; the cipher provides
   reproducibility and disorder. Neither part is asked to do the
   other's job.
-- **The contribution.** A working tool with two structural theorems
-  (counting + permutation-invariance), one cipher choice with a
-  fallback, a stable API, and six use cases where exactness on
-  arbitrary `(b, d)` is load-bearing.
+- **The contribution.** A working tool with one substrate
+  contract (exact leading-digit counting on `(b, d)` blocks) and
+  one cipher contract (stateless keyed bijection of arbitrary
+  `[0, P)` for `P ≤ 2³² − 1`), one cipher choice with a fallback,
+  a stable C API, and use cases where exactness on arbitrary
+  `(b, d)` is load-bearing.
 
 ## §3. The block-uniformity substrate
 
@@ -188,22 +205,36 @@ dependency where the paragraph awaits a Phase 1 number.
   recommended threshold. Anchor: M1's tabulated output (the
   decision is empirically calibrated, no separate proof test).
 
-- §4.4 **Structural Riemann-sum identity at `N = P`.** Stated and
-  proved in the paper. *Statement:* for any bijection
-  `π : [0, P) → [0, P)` and any `f`,
+- §4.4 **Permutation contract and endpoint invariance.** §4 commits
+  BIDDER to a *contract*: for any `period ∈ [2, 2³² − 1]` and any
+  key, `bidder_block_at(ctx, ·)` is a stateless bijection of
+  `[0, period)` — *stateless* meaning `at(i)` does not mutate
+  `ctx` and does not require `at(0), …, at(i-1)` to have been
+  called first; *bijection* meaning every output occurs exactly
+  once over `i = 0, …, period − 1`; *keyed* meaning identical key
+  + period produce identical permutations across runs and
+  machines. Composition with §3.5's Hardy random-access
+  (`c_K = q·n + r + 1`) inherits the same shape: stateless,
+  keyed, deterministic, no precomputation, no enumeration of
+  prior atoms. The contract is the load-bearing claim of §4 — not
+  any one property comparators lack (FF1 / FF3-1 also produce
+  keyed bijections), but the particular *combination* {streaming
+  random-access + arbitrary `P ∈ [2, 2³² − 1]` + zero deps + the
+  Speck32/Feistel backend} that no other comparator delivers
+  simultaneously (§7.4's matrix). *Endpoint invariance
+  (corollary).* For any bijection `π : [0, P) → [0, P)` and any
+  `f`,
 
       (1/P) Σ_{i=0}^{P-1} f(π(i)/P) = (1/P) Σ_{k=0}^{P-1} f(k/P) = R(f, P),
 
-  the left-endpoint Riemann sum. *Proof, one line:*
-  `{π(0), …, π(P-1)}` is the same multiset as `{0, …, P-1}` since
-  `π` is a bijection, so the sums are equal. *Cards-face-up
-  reading:* the identity is a tautology of bijection-hood. Any
-  keyed permutation has it — `numpy.random.permutation` with a
-  seed has it; `random.shuffle` with a seed has it; `FF1` has it;
-  a hand-coded cycle-walking AES has it. BIDDER's contribution at
-  `N = P` is *being a keyed reproducible bijection on arbitrary
-  `[0, P)`*, not the identity itself. The §4.5 statistical layer
-  at `N < P` is where BIDDER's design choices show. Anchor:
+  the left-endpoint Riemann sum, since `{π(0), …, π(P-1)}` is the
+  same multiset as `{0, …, P-1}`. The identity is bijection-
+  trivial — any keyed permutation has it — and is recorded here
+  only because §7.6's variance-controlled Monte Carlo cites it as
+  the reason BIDDER's variance at `N = P` is machine-ε (no
+  cipher-quality argument required at the endpoint). The §4.5
+  statistical layer at `N < P` is where the cipher's design
+  choices start to matter. Anchor:
   `tests/theory/test_riemann_property.py`. Source:
   `generator/RIEMANN-SUM.md`.
 
@@ -218,9 +249,9 @@ dependency where the paragraph awaits a Phase 1 number.
   `P = 1000` for `f = sin(πx)` where the ratio drops *below* 1
   (bias-cancel anomaly, see DEBTS.md D6). The realisation gap is
   the empirical price for a lightweight cipher (Speck32 + 8-round
-  minimal Feistel, no library deps). FF1 with AES would close the
-  gap at substantially higher per-call cost (see §7.4 + DEBTS.md
-  D1). The cipher's PRP quality enters the paper here, as a
+  minimal Feistel, no library deps). FF1 with AES (D1) lands at
+  ratio ~0.92 across the same two cells — sampling-consistent with
+  the ideal — at ~19–29× higher per-call cost (§7.4 throughput). The cipher's PRP quality enters the paper here, as a
   measurement; the substrate's exactness in §3 and the structural
   identity in §4.4 are unaffected. Anchor:
   `tests/theory/test_fpc_shape.py`. Source:
@@ -246,45 +277,291 @@ dependency where the paragraph awaits a Phase 1 number.
 
 ## §5. API
 
-C-primary per Phase 0: `bidder_root.h` declarations are the surface;
-the Python wrapper appears as a binding example in §5.4.
+§5 expanded to draft-paragraph granularity. C-primary per Phase 0:
+`bidder_root.h` is the canonical surface; `bidder_opaque.h`
+(heap-allocated handles, FFI-friendly) is mentioned only as the
+basis for the Python binding in §5.4. Each sub-bullet below names
+what's in the paragraph and what's deliberately excluded.
 
-- §5.1 `bidder_cipher(period, key, ...)`. C signature, contract,
-  examples.
-- §5.2 `bidder_sawtooth(n, count, ...)`. C signature, contract,
-  examples.
-- §5.3 Composition: `cipher` + `sawtooth` for "exact uniform
-  leading-digit Monte Carlo over `[b^(d−1), b^d − 1]`."
-- §5.4 Python binding example (`bidder.py`).
-- §5.5 Backwards-compatibility / stability promise. Tied to the
-  `bidder-stat/` release tag named in Phase 1 E3.
+- §5.1 **Cipher path.** Three functions from `bidder_root.h`:
+
+      int bidder_cipher_init(bidder_block_ctx *ctx, uint64_t period,
+                             const uint8_t *key, size_t key_len);
+      int bidder_block_at(const bidder_block_ctx *ctx, uint64_t i,
+                          uint32_t *out);
+      const char *bidder_block_backend(const bidder_block_ctx *ctx);
+
+  *Contract.* `period ∈ [2, BIDDER_ROOT_MAX_PERIOD_V1 = 2³² − 1]`.
+  `key` may be `NULL` only when `key_len == 0` (degenerate-key
+  case accepted, not recommended). `bidder_block_at` is stateless
+  on the `ctx` — same `(ctx, i)` always yields the same `*out` —
+  so callers can run multiple iterators or random-access calls
+  against one `ctx`. Returns one of the `BIDDER_ROOT_*` status
+  codes; `BIDDER_ROOT_OK` is success, `BIDDER_ROOT_ERR_INDEX` for
+  `i >= period`, etc. *Diagnostic:* `bidder_block_backend` returns
+  the static string `"speck32"` or `"feistel"` for the backend
+  selected at `init` based on `period` (M1's threshold).
+
+- §5.2 **Sawtooth path.** Two functions from `bidder_root.h`:
+
+      int bidder_sawtooth_init(nprime_sequence_ctx *ctx,
+                                uint64_t n, uint64_t count);
+      int bidder_sawtooth_at(const nprime_sequence_ctx *ctx,
+                              uint64_t i, uint64_t *out);
+
+  *Contract.* `n ≥ 2`, `count ≥ 1`. `bidder_sawtooth_at` returns
+  the `i`-th n-prime (0-indexed) in ascending order via the
+  closed form `c_K = q·n + r + 1` with `(q, r) = divmod(K-1,
+  n-1)` where `K = i + 1` (cite §3.5). Constant work in `i`; no
+  enumeration. *Range cap:* the result must fit in `uint64_t`;
+  otherwise `BIDDER_ROOT_ERR_OVERFLOW`. The cap is the one
+  intentional difference from the Python implementation
+  (`bidder.sawtooth`), which uses arbitrary-precision integers
+  and continues past `2⁶⁴`.
+
+- §5.3 **Composition pattern.** The headline use of the API is
+  composing cipher + sawtooth for keyed exact-uniform-leading-
+  digit Monte Carlo on a digit-class block. With `b ≥ 2`, `d ≥ 1`,
+  and the smooth condition `n² | b^(d-1)` from §3.3, the n-primes
+  of `nZ_{>0}` lying in `[b^(d-1), b^d − 1]` number exactly
+  `(b−1) · b^(d-1) · (n−1) / n²`, with leading-digit counts
+  exactly `b^(d-1) · (n−1) / n²` per digit. The pattern, in
+  C-direct form:
+
+      bidder_block_ctx cipher;
+      nprime_sequence_ctx saw;
+      bidder_cipher_init(&cipher, P, key, key_len);
+      bidder_sawtooth_init(&saw, n, P);
+      for (uint64_t i = 0; i < N; ++i) {
+          uint32_t j;  bidder_block_at(&cipher, i, &j);
+          uint64_t a;  bidder_sawtooth_at(&saw, j, &a);
+          /* a is in [b^(d-1), b^d - 1] for the smooth (b, n, d);
+             leading digit of a is exactly uniform across the block. */
+          process(a);
+      }
+
+  Where `P` is chosen as the smooth-block atom count from §3.3.
+  At `N = P`, the keyed permutation visits every n-prime atom in
+  the block exactly once; the structural Riemann-sum identity
+  (§4.4) applies; the leading-digit distribution is exact.
+
+- §5.4 **Python binding example** (`bidder.py` and
+  `bidder_c_native.py`). The Python wrappers expose the same
+  shape as a binding example, not the primary API:
+
+      import bidder
+      b = bidder.cipher(P, key)            # BidderBlock
+      s = bidder.sawtooth(n, P)            # NPrimeSequence
+      for i in range(N):
+          atom = s.at(b.at(i))
+          process(atom)
+
+  `bidder.py` is the pure-Python implementation; `bidder_c_native.py`
+  is the ctypes wrapper over `bidder_opaque.h`. Both expose the same
+  Python-level interface. *Throughput note:* the Python wrappers
+  add ~1 µs / call of ctypes / interpreter overhead on top of the
+  C kernel's sub-µs cost (M3, M4). Users wanting peak throughput
+  use the C surface directly; the Python wrappers are for
+  prototyping, scripting, and exploratory use.
+
+- §5.5 **Stability promise.** The C surface above is the version
+  this paper describes, tagged `bidder-stat-v1.0` at the
+  `bidder-stat/` repo. *Stability levels:* (1) ABI-stable across
+  patch releases (1.0.x); (2) minor releases (1.x) may *add* to
+  the surface but will not change existing function signatures,
+  argument semantics, or error-code values; (3) major releases
+  (2.x) may break compatibility; the paper covers v1 only. The
+  Python wrapper inherits the same promise indirectly: changes
+  visible at the Python level track the C surface's stability.
+
+- §5.6 **What the API does not include** (cards-face-up).
+  - *No batched random-access.* `bidder_block_at` and
+    `bidder_sawtooth_at` operate on one index at a time. Bulk
+    callers write a tight loop. (DEBTS.md D13.)
+  - *Thread-safety on shared handles is not promised, only
+    documented as plausible.* `bidder_block_at` does not mutate
+    its `ctx`; concurrent reads from a single `ctx` would not
+    race in the current implementation. The paper documents this
+    but does not enforce it across versions.
+  - *No streaming iterator beyond random-access.* The primitive
+    is `at(i)`; iteration is built by the caller. The Python
+    wrapper provides `__iter__` for convenience.
+  - *No reseeding mid-stream.* Once initialised, the key is
+    fixed for the `ctx`'s lifetime. Different keys require a
+    fresh `bidder_cipher_init` on a separate `ctx`.
+  - *No bignum sawtooth in C.* The C `bidder_sawtooth_at` returns
+    `uint64_t`; values that would exceed that report
+    `BIDDER_ROOT_ERR_OVERFLOW`. The Python `bidder.sawtooth`
+    continues with arbitrary-precision integers — this is the
+    one capability difference between the C and Python paths,
+    and the paper notes it explicitly so a reader doesn't infer
+    parity.
 
 ## §6. Implementation
 
-- §6.1 C core (`bidder_root.c`, `bidder_opaque.c`), Python wrapper,
-  no third-party deps in the wrapper. Brief paragraph on how the
-  cycle-walking Speck32/64 and Feistel fallback are wired together.
-- §6.2 Build, install, test in `bidder-stat/`. (Reference
-  `Makefile` + `bidder.py`.)
-- §6.3 Test suite layout — proof tests (theorem == implementation)
-  vs property tests vs benchmark tests. Cite `tests/theory/` and
-  `tests/test_acm_core.py`.
-- §6.4 Performance: §6.4 table of throughput numbers + a §6
-  paragraph on cycle-walking overhead and the Feistel decision
-  boundary. (Locked Phase 0.)
+§6 expanded to draft-paragraph granularity, mirroring §3 / §4 / §5.
+Each sub-bullet is one paragraph in the final paper. The section is
+implementation-shaped (source layout, wiring, tests, performance,
+build) rather than theorem-shaped; numbers come from M1 + M4, the
+test inventory comes from E4's smoke check.
+
+- §6.1 **Source layout.** *C kernel:* `bidder_root.{c,h}` is the
+  user-facing surface (six functions; see §5); `bidder_opaque.{c,h}`
+  exposes heap-allocated handle types for FFI use; the kernel is
+  `~300` lines of C plus the Speck32/64 reference implementation
+  and the unbalanced 8-round Feistel fallback. *Generator:*
+  `generator/bidder.{c,h}` holds the cycle-walking driver and the
+  block-of-`[0, P)` iterator. *Python wrappers:* `bidder.py` is the
+  pure-Python implementation (used as the test oracle and the
+  binding example in §5.4); `bidder_c_native.py` is the ctypes
+  wrapper over `bidder_opaque.h` exposing the same Python-level
+  shape. *No third-party C deps.* The kernel compiles against libc
+  alone; the Python wrappers depend on the standard library plus
+  numpy for the M1–M4 measurement scripts (numpy is not required to
+  use the wrappers).
+
+- §6.2 **Cipher wiring.** One paragraph on how the cycle-walking
+  Speck32/64 path and the Feistel fallback compose at runtime.
+  *Selection.* `bidder_cipher_init` reads `period` and the
+  `MAX_CYCLE_WALK_RATIO` constant (currently fixed at 64; DEBTS.md
+  D8) and selects the backend: cycle-walking Speck32/64 when
+  `2³² / period ≤ 64` (i.e., `period ≥ 2²⁶`), 8-round unbalanced
+  Feistel sized to the period otherwise. The selected backend is
+  reported by `bidder_block_backend(ctx)` (a static `"speck32"` or
+  `"feistel"` string; §5.1). *Key derivation.* The user-supplied
+  `(key, key_len)` is hashed with SHA-256 (the only standard-
+  library crypto primitive needed; reference implementation
+  bundled in the kernel) and the digest is used as the cipher key
+  material — Speck32/64 takes 64 bits; the Feistel round function
+  takes 128 bits. *Cycle-walking loop.* `bidder_block_at` calls
+  `Speck32_Encrypt` repeatedly until the output lands in
+  `[0, period)`; the expected number of calls is
+  `2³² / period`, bounded by 64 by construction of the threshold.
+  *Feistel path.* The unbalanced Feistel is parameterised on the
+  period's bit-width; the round function is a small SHA-256-based
+  PRF, deliberately lightweight (DEBTS.md D9 names a stronger-rounds
+  variant). The two backends share the `bidder_block_at` signature
+  and contract; callers do not need to know which backend ran.
+
+- §6.3 **Test-suite layout.** Three layers, each with a different
+  load. *Layer 1 — unit and property tests* (`tests/test_api.py`,
+  `tests/test_bidder.py`, `tests/test_bidder_block.py`,
+  `tests/test_bidder_root.py`, `tests/test_sawtooth.py`,
+  `tests/test_speck.py`): exercise the Python wrappers against the
+  C kernel and against the pure-Python oracle, plus property tests
+  (bijection-hood at small `P`, Speck round-trip equality, sawtooth
+  monotonicity). *Layer 2 — substrate proofs*
+  (`tests/test_acm_core.py`): the block-uniformity tests for the
+  integer lemma (§3.2), the sieved smooth lemma (§3.3), Family E
+  (§3.4), and the spread bound (§3.4). These tests are theorem ==
+  implementation: a failure means a §3 claim is wrong, not that the
+  cipher is misbehaving. *Layer 3 — structural and statistical
+  theory* (`tests/theory/test_riemann_property.py`,
+  `tests/theory/test_quadrature_rates.py`,
+  `tests/theory/test_fpc_shape.py`): the §4.4 Riemann-sum identity
+  at `N = P` (exact equality, machine-ε), Euler-Maclaurin
+  convergence rates for representative integrands (`f = x`,
+  `sin(πx)`, `x²(1−x)²`, step), and the §4.5 FPC-shape statistical
+  test (the test that gates M2's measurements). Total: eleven test
+  files; E4 confirms all pass on a clean checkout.
+
+- §6.4 **Performance: throughput table** *(M1 + M3 + M4 + D4
+  done).* *Workload taxonomy.* Three workload types are reported
+  separately because they measure different things and a reader
+  comparing rows across them will draw the wrong conclusion:
+  (1) **single random-access call** — one `bidder_block_at(ctx,
+  i)` for a single index, the M4-style measurement, the cost of
+  BIDDER's API per call. (2) **materialise full permutation** —
+  `[bidder.cipher.at(i) for i in range(P)]` through the Python
+  wrapper, the M3-style measurement, which builds an `O(P)`
+  Python list on top of `P` ctypes calls; the workload that lets
+  BIDDER be compared head-to-head with `numpy.random.permutation`.
+  (3) **C-direct kernel** — `bidder_block_at` called from C in a
+  tight loop, no ctypes overhead, the D4 measurement. Each row in
+  the table is tagged with its workload type; readers comparing
+  BIDDER to `numpy.random.permutation` should compare workload
+  (2) on both sides, not workload (1) to a workload-(2)
+  comparator. *Table.* Three rows per path: workload (1) M4
+  numbers — cipher ~940 ns/elem, sawtooth ~1300 ns/elem,
+  P-independent; workload (2) M3 numbers — cipher ~5400 ns/elem
+  at `P = 10⁶`, comparators (numpy ~270 ns/elem, random.shuffle
+  ~1900 ns/elem, sort-by-iid-key ~407 ns/elem) listed in §7.4;
+  workload (3) D4 numbers — Feistel kernel ~38 ns/call
+  (`P < 2²⁶`), Speck32/64 cycle-walking ~2100 ns/call at
+  `P ≈ 10⁸` (cycle-walking ratio ~43, scaling with `2³² / P`),
+  sawtooth ~3 ns/call (one divmod + arithmetic, backend-
+  independent). *Wrapper-overhead reading.* Subtracting workload
+  (3) from workload (1) gives the ctypes round-trip cost: cipher
+  ~940 − 38 ≈ 900 ns/call, sawtooth ~1300 − 3 ≈ 1300 ns/call.
+  The Python wrapper is convenience, not throughput; users
+  needing peak throughput call the C surface directly and get
+  Feistel ~38 ns/call (kernel) or ~3 ns/call (sawtooth) — sub-µs
+  per call as the paper claims. *Decision-boundary paragraph.*
+  M1 names the Feistel decision boundary: the implementation's
+  threshold (`P = 2²⁶`) is conservative; throughput-optimal
+  crossover is near `P ≈ 2³¹`; in the conservative region
+  (`2²⁶ ≤ P < 2³¹`), Speck32/64 cycle-walking runs ~3× slower
+  than Feistel would on the same `P` (~2820 vs ~930 ns/call
+  through the wrapper, scaled accordingly C-direct). Numbers:
+  `paper/measurements/m1_results.md`,
+  `paper/measurements/m3_results.md`,
+  `paper/measurements/m4_results.md`,
+  `paper/measurements/d4_results.md`.
+
+- §6.5 **Build and install.** From a clean checkout of
+  `bidder-stat/`: `make build` compiles the C kernel into
+  `libbidder.dylib` (macOS) / `libbidder.so` (Linux); `make test`
+  runs the eleven-file test suite (auto-detects `sage -python` for
+  the numpy-dependent suites, falls back to `python3` for the
+  C-only tests); `make replicate` runs M1–M4 plus the per-use-case
+  scripts and regenerates every figure and table in the paper from
+  source. *No configure step, no third-party C deps, no Python
+  package install.* The `Makefile` is ~30 lines; the C compile is
+  one `cc -O2 -fPIC -dynamiclib` command. The intent is that a
+  reviewer with `cc` and a Python with numpy can clone, type
+  `make replicate`, and reproduce every number in the paper in a
+  few minutes. E4 verifies this on a clean checkout
+  (`paper/measurements/e4_smoke.md`). Cross-platform CI is not
+  set up — the build is hand-tested on macOS and Linux only;
+  Windows users would need to adapt the `Makefile` (the C kernel
+  itself is portable).
+
+- §6.6 **What §6 does not include.** Cards-face-up. *No SIMD
+  path.* The kernel is portable scalar C; the Speck32/64
+  reference is the obvious target for SIMD batching but the paper
+  does not include such a variant (DEBTS.md D14). *No batched
+  random-access API.* `bidder_block_at` and `bidder_sawtooth_at`
+  are one-index-at-a-time; bulk callers write a tight loop
+  (DEBTS.md D13, motivated by the wrapper-overhead numbers in
+  §6.4). *No thread-safety guarantee on shared handles.* The
+  current implementation does not mutate the `ctx` in `at` calls
+  (so concurrent reads happen to be safe in practice), but the
+  paper does not promise this across versions; concurrent callers
+  should use one `ctx` per thread. *No cross-platform CI.* The
+  build is hand-tested on macOS and Linux; Windows is unverified
+  (the C kernel itself is portable C99 — DEBTS.md D15). *No
+  fuzzing harness.* The cipher is exercised by property tests
+  (round-trip, bijection-hood at small `P`, Family E membership);
+  a libFuzzer / AFL harness is not bundled (DEBTS.md D16). These
+  exclusions are deliberate Phase 1 scope cuts; they don't change
+  what §6 covers, only what it does not.
 
 ## §7. Use cases
 
 Six worked examples. Each ~half a page. Code + numerical result + the
 exactness payoff vs the asymptotic alternative.
 
-§7.6 is expanded below as the **template** for the other five (one
-bullet per intended paragraph; load-bearing claim, comparator,
-number, figure or table, code pointer, payoff sentence, plus a
-"use something else when…" sentence per the cards-face-up rule).
-§7.1–§7.5 inherit this shape when they're expanded next; each will
-include its own "use something else when" sentence naming the
-regime where another tool is the better choice.
+§7.2, §7.3, §7.4, §7.6 are expanded below to draft-paragraph
+granularity (one bullet per intended paragraph; load-bearing claim,
+comparator, number, figure or table, code pointer, payoff
+sentence). §7.1, §7.5 are gestures awaiting expansion. The §9
+limitations and the §7.4 capability matrix carry the cards-face-up
+weight for "where BIDDER isn't the right tool"; individual use
+cases name a comparator only where its presence changes the
+reader's decision. §7.4 is structurally distinct from the other
+three expanded cases: it absorbs the head-to-head comparison from
+the (now folded) §8, so it carries three comparator notes rather
+than one.
 
 - §7.1 **Stratified survey design** with leading-digit strata at
   base `b ≠ 2`.
@@ -349,11 +626,13 @@ regime where another tool is the better choice.
      reported as mean and one-sigma band over 1000 trials.
      The contrast is sharp: zero vs `b − 2` ± `√(2(b − 2))`.
    - **Code.**
-     `bidder-stat/replication/use_case_02_benford_null.{c,py}`.
-     ~25 lines C + ~30 lines Python (the histogram plot is
-     matplotlib; the chi-squared trial loop is the bulk).
-     `make use_case_02` reproduces the figure and the table
-     from a single command.
+     `bidder-stat/replication/use_case_02_benford_null.py`
+     (~120 lines Python through the C kernel via the wrapper).
+     `make use_case_02` reproduces the table.
+     Figures (matplotlib, author-side only) live with the PDF.
+     Headline numbers: BIDDER χ² = 0 exactly at every (b, d) cell;
+     i.i.d. mean / std track the χ²(b-2) prediction across
+     1000 trials.
    - **Payoff.** One sentence: the analyst gets a
      deterministic anti-Benford reference with zero sampling
      noise on the leading-digit counts at any block size, so
@@ -361,45 +640,211 @@ regime where another tool is the better choice.
      detector's properties alone — not the reference's
      finite-sample variance. The substrate's exactness has
      visible cash value here.
-   - **Use something else when.** If sampling noise in the
-     reference is acceptable — when the detector's
-     calibration tolerates `O(1/√N)` deviation in the bin
-     counts — use i.i.d. uniform; one `numpy.random.integers`
-     call, no substrate machinery. If the calibration needs
-     a Benford-*conforming* reference (rather than the
-     anti-Benford extreme), use an i.i.d. sampler from
-     Benford's distribution; BIDDER is a uniform-leading-
-     digit tool, not a Benford-conforming one. If the
-     analyst is testing for *any* deviation rather than the
-     specific direction Benford-vs-uniform, the choice
-     between BIDDER and i.i.d. for the reference matters
-     less and the simpler path wins.
+   - **Comparator note.** A Benford-*conforming* reference (as
+     opposed to the anti-Benford extreme this use case
+     constructs) is the i.i.d. sampler from Benford's
+     distribution; BIDDER does not provide that and should not
+     be miscast as a Benford-conforming tool.
 - §7.3 **Reproducible cross-validation** with exact fold sizes on
-  non-power-of-two `n`.
-- §7.4 **Format-preserving permutation** of a small-`P` domain
-  where FF1/FF3 would be overkill. *(Absorbs the head-to-head
-  comparison table per the Phase 0 fold of §8.)* The matrix has
-  axes BIDDER wins on (keyed, reproducible, streaming/random-
-  access, arbitrary `P`, zero deps) **and axes BIDDER loses on:**
-  - *Cryptographic PRP strength.* BIDDER's Speck32 (small block)
-    and 8-round minimal Feistel are not cryptographically strong.
-    FF1 / FF3-1 with AES are. Anyone needing PRP-grade randomness
-    should use FF1 / FF3-1, not BIDDER.
-  - *FPC realisation tightness.* M2 measures BIDDER's variance
-    ratio against ideal as ~1×–32× across `(P, N)`. FF1 with AES
-    is expected to land near 1× across the same panel; not
-    benchmarked here (DEBTS.md D1 is the to-do).
-  - *Real-randomness baselines.* `secrets.SystemRandom().shuffle`
-    and `os.urandom`-driven sort-by-key are gold-standard for
-    unguessable output; BIDDER doesn't compete with them on
-    randomness quality (DEBTS.md D2, D3).
-
-  Comparators benchmarked numerically in M3:
-  `numpy.random.permutation`, `random.shuffle`, sort-by-iid-key,
-  i.i.d. with replacement. BIDDER's positioning: lighter than
-  FF1/FF3 tooling, streaming where the in-memory comparators are
-  not, deliberately non-cryptographic. The matrix shows where
-  each comparator wins.
+  non-power-of-two `n`. Cipher-leveraged use case (§4.1 / §4.4 do
+  the work; the §3 substrate's leading-digit guarantee is not
+  exercised here, and the §4.5 FPC realisation gap does not
+  apply since we are partitioning records, not estimating
+  variances).
+   - **Problem.** A statistician running `k`-fold
+     cross-validation on a dataset of size `n` wants four
+     properties simultaneously: *reproducible* folds (same key
+     → same partition), *exact* fold sizes (each fold has
+     `⌊n/k⌋` or `⌈n/k⌉` elements; no sampling deviation),
+     *streaming* assignment (no materialised permutation of
+     `[0, n)` in memory), and *arbitrary* `n` (the dataset is
+     not sized for power-of-two-friendly tooling). Standard
+     tools give three of four. (Motivating paragraph.)
+   - **Cipher guarantee.** Cite §4.1 (role separation) and §4.4
+     (bijection-hood). BIDDER produces a keyed bijection
+     `π : [0, n) → [0, n)` for any `n ∈ [2, 2³² − 1]`. *Exact-
+     fold construction:* the assignment
+     `fold(i) := ⌊π(i) · k / n⌋` partitions `[0, n)` into `k`
+     disjoint folds. Fold cardinalities are
+     `|{m ∈ [0, n) : ⌊m · k / n⌋ = j}|`, which equals `⌊n/k⌋`
+     or `⌈n/k⌉` independent of *which* records land in *which*
+     fold. The bijection is what turns approximate-by-hash
+     into exact. (Headline payoff.)
+   - **Where the §4.5 gap does not enter.** Cross-validation
+     uses the fold partition for *evaluation* (training on
+     `k − 1` folds, testing on the remaining one), not for
+     variance estimation of an integral. The §4.5 FPC
+     realisation gap and the §4.4 Riemann-sum identity at
+     `N = P` do not enter §7.3's correctness; only the
+     bijection property (any keyed bijection of `[0, n)`
+     would do, but BIDDER is the bijection that's *also*
+     streaming-on-arbitrary-`n`-with-zero-deps).
+   - **Comparators.**
+     - `numpy.random.permutation(n)` with seed: works for
+       fold construction (shuffle, then contiguously
+       partition). Reproducible; exact sizes. Loses on
+       streaming — materialises `[0, n)`, infeasible at
+       `n` larger than RAM.
+     - Hash-based bucket assignment (`fold(i) := hash(record_i)
+       mod k` for some stable hash). Streaming and
+       reproducible (with a fixed hash). Loses on exact
+       sizes — fold cardinalities deviate by
+       `O(√(n · (k−1) / k²))` (binomial sampling). At
+       `n = 10⁶, k = 10`, typical deviation is ~316; max
+       across folds is ~950.
+     - BIDDER cipher: streaming + reproducible + exact +
+       arbitrary `n` + zero deps. The trade-off: ~1 µs / call
+       through the Python wrapper vs ~100 ns for a fast hash
+       (M3, M4) — ~10× per-record cost for exact sizes.
+   - **Figure.** Bar plot of realised fold sizes for
+     `(n, k) = (10000, 7)` (so `n / k = 1428.57…`, exposing
+     the `⌊⌋ / ⌈⌉` split). Three series: BIDDER (every bar
+     either 1428 or 1429, exact); hash-based with 1000 trials
+     showing the empirical bin distribution (bars wobble
+     around 1428.6 with one-σ band at ±14); `numpy.random.permutation`-
+     plus-contiguous-partition (matches BIDDER's exact 1428 /
+     1429 — both win on size, but only BIDDER is streaming).
+     Generated by `use_case_03_cross_validation`.
+   - **Table.** Maximum fold-size deviation across `(n, k) ∈
+     {(1000, 5), (10000, 7), (100000, 10), (1000000, 10),
+     (1000000, 100)}`. *BIDDER row:* `0` when `k | n`, `1`
+     when `k ∤ n`. *Hash row:* mean and 99th-percentile max
+     deviation over 1000 trials with `xxhash` (or any stable
+     fast hash).
+   - **Code.** `bidder-stat/replication/use_case_03_cross_validation.py`
+     (~100 lines Python through the C kernel via the wrapper).
+     `make use_case_03` runs the panel.
+     Headline: BIDDER fold sizes are exactly in `{⌊n/k⌋, ⌈n/k⌉}`
+     at every panel cell (max deviation = 0); SHA-256 hash
+     baseline grows worst-deviation ~ `O(sqrt(n/k))` (46 at
+     n = 1k, 1113 at n = 1M).
+   - **Payoff.** One sentence: keyed-reproducible exact-fold-
+     size partition on arbitrary `n`, with streaming
+     assignment (no materialised permutation), at the cost of
+     ~10× per-record overhead vs hash-based — appropriate
+     when exact fold sizes are load-bearing for the CV
+     protocol (balanced CV variance bounds, regulatory
+     fairness audits, cross-implementation reproducibility
+     where deviation patterns from different hashes must not
+     drift).
+   - **Comparator note.** Hash-based bucket assignment is the
+     simpler choice when `O(√n/k)` fold-size deviation is
+     acceptable; `numpy.random.permutation` with a seed plus
+     contiguous partition is the simpler choice when the dataset
+     fits in memory. BIDDER's win is the regime where exact +
+     streaming + reproducible + arbitrary `n` must hold together.
+- §7.4 **Format-preserving permutation of a small-`P` domain.**
+  Cipher-leveraged use case (§4.4 is what's load-bearing; §3
+  substrate is unused but trivially compatible). *Absorbs the
+  head-to-head comparison table per the Phase 0 fold of §8;* the
+  capability matrix is the section's single most informative
+  artifact and the load-bearing finding for the whole §7.
+   - **Problem.** A practitioner needs a keyed reproducible
+     bijection of a small-`P` domain. Examples: anonymising
+     customer IDs in `[0, 10⁶)` for a deterministic test corpus;
+     randomising row order in a finite dataset for staged
+     processing where the same key must reproduce the order on
+     re-run; deterministically permuting a fixed-size token
+     vocabulary across runs of an experiment. FF1 and FF3-1 with
+     AES are the reference FPE tools (NIST SP 800-38G), but they
+     require an AES library and are sized for cryptographic-
+     strength PRP guarantees. For applications that need keyed-
+     bijection-on-arbitrary-`P` without the cryptographic-grade
+     PRP requirement, the FF1/FF3 framework is overkill;
+     for applications that need cryptographic strength, BIDDER is
+     not a substitute. The use case is the regime in between.
+     (Motivating paragraph.)
+   - **Cipher contract.** Cite §4.4: `bidder_block_at` is a
+     stateless keyed bijection of `[0, P)` for any `P ∈ [2,
+     2³² − 1]`. Streaming + random-access + arbitrary-`P` are
+     simultaneously available; same `(key, P)` produces the same
+     permutation across runs and machines. The §3 substrate is
+     unused here — the use case wants any keyed bijection of an
+     arbitrary domain — but the same `bidder.cipher` machinery
+     used by §7.6 is the load-bearing primitive. (One paragraph;
+     the contract.)
+   - **What BIDDER does not provide.** Cards-face-up. Speck32 has
+     a 32-bit block and is designed for lightweight (not
+     cryptographic-grade) applications; the 8-round Feistel is
+     by-construction lightweight. Anyone needing PRP-grade
+     unguessability should use FF1 / FF3-1 with AES (NIST SP
+     800-38G); D1 measures FF1's FPC realisation ratio at ~0.92
+     across two cells (sampling-consistent with the ideal 1.0)
+     vs BIDDER's 6.8–32× — FF1 is **7–34× tighter on FPC** at
+     the cells measured. Anyone needing CSPRNG-grade randomness
+     should use `secrets.SystemRandom().shuffle()`. The use case
+     is the regime where these properties are not load-bearing —
+     small-domain, reproducible-permutation work where the
+     application is not adversarial.
+   - **Capability matrix** *(headline artifact, from M3).* Five
+     axes: keyed; reproducible; streaming / random-access;
+     arbitrary `P`; extra dependencies. Six rows: BIDDER (cipher);
+     `numpy.random.permutation`; `random.shuffle`; sort-by-iid-
+     key; i.i.d. with replacement; FF1 / FF3-1 (cited, not
+     benchmarked). BIDDER is the only row with all of {keyed,
+     reproducible, streaming/random-access, arbitrary `P`, zero
+     deps}; FF1 / FF3-1 match BIDDER on every axis except
+     dependencies (AES + FPE library); the in-memory comparators
+     match on keyed + reproducible but lose on streaming; i.i.d.
+     with replacement matches on streaming but is not a
+     permutation. The matrix is reproduced from
+     `paper/measurements/m3_results.md` and is the §7 case where
+     the load-bearing finding is qualitative (the *combination*
+     of properties), not a single numerical comparison.
+   - **Throughput across three workloads** *(M3 + M4 + D4 + D1
+     numbers).* Per the §6.4 taxonomy: *workload (1) — single
+     random-access call (M4):* BIDDER ~940 ns/elem through the
+     wrapper, comparators not measured at this workload (M3
+     materialises full permutations). *Workload (2) — materialise
+     full permutation (M3 + D1):* BIDDER cipher ~5400 ns/elem at
+     `P = 10⁶`; FF1 (AES-128, cycle-walking) ~100,000 ns/elem at
+     `P = 10⁶`, ~122,000 ns/elem at `P = 10⁵`, ~147,000 ns/elem
+     at `P = 10⁴` (cycle-walking ratio higher at smaller `P`);
+     numpy ~270 ns/elem; random.shuffle ~1900 ns/elem;
+     sort-by-iid-key ~407 ns/elem. FF1 is **~19–29× heavier than
+     BIDDER through the same Python wrapper**; the numpy /
+     random.shuffle / sort-by-key comparators win this workload
+     because they materialise the permutation natively in
+     optimised C / Python. *Workload (3) — C-direct kernel (D4):*
+     BIDDER ~38 ns/call (Feistel, `P < 2²⁶`); ~2112 ns/call
+     (Speck32 cycle-walking at `P ≈ 10⁸`); FF1 with AES not
+     benchmarked C-direct in this paper, but the ~100 µs Python
+     figure includes ~20 AES round-trips per FF1 round × 10
+     rounds, so a C-direct FF1 would be a small fraction of the
+     Python number. The C-direct row is where "lightweight"
+     becomes a number: BIDDER's Feistel kernel is sub-µs and
+     remains substantially lighter than FF1's per-call cost
+     under any wrapper. Numbers:
+     `paper/measurements/d1_results.md`.
+   - **Code.** `bidder-stat/replication/use_case_04_fpe.py`
+     (~110 lines Python through the C kernel). The thinnest of
+     the §7 use cases: open `bidder.cipher(P, key)`, iterate
+     `block.at(i)` over `i = 0, …, N − 1` to obtain the
+     permutation. The use case verifies bijection + determinism
+     at 6 small-P points and renders the §7.4 capability matrix
+     plus the three-workload throughput row from M3 + D1 + D4
+     outputs (it does not re-run those measurements). `make
+     use_case_04` builds and prints the matrix.
+   - **Payoff.** One sentence: BIDDER is the only comparator
+     delivering all of {keyed, reproducible, streaming + random-
+     access, arbitrary `P` ∈ [2, 2³² − 1], zero deps}; the
+     C-direct Feistel kernel (~38 ns/call) is sub-µs and ~19–29×
+     lighter per call than FF1 (AES-128) through the same wrapper
+     (D1) — appropriate when keyed-bijection-on-arbitrary-`P` is
+     load-bearing but cryptographic-strength PRP is not.
+   - **Comparator note.** Three decision-changing comparators.
+     *FF1 / FF3-1 with AES* is the right tool when cryptographic-
+     grade PRP is required and FPC realisation tighter than ~7×
+     of ideal is needed (D1 measures FF1 at ratio ~0.92 vs
+     BIDDER at ratio 6.8–32 across two M2 cells); the cost is
+     ~19–29× higher per-call throughput than BIDDER (NIST SP
+     800-38G). *`numpy.random.permutation` with a seed* is the
+     right tool when the dataset fits in memory and streaming is
+     not required (M3's workload-(2) winner). *`secrets.SystemRandom
+     ().shuffle()`* is the right tool when CSPRNG-grade
+     unguessability matters and reproducibility does not. BIDDER's
+     win is the regime where keyed + reproducible + streaming +
+     arbitrary `P` + zero deps must hold simultaneously.
 - §7.5 **Deterministic test corpora** for digit-statistic
   algorithms.
 
@@ -442,23 +887,24 @@ regime where another tool is the better choice.
    - **Table.** Single `(P, N)` grid showing BIDDER's measured
      variance / ideal FPC ratio. One row pulled from M2's full
      output. The remainder of M2 lives in §6.4 / appendix.
-   - **Code.** `bidder-stat/replication/use_case_06_variance_mc.{c,py}`.
-     ~30 lines C + ~20 lines Python. `make use_case_06`
-     reproduces the figure and the M2 row from a single command.
+   - **Code.** `bidder-stat/replication/use_case_06_variance_mc.py`
+     (~80 lines, Python through the C kernel via the wrapper).
+     `make use_case_06` runs it and writes
+     `use_case_06_results.md`. Headline numbers (P = 2000,
+     n_keys = 200): BIDDER variance at N = P is 6.15e-31
+     (machine-ε; floating-point round-off); FPC realisation
+     ratio peaks at 7.17 at N = P/2; i.i.d. baseline never drops
+     below σ²/P.
    - **Payoff.** One sentence: no other single tool gives all of
      {known closed-form variance, exact at `N = P`, streaming,
      keyed-reproducible, arbitrary `P`} simultaneously; BIDDER
      does, at a measured FPC-realisation cost reported by M2.
-   - **Use something else when** (template paragraph for every §7
-     use case): if your application needs FPC realisation tighter
-     than ~5× the ideal at moderate `P`, use FF1 with AES instead
-     (DEBTS.md D1). If your application needs cryptographically
-     unguessable output, use `secrets.SystemRandom().shuffle()`
-     (DEBTS.md D2). BIDDER's contribution is in the regime where
-     none of {known variance, exact at `N = P`, streaming, keyed-
-     reproducible, arbitrary `P`, zero deps} can be sacrificed
-     simultaneously; outside that regime, the comparators above
-     are better fits.
+   - **Comparator note.** FF1 with AES is the right tool when
+     tight FPC realisation is required: D1 measures FF1 at ratio
+     ~0.92 (sampling-consistent with the ideal) at the same M2
+     cells where BIDDER is 6.8× and 32×, at ~19–29× higher per-
+     call cost. Cryptographic-strength randomness is a separate
+     concern handled in §9, not by the §7.6 use case.
 
 *(Open: are these the six? Is one too crypto-adjacent? Audit /
 forensic-accounting example as a swap candidate.)*
@@ -491,10 +937,13 @@ that would close it (DEBTS.md).
   AES, or a CSPRNG-backed shuffle.
 
 - **FPC realisation gap is significant and `(P, N)`-dependent.**
-  M2 measures variance ratios from ~1× (small `P`) up to ~32× at
-  `(P, N) = (10000, 5000)`. The gap is the empirical price of
-  the lightweight cipher choice. (DEBTS.md D1 names a comparator-
-  benchmark to-do; D11 a stronger-cipher experiment.)
+  M2 measures BIDDER variance ratios from ~1× (small `P`) up to
+  ~32× at `(P, N) = (10000, 5000)`. D1 measures FF1 (AES-128) on
+  the same cells at ratio ~0.92 (sampling-consistent with the
+  ideal), at ~19–29× higher per-call cost. The gap is the
+  empirical price of BIDDER's lightweight cipher choice. (DEBTS.md
+  D11 names a stronger-cipher experiment with a heavier-but-still-
+  zero-deps round function.)
 
 - **Bias-cancel anomaly at `P = 1000` for `f = sin(πx)`.** M2
   reports variance ratios *below* 1 at this period, indicating
@@ -527,11 +976,15 @@ that would close it (DEBTS.md).
   claims cover the smooth and Family E regions; outside them the
   spread bound (≤ 2) is the best the paper offers.
 
-- **Throughput numbers are wrapper-dominated.** M3 / M4 measure
-  ~1 µs / call through the Python ctypes wrapper; the C kernel is
-  sub-microsecond. Users wanting peak throughput should call the
-  C kernel directly. (DEBTS.md D4 — C-direct benchmark to-do; D12
-  — quickstart-from-C documentation.)
+- **Throughput numbers are workload-dependent and wrapper-aware.**
+  Three workloads, three rows (§6.4): single random-access call
+  through the Python wrapper ~940 ns/call (M4); materialise full
+  permutation through the wrapper ~5400 ns/elem at `P = 10⁶`
+  (M3); C-direct kernel ~38 ns/call (Feistel) or ~3 ns/call
+  (sawtooth) (D4 — closed). Users wanting peak throughput call
+  the C surface directly; the Python wrapper costs ~900 ns/call
+  in ctypes overhead. (DEBTS.md D12 — C quickstart documentation
+  still pending.)
 
 - **Absolute normality of `C_b(n)` is out of scope.** The
   ACM-Champernowne digit-stream is normal in its base of
@@ -541,12 +994,14 @@ that would close it (DEBTS.md).
   not about the digit-stream as a real number.
 
 - **Comparators not benchmarked numerically.** §7.4 / M3 cite
-  FF1, FF3-1, `secrets.SystemRandom`, and `os.urandom`-based
-  shuffles as comparators but only run M3 against subset that
-  excludes them. The qualitative conclusions (FF1 wins on
-  cryptographic strength + FPC tightness; `secrets.SystemRandom`
-  wins on unguessable randomness) are committed in the paper;
-  numbers are deferred to DEBTS.md (D1, D2, D3).
+  `secrets.SystemRandom` and `os.urandom`-based shuffles as
+  comparators but do not benchmark them; the qualitative
+  conclusion (these are CSPRNG-grade for unguessable randomness;
+  BIDDER doesn't compete with them on randomness quality) is
+  committed in the paper. Numbers deferred: DEBTS.md D2, D3. FF1
+  is benchmarked (D1, closed): tighter FPC at higher per-call
+  cost; FF3-1 is cited but not separately benchmarked since it
+  shares FF1's AES backbone.
 
 ## §10. Discussion
 
@@ -589,10 +1044,15 @@ Lives in the carved `bidder-stat/` repo per Phase 0. Contents:
   impl.
 - `tests/theory/` (the three structural-claim tests).
 - `tests/test_acm_core.py` (the block-uniformity tests).
-- `bidder-stat/replication/use_case_<n>.{c,py}` for each of the six
-  use cases.
-- Top-level `Makefile` (or `replicate.sh`) that builds, runs tests,
-  and reproduces every figure in the paper.
+- `bidder-stat/replication/use_case_<n>.py` for each expanded §7
+  use case (currently §7.2, §7.3, §7.4, §7.6 — §7.1 and §7.5
+  pending). Plus `replication/d1_measure.py` (FF1 comparator,
+  closes D1) and `replication/bench_c.c` (C-direct kernel,
+  closes D4).
+- Top-level `Makefile` (and `replicate.sh`) that builds, runs
+  tests, runs M1–M4 + D4 + D1 + the use cases, and reproduces
+  every table referenced in the paper. Figures (matplotlib,
+  author-side) live with the PDF.
 
 ---
 

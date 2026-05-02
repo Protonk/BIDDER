@@ -8,14 +8,14 @@ propagate through the CF lens.
 
 ## Setup
 
-`δ = p/q` with `p` a 12,873-digit integer and `q = 2^11,879 · 5^4,894`
-(a 12,874-digit power-of-10 divisor — 4894 fives matching `C_Surv`'s
-length, the rest twos). The Euclidean algorithm gives a finite CF
-of length `N = 24,923`.
+`δ = p/q` with `p` a 12,871-digit integer and `q = 2^12,871 · 5^12,873`
+(reduced from `10^12,874` after cancellation of `gcd(num, 10^L_b) = 40`).
+The Euclidean algorithm gives a finite CF of length `N = 24,923`.
 
 Reference baselines for a random rational `p/q`:
 - Worst-case CF length (Fibonacci-tight): `log_φ(q) ≈ 61,594`.
-- Average CF length: `(12 ln 2 / π²) · ln(q) ≈ 24,975` (Heilbronn 1969).
+- Average CF length: `(12 ln 2 / π²) · ln(q) ≈ 24,979` (Heilbronn 1969;
+  using actual `q = 2^12871 · 5^12873`).
 - Asymptotic partial-quotient distribution: Gauss–Kuzmin
   `P(a_i = k) = log₂((k+1)² / k(k+2))`.
 - Asymptotic geometric mean: Khinchin's constant `K₀ ≈ 2.6854520`.
@@ -52,7 +52,7 @@ across all `k`.
 
 Three observables independently confirm "generic rational":
 
-1. **CF length** lands within 0.2% of the Heilbronn average for a
+1. **CF length** lands within 0.23% of the Heilbronn average for a
    random rational of denominator `≈ 10^12,874`. The ratio
    `N / log_φ(q) ≈ 0.405` is the theoretical mean exactly.
 
@@ -111,8 +111,8 @@ The result is for *one* panel (`[2, 10], k = 400`). It doesn't address:
   CF analysis is a separate axis.
 
 - **Comparison to random control.** A random rational with the same
-  denominator structure (`p' uniform in [0, q)`, `q = 2^11,879 ·
-  5^4,894`) is the natural null. EXP02 hasn't directly measured the
+  denominator structure (`p' uniform in [0, q)`, `q = 2^12,871 ·
+  5^12,873`) is the natural null. EXP02 hasn't directly measured the
   control; the CF metrics agree with theoretical predictions for
   random rationals, but a Monte Carlo control would tighten the
   comparison.

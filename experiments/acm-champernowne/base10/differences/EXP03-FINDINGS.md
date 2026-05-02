@@ -39,9 +39,10 @@ bundle overlap:   236.88         0.03604
 For `df = 81` the χ² critical value at `p < 0.001` is `≈ 119`. δ
 sits *just under* (`110`); bundle sits well above (`237`).
 
-Bundle's pair structure is roughly **2.25× larger** than δ's by both
-χ² and mutual information. The transducer suppresses but does not
-destroy the pair correlations.
+Bundle's pair structure is roughly **2.15× larger** than δ's by χ²
+(`237/110 ≈ 2.15`) and **2.25× larger** by mutual information
+(`0.036/0.016`). The transducer suppresses but does not destroy
+pair correlations.
 
 ## Top anomalous digit pairs in δ
 
@@ -65,25 +66,23 @@ Three observations stand out:
 
 ### 1. Borrow-pair signatures appear, in modest excess
 
-Pairs `(0, 9)` and `(8, 9)` are over-represented. These match the
-borrow-signature reading of EXP01:
+Pairs `(0, 9)` and `(8, 9)` are over-represented. These are
+*consistent with* the borrow-signature reading of EXP01 — `(0, 9)`
+is a candidate "agreement-then-borrow-firing" pattern, `(8, 9)` is a
+candidate "result-of-borrow" pattern — but the digram itself is
+diagnostic only at the level of joint-pair excess, not at the level
+of source-digit arithmetic. A definitive borrow-trace would require
+aligning bundle and survivor digits position-by-position with their
+borrow lineage tracked, which this experiment does not do.
 
-- `(0, 9)`: a digit-position where bundle and survivor *agreed*
-  (giving 0) followed by a position where a borrow chain *fired*
-  (giving 9). The borrow chain starts on the next digit.
-- `(8, 9)`: bundle's `8` minus survivor's `9` (with no incoming
-  borrow) leaves `−1` mod 10 = `9`, with a borrow propagating
-  *backwards* — i.e., the previous digit got `8` after losing
-  `1` to the borrow.
+### 2. Long borrow chains are suppressed below independence baseline
 
-These are predicted patterns of single-position borrows.
-
-### 2. Long borrow chains are suppressed
-
-`(9, 9)` is *under-represented* by `−0.0025`. If borrow chains had
-characteristic length > 1, we'd see `(9, 9)` over-represented —
-borrows propagating across multiple positions. We see the opposite.
-Borrows in this construction are mostly *single-position* events.
+`(9, 9)` is *under-represented* by `−0.0025`. Long borrow chains
+would predict `(9, 9)` over-representation; we see suppression
+instead. Borrows in this construction don't propagate across
+multiple positions in any signal we can detect at this resolution —
+but the data shows below-baseline `(9, 9)`, not absence of `(9, 9)`
+entirely.
 
 ### 3. Bundle-inherited pair patterns dominate the top spots
 
