@@ -74,18 +74,35 @@ directory is where we do that work directly.
   and K-noisy under both raw and entry-shuffle (ρ ≈ 0, min ρ ≈
   −0.65). Reference parent: `C_Surv` itself has ρ = +0.73,
   intermediate between prime-m's +0.91 and comp-m's +0.24.
-  **Implication.** The K-stability difference between prime-m
-  and comp-m is *not* a structural property of the cofactor
-  refinements — both refinements add similar small K-noisy
-  perturbations to a parent that is already K-stable. The
-  D_N*-normalization in EXP-DSUBN-01 amplifies those small
-  perturbations: in prime-m they happen to align with the
-  parent's K-stable shape (lifting ρ from 0.73 to 0.91); in
-  comp-m they anti-align (collapsing ρ from 0.73 to 0.24).
-  C_Surv is the K-stable object the bracketing has been tracking
-  all along. The "structurally cleaner target" framing for
-  prime-cofactor was promoting normalization-amplified noise to a
-  structural claim.
+  **Initial reading** (corrected by EXP-DSUBN-04 below): the
+  refinement looked like K-noisy perturbation, with the
+  prime-m/comp-m K-stability difference attributed to
+  D_N*-normalization-amplified noise.
+
+- `alignment_heatmap.py` / `alignment_heatmap.png` — EXP-DSUBN-04.
+  Localizes the (t, K) interaction between parent residual and
+  refinement deviation:
+  `align(t, K) = (F_N^{surv}(t,K) − t) · (F_N^{ref}(t,K) − F_N^{surv}(t,K))`.
+  2×2 grid: rows raw / entry-shuffled (destroyer); cols prime-m /
+  comp-m. Per-cell strip above heatmap: per-K integrated
+  ∫align dt. **Findings.** (a) **Mirror symmetry** between prime-m
+  and comp-m heatmaps — where prime-m is destructive, comp-m is
+  constructive, and vice versa. This is `dev_prime + dev_comp ≈
+  dev_surv` as a (t, K)-localized identity. The cofactor partition
+  is splitting a *single* underlying coordinate, not two
+  independent ones. (b) **K-stable t-localization** — vertical
+  bands persist across K. The deviation has K-coherent t-structure
+  the raw pairwise Pearson ρ missed (because the structural part
+  is small relative to K-noise, but emerges after multiplication
+  with the parent's larger signal). (c) **Shuffle preserves the
+  pattern exactly** to ~10⁻⁴ precision in ∫align dt — confirms the
+  EXP-DSUBN-02 marginal-property finding at heatmap resolution.
+  **Walks back EXP-DSUBN-03's "noise" framing**: the refinement
+  *does* carry K-stable structural content; it's just hidden under
+  K-noise at the deviation-curve level and only visible after the
+  parent-multiplication subtraction. The cofactor restriction is a
+  meaningful structural coordinate, mirror-imaged between prime
+  and comp.
 
 - `k_scaling.py` / `k_scaling.png` — sweeps K ∈ {100, …, 6400} and
   measures `D_L*(K)` for the five constructions. Empirical result:
