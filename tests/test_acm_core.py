@@ -245,6 +245,67 @@ def test_block_uniformity_sieved_family_e():
     print(f"  Sieved block uniformity (Family E, {checked} triples): OK")
 
 
+def test_block_uniformity_sieved_generalised_family_e():
+    """Generalised Family E (clause 3'): for integers (qp, m_min)
+    with m_max := m_min + qp(b-1) - 1, if n satisfies the bracketing
+    conditions
+        (m_min - 1) * n  <  W  <=  m_min * n,
+        m_max * n  <=  bW - 1  <  (m_max + 1) * n,
+    and the leading-digit alignment
+        leading_digit_b(k * n) = (k - m_min) // qp + 1
+            for k in [m_min, m_max],
+    then the multiples of n in B_{b,d} = [W, bW - 1] distribute as
+    exactly qp per leading digit, where W = b^(d-1). Clause 3 is the
+    qp = 1 case; this test covers qp >= 2.
+
+    Sweeps b in [2, 10], d in [2, 5], qp in [2, 50], m_min in
+    [1, 100]; for every (b, d, qp, m_min) whose bracketed n-range
+    contains an integer n >= 2 satisfying the leading-digit
+    alignment, verifies M_k(n) = qp for all leading-digit strips k.
+    """
+    checked = 0
+    for b in range(2, 11):
+        for d in range(2, 6):
+            W = b ** (d - 1)
+            for qp in range(2, 51):
+                for m_min in range(1, 101):
+                    m_max = m_min + qp * (b - 1) - 1
+                    # m_max * n <= bW - 1
+                    n_hi = (b * W - 1) // m_max
+                    # (m_min - 1) * n < W  (vacuous when m_min == 1)
+                    if m_min > 1:
+                        n_hi = min(n_hi, (W - 1) // (m_min - 1))
+                    n_lo = max(
+                        (W + m_min - 1) // m_min,        # m_min * n >= W
+                        (b * W - 1) // (m_max + 1) + 1,  # (m_max + 1) * n > bW - 1
+                        2,
+                    )
+                    if n_lo > n_hi:
+                        continue
+                    for n in range(n_lo, n_hi + 1):
+                        aligned = True
+                        for k in range(m_min, m_max + 1):
+                            if _leading_digit_base(k * n, b) != (k - m_min) // qp + 1:
+                                aligned = False
+                                break
+                        if not aligned:
+                            continue
+                        for kdig in range(1, b):
+                            lo = kdig * W
+                            hi = (kdig + 1) * W - 1
+                            mk = hi // n - (lo - 1) // n
+                            assert mk == qp, (
+                                f"Generalised Family E "
+                                f"(b,n,d,qp,m_min)=({b},{n},{d},{qp},{m_min}): "
+                                f"strip {kdig} has {mk} multiples of n, "
+                                f"expected {qp}")
+                        checked += 1
+    assert checked > 0, (
+        "no Generalised Family E triples found in sweep — sweep range broken")
+    print(f"  Sieved block uniformity (Generalised Family E, "
+          f"{checked} triples): OK")
+
+
 def test_block_uniformity_sieved_unconditional_witnesses():
     """Regression fixture for the canonical witness *outside* both
     sufficient families: (b, n, d) = (4, 5, 5). Smooth fails because
@@ -490,6 +551,7 @@ if __name__ == '__main__':
 
     test_block_uniformity_sieved_sufficient()
     test_block_uniformity_sieved_family_e()
+    test_block_uniformity_sieved_generalised_family_e()
     test_block_uniformity_sieved_unconditional_witnesses()
     test_block_uniformity_sieved_spread_bound()
 

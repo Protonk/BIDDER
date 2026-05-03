@@ -55,6 +55,38 @@ directory is where we do that work directly.
   the entire t-profile" — the prime-cofactor sub-population is the
   structurally cleaner target for any future normality proof.
 
+- `shuffle_kshape.py` / `shuffle_kshape.png` — EXP-DSUBN-02.
+  Discharges the destroyer for EXP-DSUBN-01 per
+  `experiments/VISUAL-REDUCTION-DISCIPLINE.md`. Holds the atom set
+  fixed; varies only ordering (raw / entry-shuffled / d-matched).
+  Result: the K-invariance is *not* an entry-order property —
+  prime-m ρ = 0.91 / 0.91 / 0.91 across the three orderings;
+  comp-m ρ = 0.24 / 0.24 / 0.21. The K-stable shape that prime-m
+  has and comp-m lacks is a property of the atom set's
+  marginal-of-orbit distribution, not of structural ordering. The
+  EXP-DSUBN-01 claim downgrades from "structurally different
+  ordering" to "structurally different atom-set marginals."
+
+- `refinement_kshape.py` / `refinement_kshape.png` — EXP-DSUBN-03.
+  Subtracts the pooled `C_Surv` parent from each cofactor
+  refinement. The refinement-deviation `F_N^{prime-m} − F_N^{surv}`
+  (and the comp-m analogue) is small (~0.04 peak vs F values 0-1)
+  and K-noisy under both raw and entry-shuffle (ρ ≈ 0, min ρ ≈
+  −0.65). Reference parent: `C_Surv` itself has ρ = +0.73,
+  intermediate between prime-m's +0.91 and comp-m's +0.24.
+  **Implication.** The K-stability difference between prime-m
+  and comp-m is *not* a structural property of the cofactor
+  refinements — both refinements add similar small K-noisy
+  perturbations to a parent that is already K-stable. The
+  D_N*-normalization in EXP-DSUBN-01 amplifies those small
+  perturbations: in prime-m they happen to align with the
+  parent's K-stable shape (lifting ρ from 0.73 to 0.91); in
+  comp-m they anti-align (collapsing ρ from 0.73 to 0.24).
+  C_Surv is the K-stable object the bracketing has been tracking
+  all along. The "structurally cleaner target" framing for
+  prime-cofactor was promoting normalization-amplified noise to a
+  structural claim.
+
 - `k_scaling.py` / `k_scaling.png` — sweeps K ∈ {100, …, 6400} and
   measures `D_L*(K)` for the five constructions. Empirical result:
   `D_L*` does not decay smoothly with K, fluctuates in [0.05,

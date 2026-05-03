@@ -1,26 +1,16 @@
 # AGENTS.md
 
-## Build and test
+## Sage has tools
 
-Python tests (no dependencies beyond stdlib):
+>use sage to invoke python
 
-    python3 tests/test_bidder.py
-    python3 tests/test_speck.py
+Use sage for `numpy`, `scipy`, and `matplotlib`. Do not attempt to install these or use the system version.
 
-Python core tests (requires sage for numpy):
+As an example, run a script from the repo root:
 
-    sage -python tests/test_acm_core.py
-
-C tests:
-
-    gcc -O2 -o test_acm_core_c tests/test_acm_core_c.c core/acm_core.c -lm
-    ./test_acm_core_c
-
-    gcc -O2 -o test_bidder_c tests/test_bidder_c.c generator/bidder.c -lm
-    ./test_bidder_c
-
-Plots and experiments require `sage -python`, not `python3`.
-sage carries numpy and matplotlib internally.
+```
+sage -python tests/test_acm_core.py
+```
 
 ## Experiment conventions
 
