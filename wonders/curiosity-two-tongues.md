@@ -4,7 +4,7 @@
 
 **Category.** Curiosity.
 
-**Deadline.** 2026-Q4.
+**Deadline.** 2026-Q3.
 
 ## Description
 

@@ -1,11 +1,12 @@
 # The Cabinet, First Vitrine
 
-Eight specimens. Marvel, prodigy, sport, monster — one each. Two
+Nine specimens. Two marvels. Prodigy, sport, monster — one each. Two
 wonders. Two curiosities (one live, one retired). The cabinet's six
 categories are all populated; the curiosity drawer also opened its
 retired sub-shelf, folded in from the proto-cabinet `nasties/`. The
-categories are not a partition; multiple wonders is the natural
-shape when the substrate keeps offering more than one open frontier.
+categories are not a partition; multiple specimens per category is
+the natural shape when the substrate keeps offering more than one
+finding of a given kind.
 
 ## Marvels
 
@@ -14,6 +15,13 @@ shape when the substrate keeps offering more than one open frontier.
   to terminate at `Ω(k') + 1` instead, with the same multinomial
   number appearing at the kernel-zero boundary and as the leading
   coefficient. Anchored.
+- [Generalised Family E](marvel-generalised-family-e.md) — the
+  lucky-locus closure that turned out to be a sibling of clause 3
+  rather than a new mechanism. A `(qp, m_min)` parameterisation
+  closes 69 of 96 spread-zero cells outside the proven substrate
+  regimes, with the same divmod argument as Family E and clause 3
+  recovered as the special case `qp = 1, δ = 0`. All 46 swept
+  groups match prediction exactly. Anchored.
 
 ## Prodigies
 
@@ -45,15 +53,18 @@ shape when the substrate keeps offering more than one open frontier.
 
 ## Curiosities
 
-- [The Two Tongues](curiosity-two-tongues.md) — the survivor
-  Champernowne real `C_Surv` tracks the bundle's running leading-
-  digit L1 deviation almost cell for cell, including through the
-  dramatic n=2 dip, despite throwing away 62.8% of atoms. The
-  `l1_grid` heatmap confirms the agreement is generic across
-  `(K, n_0) ∈ [10, 1000]²`, not a one-panel coincidence. The
-  mechanism — why a structured filter behaves like a uniform-random
-  thinning at the leading-digit level — is unprobed. *Deadline:
-  2026-Q3.*
+- [The Two Tongues](curiosity-two-tongues.md) — `C_Surv` tracks
+  the bundle's leading-digit L1 deviation cell for cell, including
+  through the n=2 dip; the `l1_grid` heatmap shows the agreement
+  is generic across `(K, n_0) ∈ [10, 1000]²`. Probed twice. The
+  `differences/` chain reframed `C_Surv` as an
+  `H(stream | integer) = 0` optimizer and the magnitude tracking
+  as its L1-layer footprint. The `dsubn` D_N work carried the
+  bracketing forward to star discrepancy and localized a
+  mirror-symmetric cofactor decomposition of the parent's orbit
+  residual (EXP-DSUBN-04). What's still open: K-stability
+  persistence at `K → ∞` and the arithmetic coordinate governing
+  the mirror partition. *Deadline: 2026-Q3.*
 - [The first_digit Pothole](curiosity-retired-first-digit.md)
   *(retired)* — `first_digit(8)` returned `7` because
   `int(10**frac)` truncated `7.999999999999999`. Eleven integers in
