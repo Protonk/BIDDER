@@ -2,24 +2,7 @@
 
 ## §1. Abstract
 
-*If we got rid of the odd numbers, what numbers would be odd?*
-The natural answer — the multiples of 2 that aren't multiples of
-4 — generalises to the n-prime atoms of `M_n = {1} ∪ nℤ_{>0}`
-(multiples of `n` not divisible by `n²`). We present a tool
-around this construction: an exact counting theorem for n-prime
-atoms on arbitrary digit-class blocks `[b^(d-1), b^d − 1]`
-(`b^(d-1)·(n−1)/n²` per leading digit when `n² | b^(d-1)`;
-spread ≤ 2 universally), composed with a keyed cipher that is a
-stateless bijection of `[0, P)` for any `P ∈ [2, 2³² − 1]`
-(Speck32/64 cycle-walking with an unbalanced Feistel fallback at
-small `P`). The substrate is asked only to be exact; the cipher
-only to be a reproducible bijection. Their composition gives
-streaming random-access to a deterministic anti-Benford
-reference, exact-fold partitioning of arbitrary populations,
-format-preserving permutation of small domains, and Monte Carlo
-with a known endpoint and a measured FPC realisation gap. The
-replication archive (~300 lines of C, two pinned Python
-dependencies) reproduces every numerical claim from source.
+*If we got rid of the odd numbers, what numbers would be odd?* The natural answer — the multiples of 2 that aren't multiples of 4 — generalises to the n-prime atoms of `M_n = {1} ∪ nℤ_{>0}` (multiples of `n` not divisible by `n²`). We present a tool around this construction: an exact counting theorem for n-prime atoms on arbitrary digit-class blocks `[b^(d-1), b^d − 1]` (`b^(d-1)·(n−1)/n²` per leading digit when `n² | b^(d-1)`; spread ≤ 2 universally), composed with a keyed cipher that is a stateless bijection of `[0, P)` for any `P ∈ [2, 2³² − 1]` (Speck32/64 cycle-walking with an unbalanced Feistel fallback at small `P`). The substrate is asked only to be exact; the cipher only to be a reproducible bijection. Their composition gives streaming random-access to a deterministic anti-Benford reference, exact-fold partitioning of arbitrary populations, format-preserving permutation of small domains, and Monte Carlo with a known endpoint and a measured FPC realisation gap. The replication archive (~300 lines of C, two pinned Python dependencies) reproduces every numerical claim from source.
 
 ## §2. Introduction
 
@@ -315,8 +298,7 @@ on the chosen integrand, an anomaly where the cipher's
 backend-specific symmetries happen to align with `sin(πx)` on a
 period-1000 grid; the effect does not persist across
 neighbouring `P` values. The realisation gap is the empirical
-price of the lightweight-cipher choice (Speck32 + 8-round
-minimal Feistel, no library deps): the lightweight backends
+price of the lightweight-cipher choice: the lightweight backends
 achieve only partial PRP-quality at sub-period prefixes, and
 FF1's higher AES round count is what drives its tighter
 realisation. FF1 with AES lands at ratio `~0.92` across the
