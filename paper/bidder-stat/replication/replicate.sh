@@ -29,6 +29,18 @@ echo "=== M2: FPC realisation gap ==="
 $PY replication/m2_fpc_gap.py
 
 echo
+echo "=== M2-anomaly: P=1000 anomaly probe (neighbour P + integrand sweep) ==="
+$PY replication/m2_anomaly_probe.py
+
+echo
+echo "=== M2-domain: Feistel domain s sweep (s=15..100, three probes per s) ==="
+$PY replication/m2_feistel_domain.py
+
+echo
+echo "=== M2-pow2: power-of-2 Feistel domain bands (s=62..67, s=126..130) ==="
+$PY replication/m2_power_of_two.py
+
+echo
 echo "=== M3: comparison ==="
 $PY replication/m3_comparison.py
 
