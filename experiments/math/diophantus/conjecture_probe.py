@@ -33,7 +33,8 @@ print()
 def first_break(n, r, M):
     n_plus_1 = n + 1
     for j in range(1, M + 1):
-        if (j * n) % r < -(-(j * r) // n_plus_1):
+        # Corrected: ⌈jn/(n+1)⌉, not ⌈jr/(n+1)⌉.
+        if (j * n) % r < -(-(j * n) // n_plus_1):
             return j
     return None
 
@@ -91,7 +92,7 @@ for d in range(1, D_MAX + 1):
         s = (W // n) % n
         if r != s:
             continue
-        M = (B * W) // (n * n)
+        M = (B * W - 1) // (n * n)  # Corrected.
         if M == 0:
             continue
         fb = first_break(n, r, M)
@@ -127,7 +128,8 @@ def beatty_ladder_check(n, r, j_max):
     None."""
     np1 = n + 1
     for j in range(1, j_max + 1):
-        if (j * n) % r < -(-(j * r) // np1):
+        # Corrected: ⌈jn/(n+1)⌉.
+        if (j * n) % r < -(-(j * n) // np1):
             return j
     return None
 

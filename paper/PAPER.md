@@ -1,52 +1,8 @@
-<!--
-PAPER.md — JStatSoft submission. LaTeX-bound markdown for the
-math-typeset skill (pandoc + amsart).
-
-Conventions used throughout:
-
-  * Math is in inline ($...$) or display ($$...$$) form.
-  * Code identifiers inside math contexts use \mathtt{}; standalone
-    code spans use markdown backticks (which pandoc renders as
-    \texttt{}). Both resolve to Computer Modern Typewriter at the
-    same size in lmodern, so the two styles render identically.
-  * Math-mode set braces use \{ \}; the divides bar uses \mid; the
-    set difference uses \setminus.
-  * Code fences carry no language tag (pandoc otherwise emits the
-    Shaded environment, which the skill's default preamble does not
-    define).
-  * Section headings carry no §N. prefix; amsart auto-numbers via
-    the \setcounter block below the abstract, putting "The question
-    and the bargain" at §2 and continuing through §7 References.
-
-Build note: the math-typeset skill's default preamble does not load
-lmodern, longtable, or booktabs. If pandoc emits longtable for the
-markdown tables, or if the runtime cannot generate cm bitmap fonts,
-extend the preamble with
-
-  \usepackage{lmodern, longtable, booktabs, array, calc}
-
-before \begin{document}.
-
-Suggested skill invocation (after extracting the H1 title and the
-Abstract section content into separate files):
-
-  python3 /mnt/skills/user/math-typeset/scripts/build.py PAPER-body.md \
-    --title "BIDDER: Exact Leading-Digit Sampling with Keyed Random Access" \
-    --author "<author>" \
-    --abstract @PAPER-abstract.md \
-    --output ./out/
--->
-
 # BIDDER: Exact Leading-Digit Sampling with Keyed Random Access
 
 ## Abstract
 
 We present BIDDER, an exact leading-digit sampler with keyed random access for the $n$-prime atoms of the multiplicative monoid $M_n = \{1\} \cup n\mathbb{Z}_{>0}$ (multiples of $n$ not divisible by $n^2$). Two contracts compose: an exact counting theorem on arbitrary digit-class blocks $[b^{d-1}, b^d - 1]$ ($b^{d-1} \cdot (n-1)/n^2$ atoms per leading digit when $n^2 \mid b^{d-1}$; spread $\leq 2$ universally), and a keyed stateless cipher that is a bijection of $[0, P)$ for any $P \in [2, 2^{32} - 1]$ (Speck32/64 cycle-walking with an unbalanced Feistel fallback at small $P$). The substrate is asked only to be exact; the cipher only to be a reproducible bijection. Composing them yields streaming random-access to a deterministic anti-Benford reference, exact-fold partitioning of arbitrary populations, and Monte Carlo with a known endpoint and a measured FPC realisation gap. The implementation is $\sim 300$ lines of C.
-
-```{=latex}
-% Body sections start at §2; the abstract holds the §1 slot.
-\setcounter{section}{1}
-```
 
 ## The question and the bijection
 
@@ -60,7 +16,7 @@ To this exactly uniform sawtooth we attach a small-block cipher, a keyed bijecti
 
 Four adjacent lines of work each do part of what BIDDER does. *PRNG-from-normal-numbers* (Bailey & Crandall 2002; Bailey 2004) gives random access to the digits of a fixed Stoneham-class constant via BBP-style extraction; BIDDER gives keyed random access where the key selects among permutations rather than indexing into a single fixed digit stream. *Quasi-Monte Carlo* (Halton 1960; Sobol' 1967; Niederreiter 1992; Owen 1995; Dick & Pillichshammer 2010) gives bounded star discrepancy $O((\log N)^d / N)$ asymptotically; BIDDER gives endpoint-exact at finite $N$ with FPC-shaped interior at $N < P$. *Exact ranged-integer generation* (Lemire 2019; Saad et al. 2020) gives unbiased i.i.d. samplers over $[0, s)$; BIDDER is a bijection that visits each value exactly once. *Format-preserving encryption* (NIST SP 800-38G — FF1 and FF3-1 with AES) supplies keyed bijections of arbitrary domains sized for cryptographic-strength PRP, requires an AES library, and accepts AES-per-call cost; BIDDER asks of its cipher only bijection-hood, with no library dependency and $\sim 19$–$29\times$ lower per-call cost on the same workload. None of the four sits at all four BIDDER corners simultaneously.
 
-§3 proves the substrate's distribution and indexing results. §4 describes the cipher and how it attaches to the substrate. §5 walks three worked examples, §6 presents the artifact (C surface and replication archive), and §7 is the test suite that backs it.
+The next sections prove the substrate's distribution and indexing results, describe the cipher and how it attaches to the substrate, walk three worked examples, place BIDDER against prior work, and present the artifact and tests that back it.
 
 ## The substrate
 
@@ -170,11 +126,11 @@ The endpoint corollary gives the first: at $N = P$, BIDDER's prefix-mean equals 
 
 We examine two lines of work; each is a precise neighbour to part of what BIDDER does. Bailey–Crandall (PRNG-from-normal-numbers) and BIDDER's substrate emerge from the same kind of process: a number-theoretic structure exposed through a closed-form, random-access extraction that needs no enumeration of the prefix. Their construction is the closest available structural analogue to ours, and the comparison is what most clearly places BIDDER's substrate mathematically. Sobol' and the broader quasi-Monte Carlo literature are the textbook home for "deterministic sequences more uniform than i.i.d. samples" — exactly the effect BIDDER pursues, in the discrete-block-with-leading-digit-structure setting where QMC's continuous-cube tools don't apply natively.
 
-Bailey and Crandall (2002) and Bailey (2004) build a pseudorandom number generator from the digits of Stoneham-class normal numbers $\alpha_{b,c} = \sum_{n=0}^{\infty} 1/(c^n b^{c^n})$. The $K$-th base-$b$ digit of $\alpha_{b,c}$ can be extracted via BBP-style formulas in $O(\log K)$ work, without computing the prefix. The result is a deterministic, reproducible, random-access digit stream whose equidistribution is guaranteed asymptotically — the underlying Stoneham constant is provably normal in base $b$. The kinship with BIDDER is real: both deliver random-access, deterministic, low-per-access-cost sequences with mathematical backing on their distribution. A reader meeting Bailey–Crandall and BIDDER side by side could reasonably ask why BIDDER is more than a re-engineering of the Stoneham construction.
+The PRNG-from-normal-numbers construction (Bailey & Crandall 2002; Bailey 2004) builds a pseudorandom number generator from the digits of Stoneham-class normal numbers $\alpha_{b,c} = \sum_{n=0}^{\infty} 1/(c^n b^{c^n})$. The $K$-th base-$b$ digit of $\alpha_{b,c}$ can be extracted via BBP-style formulas in $O(\log K)$ work, without computing the prefix. The result is a deterministic, reproducible, random-access digit stream whose equidistribution is guaranteed asymptotically — the underlying Stoneham constant is provably normal in base $b$. The kinship with BIDDER is real: both deliver random-access, deterministic, low-per-access-cost sequences with mathematical backing on their distribution. A reader meeting Bailey–Crandall and BIDDER side by side could reasonably ask why BIDDER is more than a re-engineering of the Stoneham construction.
 
 The differences are structural, not engineering. **Single stream vs. keyed family.** Bailey–Crandall produces one sequence per $(b, c)$ Stoneham pair; to get a different sequence, you change the constant. BIDDER's cipher is keyed: the substrate certifies a single block of $P$ atoms, and the cipher key selects among $2^{|\mathit{key}|}$ permutations of that block. **Asymptotic equidistribution vs. exact finite-block counts.** Bailey–Crandall's distributional guarantee is asymptotic — the digits equidistribute in the limit, with finite-$N$ discrepancy that approaches zero. BIDDER's substrate (Theorems 3.5–3.7) gives exact per-leading-digit counts at every finite $N$ matching the regime: at $(b, n, d) = (10, 2, 4)$ every leading digit gets exactly $250$ atoms in $[1000, 9999]$, not "approaches $250$ as $N$ grows." **Digit stream vs. finite-set bijection.** Bailey–Crandall outputs a digit stream — an infinite sequence over $\{0, \ldots, b-1\}$. BIDDER outputs a bijection of a finite set $[0, P)$, with every value visited exactly once at $N = P$. **Provable-normality theorem vs. counting argument.** Bailey–Crandall's correctness rests on the deep number-theoretic result that the Stoneham constant is normal in base $b$. BIDDER's substrate is a counting theorem: divmod arithmetic on multiples of $n$ and $n^2$ in $B_{b,d}$. The two tools answer different questions on different mathematical foundations.
 
-Sobol' (1967) and the broader quasi-Monte Carlo literature (Halton 1960; Niederreiter 1992; Owen 1995; Dick and Pillichshammer 2010) construct low-discrepancy sequences in $[0, 1]^d$ with star discrepancy $O((\log N)^d / N)$ asymptotically — sequences engineered to be more uniform than i.i.d. samples. Two differences place BIDDER. **Low-discrepancy vs. exact distribution.** QMC's $O((\log N)^d / N)$ is an asymptotic discrepancy bound; the sequences are approximately uniform, with discrepancy that shrinks as $N$ grows. BIDDER's substrate (Theorems 3.5–3.7) gives exact per-leading-digit counts at finite $N$ in the certified regimes, and the cipher's endpoint corollary (§4) gives prefix-mean equal to the left-endpoint Riemann sum exactly at $N = P$ — bijection-hood alone, no discrepancy bound needed. **Continuous cube vs. discrete blocks.** QMC operates in $[0, 1]^d$; BIDDER operates over discrete integer blocks $B_{b,d} = [b^{d-1}, b^d - 1]$ with leading-digit structure. The objects are different in kind: QMC produces low-discrepancy point sets in continuous high-dimensional spaces, where the leading-digit structure has no analogue and exact-uniform counts on integer blocks aren't a meaningful target.
+Sobol' and the broader quasi-Monte Carlo literature (Halton 1960; Sobol' 1967; Niederreiter 1992; Owen 1995; Dick & Pillichshammer 2010) construct low-discrepancy sequences in $[0, 1]^d$ with star discrepancy $O((\log N)^d / N)$ asymptotically — sequences engineered to be more uniform than i.i.d. samples. Two differences place BIDDER. **Low-discrepancy vs. exact distribution.** QMC's $O((\log N)^d / N)$ is an asymptotic discrepancy bound; the sequences are approximately uniform, with discrepancy that shrinks as $N$ grows. BIDDER's substrate (Theorems 3.5–3.7) gives exact per-leading-digit counts at finite $N$ in the certified regimes, and the cipher's endpoint corollary gives prefix-mean equal to the left-endpoint Riemann sum exactly at $N = P$ — bijection-hood alone, no discrepancy bound needed. **Continuous cube vs. discrete blocks.** QMC operates in $[0, 1]^d$; BIDDER operates over discrete integer blocks $B_{b,d} = [b^{d-1}, b^d - 1]$ with leading-digit structure. The objects are different in kind: QMC produces low-discrepancy point sets in continuous high-dimensional spaces, where the leading-digit structure has no analogue and exact-uniform counts on integer blocks aren't a meaningful target.
 
 ## The artifact
 
@@ -203,7 +159,7 @@ Eleven test files in `tests/` exercise three concerns: tests of the theory, test
 
 ### Tests of the theory
 
-Three files in `tests/theory/`: `test_riemann_property.py` (the endpoint identity at $N = P$, exact equality, machine-$\varepsilon$), `test_quadrature_rates.py` (Euler–Maclaurin convergence rates for $f = x$, $\sin(\pi x)$, $x^2(1-x)^2$, step), and `test_fpc_shape.py` (the realisation-gap measurement at $N < P$). These check the structural and statistical claims §4 makes about the cipher independently of any specific BIDDER backend.
+Three files in `tests/theory/`: `test_riemann_property.py` (the endpoint identity at $N = P$, exact equality, machine-$\varepsilon$), `test_quadrature_rates.py` (Euler–Maclaurin convergence rates for $f = x$, $\sin(\pi x)$, $x^2(1-x)^2$, step), and `test_fpc_shape.py` (the realisation-gap measurement at $N < P$). These check the structural and statistical claims about the cipher independently of any specific BIDDER backend.
 
 ### Tests of the artifact
 
@@ -211,7 +167,7 @@ Six files in `tests/`: `test_api.py`, `test_bidder.py`, `test_bidder_block.py`, 
 
 ### Tests of the theory via the artifact
 
-`tests/test_acm_core.py`: each substrate result has a verification test that runs the implementation through `bidder_sawtooth_at` and confirms the output matches the proven statement over a finite parameter sweep. The proofs in §3 cover all valid parameters; the tests below cover the listed sweep (every triple in the sweep is checked exhaustively).
+`tests/test_acm_core.py`: each substrate result has a verification test that runs the implementation through `bidder_sawtooth_at` and confirms the output matches the proven statement over a finite parameter sweep. The substrate proofs cover all valid parameters; the tests below cover the listed sweep (every triple in the sweep is checked exhaustively).
 
 | result | implementation | test function | tested sweep |
 |---|---|---|---|
@@ -224,22 +180,4 @@ Six files in `tests/`: `test_api.py`, `test_bidder.py`, `test_bidder_block.py`, 
 
 ## Conclusion
 
-BIDDER is a substrate (exact leading-digit counts of $n$-prime atoms on digit-class blocks; Theorems 3.4–3.7) attached to a stateless keyed cipher (a bijection of $[0, P)$ for any $P \in [2, 2^{32} - 1]$; §4) via a closed-form random-access (Lemma 3.10). The substrate's exactness is structural, the cipher's PRP quality is measured, and the $n^2$-cancellation trigger set (Remark 3.11) is the open question this paper leaves on the table.
-
-## References
-
-- Bailey, D. H. (2004). *A Pseudo-Random Number Generator Based on Normal Numbers.* Lawrence Berkeley National Laboratory Technical Report LBNL-57489.
-- Bailey, D. H., & Crandall, R. E. (2002). *Random Generators and Normal Numbers.* Experimental Mathematics, 11(4), 527–546.
-- Beaulieu, R., Treatman-Clark, S., Shors, D., Weeks, B., Smith, J., & Wingers, L. (2013). *The SIMON and SPECK Families of Lightweight Block Ciphers.* IACR Cryptology ePrint Archive 2013/404. The original specification; test vectors in Appendix C.
-- Black, J., & Rogaway, P. (2002). *Ciphers with Arbitrary Finite Domains.* CT-RSA 2002, LNCS 2271, 114–130. The cycle-walking construction.
-- Copeland, A. H., & Erdős, P. (1946). *Note on Normal Numbers.* Bulletin of the American Mathematical Society, 52, 857–860.
-- Dick, J., & Pillichshammer, F. (2010). *Digital Nets and Sequences: Discrepancy Theory and Quasi-Monte Carlo Integration.* Cambridge University Press.
-- Halton, J. H. (1960). *On the efficiency of certain quasi-random sequences of points in evaluating multi-dimensional integrals.* Numerische Mathematik, 2, 84–90.
-- Lemire, D. (2019). *Fast Random Integer Generation in an Interval.* ACM Transactions on Modeling and Computer Simulation, 29(1), Article 3.
-- Luby, M., & Rackoff, C. (1988). *How to Construct Pseudorandom Permutations from Pseudorandom Functions.* SIAM Journal on Computing, 17(2), 373–386.
-- Niederreiter, H. (1992). *Random Number Generation and Quasi-Monte Carlo Methods.* SIAM CBMS-NSF Regional Conference Series in Applied Mathematics, vol. 63.
-- NIST SP 800-38G (2016, errata 2019). *Recommendation for Block Cipher Modes of Operation: Methods for Format-Preserving Encryption (FF1/FF3-1).*
-- Owen, A. B. (1995). *Randomly Permuted (t,m,s)-Nets and (t,s)-Sequences.* In Niederreiter, H. & Shiue, P. J.-S. (eds.), Monte Carlo and Quasi-Monte Carlo Methods in Scientific Computing. Springer Lecture Notes in Statistics, vol. 106, pp. 299–317.
-- Saad, F. A., Freer, C. E., Rinard, M. C., & Mansinghka, V. K. (2020). *Optimal Approximate Sampling from Discrete Probability Distributions.* Proceedings of the ACM on Programming Languages, 4(POPL), Article 36.
-- Schiffer, J. (1986). Discrepancy of Champernowne-type concatenations.
-- Sobol', I. M. (1967). *On the distribution of points in a cube and the approximate evaluation of integrals.* USSR Computational Mathematics and Mathematical Physics, 7(4), 86–112.
+BIDDER is a substrate (exact leading-digit counts of $n$-prime atoms on digit-class blocks; Theorems 3.4–3.7) attached to a stateless keyed cipher (a bijection of $[0, P)$ for any $P \in [2, 2^{32} - 1]$) via a closed-form random-access (Lemma 3.10). The substrate's exactness is structural, the cipher's PRP quality is measured, and the $n^2$-cancellation trigger set (Remark 3.11) is the open question this paper leaves on the table.

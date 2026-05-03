@@ -71,15 +71,16 @@ def C_j(j, n, r):
     Returns (lhs, rhs, holds): the values of (jn) mod r,
     ⌈jr/(n+1)⌉, and whether the condition holds."""
     lhs = (j * n) % r
-    rhs = -(-(j * r) // (n + 1))
+    # Corrected: ⌈jn/(n+1)⌉, not ⌈jr/(n+1)⌉.
+    rhs = -(-(j * n) // (n + 1))
     return lhs, rhs, lhs >= rhs
 
 
 def first_break(n, r, n_plus_1, M):
     """First j ∈ {1, …, M} at which C_j fails. Returns None if all
-    pass."""
+    pass. Uses corrected predicate (jn mod r ≥ ⌈jn/(n+1)⌉)."""
     for j in range(1, M + 1):
-        if (j * n) % r < -(-(j * r) // n_plus_1):
+        if (j * n) % r < -(-(j * n) // n_plus_1):
             return j
     return None
 
@@ -96,7 +97,7 @@ def collect_rs_cells():
                 continue
             if n * n <= W:
                 continue
-            M = (B * W) // (n * n)
+            M = (B * W - 1) // (n * n)  # Corrected.
             cells.append((n, d, r, M, W))
     return cells
 
@@ -130,71 +131,34 @@ for n, d, r, M, W in cells:
 
 print()
 
-# j = 2 condition.
+# j ≥ 2 conditions (corrected: no case-split needed for j ≤ n).
 print("=" * 72)
-print("Theorem A2 (j = 2 boundary). Necessary case-split:")
+print("Theorem A_j (j ≥ 2 boundary, corrected predicate).")
 print("=" * 72)
 print()
-print("  j=2 condition: 2n mod r ≥ ⌈2r/(n+1)⌉.")
+print("  Corrected predicate: jn mod r ≥ ⌈jn/(n+1)⌉.")
+print("  For j ≤ n (which holds here since j ≤ M ≤ b−1 < n):")
+print("  ⌈jn/(n+1)⌉ = j  (since jn/(n+1) ∈ (j−1, j) for j ≤ n).")
 print()
-print("  Case A (2r ≤ n+1): ⌈⌉ = 1, condition is r ∤ 2n.")
-print("  Case B (2r > n+1):  ⌈⌉ = 2, condition is 2n mod r ≥ 2.")
-print()
-print("  Combined with j=1 (r ∤ n):")
-print("    If r odd: r ∤ 2n ⟺ r ∤ n, so j=2 in Case A is redundant.")
-print("    If r = 2: r | 2n always, so r=2 fails j=2. Excluded.")
-print("    If r even, r ≥ 4: r ∤ 2n is strictly stronger than r ∤ n.")
+print("  Hence: C_j is simply  jn mod r ≥ j  for j = 1, …, M.")
+print("  C_1: n mod r ≥ 1  ⟺  r ∤ n.")
+print("  C_2: 2n mod r ≥ 2.")
+print("  C_3: 3n mod r ≥ 3.")
 print()
 
-print("Verification on r = s cells:")
-print(f"{'n':>4} {'d':>3} {'r':>5}  {'case':>4}  {'C_2':>5}  "
-      f"{'sz?':>5}  {'consistent?':>11}")
+print("Verification on r = s cells (j = 2 and j = 3):")
+print(f"{'n':>4} {'d':>3} {'r':>5}  {'C_2':>5}  {'C_3':>5}  "
+      f"{'sz?':>5}  case_i  {'consistent?':>11}")
 for n, d, r, M, W in cells:
-    case = "A" if 2 * r <= n + 1 else "B"
-    if case == "A":
-        c2 = (2 * n) % r != 0
-    else:
-        c2 = (2 * n) % r >= 2
+    c2 = ((2 * n) % r) >= 2
+    c3 = ((3 * n) % r) >= 3
     sz = spread_zero(B, n, d)
     gfe = is_gfe_extended(B, n, d)
     case_i = sz and not gfe
-    consistent = case_i <= c2
-    print(f"{n:>4} {d:>3} {r:>5}  {case:>4}  {str(c2):>5}  "
-          f"{str(sz):>5}  {'yes' if consistent else 'NO'}")
-print()
-
-# j = 3 condition.
-print("=" * 72)
-print("Theorem A3 (j = 3 boundary). Three-case-split:")
-print("=" * 72)
-print()
-print("  j=3 condition: 3n mod r ≥ ⌈3r/(n+1)⌉.")
-print()
-print("  Case A (3r ≤ n+1):     ⌈⌉ = 1, condition r ∤ 3n.")
-print("  Case B (n+1 < 3r ≤ 2(n+1)):  ⌈⌉ = 2, condition 3n mod r ≥ 2.")
-print("  Case C (3r > 2(n+1)):  ⌈⌉ = 3, condition 3n mod r ≥ 3.")
-print()
-
-print("Verification on r = s cells:")
-print(f"{'n':>4} {'d':>3} {'r':>5}  {'case':>4}  {'C_3':>5}  "
-      f"{'sz?':>5}  {'consistent?':>11}")
-for n, d, r, M, W in cells:
-    n_plus_1 = n + 1
-    if 3 * r <= n_plus_1:
-        case = "A"
-        c3 = (3 * n) % r != 0
-    elif 3 * r <= 2 * n_plus_1:
-        case = "B"
-        c3 = (3 * n) % r >= 2
-    else:
-        case = "C"
-        c3 = (3 * n) % r >= 3
-    sz = spread_zero(B, n, d)
-    gfe = is_gfe_extended(B, n, d)
-    case_i = sz and not gfe
-    consistent = case_i <= c3
-    print(f"{n:>4} {d:>3} {r:>5}  {case:>4}  {str(c3):>5}  "
-          f"{str(sz):>5}  {'yes' if consistent else 'NO'}")
+    consistent = (not case_i) or (c2 and c3)
+    print(f"{n:>4} {d:>3} {r:>5}  {str(c2):>5}  {str(c3):>5}  "
+          f"{str(sz):>5}  {str(case_i):>6}  "
+          f"{'yes' if consistent else 'NO'}")
 print()
 
 # Cumulative: how many cells fail j=1, j=2, j=3 conditions?

@@ -73,7 +73,7 @@ for d in range(1, D_MAX + 1):
             continue  # r | n, falls outside Conjecture A's scope
         cells_total += 1
         g = gcd(n, r)
-        M = (B * W) // (n * n)
+        M = (B * W - 1) // (n * n)  # Corrected.
         target = r // g  # j_fail
         headroom = target - M
         headroom_distribution.append(headroom)

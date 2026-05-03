@@ -87,14 +87,14 @@ def beatty_check_rs(b, n, d):
     W = b**(d - 1)
     r = W % n
     n2 = n * n
-    M = (b * W) // n2
+    M = (b * W - 1) // n2  # Corrected: block ends at bW − 1.
     if r == 0 or M == 0:
         return None
     ok = True
     details = []
     for j in range(1, M + 1):
         lhs = (j * n) % r
-        rhs = -(-(j * r) // (n + 1))  # ceil division
+        rhs = -(-(j * n) // (n + 1))  # Corrected: ⌈jn/(n+1)⌉, not ⌈jr/(n+1)⌉.
         details.append((j, lhs, rhs, lhs >= rhs))
         if lhs < rhs:
             ok = False
