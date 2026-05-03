@@ -15,6 +15,9 @@ properties, not the raw ACM construction.
 
 - **digits/** — Multi-digit extraction beyond the leading digit.
 
+- **imbalance/** — Prefix imbalance: endpoint exactness versus order
+  quality.
+
 - **art/contamination/** — Using BIDDER as a calibration source to
   characterize how arithmetic operations (multiplication, addition)
   contaminate uniform distributions.

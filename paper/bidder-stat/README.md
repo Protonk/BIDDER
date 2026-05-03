@@ -28,9 +28,9 @@ paper.
 All Python work runs in `.venv/` against pinned versions in
 `requirements.txt`. The minimal set is small on purpose: `numpy`
 (measurement scripts and tests) and `pycryptodome` (AES primitive
-for the FF1 reference comparator in §7.4 / D1). The kernel itself
-has zero C dependencies; the Python wrappers depend only on the
-standard library.
+for the FF1 reference comparator in the FPE use case / D1). The
+kernel itself has zero C dependencies; the Python wrappers depend
+only on the standard library.
 
 `make venv` is idempotent and only re-runs the install when
 `requirements.txt` changes. `make distclean` removes `.venv/`.
@@ -96,7 +96,7 @@ break existing call sites.
   theorems:
   - `test_riemann_property.py` — `E_P(key) = R` (the §4.4 identity).
   - `test_quadrature_rates.py` — left-rule Euler-Maclaurin rates
-    (the quadrature layer for §4.4 / §7).
+    (the quadrature layer for the cipher and sampling sections).
   - `test_fpc_shape.py` — the FPC layer at `N < P` (the §4.5 shape
     plus the cipher's measured gap from ideal).
 

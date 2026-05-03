@@ -1,0 +1,21 @@
+Prefix imbalance experiment
+============================
+
+backend: bidder_c
+base: 10
+digit_class: 4
+period: 9000
+per_digit_count: 1000
+bidder_keys: 64
+random_permutations: 256
+random_seed: 20260503
+
+Worst finite-population standardized prefix imbalance:
+  lexicographic: Dmax=94.863 at t=1000 (digit 1)
+  BIDDER:        Dmax=7.520 at t=1003 (digit 1)
+  BIDDER keys:   min=3.777, p05=4.898, median=7.471, p95=11.282, p99=13.456, max=15.508
+  random:        min=2.828, p05=2.851, median=3.534, p95=4.499, p99=5.328, max=6.326
+
+Endpoint leading-digit counts:
+  lexicographic: [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000]
+  BIDDER:        [1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000]

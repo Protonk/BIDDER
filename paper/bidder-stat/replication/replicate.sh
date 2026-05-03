@@ -69,6 +69,10 @@ echo "=== §7.2 Benford-test null (use_case_02) ==="
 $PY replication/use_case_02_benford_null.py
 
 echo
+echo "=== §7.2 Prefix imbalance diagnostic (use_case_02) ==="
+$PY replication/use_case_02_prefix_imbalance.py
+
+echo
 echo "=== §7.3 Cross-validation (use_case_03) ==="
 $PY replication/use_case_03_cross_validation.py
 

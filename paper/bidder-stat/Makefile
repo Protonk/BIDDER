@@ -78,6 +78,7 @@ use_case_01: venv build
 
 use_case_02: venv build
 	$(PY) replication/use_case_02_benford_null.py
+	$(PY) replication/use_case_02_prefix_imbalance.py
 
 use_case_03: venv build
 	$(PY) replication/use_case_03_cross_validation.py
