@@ -25,7 +25,7 @@ import struct
 
 # Constants matching bidder.h
 SPECK32_ROUNDS = 22
-FEISTEL_ROUNDS = 8
+FEISTEL_ROUNDS = 16
 MAX_CYCLE_WALK_RATIO = 64
 
 
@@ -143,8 +143,8 @@ class Bidder:
             R = index % self._R_size
             for i in range(FEISTEL_ROUNDS):
                 rk = self._fk[i]
-                f = ((R + (rk >> (i * 3))) ^
-                     (rk >> (i * 5 + 1))) % self._L_size
+                f = ((R + (rk >> ((i * 3) & 63))) ^
+                     (rk >> ((i * 5 + 1) & 63))) % self._L_size
                 L, R = R, (L + f) % self._L_size
             result = L * self._R_size + R
             if result < self.block_size:

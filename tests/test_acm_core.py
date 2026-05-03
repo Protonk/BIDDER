@@ -364,6 +364,34 @@ def test_block_uniformity_spread_bound():
           f"(worst seen: spread={worst} at {worst_at})")
 
 
+def test_block_uniformity_half_aligned():
+    """Corollary 3.11 (half-aligned regime): if n | b^(d-1) but
+    n^2 does not divide b^(d-1), the per-leading-digit counts of
+    A_n in B_{b,d} have spread at most 1. Sits between Theorem 3.6
+    (spread = 0 when n^2 | b^(d-1)) and Theorem 3.10 (spread <= 2
+    universally). Sweeps the same cube as the spread-bound test
+    over all triples in the half-aligned regime.
+    """
+    checked = 0
+    for b in range(2, 11):
+        for n in range(2, 11):
+            for d in range(1, 6):
+                W = b ** (d - 1)
+                if W % n != 0 or W % (n * n) == 0:
+                    continue
+                counts = _per_digit_counts(n, b, d)
+                if not counts:
+                    continue
+                spread = max(counts) - min(counts)
+                assert spread <= 1, (
+                    f"Half-aligned (b,n,d)=({b},{n},{d}): spread "
+                    f"{spread} > 1 (counts={counts})")
+                checked += 1
+    assert checked > 0, (
+        "no half-aligned triples found in sweep — sweep range broken")
+    print(f"  Block uniformity (half-aligned regime, {checked} triples): OK")
+
+
 # =====================================================================
 # first_digit — the extraction works
 # =====================================================================
@@ -554,6 +582,7 @@ if __name__ == '__main__':
     test_block_uniformity_generalized_family_e()
     test_block_uniformity_unconditional_witnesses()
     test_block_uniformity_spread_bound()
+    test_block_uniformity_half_aligned()
 
     test_first_digit_powers_of_10()
     test_first_digit_boundaries()

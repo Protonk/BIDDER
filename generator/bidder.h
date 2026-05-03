@@ -20,7 +20,7 @@
 #include <stdint.h>
 
 #define BIDDER_SPECK32_ROUNDS 22
-#define BIDDER_FEISTEL_ROUNDS 8
+#define BIDDER_FEISTEL_ROUNDS 16
 #define BIDDER_MAX_CYCLE_WALK_RATIO 64
 
 typedef struct {

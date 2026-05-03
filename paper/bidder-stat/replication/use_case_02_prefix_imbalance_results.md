@@ -19,13 +19,13 @@ Endpoint leading-digit exactness is a multiset property. This diagnostic uses th
 | order family | Dmax | prefix t | digit at max |
 |---|---:|---:|---:|
 | lexicographic | 94.863 | 1000 | 1 |
-| BIDDER key 0 | 7.520 | 1003 | 1 |
+| BIDDER key 0 | 3.948 | 8983 | 2 |
 
 ## Ensemble summaries
 
 | ensemble | min | p05 | median | p95 | p99 | max |
 |---|---:|---:|---:|---:|---:|---:|
-| BIDDER keys | 3.777 | 4.898 | 7.471 | 11.282 | 13.456 | 15.508 |
+| BIDDER keys | 2.872 | 3.100 | 3.946 | 4.920 | 5.436 | 5.658 |
 | random permutations | 2.828 | 2.851 | 3.534 | 4.499 | 5.328 | 6.326 |
 
 ## Endpoint counts

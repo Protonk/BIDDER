@@ -172,12 +172,12 @@ def test_cross_check_feistel():
     """Feistel-mode output must match C exactly."""
     gen = Bidder(base=10, digit_class=2, key=b'test')
     out = [gen.next() for _ in range(20)]
-    expected = [3, 8, 1, 2, 7, 1, 5, 4, 7, 4, 2, 5, 8, 7, 8, 9, 2, 9, 6, 7]
+    expected = [5, 6, 5, 8, 3, 8, 7, 8, 9, 4, 5, 7, 7, 4, 3, 1, 3, 1, 5, 8]
     assert out == expected, f"Feistel cross-check: {out} != {expected}"
 
     gen2 = Bidder(base=10, digit_class=3, key=b'test')
     out2 = [gen2.next() for _ in range(20)]
-    expected2 = [1, 1, 8, 8, 3, 2, 9, 9, 3, 2, 2, 4, 5, 2, 3, 6, 7, 3, 6, 6]
+    expected2 = [2, 3, 7, 6, 8, 3, 1, 3, 6, 7, 3, 1, 9, 9, 8, 1, 5, 2, 8, 3]
     assert out2 == expected2, f"Feistel cross-check: {out2} != {expected2}"
     print("  Cross-check (feistel): OK")
 
@@ -194,7 +194,7 @@ def test_cross_check_mode_boundary():
     """Mode-boundary case (base=8130, d=2) must match C."""
     gen = Bidder(base=8130, digit_class=2, key=b'boundary')
     out = [gen.next() for _ in range(10)]
-    expected = [4268, 4295, 4038, 4289, 4040, 4291, 1394, 1677, 1396, 1679]
+    expected = [1277, 2420, 5041, 1546, 5039, 1560, 947, 108, 961, 3498]
     assert out == expected, f"Boundary cross-check: {out} != {expected}"
     print(f"  Cross-check (mode boundary, mode={gen._mode}): OK")
 
@@ -266,7 +266,7 @@ def test_at_cross_check_feistel():
     """at(i) cross-check against the cached C output for feistel mode."""
     gen = Bidder(base=10, digit_class=2, key=b'test')
     out = [gen.at(i) for i in range(20)]
-    expected = [3, 8, 1, 2, 7, 1, 5, 4, 7, 4, 2, 5, 8, 7, 8, 9, 2, 9, 6, 7]
+    expected = [5, 6, 5, 8, 3, 8, 7, 8, 9, 4, 5, 7, 7, 4, 3, 1, 3, 1, 5, 8]
     assert out == expected, f"at() feistel cross-check: {out} != {expected}"
     print("  at() cross-check (feistel): OK")
 

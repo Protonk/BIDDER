@@ -245,8 +245,8 @@ static uint32_t permute_feistel(const bidder_ctx *ctx, uint32_t index)
 
         for (int i = 0; i < BIDDER_FEISTEL_ROUNDS; i++) {
             uint64_t rk = ctx->feistel_keys[i];
-            uint32_t f = (uint32_t)(((R + (rk >> (i * 3))) ^
-                                     (rk >> (i * 5 + 1))) % L_size);
+            uint32_t f = (uint32_t)(((R + (rk >> ((i * 3) & 63))) ^
+                                     (rk >> ((i * 5 + 1) & 63))) % L_size);
             uint32_t tmp = R;
             R = (L + f) % L_size;
             L = tmp;
