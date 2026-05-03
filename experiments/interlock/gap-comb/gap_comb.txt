@@ -1,0 +1,102 @@
+Gap-comb mantissa spectroscopy
+N = 1000000
+K_MAX = 64
+prime amplitude floor for ratio residual = 0.002
+
+Spectral distances over k = 1..K_MAX.
+distP = L2(C_atoms, C_primes). distM = L2(C_atoms, C_gap_model).
+
+S             F  |G|       |A|   |model|   A-M   M-A     distP     distM    gain     coh stable
+--------------------------------------------------------------------------------------------------
+<3,5>         7    4   155,333   155,328     5     0   0.00121   0.00001   86.43   1.000     64
+<3,7>        11    6   180,596   180,584    12     0   0.00137   0.00002   74.01   1.000     64
+<4,5>        11    6   185,979   185,961    18     0   0.00142   0.00002   58.00   1.000     64
+<5,7>        23   12   241,068   241,024    44     0   0.00156   0.00003   58.33   1.000     64
+<3,5,7>       4    3   142,080   142,078     2     0   0.00112   0.00001  111.94   1.000     64
+
+Phase-comb peaks from C_atoms / C_primes - 1.
+
+<3,5>  generators=(3, 5)
+G = [1, 2, 4, 7]
+nonunit gap phases log10(g) mod 1:
+  2:0.3010, 4:0.6021, 7:0.8451
+top data peaks:
+  phase=0.9736 score=1.000 nearest_gap=0.1285
+  phase=0.6738 score=0.941 nearest_gap=0.0718
+  phase=0.3691 score=0.920 nearest_gap=0.0681
+  phase=0.9990 score=0.798 nearest_gap=0.1539
+  phase=0.8809 score=0.796 nearest_gap=0.0358
+top gap-prime-model peaks:
+  phase=0.9736 score=1.000 nearest_gap=0.1285
+  phase=0.6738 score=0.937 nearest_gap=0.0718
+  phase=0.3691 score=0.920 nearest_gap=0.0681
+  phase=0.8809 score=0.794 nearest_gap=0.0358
+  phase=0.9990 score=0.794 nearest_gap=0.1539
+
+<3,7>  generators=(3, 7)
+G = [1, 2, 4, 5, 8, 11]
+nonunit gap phases log10(g) mod 1:
+  2:0.3010, 4:0.6021, 5:0.6990, 8:0.9031, 11:0.0414
+top data peaks:
+  phase=0.8789 score=1.000 nearest_gap=0.0242
+  phase=0.6865 score=0.902 nearest_gap=0.0124
+  phase=0.5986 score=0.869 nearest_gap=0.0034
+  phase=0.9971 score=0.819 nearest_gap=0.0443
+  phase=0.5430 score=0.814 nearest_gap=0.0591
+top gap-prime-model peaks:
+  phase=0.8789 score=1.000 nearest_gap=0.0242
+  phase=0.6875 score=0.902 nearest_gap=0.0115
+  phase=0.5986 score=0.867 nearest_gap=0.0034
+  phase=0.9971 score=0.818 nearest_gap=0.0443
+  phase=0.5430 score=0.815 nearest_gap=0.0591
+
+<4,5>  generators=(4, 5)
+G = [1, 2, 3, 6, 7, 11]
+nonunit gap phases log10(g) mod 1:
+  2:0.3010, 3:0.4771, 6:0.7782, 7:0.8451, 11:0.0414
+top data peaks:
+  phase=0.9717 score=1.000 nearest_gap=0.0697
+  phase=0.6719 score=0.915 nearest_gap=0.1063
+  phase=0.8818 score=0.886 nearest_gap=0.0367
+  phase=0.3652 score=0.884 nearest_gap=0.0642
+  phase=0.9248 score=0.777 nearest_gap=0.0797
+top gap-prime-model peaks:
+  phase=0.9717 score=1.000 nearest_gap=0.0697
+  phase=0.6719 score=0.911 nearest_gap=0.1063
+  phase=0.3662 score=0.893 nearest_gap=0.0652
+  phase=0.8818 score=0.888 nearest_gap=0.0367
+  phase=0.9248 score=0.768 nearest_gap=0.0797
+
+<5,7>  generators=(5, 7)
+G = [1, 2, 3, 4, 6, 8, 9, 11, 13, 16, 18, 23]
+nonunit gap phases log10(g) mod 1:
+  2:0.3010, 3:0.4771, 4:0.6021, 6:0.7782, 8:0.9031, 9:0.9542, 11:0.0414, 13:0.1139, 16:0.2041, 18:0.2553, 23:0.3617
+top data peaks:
+  phase=0.6758 score=1.000 nearest_gap=0.0737
+  phase=0.3662 score=0.969 nearest_gap=0.0045
+  phase=0.8760 score=0.914 nearest_gap=0.0271
+  phase=0.5957 score=0.913 nearest_gap=0.0064
+  phase=0.9229 score=0.821 nearest_gap=0.0198
+top gap-prime-model peaks:
+  phase=0.6758 score=1.000 nearest_gap=0.0737
+  phase=0.3662 score=0.972 nearest_gap=0.0045
+  phase=0.8760 score=0.921 nearest_gap=0.0271
+  phase=0.5957 score=0.919 nearest_gap=0.0064
+  phase=0.9229 score=0.827 nearest_gap=0.0198
+
+<3,5,7>  generators=(3, 5, 7)
+G = [1, 2, 4]
+nonunit gap phases log10(g) mod 1:
+  2:0.3010, 4:0.6021
+top data peaks:
+  phase=0.6748 score=1.000 nearest_gap=0.0727
+  phase=0.9951 score=0.944 nearest_gap=0.3059
+  phase=0.8818 score=0.800 nearest_gap=0.2798
+  phase=0.3682 score=0.790 nearest_gap=0.0671
+  phase=0.9258 score=0.779 nearest_gap=0.3237
+top gap-prime-model peaks:
+  phase=0.6748 score=1.000 nearest_gap=0.0727
+  phase=0.9951 score=0.945 nearest_gap=0.3059
+  phase=0.8818 score=0.800 nearest_gap=0.2798
+  phase=0.3682 score=0.792 nearest_gap=0.0671
+  phase=0.9258 score=0.779 nearest_gap=0.3237

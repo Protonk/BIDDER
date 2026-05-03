@@ -10,3 +10,8 @@ that anchor doc.
 - `game-start/` — first-digit fingerprint of `A_⟨3,5⟩` against primes
   and the `M_n` baselines (`INTERLOCKING-DEFECTS.md` §"What's open"
   item 1).
+- `gap-comb/` — log-mantissa Fourier spectroscopy of `A_S` against
+  primes and the gap-prime model `{p} ∪ {g p : g ∈ G \ {1}}`.
+- `survivors/` — ACM survivor windows read inside a numerical
+  semigroup ambient, with `C_SurvA` the ACM survivors that are also
+  multiplicative atoms of `(S, ·)`.

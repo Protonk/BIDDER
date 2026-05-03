@@ -96,8 +96,51 @@ See `first_digit.png` for the five-panel comparison and
   `INTERLOCKING-DEFECTS.md` §"What's open"), which probes a strict
   per-strip count rather than a frequency.
 
+## Follow-up: does the inheritance hold across `N`?
+
+`tilt_decay.py` re-runs the comparison at `N ∈ {10³, 10⁴, 10⁵, 10⁶, 10⁷}`
+to test whether `A_⟨3,5⟩` matches primes at every scale or only at
+`10⁶`. The decay shapes are essentially identical, and the agreement
+*tightens* with `N`:
+
+```
+     N        |P|        |A|   TVD_P(u)  TVD_A(u)   TVD(A,P)
+10^3        168        351     0.0496    0.0456     0.0346
+10^4      1,229      2,491     0.0307    0.0329     0.0069
+10^5      9,592     19,164     0.0234    0.0252     0.0034
+10^6     78,498    155,333     0.0197    0.0205     0.0015
+10^7    664,579  1,305,262     0.0167    0.0172     0.0006
+```
+
+Three patterns survive the `10³ → 10⁷` sweep:
+
+- `TVD(P, uniform)` and `TVD(A, uniform)` decay together. Each shrinks
+  by roughly the same factor per decade — neither sequence is
+  "pulling away" from uniform faster than the other.
+- `A_⟨3,5⟩` carries a *slightly* larger residual than primes at every
+  `N ≥ 10⁴` (TVD `~3 %` larger), consistent with the gap-stuck
+  composite tail and the multiplicity of shifted-prime layers.
+- `TVD(A_⟨3,5⟩, primes)` shrinks much faster than either residual
+  against uniform: `0.0346 → 0.0006` over four decades, roughly
+  halving per decade in the large-`N` regime. The two sequences are
+  converging to *each other* faster than either is converging to
+  uniform.
+
+`tilt_decay.png` plots the per-digit signed deviation (`freq − 1/9`)
+for both sequences across all five `N` values; the side-by-side panels
+show the same characteristic monotone-decreasing tilt with the same
+decay rate.
+
+The headline result: `A_⟨3,5⟩` does not just match the prime tilt at
+`10⁶`, it inherits the prime *finite-sample residual function* — the
+exact same shape of drop, the same convergence rate toward uniform,
+and the gap between them shrinks as `N` grows.
+
 ## Files
 
-- `first_digit.py` — experiment script.
-- `first_digit.png` — five-panel histogram comparison.
+- `first_digit.py` — primary experiment script.
+- `first_digit.png` — five-panel histogram comparison at `N = 10⁶`.
 - `first_digit_summary.txt` — counts, TVDs, per-digit table.
+- `tilt_decay.py` — N-scaling follow-up.
+- `tilt_decay.png` — per-digit residual decay across `N ∈ {10³ … 10⁷}`.
+- `tilt_decay.txt` — full decay table.
