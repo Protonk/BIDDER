@@ -1,8 +1,8 @@
 ## Appendix A: The spread-zero locus and an open base-10 problem
 
-Theorem 3.9 bounds the spread of $n$-prime atom counts across leading-digit strips by 2. When the spread equals zero, a finer analysis applies. This appendix carries that analysis as far as we have it: a structural decomposition of the spread-zero locus when $n^2 > W$ and outside Family E (Theorem A.1); a Beatty-pair coincidence reduction of one of its three cases (Lemma A.2); and an open problem on the base-10 form of A.2's inequality (A.3).
+Theorem 3.10 bounds the spread of counts of $A_n \cap B_{b,d}$ across leading-digit strips by 2. When the spread equals zero, a finer analysis applies. This appendix carries that analysis as far as we have it: a structural decomposition of the spread-zero locus when $n^2 > W$ and outside Family E (Theorem A.1); a Beatty-pair coincidence reduction of one of its three cases (Lemma A.2); and an open problem on the base-10 form of A.2's inequality (A.3).
 
-**Theorem A.1 (Structural decomposition of spread-zero, $n^2 > W$).** Let $W = b^{d-1}$ and suppose $n^2 > W$, outside the Family E regime of Theorem 3.6. For $k \in \{1, \ldots, b-1\}$, let $C_m(k)$ be the number of multiples of $m$ in the strip $S_k$. Write $C_n(k) = \lfloor W/n \rfloor + e_n(k)$, with $e_n(k) \in \{0, 1\}$, and set $r = W \bmod n$, $E_n = \#\{k : e_n(k) = 1\}$, and $M = \lfloor (bW - 1)/n^2 \rfloor$. Define
+**Theorem A.1 (Structural decomposition of spread-zero, $n^2 > W$).** Let $W = b^{d-1}$ and suppose $n^2 > W$, outside the Family E regime of Theorem 3.7. For $k \in \{1, \ldots, b-1\}$, let $C_m(k)$ be the number of multiples of $m$ in the strip $S_k$. Write $C_n(k) = \lfloor W/n \rfloor + e_n(k)$, with $e_n(k) \in \{0, 1\}$, and set $r = W \bmod n$, $E_n = \#\{k : e_n(k) = 1\}$, and $M = \lfloor (bW - 1)/n^2 \rfloor$. Define
 
 $$
 I_n =
@@ -14,7 +14,7 @@ I_n =
 I_{n^2} = \{\lfloor jn^2/W \rfloor : j = 1, \ldots, M\}.
 $$
 
-Both are subsets of $\{1, \ldots, b-1\}$. The $n$-prime atom counts in $B_{b,d}$ have spread $= 0$ if and only if exactly one of the following three constant-difference cases holds:
+Both are subsets of $\{1, \ldots, b-1\}$. The counts of $A_n \cap B_{b,d}$ across leading-digit strips have spread $= 0$ if and only if exactly one of the following three constant-difference cases holds:
 
 1. $I_n = I_{n^2}$;
 2. $I_n = \emptyset$ and $I_{n^2} = \{1, \ldots, b-1\}$;
@@ -31,7 +31,7 @@ The last difference is $0$ or $1$, and its $j$-th occurrence is the smallest $k$
 
 Since $n^2 > W$, each strip contains at most one multiple of $n^2$. The multiples of $n^2$ that lie in $B_{b,d} = [W, bW - 1]$ are $jn^2$ for $j = 1, \ldots, M$, and $jn^2$ lies in strip $\lfloor jn^2/W \rfloor$. Hence $I_{n^2}$ is exactly the set of strips containing a multiple of $n^2$; write $e_{n^2}(k)$ for its indicator.
 
-The atom count in strip $S_k$ is
+The count of elements of $A_n$ in strip $S_k$ is
 
 $$
 A_k = C_n(k) - C_{n^2}(k)
