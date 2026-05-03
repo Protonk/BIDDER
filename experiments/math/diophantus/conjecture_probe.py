@@ -118,7 +118,7 @@ print("Part 2: decoupled probe — the Beatty inequality in isolation")
 print("=" * 72)
 print()
 print("Question: for (n, r, b) with r ∤ n, r < n, does")
-print("  (jn) mod r ≥ ⌈jr/(n+1)⌉ for j = 1..b−1")
+print("  (jn) mod r ≥ ⌈jn/(n+1)⌉ for j = 1..b−1")
 print("hold? (Stripping the substrate constraint that W = r(n+1).)")
 print()
 

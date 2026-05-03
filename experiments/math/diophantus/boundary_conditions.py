@@ -3,7 +3,7 @@ Investigation A: boundary conditions on the Beatty inequality.
 
 For r = s sub-sub-case in the n² > W sub-locus, alignment iff:
 
-    (jn) mod r  ≥  ⌈jr/(n+1)⌉      for all j = 1, …, M.
+    (jn) mod r  ≥  ⌈jn/(n+1)⌉      for all j = 1, …, M.
 
 Each fixed `j` gives a single inequality on (n, r) — call it C_j.
 Failing any C_j kills alignment, so the conjunction
@@ -12,7 +12,7 @@ necessary conditions" is C_1, C_1 ∧ C_2, … : a sieve that gets
 strictly tighter with each j.
 
 This script:
-  - extracts each C_j in simplified form (case-split where needed),
+  - states each C_j predicate and the j <= n simplification,
   - tests it on the r = s cells in the swept range,
   - reports the smallest j at which each non-aligning cell first
     fails (the "break point" — a preview of Investigation C),
@@ -69,7 +69,7 @@ def C_j(j, n, r):
     """Predicate for the j-th boundary condition.
 
     Returns (lhs, rhs, holds): the values of (jn) mod r,
-    ⌈jr/(n+1)⌉, and whether the condition holds."""
+    ⌈jn/(n+1)⌉, and whether the condition holds."""
     lhs = (j * n) % r
     # Corrected: ⌈jn/(n+1)⌉, not ⌈jr/(n+1)⌉.
     rhs = -(-(j * n) // (n + 1))
@@ -111,8 +111,8 @@ print("=" * 72)
 print("Theorem A1 (j = 1 boundary). Necessary condition: r ∤ n.")
 print("=" * 72)
 print()
-print("Proof. j = 1 condition is n mod r ≥ ⌈r/(n+1)⌉. Since")
-print("0 ≤ r ≤ n, we have r/(n+1) < 1, so ⌈r/(n+1)⌉ = 1 (for r ≥ 1).")
+print("Proof. j = 1 condition is n mod r ≥ ⌈n/(n+1)⌉. Since")
+print("0 < n/(n+1) < 1, we have ⌈n/(n+1)⌉ = 1.")
 print("Thus n mod r ≥ 1, equivalently r ∤ n. ∎")
 print()
 
@@ -137,26 +137,33 @@ print("Theorem A_j (j ≥ 2 boundary, corrected predicate).")
 print("=" * 72)
 print()
 print("  Corrected predicate: jn mod r ≥ ⌈jn/(n+1)⌉.")
-print("  For j ≤ n (which holds here since j ≤ M ≤ b−1 < n):")
-print("  ⌈jn/(n+1)⌉ = j  (since jn/(n+1) ∈ (j−1, j) for j ≤ n).")
+print("  For j ≤ n, ⌈jn/(n+1)⌉ = j.")
+print("  For j > n, keep the ceiling form.")
 print()
-print("  Hence: C_j is simply  jn mod r ≥ j  for j = 1, …, M.")
+print("  Thus C_j simplifies to jn mod r ≥ j only in the j ≤ n range.")
 print("  C_1: n mod r ≥ 1  ⟺  r ∤ n.")
-print("  C_2: 2n mod r ≥ 2.")
-print("  C_3: 3n mod r ≥ 3.")
+print("  C_2: 2n mod r ≥ ⌈2n/(n+1)⌉ = 2 when M ≥ 2.")
+print("  C_3: 3n mod r ≥ ⌈3n/(n+1)⌉ = 3 when M ≥ 3.")
 print()
 
-print("Verification on r = s cells (j = 2 and j = 3):")
+print("Verification on r = s cells (j = 2 and j = 3, if present):")
 print(f"{'n':>4} {'d':>3} {'r':>5}  {'C_2':>5}  {'C_3':>5}  "
       f"{'sz?':>5}  case_i  {'consistent?':>11}")
 for n, d, r, M, W in cells:
-    c2 = ((2 * n) % r) >= 2
-    c3 = ((3 * n) % r) >= 3
+    if M >= 2:
+        c2 = str(C_j(2, n, r)[2])
+    else:
+        c2 = "N/A"
+    if M >= 3:
+        c3 = str(C_j(3, n, r)[2])
+    else:
+        c3 = "N/A"
     sz = spread_zero(B, n, d)
     gfe = is_gfe_extended(B, n, d)
     case_i = sz and not gfe
-    consistent = (not case_i) or (c2 and c3)
-    print(f"{n:>4} {d:>3} {r:>5}  {str(c2):>5}  {str(c3):>5}  "
+    shown_ok = all(C_j(j, n, r)[2] for j in range(1, min(M, 3) + 1))
+    consistent = (not case_i) or shown_ok
+    print(f"{n:>4} {d:>3} {r:>5}  {c2:>5}  {c3:>5}  "
           f"{str(sz):>5}  {str(case_i):>6}  "
           f"{'yes' if consistent else 'NO'}")
 print()

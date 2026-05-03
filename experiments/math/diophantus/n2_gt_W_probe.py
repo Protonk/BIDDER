@@ -1,6 +1,6 @@
 """
 Probe: in the n² > W sub-locus, does the count condition
-    E_n = ⌊bW/n²⌋
+    E_n = ⌊(bW-1)/n²⌋
 characterise n²-cancellation alignment?
 
 For n² > W, all multiples of n² in B_{b,d} = [W, bW-1] lie at

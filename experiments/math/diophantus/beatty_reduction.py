@@ -5,28 +5,25 @@ number-theoretic condition.
 Setup. In the n² > W sub-locus with case (i) (S₁ = S₂, both
 non-empty), we need:
 
-  k_j := ⌈(jn + 1)/r⌉ − 1  =  ⌊j · n²/W⌋   for j = 1, …, M.
+  k_j := ⌈(jn + 1)/r⌉ − 1  =  ⌊j · n²/W⌋   for j = 1, …, M,
+  where M = ⌊(bW − 1)/n²⌋.
 
-Lemma (clean reduction for r = s case). When r = s (so W = r(n+1)
-and the cell automatically satisfies n² > W), the alignment condition
-for case (i) reduces to:
+Lemma (r = s reduction, n² > W). When r = s and n² > W
+(together forcing W = r(n+1)), with M ≥ 1 and E_n ≥ 1, case (i)
+holds iff:
 
-  (jn) mod r ≥ ⌈j r / (n+1)⌉   for all j = 1, …, M.
+  (jn) mod r ≥ ⌈jn/(n+1)⌉   for all j = 1, …, M.
 
 Proof. With β := n/r, α := n²/(r(n+1)), and X_j = jβ + 1/r,
 Y_j = jα. Direct computation: β − α = n/W = n/(r(n+1)),
 and X_j − Y_j = ((j+1)n + 1)/(r(n+1)). The equality
 ⌈X_j⌉ − 1 = ⌊Y_j⌋ holds iff {jβ} lies in the safe interval
 [j·n/(r(n+1)), (r−1)/r]. The lower bound — multiplied by r —
-becomes (jn) mod r ≥ jn/(n+1), equivalently (jn) mod r ≥ jr/(n+1)
-after rearranging (the difference of n vs r in the multiplier is
-absorbed by the cyclic structure when r = s). The upper bound is
-{jβ}·r ≤ r − 1, which is automatic. ∎
+becomes (jn) mod r ≥ jn/(n+1); discreteness gives the ceiling.
+The upper bound is {jβ}·r ≤ r − 1, automatic. ∎
 
 This script:
-  - verifies the lemma on the 6 r=s cells in the b = 10 sweep;
-  - probes empirically whether the reduction *characterises* (i.e.,
-    necessary AND sufficient) case (i) in the r = s sub-sub-locus;
+  - verifies the lemma on the r=s cells in the b = 10 sweep;
   - reports the remaining open question concretely.
 """
 
@@ -83,7 +80,7 @@ def E_n(b, n, d):
 
 
 def beatty_check_rs(b, n, d):
-    """For r = s case: check (jn) mod r ≥ ⌈jr/(n+1)⌉ for j = 1..M."""
+    """For r = s case: check (jn) mod r ≥ ⌈jn/(n+1)⌉ for j = 1..M."""
     W = b**(d - 1)
     r = W % n
     n2 = n * n
@@ -121,7 +118,7 @@ for d in range(1, D_MAX + 1):
             continue
         rs_cells.append((n, d, r))
         En = E_n(B, n, d)
-        M = (B * W) // (n * n)
+        M = (B * W - 1) // (n * n)  # Corrected: block ends at bW − 1.
         gfe = is_gfe_extended(B, n, d)
         sz = spread_zero(B, n, d)
         chk = beatty_check_rs(B, n, d)

@@ -21,7 +21,7 @@ where
           apart and lie in distinct strips)
 
 with r = W mod n, E_n = #{k ∈ {1..b−1} : extras_n[k] = 1}, and
-M_{n²} = ⌊bW/n²⌋.
+M_{n²} = ⌊(bW − 1)/n²⌋ (the block ends at bW − 1).
 
 Equivalently: spread = 0  ⟺  (extras_n[k] − extras_n²[k]) is
 constant in k, where extras_n²[k] = [k ∈ S₂] for n² > W. The

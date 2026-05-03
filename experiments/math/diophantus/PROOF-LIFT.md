@@ -113,20 +113,24 @@ proper.
 
 **Lemma.** Suppose `r = s` (where `r = W mod n`,
 `s = ⌊W/n⌋ mod n`) **and** `n² > W`. These two together force
-`W = r(n+1)`. Let `M = ⌊(bW − 1)/n²⌋`. Then case (i) of A.1 with
-both subsets non-empty holds iff
+`W = r(n+1)`. Let `M = ⌊(bW − 1)/n²⌋`, and assume `M ≥ 1` and
+`E_n ≥ 1` (so `S₁` and `S₂` are non-empty). Then case (i) of A.1
+holds iff
 
 ```
 (jn) mod r  ≥  ⌈jn/(n+1)⌉      for all j ∈ {1, …, M}.
 ```
 
-For `j ≤ n` (always satisfied here, since `j ≤ M ≤ b − 1 < n` in
-the regime), `⌈jn/(n+1)⌉ = j` (because `jn/(n+1) ∈ (j−1, j)` for
-`j ≤ n`). So the inequality simplifies to
+The ceiling form is the universal statement; `M ≥ n` is possible
+(e.g., (b, n, d) = (10, 4, 2) has M = 6, n = 4), so the
+simplification `⌈jn/(n+1)⌉ = j` is only valid for `j ≤ n` and is
+*not* universal across the lemma's regime.
 
-```
-(jn) mod r  ≥  j      for all j ∈ {1, …, M}.
-```
+**On the M ≥ 1 guard.** Without it, M = 0 makes the inequality
+vacuously true while case (i) with non-empty subsets is false; the
+biconditional collapses. M = 0 cells have `S₂ = ∅`; if also
+`E_n = 0`, they satisfy case (i) only vacuously (`S₁ = S₂ = ∅`)
+and are excluded from clause 3″ proper by the non-empty guard.
 
 **Proof of `W = r(n+1)`.** `r = s` means `W mod n = ⌊W/n⌋ mod n`.
 Write `W = Qn² + sn + r` with `Q = ⌊W/n²⌋`. The hypothesis `n² > W`
@@ -136,21 +140,15 @@ gives `Q = 0`, so `W = sn + r = rn + r = r(n+1)`. (Without
 
 **Proof of the inequality.** Write `β := n/r`,
 `α := n²/W = β · n/(n+1)`, `X_j := (jn+1)/r`, `Y_j := jn²/W`.
-Direct computation: `X_j − Y_j = ((j+1)n + 1)/(r(n+1))`.
+Direct computation: `X_j − Y_j = ((j+1)n + 1)/(r(n+1)) > 0`.
 
-We need `⌈X_j⌉ − 1 = ⌊Y_j⌋ = k_j`. Since `X_j > Y_j`, we have
-`⌈X_j⌉ − 1 ≥ ⌊Y_j⌋` always. Equality iff
-`X_j ≤ ⌊Y_j⌋ + 1`, iff `(X_j − Y_j) ≤ 1 − {Y_j}`, iff
-`{Y_j} ≤ 1 − (X_j − Y_j)`. Equivalently:
-`{X_j} = {Y_j} + (X_j − Y_j) ≤ 1`, which (since `X_j − Y_j > 0`)
-sharpens to `{Y_j} ≥ ` (lower bound from the bound on `{X_j}`).
-
-The clean derivation: equality `⌈X_j⌉ − 1 = ⌊Y_j⌋` holds iff
+The j-th element of `S₁` is `⌈X_j⌉ − 1`; the j-th element of
+`S₂` is `⌊Y_j⌋`. Equality `⌈X_j⌉ − 1 = ⌊Y_j⌋` holds iff
 `{jβ} ∈ [jn/(r(n+1)), (r−1)/r]`. The upper bound is automatic
 (`{jβ}·r ≤ r − 1` always for `r ≥ 1`); the lower bound, multiplied
 by `r`, gives `(jβ)·r ≥ jn/(n+1)`, i.e., `(jn) mod r ≥ jn/(n+1)`.
-Since `(jn) mod r` is an integer, the discreteness gives the
-ceiling: `(jn) mod r ≥ ⌈jn/(n+1)⌉`. ∎
+Since `(jn) mod r` is an integer, discreteness gives the ceiling:
+`(jn) mod r ≥ ⌈jn/(n+1)⌉`. ∎
 
 **Verification.** `beatty_reduction.py` (corrected) — predicate
 matches case-(i) firing on 17/17 r = s cells (b = 10 sweep), zero
@@ -159,12 +157,13 @@ mismatches.
 ### A.3 Conjecture A (closed-form, b = 10)
 
 > **Conjecture (b = 10).** Let `(10, n, d)` satisfy: `r = s`,
-> `n² > W = r(n+1)`, `r ∤ n`, and `br > n` (not GFE). Then case (i)
-> holds — equivalently, `(jn) mod r ≥ j` for all `j ∈ {1, …, M}`.
+> `n² > W = r(n+1)`, `r ∤ n`, `br > n` (not GFE), and `M ≥ 1`.
+> Then case (i) holds — equivalently,
+> `(jn) mod r ≥ ⌈jn/(n+1)⌉` for all `j ∈ {1, …, M}`.
 
 If proved, this collapses the Beatty inequality to its `j = 1`
-element: in the b = 10 substrate r = s sub-sub-case, **alignment
-iff `r ∤ n`**.
+element: in the b = 10 substrate r = s sub-sub-case (with M ≥ 1),
+**alignment iff `r ∤ n`**.
 
 **Status.**
 - Empirically verified across `b = 10`, `n ≤ 5000`, `d ≤ 14`
@@ -186,9 +185,9 @@ iff `r ∤ n`**.
   headroom 2 and the simpler sufficient condition `n > b·gcd(n, r)`
   also holding 40/40 (`conjecture_A_partial.py`). This kills the
   `j_fail = r/gcd(n, r)` obstruction.
-- (2) The inequality `(jn) mod r ≥ j` holds at every `j ∈ [1, M]`,
-  given (1) and `r ∤ n`. **Open**, b = 10. Needs continued-fraction
-  / three-distance machinery on the rotation `(jn) mod r`
+- (2) The inequality `(jn) mod r ≥ ⌈jn/(n+1)⌉` holds at every
+  `j ∈ [1, M]`, given (1) and `r ∤ n`. **Open**, b = 10. Needs
+  continued-fraction / three-distance machinery on the rotation `(jn) mod r`
   exploiting the b = 10-smoothness of `r(n+1) = 10^(d-1)`. The
   base-specificity of the conjecture suggests the proof must use
   base-smoothness in an essential way — a generic
@@ -211,10 +210,13 @@ substrate paper's open question:
     when does S₁ = S₂ (non-empty)?
 
     │   Beatty-reduction lemma (A.2), specialised to r = s and n² > W
+    │   (with M ≥ 1, E_n ≥ 1)
     │   — proved
     ▼
-    iff (jn) mod r ≥ j for j = 1..M
-    (using ⌈jn/(n+1)⌉ = j for j ≤ n)
+    iff (jn) mod r ≥ ⌈jn/(n+1)⌉ for j = 1..M
+    (the simplification ⌈jn/(n+1)⌉ = j applies only for j ≤ n,
+     not universally — M ≥ n+1 is possible, e.g., (b,n,d) = (10,4,2)
+     has M = 6, n = 4)
 
     │   Conjecture A (A.3), b = 10 only
     │   — empirically verified, not proved
@@ -262,22 +264,25 @@ labelled with its b = 10 scope.
 
 > **Lemma 3.12 (Beatty-pair coincidence reduction, $r = s$ and $n^2 > W$).**
 > If additionally $r = \lfloor W/n \rfloor \bmod n$ (so $r = s$)
-> and $n^2 > W$, then $W = r(n+1)$ and case (i) of Theorem 3.11
-> with $S_1, S_2$ non-empty holds iff
+> and $n^2 > W$, then $W = r(n+1)$. Assuming $M \geq 1$ and
+> $E_n \geq 1$ (so $S_1, S_2$ are non-empty), case (i) of Theorem
+> 3.11 holds iff
 > $$
 > (jn) \bmod r \;\geq\; \lceil jn/(n+1) \rceil \qquad \text{for all
 > } j \in \{1, \ldots, M\}.
 > $$
-> For $j \leq n$ (which holds throughout the regime, $j \leq M \leq
-> b - 1 < n$) this simplifies to $(jn) \bmod r \geq j$.
+> For $j \leq n$, $\lceil jn/(n+1) \rceil = j$; for $j > n$, the
+> ceiling is strictly less than $j$. Both ranges occur in the
+> regime — $M = 6 > 4 = n$ at $(b, n, d) = (10, 4, 2)$ — so the
+> ceiling form is the universal statement.
 
 > **Remark 3.13 (Conjecture and open question).** In the $b = 10$
-> substrate $r = s$ sub-sub-case, we conjecture that the inequality
-> of Lemma 3.12 holds at every $j \in [1, M]$ iff $r \nmid n$ —
-> i.e., the j-ladder of necessary conditions collapses to its $j = 1$
-> element under the substrate constraint. Verified empirically on
-> $b = 10$, $n \leq 5000$, $d \leq 14$ (zero exceptions). The
-> conjecture is base-specific: at $b = 6$, the cell
+> substrate $r = s$ sub-sub-case with $M \geq 1$, we conjecture that
+> the inequality of Lemma 3.12 holds at every $j \in [1, M]$ iff
+> $r \nmid n$ — i.e., the j-ladder of necessary conditions collapses
+> to its $j = 1$ element under the substrate constraint. Verified
+> empirically on $b = 10$, $n \leq 5000$, $d \leq 14$ (zero
+> exceptions). The conjecture is base-specific: at $b = 6$, the cell
 > $(b, n, d) = (6, 23, 4)$ satisfies the hypotheses but has the
 > inequality fail at $j = 2$, so the conjecture is false for general
 > $b$. A proof at $b = 10$ would close clause 3″ in the $r = s$
@@ -309,9 +314,11 @@ exact-uniformity `P` in the n²-cancellation regime, by computing
 universal in `b` and is the user-facing payload of the work.**
 
 The Beatty-reduction lemma (3.12) provides a sharper test in the
-r = s sub-sub-case: case (i) reduces to the single inequality
-`(jn) mod r ≥ j for j = 1..M`. Same complexity (`O(b)`) but
-mathematically sharper — and again universal in b.
+r = s sub-sub-case (under n² > W and with M ≥ 1, E_n ≥ 1): case (i)
+reduces to the single inequality `(jn) mod r ≥ ⌈jn/(n+1)⌉` for
+j = 1..M. Same complexity (`O(b)`) but mathematically sharper — and
+universal in b. (The simplification `⌈jn/(n+1)⌉ = j` is valid only
+when `j ≤ n`, which is not guaranteed across the regime.)
 
 **What closing Conjecture A would buy.** A one-line `O(1)` test
 *at b = 10*: in the b = 10 substrate r = s sub-sub-case, alignment
@@ -353,7 +360,8 @@ Five reasons:
    any bound; the verification is `O(b)` per cell.
 
 5. **The journey has the right epistemic shape.** The paper now
-   names a specific integer inequality (`(jn) mod r ≥ j`), the
+   names a specific integer inequality (`(jn) mod r ≥ ⌈jn/(n+1)⌉`),
+   with the simplification to `(jn) mod r ≥ j` only when `j ≤ n`; the
    substrate-context-vs-decoupled contrast that explains why the
    collapse is non-trivial, the base-specificity that scopes the
    conjecture, and the partial proof (part 1 verified 40/40, part 2
