@@ -39,7 +39,7 @@ def test_cipher_small_sweep():
 # Sawtooth path
 # =====================================================================
 
-def test_sawtooth_returns_nprime_sequence():
+def test_sawtooth_returns_a_n_sequence():
     S = bidder.sawtooth(3, 50)
     assert isinstance(S, bidder.NPrimeSequence)
     assert S.period == 50
@@ -119,7 +119,7 @@ if __name__ == '__main__':
 
     test_cipher_returns_bidder_block()
     test_cipher_small_sweep()
-    test_sawtooth_returns_nprime_sequence()
+    test_sawtooth_returns_a_n_sequence()
     test_sawtooth_small_sweep()
     test_sawtooth_n_overflow()
     test_sawtooth_count_overflow()

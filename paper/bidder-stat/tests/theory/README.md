@@ -26,9 +26,9 @@ Run all theory tests:
 | FPC for ideal permutations | `generator/RIEMANN-SUM.md §Finite-population correction` | `test_fpc_shape.py` (via `_helpers.py:shuffle_prefix_means`, the ideal null built here) | `mc_diagnostic.py` (background; does not encode the ideal null directly) |
 | Cipher coupling gap | `generator/RIEMANN-SUM.md §What the cipher actually achieves` | `test_fpc_shape.py` | `mc_diagnostic.py`, `stratified.py` |
 | Integer block uniformity | `core/BLOCK-UNIFORMITY.md §Lemma` | `tests/test_acm_core.py::test_block_boundary_*` | `uniformity_demo.py` |
-| Sieved block (smooth) | `core/BLOCK-UNIFORMITY.md §Sieved version` | `tests/test_acm_core.py::test_block_uniformity_sieved_sufficient` | — |
-| Sieved block (Family E) | `core/BLOCK-UNIFORMITY.md §A second sufficient family` | `tests/test_acm_core.py::test_block_uniformity_sieved_family_e` | — |
-| Spread bound ≤ 2 | `core/BLOCK-UNIFORMITY.md §A spread bound` | `tests/test_acm_core.py::test_block_uniformity_sieved_spread_bound` | — |
+| Sieved block (smooth) | `core/BLOCK-UNIFORMITY.md §Sieved version` | `tests/test_acm_core.py::test_block_uniformity_sufficient` | — |
+| Sieved block (Family E) | `core/BLOCK-UNIFORMITY.md §A second sufficient family` | `tests/test_acm_core.py::test_block_uniformity_family_e` | — |
+| Spread bound ≤ 2 | `core/BLOCK-UNIFORMITY.md §A spread bound` | `tests/test_acm_core.py::test_block_uniformity_spread_bound` | — |
 | Hardy closed form | `core/HARDY-SIDESTEP.md` | `tests/test_sawtooth.py` + `core/hardy_sidestep.py` | `acm_sawtooth.py` (downstream illustration) |
 | Abductive key | `core/ABDUCTIVE-KEY.md` | — | — |
 

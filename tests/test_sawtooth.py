@@ -21,7 +21,7 @@ from sawtooth import NPrimeSequence
 # Cross-check against brute-force acm_n_primes
 # =====================================================================
 
-def test_at_matches_acm_n_primes():
+def test_at_matches_a_n_oracle():
     """at(K) for K in range(count) must equal acm_n_primes(n, count)."""
     from acm_core import acm_n_primes
     checked = 0
@@ -219,7 +219,7 @@ def test_count_overflow():
 if __name__ == '__main__':
     print("=== NPrimeSequence tests ===\n")
 
-    test_at_matches_acm_n_primes()
+    test_at_matches_a_n_oracle()
     test_n_type_error()
     test_n_value_error()
     test_count_type_error()

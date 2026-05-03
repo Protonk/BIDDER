@@ -30,7 +30,7 @@ def test_n1_ordinary_primes():
     assert acm_n_primes(1, 10) == [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
     print("  n=1 ordinary primes: OK")
 
-def test_known_acm_n_primes():
+def test_known_a_n_values():
     """Hand-verified n-primes for small n."""
     assert acm_n_primes(2, 5) == [2, 6, 10, 14, 18]
     assert acm_n_primes(3, 5) == [3, 6, 12, 15, 21]
@@ -89,7 +89,7 @@ def test_known_champernowne():
     assert c == 1.26101418, f"C(2,5) = {c}, expected 1.26101418"
     print("  Known Champernowne real: OK")
 
-def test_first_n_prime_is_n():
+def test_first_a_n_element_is_n():
     """For n >= 2, the first n-prime is n itself."""
     for n in range(2, 1000):
         assert acm_n_primes(n, 1) == [n], (
@@ -191,7 +191,7 @@ def _per_digit_counts(n, b, d):
     return counts[1:b]  # drop the unused 0 slot
 
 
-def test_block_uniformity_sieved_sufficient():
+def test_block_uniformity_sufficient():
     """Sufficient condition: if n^2 | b^(d-1), then n-primes in
     [b^(d-1), b^d - 1] have exactly uniform leading base-b digits,
     each appearing b^(d-1)*(n-1)/n^2 times.
@@ -217,7 +217,7 @@ def test_block_uniformity_sieved_sufficient():
     print(f"  Sieved block uniformity (sufficient condition, {checked} triples): OK")
 
 
-def test_block_uniformity_sieved_family_e():
+def test_block_uniformity_family_e():
     """Family E (second sufficient family): for d >= 2 and
     n in [b^(d-1), floor((b^d - 1)/(b-1))], the n-primes in the block
     are exactly {n, 2n, ..., (b-1)n}, one per leading base-b digit.
@@ -245,7 +245,7 @@ def test_block_uniformity_sieved_family_e():
     print(f"  Sieved block uniformity (Family E, {checked} triples): OK")
 
 
-def test_block_uniformity_sieved_unconditional_witnesses():
+def test_block_uniformity_unconditional_witnesses():
     """Regression fixture for the canonical witness *outside* both
     sufficient families: (b, n, d) = (4, 5, 5). Smooth fails because
     25 does not divide 256. Family E fails because 5 < 256. The
@@ -255,7 +255,7 @@ def test_block_uniformity_sieved_unconditional_witnesses():
 
     The earlier (4, 4, 2) witness has been promoted to Family E
     coverage (it is the j = 0 case for (b, d) = (4, 2)) and is
-    tested by test_block_uniformity_sieved_family_e.
+    tested by test_block_uniformity_family_e.
     """
     b, n, d = 4, 5, 5
     expected_each, expected_total = 41, 123
@@ -277,7 +277,7 @@ def test_block_uniformity_sieved_unconditional_witnesses():
     print("  Sieved block uniformity (unconditional witness (4,5,5)): OK")
 
 
-def test_block_uniformity_sieved_spread_bound():
+def test_block_uniformity_spread_bound():
     """For any (b, n, d), the per-leading-digit n-prime count
     spread is at most 2. Proof in BLOCK-UNIFORMITY.md (each
     multiples-of-m count contributes at most 1 to the spread,
@@ -473,14 +473,14 @@ if __name__ == '__main__':
     print("=== ACM core tests ===\n")
 
     test_n1_ordinary_primes()
-    test_known_acm_n_primes()
+    test_known_a_n_values()
     test_divisibility_contract()
     test_square_boundary_exclusion()
     test_first_n_minus_1_below_square()
     test_monotonicity()
 
     test_known_champernowne()
-    test_first_n_prime_is_n()
+    test_first_a_n_element_is_n()
     test_leading_digit_preservation()
     test_range()
 
@@ -488,10 +488,10 @@ if __name__ == '__main__':
     test_block_boundary_999()
     test_block_boundary_9999()
 
-    test_block_uniformity_sieved_sufficient()
-    test_block_uniformity_sieved_family_e()
-    test_block_uniformity_sieved_unconditional_witnesses()
-    test_block_uniformity_sieved_spread_bound()
+    test_block_uniformity_sufficient()
+    test_block_uniformity_family_e()
+    test_block_uniformity_unconditional_witnesses()
+    test_block_uniformity_spread_bound()
 
     test_first_digit_powers_of_10()
     test_first_digit_boundaries()

@@ -217,12 +217,12 @@ The second validation layer checks the substrate claims through the implementati
 
 | result | public behavior checked | validation target | tested sweep |
 |---|---|---|---|
-| Lemma 3.4 (Closed-form indexing) | `bidder_sawtooth_at` | `test_at_matches_acm_n_primes` (oracle); `test_kth_prime_*` (closed-form vs enumeration) | sawtooth oracle: $n \in \{2, \ldots, 12\}$; closed-form: $n \in \{2, \ldots, 9999\}$ |
+| Lemma 3.4 (Closed-form indexing) | `bidder_sawtooth_at` | `test_at_matches_a_n_oracle` (closed-form vs enumeration) | $n \in \{2, \ldots, 12\}$ |
 | Theorem 3.5 (Integer block-uniformity) | (fact about $\mathbb{Z}$) | `test_block_boundary_*` | base 10, $d \in \{1, \ldots, 9\}$ |
-| Theorem 3.6 (Block-aligned) | `bidder_sawtooth_at` | `test_block_uniformity_sieved_sufficient` | $b, n \in \{2, \ldots, 10\}$, $d \in \{1, \ldots, 5\}$ |
-| Theorem 3.7 (Family E) | `bidder_sawtooth_at` | `test_block_uniformity_sieved_family_e` | $b \in \{2, \ldots, 10\}$, $d \in \{2, \ldots, 5\}$ |
-| Criterion 3.8 (Generalized Family E certificate) | `bidder_sawtooth_at` | `test_block_uniformity_sieved_generalised_family_e` | $b \in \{2, \ldots, 10\}$, $d \in \{2, \ldots, 5\}$, $q' \in \{2, \ldots, 50\}$, $m_{\min} \in \{1, \ldots, 100\}$ |
-| Theorem 3.10 (Spread bound) | `bidder_sawtooth_at` | `test_block_uniformity_sieved_spread_bound` | $b, n \in \{2, \ldots, 10\}$, $d \in \{1, \ldots, 5\}$ |
+| Theorem 3.6 (Block-aligned) | `bidder_sawtooth_at` | `test_block_uniformity_sufficient` | $b, n \in \{2, \ldots, 10\}$, $d \in \{1, \ldots, 5\}$ |
+| Theorem 3.7 (Family E) | `bidder_sawtooth_at` | `test_block_uniformity_family_e` | $b \in \{2, \ldots, 10\}$, $d \in \{2, \ldots, 5\}$ |
+| Criterion 3.8 (Generalized Family E certificate) | `bidder_sawtooth_at` | `test_block_uniformity_generalized_family_e` | $b \in \{2, \ldots, 10\}$, $d \in \{2, \ldots, 5\}$, $q' \in \{2, \ldots, 50\}$, $m_{\min} \in \{1, \ldots, 100\}$ |
+| Theorem 3.10 (Spread bound) | `bidder_sawtooth_at` | `test_block_uniformity_spread_bound` | $b, n \in \{2, \ldots, 10\}$, $d \in \{1, \ldots, 5\}$ |
 | Appendix A boundary checks | structural diagnostic, Beatty reduction, base-10 conjecture scope | `experiments/math/diophantus/structural_theorem.py`; `beatty_reduction.py`; `conjecture_probe.py`; `conjecture_A_partial.py` | structural sweep 1925 cells; Beatty sweep 17 cells; base-10 conjecture sweep $n \leq 5000$, $d \leq 14$ |
 
 The replication layer regenerates the numerical archive rather than trusting hand-copied tables. `make replicate` runs the cycle-walking decision sweep, the FPC realization-gap grid, the wrapper and C-direct throughput panels, the FF1/AES comparator measurement, and the worked use-case scripts. The manuscript cites the generated `paper/measurements/*_results.md` rows as its quantitative source of record.

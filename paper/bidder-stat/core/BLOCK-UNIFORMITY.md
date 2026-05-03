@@ -153,7 +153,7 @@ The bound is tight. Two cases where the spread reaches 2:
 | (4, 6, 3)  | `3 1 3`          | 2      |
 
 A brute-force sweep over `b, n ≤ 10` and `d ≤ 5` finds no spread
-larger than 2; see `tests/test_acm_core.py::test_block_uniformity_sieved_spread_bound`.
+larger than 2; see `tests/test_acm_core.py::test_block_uniformity_spread_bound`.
 
 
 ## A second sufficient family
@@ -269,10 +269,10 @@ Whether there is a third clean family — or a unified sufficient
 condition that subsumes the lucky cancellations — is open.
 
 `(4, 5, 5)` is the regression fixture in
-`tests/test_acm_core.py::test_block_uniformity_sieved_unconditional_witnesses`.
+`tests/test_acm_core.py::test_block_uniformity_unconditional_witnesses`.
 The earlier `(4, 4, 2)` witness has been subsumed: it is the `j = 0`
 case of Family E for `(b, d) = (4, 2)` and is now covered by
-`tests/test_acm_core.py::test_block_uniformity_sieved_family_e`.
+`tests/test_acm_core.py::test_block_uniformity_family_e`.
 
 
 ## Concrete legal triples for the smooth family
@@ -698,17 +698,17 @@ exact digit counts at n = 99, 999, and 9999.
 
 The sieved lemmas have four companion tests in the same file:
 
-- `test_block_uniformity_sieved_sufficient` — sweeps `(b, n, d)`
+- `test_block_uniformity_sufficient` — sweeps `(b, n, d)`
   with `b, n ∈ [2, 10]`, `d ∈ [1, 5]`, and `n² | b^(d-1)`, asserting
   exact uniformity and the count formula `b^(d-1)·(n − 1)/n²` for every
   legal triple of the **smooth family**.
-- `test_block_uniformity_sieved_family_e` — sweeps `(b, d)` with
+- `test_block_uniformity_family_e` — sweeps `(b, d)` with
   `b ∈ [2, 10]`, `d ∈ [2, 5]`, generates every Family E `n` for that
   `(b, d)`, and asserts exact uniformity with count `1` per leading
   digit. Also asserts disjointness from the smooth family.
-- `test_block_uniformity_sieved_unconditional_witnesses` — pins
+- `test_block_uniformity_unconditional_witnesses` — pins
   `(4, 5, 5)` as the canonical witness *outside both* sufficient
   families (lucky cancellation case).
-- `test_block_uniformity_sieved_spread_bound` — sweeps the same
+- `test_block_uniformity_spread_bound` — sweeps the same
   `(b, n, d)` cube and asserts that the per-digit spread is at most 2
   even when neither sufficient family applies.
